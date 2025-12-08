@@ -140,13 +140,13 @@ const Businesses: React.FC = () => {
               {[
                 getImagePath('/images/partnerorga/Download.jpg'),
                 getImagePath('/images/partnerorga/Download.jpg'),
-                getImagePath('/images/partnerorga/Download (2).png'),
-                getImagePath('/images/partnerorga/Download (3).png'),
-                getImagePath('/images/partnerorga/Download (4).png'),
-                getImagePath('/images/partnerorga/Download (5).png'),
-                getImagePath('/images/partnerorga/Download (6).png'),
-                getImagePath('/images/partnerorga/Download.jpeg'),
-                getImagePath('/images/partnerorga/Download (1).jpeg')
+                getImagePath('/images/partnerorga/Download (2).jpg'),
+                getImagePath('/images/partnerorga/Download (3).jpg'),
+                getImagePath('/images/partnerorga/Download (4).jpg'),
+                getImagePath('/images/partnerorga/Download (5).jpg'),
+                getImagePath('/images/partnerorga/Download (6).jpg'),
+                getImagePath('/images/partnerorga/Download.jpg'),
+                getImagePath('/images/partnerorga/Download (1).jpg')
               ].map((logo, index) => (
                 <motion.div
                   key={index}

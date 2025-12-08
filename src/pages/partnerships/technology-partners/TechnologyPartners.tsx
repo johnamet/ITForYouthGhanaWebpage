@@ -8,7 +8,7 @@ const TechnologyPartners: React.FC = () => {
   const partnershipData = {
     title: 'Technology Partners',
     description: 'Collaborate with technology companies to provide cutting-edge tools, training, and career pathways.',
-    image: getImagePath('/images/randomPictures/studentscodingback.jpg'),
+    image: getImagePath('/images/randomPictures/studentsBackcoding.jpg'),
     benefits: ['Latest technology', 'Expert training', 'Career pathways', 'Innovation'],
     overview: 'Our Technology Partnerships connect us with leading technology companies to provide our participants with access to cutting-edge tools, expert training, and direct pathways to technology careers.',
     whatWeOffer: [

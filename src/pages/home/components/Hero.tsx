@@ -14,7 +14,7 @@ const heroSlides = [
     subtitle: 'Students celebrating their achievements in technology training programs'
   },
   {
-    image: getImagePath('/images/randomPictures/main.jpg'),
+    image: getImagePath('/images/randomPictures/UX4.jpg'),
     title: 'Technology Education',
     subtitle: 'Modern IT training with comprehensive curriculum and expert instructors'
   },

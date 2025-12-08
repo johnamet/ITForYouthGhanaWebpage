@@ -17,7 +17,7 @@ const SuccessStories: React.FC = () => {
       name: 'Benedicta Konadu',
       role: 'Graphic Designer',
       quote: 'The design skills and mentorship gave me the confidence to pursue my creative dreams professionally.',
-      image: getImagePath('/images/people/benedicta.png')
+      image: getImagePath('/images/people/benedicta.jpg')
     },
     {
       name: 'Danielle Mensah',

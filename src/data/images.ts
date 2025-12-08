@@ -18,7 +18,7 @@ export const PEOPLE_IMAGES = {
   },
   
   benedicta: {
-    path: '/images/people/benedicta.png',
+    path: '/images/people/benedicta.jpg',
     alt: 'Benedicta Konadu - Graphic Designer', 
     title: 'Benedicta Konadu',
     description: 'Graphic Designer sharing creative expertise',
@@ -123,7 +123,7 @@ export const RANDOM_IMAGES = {
     category: 'learning'
   },
   studentscodingback: {
-    path: '/images/randomPictures/studentscodingback.jpg',
+    path: '/images/randomPictures/studentsBackcoding.jpg',
     alt: 'Students Coding Back View',
     category: 'learning'
   },

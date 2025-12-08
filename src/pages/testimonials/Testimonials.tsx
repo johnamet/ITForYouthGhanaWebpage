@@ -30,7 +30,7 @@ const Testimonials: React.FC = () => {
       role: 'Graphic Designer',
       company: 'Creative Agency Kumasi',
       quote: 'The support I received fueled my growth and gave me the courage to pursue my dreams in the design world.',
-      image: getImagePath('/images/people/benedicta.png'),
+      image: getImagePath('/images/people/benedicta.jpg'),
       program: 'UI/UX Design Program',
       year: '2021'
     },

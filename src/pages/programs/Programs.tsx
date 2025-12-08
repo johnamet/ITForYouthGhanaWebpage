@@ -48,7 +48,7 @@ const Programs: React.FC = () => {
       description: 'Basic computer skills and digital literacy for rural communities.',
       duration: '6 weeks',
       participants: '120 graduates',
-      image: getImagePath('/images/randomPictures/studentscodingback.jpg'),
+      image: getImagePath('/images/randomPictures/studentsBackcoding.jpg'),
       skills: ['Computer Basics', 'Internet Navigation', 'Digital Safety', 'Email & Communication'],
       requirements: 'No prior experience required',
       status: 'past' as const,

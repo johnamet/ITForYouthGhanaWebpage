@@ -23,7 +23,7 @@ const Impact: React.FC = () => {
     {
       title: 'For Volunteers',
       description: 'Make an impact in your community through teaching support, outreach programs and event management.',
-      image: getImagePath('/images/randomPictures/mireiotalking.jpeg'),
+      image: getImagePath('/images/randomPictures/mireiotalking.jpg'),
       link: '/opportunities/volunteers'
     }
   ]

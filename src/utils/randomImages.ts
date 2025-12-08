@@ -11,26 +11,25 @@ export const getImagePath = (path: string) => {
 const baseImages = [
   '/images/randomPictures/UX4.jpg',
   '/images/randomPictures/UXteacher.png',
-  '/images/randomPictures/children_holding_sign_in_streets.jpeg',
+  '/images/randomPictures/children_holding_sign_in_streets.jpg',
   '/images/randomPictures/frontalgraduation.jpg',
   '/images/randomPictures/girlstaslkingUX.jpg',
   '/images/randomPictures/graduation.jpg',
   '/images/randomPictures/graduations.jpg',
   '/images/randomPictures/graduationspeaking.jpg',
   '/images/randomPictures/group_girls.jpg',
-  '/images/randomPictures/groupofgirlsentrance.jpeg',
-  '/images/randomPictures/groupworkUX.jpeg',
+  '/images/randomPictures/groupofgirlsentrance.jpg',
+  '/images/randomPictures/groupworkUX.jpg',
   '/images/randomPictures/groupworkstudents.jpg',
   '/images/randomPictures/happystudentscasual.jpg',
-  '/images/randomPictures/main.jpg',
   '/images/randomPictures/maingraduationpic.jpg',
-  '/images/randomPictures/mave.jpg',
+  '/images/randomPictures/maingraduationpic.jpg',
   '/images/randomPictures/mave_peter.jpg',
-  '/images/randomPictures/mireiotalking.jpeg',
+  '/images/randomPictures/mireiotalking.jpg',
   '/images/randomPictures/peterTalking.jpg',
   '/images/randomPictures/peterblackboard.jpg',
-  '/images/randomPictures/peterfocus.jpg',
-  '/images/randomPictures/petertalkingfrontal.jpg',
+  '/images/randomPictures/peterblackboard.jpg',
+  '/images/randomPictures/petertalkingtostudentscoloful.jpg',
   '/images/randomPictures/petertalkingtostudentscoloful.jpg',
   '/images/randomPictures/redclothingStudents.jpg',
   '/images/randomPictures/redstudentgrouplesson.jpg',
@@ -39,7 +38,7 @@ const baseImages = [
   '/images/randomPictures/studentpresenting.jpg',
   '/images/randomPictures/studentsBackcoding.jpg',
   '/images/randomPictures/studentsblueclothing.jpg',
-  '/images/randomPictures/studentscodingback.jpg',
+  '/images/randomPictures/studentsBackcoding.jpg',
   '/images/randomPictures/studentslistening.jpg',
   '/images/randomPictures/studentslisteningfrontal.jpg',
   '/images/randomPictures/uXstudents.jpg',
@@ -74,7 +73,7 @@ export const getRandomImageSet = (count: number): string[] => {
 // Kategorisierte Bildsets für spezielle Anwendungen
 const baseCategoryImages = {
   workshops: [
-    '/images/randomPictures/groupworkUX.jpeg',
+    '/images/randomPictures/groupworkUX.jpg',
     '/images/randomPictures/groupworkstudents.jpg',
     '/images/randomPictures/UXteacher.png',
     '/images/randomPictures/girlstaslkingUX.jpg',
@@ -88,16 +87,16 @@ const baseCategoryImages = {
     '/images/randomPictures/maingraduationpic.jpg'
   ],
   tech: [
-    '/images/randomPictures/studentscodingback.jpg',
     '/images/randomPictures/studentsBackcoding.jpg',
+    '/images/randomPictures/studentslistening.jpg',
     '/images/randomPictures/peterblackboard.jpg',
-    '/images/randomPictures/main.jpg'
+    '/images/randomPictures/UX4.jpg'
   ],
   community: [
     '/images/randomPictures/group_girls.jpg',
     '/images/randomPictures/happystudentscasual.jpg',
-    '/images/randomPictures/children_holding_sign_in_streets.jpeg',
-    '/images/randomPictures/groupofgirlsentrance.jpeg'
+    '/images/randomPictures/children_holding_sign_in_streets.jpg',
+    '/images/randomPictures/groupofgirlsentrance.jpg'
   ]
 }
 

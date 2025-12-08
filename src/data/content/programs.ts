@@ -56,7 +56,7 @@ export const programs: ProgramsData = {
       duration: "6 months",
       participants: "Small classes of 15-20 students for personalized attention",
       skills: ["Python Programming", "JavaScript & Web Development", "React for User Interfaces", "Node.js for Servers", "Database Management", "Git & Version Control", "Basic Cloud Deployment", "Working in Teams"],
-      image: getImagePath("/images/randomPictures/studentscodingback.jpg"),
+      image: getImagePath("/images/randomPictures/studentsBackcoding.jpg"),
       highlights: ["Build 3-4 complete projects for your portfolio", "Guest speakers from local tech companies", "Job interview preparation and resume building", "Ongoing support after graduation"],
       careerOutcomes: ["Junior Software Developer", "Web Developer", "Frontend Developer", "Backend Developer"],
       realTalk: "This program is challenging and requires daily commitment. Most successful students spend 6-8 hours daily on coursework and practice.",
@@ -98,7 +98,7 @@ export const programs: ProgramsData = {
       duration: "6 months",
       participants: "Creative thinkers who want to build visual communication skills",
       skills: ["Adobe Photoshop & Illustrator", "Video Editing (Premiere Pro)", "Logo & Brand Design", "Social Media Graphics", "Basic Animation", "Photography Basics", "Client Project Management"],
-      image: getImagePath("/images/randomPictures/studentscodingback.jpg"),
+      image: getImagePath("/images/randomPictures/studentsBackcoding.jpg"),
       highlights: ["Work on real projects for local businesses", "Build a diverse creative portfolio", "Learn both print and digital design", "Basic entrepreneurship for creative freelancers"],
       careerOutcomes: ["Freelance Graphic Designer", "Social Media Designer", "Video Editor", "Marketing Assistant"],
       realTalk: "This program requires creativity and patience. You'll spend lots of time perfecting details. No prior experience needed, but you should enjoy visual problem-solving.",
@@ -144,7 +144,7 @@ export const programs: ProgramsData = {
       schedule: "Morning, Evening & Weekend",
       startDate: "10/02/2025",
       status: "Completed - Past Course",
-      image: getImagePath("/images/randomPictures/studentscodingback.jpg"),
+      image: getImagePath("/images/randomPictures/studentsBackcoding.jpg"),
       description: "Master network infrastructure and administration with hands-on training in modern networking technologies."
     },
     {
