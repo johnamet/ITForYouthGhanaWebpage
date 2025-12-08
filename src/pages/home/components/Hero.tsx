@@ -9,7 +9,7 @@ const heroSlides = [
     subtitle: 'Celebrating our students achievements as they complete their IT training journey'
   },
   {
-    image: getImagePath('/images/randomPictures/girlstaslkingUX.jpg'),
+    image: getImagePath('/images/randomPictures/groupworkUX.jpg'),
     title: 'UX Design Training',
     subtitle: 'Students mastering user experience design and digital product development'
   },
@@ -24,12 +24,12 @@ const heroSlides = [
     subtitle: 'Work together on real-world projects and build team skills'
   },
   {
-    image: getImagePath('/images/randomPictures/studentgroupguys.jpg'),
+    image: getImagePath('/images/randomPictures/uXstudents.jpg'),
     title: 'Tech Community',
     subtitle: 'Join a vibrant community of aspiring tech professionals'
   },
   {
-    image: getImagePath('/images/randomPictures/redstudentgrouplesson.jpg'),
+    image: getImagePath('/images/randomPictures/happystudentscasual.jpg'),
     title: 'Your Success Story',
     subtitle: 'Transform your career with professional IT training and certification'
   }
