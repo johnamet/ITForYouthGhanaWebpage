@@ -5,26 +5,45 @@ const CACHE_NAME = 'it-youth-ghana-v1';
 const STATIC_CACHE = 'static-v1';
 const DYNAMIC_CACHE = 'dynamic-v1';
 
-// Cache essential files
+// Cache essential files - PRELOAD ALLE BILDER FÜR MAXIMALE PERFORMANCE
 const staticAssets = [
   '/',
-  '/images/logo/logo.jpg',
-  '/images/randomPictures/UX4.jpg',
   '/manifest.json'
 ];
 
-// Install event - cache static assets
+// ALLE BILDER VOR-CACHEN FÜR EXTREM SCHNELLES LADEN
+const imageAssets = [
+  '/images/logo/logo.jpg',
+  '/images/randomPictures/UX4.jpg',
+  '/images/randomPictures/mireiotalking.jpg',
+  '/images/randomPictures/maingraduationpic.jpg',
+  '/images/randomPictures/studentslistening.jpg',
+  '/images/randomPictures/graduation.jpg',
+  '/images/randomPictures/groupofgirlsentrance.jpg',
+  '/images/randomPictures/UXcours.jpg',
+  '/images/randomPictures/UXteacher.png',
+  '/images/people/peter.jpg'
+];
+
+// Install event - cache static assets und alle BILDER
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
-        console.log('Caching static assets');
-        return cache.addAll(staticAssets);
-      })
-      .then(() => {
-        self.skipWaiting();
-      })
+    Promise.all([
+      caches.open(STATIC_CACHE)
+        .then((cache) => {
+          console.log('Caching static assets');
+          return cache.addAll(staticAssets);
+        }),
+      caches.open(DYNAMIC_CACHE)
+        .then((cache) => {
+          console.log('PRELOADING ALLE BILDER FÜR MAXIMALE PERFORMANCE!');
+          return cache.addAll(imageAssets);
+        })
+    ]).then(() => {
+      console.log('Alle Assets und Bilder gecached!');
+      self.skipWaiting();
+    })
   );
 });
 

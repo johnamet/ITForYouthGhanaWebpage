@@ -45,7 +45,8 @@ const LazyImage: React.FC<LazyImageProps> = ({
         })
       },
       {
-        rootMargin: '100px' // Earlier loading for better UX
+        rootMargin: '200px', // Extrem früheres Loading für besseres UX
+        threshold: 0.01 // Sobald 1% sichtbar ist
       }
     )
 
@@ -123,6 +124,8 @@ const LazyImage: React.FC<LazyImageProps> = ({
           {...imageProps}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
+          fetchPriority={priority ? "high" : "low"}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       )}
     </div>

@@ -29,7 +29,7 @@ const heroSlides = [
     subtitle: 'Join a vibrant community of aspiring tech professionals'
   },
   {
-    image: getImagePath('/images/randomPictures/graduationspeaking.jpg'),
+    image: getImagePath('/images/randomPictures/redstudentgrouplesson.jpg'),
     title: 'Your Success Story',
     subtitle: 'Transform your career with professional IT training and certification'
   }
@@ -106,12 +106,21 @@ const Hero: React.FC = () => {
                 objectPosition: 'center'
               }}
               loading="eager"
+              fetchPriority="high"
+              decoding="sync"
+              sizes="100vw"
+              crossOrigin="anonymous"
               onError={(e) => {
                 console.log('Image failed to load:', heroSlides[currentSlide].image);
-                console.log('Error event:', e);
+                // Fallback: nächsten Slide versuchen
+                if (heroSlides.length > 1) {
+                  setTimeout(() => {
+                    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+                  }, 100);
+                }
               }}
               onLoad={() => {
-                console.log('Image loaded successfully:', heroSlides[currentSlide].image);
+                console.log('Hero image loaded fast:', heroSlides[currentSlide].image);
               }}
             />
           </motion.div>
@@ -146,6 +155,9 @@ const Hero: React.FC = () => {
               background: 'transparent',
               filter: 'drop-shadow(0 12px 40px rgba(0, 0, 0, 0.5))'
             }}
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
             whileHover={{ 
               scale: 1.05,
               transition: { duration: 0.3 }
