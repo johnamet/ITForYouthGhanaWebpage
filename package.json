@@ -18,7 +18,7 @@
     "deploy:staging": "npm run build:staging && echo \"Deploy to staging\"",
     "deploy:production": "npm run build:production && echo \"Deploy to production\"",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist --no-history --dotfiles",
+    "deploy": "./deploy-no-lfs.sh",
     "health-check": "curl -f $VITE_APP_URL/health || exit 1",
     "postbuild": "echo \"Build completed successfully\""
   },
