@@ -4,34 +4,34 @@ import { getImagePath } from '../../../utils/randomImages'
 
 const heroSlides = [
   {
-    image: getImagePath('/images/randomPictures/frontalgraduation.jpg'),
+    image: getImagePath('/images/randomPictures/maingraduationpic.jpg'),
     title: 'Graduation Success 2024',
     subtitle: 'Celebrating our students achievements as they complete their IT training journey'
   },
   {
-    image: getImagePath('/images/randomPictures/happystudentscasual.jpg'),
-    title: 'Happy IT Students',
-    subtitle: 'Students celebrating their achievements in technology training programs'
+    image: getImagePath('/images/randomPictures/girlstaslkingUX.jpg'),
+    title: 'UX Design Training',
+    subtitle: 'Students mastering user experience design and digital product development'
   },
   {
-    image: getImagePath('/images/randomPictures/UX4.jpg'),
-    title: 'Technology Education',
-    subtitle: 'Modern IT training with comprehensive curriculum and expert instructors'
+    image: getImagePath('/images/randomPictures/petertalkingtostudentscoloful.jpg'),
+    title: 'Expert Instruction',
+    subtitle: 'Learn from experienced tech professionals and industry experts'
   },
   {
-    image: getImagePath('/images/randomPictures/studentslisteningfrontal.jpg'),
-    title: 'Interactive Learning Environment',
-    subtitle: 'Students engaged in practical IT training sessions with expert instructors'
+    image: getImagePath('/images/randomPictures/groupworkstudents.jpg'),
+    title: 'Collaborative Learning',
+    subtitle: 'Work together on real-world projects and build team skills'
   },
   {
-    image: getImagePath('/images/randomPictures/group_girls.jpg'),
-    title: 'Empowering Young Women in Tech',
-    subtitle: 'Creating pathways for women in technology careers through hands-on training'
+    image: getImagePath('/images/randomPictures/studentgroupguys.jpg'),
+    title: 'Tech Community',
+    subtitle: 'Join a vibrant community of aspiring tech professionals'
   },
   {
-    image: getImagePath('/images/randomPictures/studentsBackcoding.jpg'),
-    title: 'Software Development Skills',
-    subtitle: 'Students learning coding and software development with modern technologies'
+    image: getImagePath('/images/randomPictures/graduationspeaking.jpg'),
+    title: 'Your Success Story',
+    subtitle: 'Transform your career with professional IT training and certification'
   }
 ]
 
