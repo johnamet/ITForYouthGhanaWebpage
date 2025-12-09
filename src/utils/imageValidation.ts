@@ -22,13 +22,45 @@ export const getOptimizedImagePath = (path: string): string => {
   return fullPath
 }
 
+// Create blue placeholder for missing images
+export const createBluePlaceholder = (width: number = 400, height: number = 300): string => {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')!
+  
+  canvas.width = width
+  canvas.height = height
+  
+  // Create blue gradient background
+  const gradient = ctx.createLinearGradient(0, 0, width, height)
+  gradient.addColorStop(0, '#0c2d5a') // --color-primary
+  gradient.addColorStop(1, '#1a3d6d') // --color-primary-light
+  
+  ctx.fillStyle = gradient
+  ctx.fillRect(0, 0, width, height)
+  
+  // Add icon in center
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+  ctx.font = '48px serif'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText('🖼️', width / 2, height / 2)
+  
+  return canvas.toDataURL()
+}
+
 // Fallback image handler
 export const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
   const target = event.target as HTMLImageElement
-  const fallbackPath = getOptimizedImagePath('/images/fallback/placeholder.jpg')
   
-  console.warn(`Image failed to load: ${target.src}. Using fallback.`)
-  target.src = fallbackPath
+  // Get original dimensions or use defaults
+  const width = target.naturalWidth || target.width || 400
+  const height = target.naturalHeight || target.height || 300
+  
+  console.warn(`Image failed to load: ${target.src}. Using blue placeholder.`)
+  
+  // Create and set blue placeholder
+  target.src = createBluePlaceholder(width, height)
+  target.style.objectFit = 'cover'
 }
 
 // Image preloader for critical images

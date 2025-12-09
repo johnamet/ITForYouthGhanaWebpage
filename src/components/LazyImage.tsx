@@ -1,5 +1,6 @@
 // Performance-optimierte Komponente für Lazy Loading von Bildern
 import React, { useState, useRef, useEffect } from 'react'
+import { createBluePlaceholder } from '../utils/imageValidation'
 
 interface LazyImageProps {
   src: string
@@ -66,9 +67,15 @@ const LazyImage: React.FC<LazyImageProps> = ({
     if (onLoad) onLoad()
   }
 
-  const handleError = () => {
+  const handleError = (event: React.SyntheticEvent<HTMLImageElement>) => {
     setHasError(true)
     if (onError) onError()
+    
+    // Set blue placeholder on error
+    const target = event.target as HTMLImageElement
+    const placeholderWidth = width || target.width || 400
+    const placeholderHeight = height || target.height || 300
+    target.src = createBluePlaceholder(placeholderWidth, placeholderHeight)
   }
 
   const imageProps = {
@@ -102,23 +109,9 @@ const LazyImage: React.FC<LazyImageProps> = ({
         )
       )}
 
-      {/* Error State */}
-      {hasError && (
-        <div 
-          className={`flex items-center justify-center bg-neutral-100 text-neutral-700 ${className}`}
-          style={{ width, height }}
-        >
-          <div className="text-center">
-            <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p className="text-sm">Image not available</p>
-          </div>
-        </div>
-      )}
 
       {/* Actual Image - Optimiert für langsame Internetverbindungen */}
-      {(isInView || priority) && !hasError && (
+      {(isInView || priority) && (
         <img
           src={src}
           {...imageProps}
