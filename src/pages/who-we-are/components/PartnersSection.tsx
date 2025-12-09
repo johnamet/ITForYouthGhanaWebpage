@@ -89,11 +89,11 @@ const PartnersSection: React.FC = () => {
               className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100 group"
             >
               <div className="flex flex-col items-center">
-                <div className="w-20 h-20 mb-4 flex items-center justify-center overflow-hidden rounded-lg bg-neutral-50 transition-colors duration-300">
+                <div className="w-24 h-16 mb-4 flex items-center justify-center overflow-hidden rounded-lg bg-neutral-50 transition-colors duration-300 p-2">
                   <img 
                     src={partner.image} 
                     alt={partner.name}
-                    className="max-w-full max-h-full object-contain transition-all duration-300"
+                    className="w-full h-full object-contain transition-all duration-300"
                   />
                 </div>
                 
