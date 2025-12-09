@@ -83,14 +83,14 @@ const SuccessStories: React.FC = () => {
             <h3 className="heading-md mb-4" style={{ color: '#0c2d5a' }}>Transforming Ghana's Digital Future</h3>
             <p className="text-lg mb-6 text-neutral-700 max-w-2xl mx-auto">
             Join thousands of success stories and be part of Ghana's tech transformation.</p>
-            <motion.a
-              href="/contact"
-              className="btn btn-primary inline-block"
+            <motion.button
+              onClick={() => window.location.href = '/contact'}
+              className="btn btn-primary inline-block border-0 cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Read More Stories
-            </motion.a>
+            </motion.button>
           </div>
         </motion.div>
 

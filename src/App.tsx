@@ -28,6 +28,7 @@ const Error500 = React.lazy(() => import('./pages/Error500'))
 // Program pages
 const ProgramsPage = React.lazy(() => import('./pages/programs/Programs'))
 const ProgramDetail = React.lazy(() => import('./components/programs/ProgramDetail'))
+const TrainingProgramDetail = React.lazy(() => import('./components/programs/TrainingProgramDetail'))
 
 // Partnership pages
 const EducationalPartnerships = React.lazy(() => import('./pages/partnerships/educational-partnerships/EducationalPartnerships'))
@@ -91,6 +92,7 @@ function App() {
                 <Route path="/partnerships/technology-partners" element={<TechnologyPartners />} />
                 <Route path="/programs" element={<ProgramsPage />} />
                 <Route path="/programs/:programId" element={<ProgramDetail />} />
+                <Route path="/training/:programId" element={<TrainingProgramDetail />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/tech-empowerment" element={<TechEmpowerment />} />
                 <Route path="/404" element={<Error404 />} />

@@ -35,7 +35,7 @@ const Vision: React.FC = () => {
             className="relative"
           >
             <img 
-              src={getImagePath("/images/randomPictures/happystudentscasual.jpg")} 
+              src={getImagePath("/images/randomPictures/studentsblueclothing.jpg")} 
               alt="Students learning technology" 
               className="rounded-2xl shadow-lg w-full h-80 object-cover"
             />

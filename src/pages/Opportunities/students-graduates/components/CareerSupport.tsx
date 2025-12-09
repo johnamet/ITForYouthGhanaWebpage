@@ -8,32 +8,26 @@ const CareerSupport: React.FC = () => {
   const supportServices = [
     {
       name: 'Resume Building',
-      icon: 'R',
       description: 'Professional resume writing and portfolio development to showcase your skills effectively.'
     },
     {
       name: 'Interview Preparation',
-      icon: 'I',
       description: 'Mock interviews and coaching to help you gain confidence in job interviews.'
     },
     {
       name: 'Job Placement',
-      icon: 'J',
       description: 'Direct connections with partner companies actively hiring our graduates.'
     },
     {
       name: 'Mentorship',
-      icon: 'M',
       description: 'Ongoing support from industry professionals even after graduation.'
     },
     {
       name: 'Freelancing Guidance',
-      icon: 'F',
       description: 'Learn how to start and grow your freelance business in tech.'
     },
     {
       name: 'Continuous Learning',
-      icon: 'C',
       description: 'Access to advanced courses and workshops to keep your skills current.'
     }
   ]
@@ -64,9 +58,6 @@ const CareerSupport: React.FC = () => {
               className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-100 group hover:shadow-xl transition-all duration-300"
             >
               <div className="text-center mb-6">
-                <div className="w-16 h-16 mb-4 mx-auto flex items-center justify-center rounded-full text-2xl" style={{ backgroundColor: 'rgba(12, 45, 90, 0.1)' }}>
-                  {service.icon}
-                </div>
                 <h3 className="font-semibold text-xl mb-3" style={{ color: '#0c2d5a' }}>{service.name}</h3>
               </div>
               <p className="text-neutral-700 leading-relaxed text-center">
@@ -88,14 +79,14 @@ const CareerSupport: React.FC = () => {
             <p className="text-lg mb-6 text-neutral-700 max-w-2xl mx-auto">
               Join our comprehensive program and get access to all these career support services. We're here to help you succeed every step of the way.
             </p>
-            <motion.a
-              href="/apply"
-              className="btn btn-primary inline-block"
+            <motion.button
+              onClick={() => window.location.href = '/contact'}
+              className="btn btn-primary inline-block border-0 cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Apply Now
-            </motion.a>
+            </motion.button>
           </div>
         </motion.div>
       </div>

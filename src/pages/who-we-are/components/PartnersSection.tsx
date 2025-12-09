@@ -6,51 +6,45 @@ const PartnersSection: React.FC = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.2 })
 
+  const handlePartnerWithUs = () => {
+    window.location.href = '/partners'
+  }
+
   const partners = [
     {
       name: 'Partner Organization 1',
-      image: getImagePath('/images/partnerorga/Download.png'),
+      image: getImagePath('/images/partnerorga/Download.jpg'),
       type: 'Strategic Partner'
     },
     {
       name: 'Partner Organization 2', 
-      image: getImagePath('/images/partnerorga/Download (1).png'),
+      image: getImagePath('/images/partnerorga/Download (1).jpg'),
       type: 'Technology Partner'
     },
     {
       name: 'Partner Organization 3',
-      image: getImagePath('/images/partnerorga/Download (2).png'),
+      image: getImagePath('/images/partnerorga/Download (2).jpg'),
       type: 'Educational Partner'
     },
     {
       name: 'Partner Organization 4',
-      image: getImagePath('/images/partnerorga/Download (3).png'),
+      image: getImagePath('/images/partnerorga/Download (3).jpg'),
       type: 'Community Partner'
     },
     {
       name: 'Partner Organization 5',
-      image: getImagePath('/images/partnerorga/Download (4).png'),
+      image: getImagePath('/images/partnerorga/Download (4).jpg'),
       type: 'Strategic Partner'
     },
     {
       name: 'Partner Organization 6',
-      image: getImagePath('/images/partnerorga/Download (5).png'),
+      image: getImagePath('/images/partnerorga/Download (5).jpg'),
       type: 'Technology Partner'
     },
     {
       name: 'Partner Organization 7',
-      image: getImagePath('/images/partnerorga/Download (6).png'),
+      image: getImagePath('/images/partnerorga/Download (6).jpg'),
       type: 'Educational Partner'
-    },
-    {
-      name: 'Partner Organization 8',
-      image: getImagePath('/images/partnerorga/Download.jpeg'),
-      type: 'Community Partner'
-    },
-    {
-      name: 'Partner Organization 9',
-      image: getImagePath('/images/partnerorga/Download (1).jpeg'),
-      type: 'Strategic Partner'
     }
   ]
 
@@ -103,14 +97,6 @@ const PartnersSection: React.FC = () => {
                   />
                 </div>
                 
-                <div className="text-center">
-                  <p className="text-xs font-semibold mb-1 opacity-70" style={{ color: '#0c2d5a' }}>
-                    {partner.type}
-                  </p>
-                  <h4 className="text-sm font-medium text-neutral-700 transition-colors duration-300">
-                    {partner.name}
-                  </h4>
-                </div>
               </div>
             </motion.div>
           ))}
@@ -128,9 +114,9 @@ const PartnersSection: React.FC = () => {
             <p className="text-lg mb-6 text-neutral-700 max-w-2xl mx-auto">
               Join our network of partners and help us expand our impact. Together, we can create more opportunities for Ghana's youth to thrive in the digital economy.
             </p>
-            <motion.a
-              href="/contact"
-              className="inline-block"
+            <motion.button
+              onClick={handlePartnerWithUs}
+              className="inline-block cursor-pointer border-0"
               style={{
                 padding: '16px 32px',
                 fontSize: '16px',
@@ -158,7 +144,7 @@ const PartnersSection: React.FC = () => {
               }}
             >
               Partner With Us
-            </motion.a>
+            </motion.button>
           </div>
         </motion.div>
       </div>

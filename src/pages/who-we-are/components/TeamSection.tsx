@@ -18,21 +18,21 @@ const TeamSection: React.FC = () => {
     },
     {
       name: 'Miréio Trinley',
-      role: 'IT & Technology Lead',
+      role: 'Software Dev',
       image: getImagePath('/images/people/white lady-Cover.jpg'),
-      description: 'Leading our technology initiatives and IT infrastructure. Responsible for technical program development, system architecture, and innovative learning solutions.',
+      description: 'Software Dev',
       email: 'mireiotrinley@itforyouthghana.org',
       linkedin: 'https://www.linkedin.com/in/mireio-trinley',
-      expertise: 'Technology, System Architecture, IT Development'
+      expertise: 'Software Development'
     },
     {
       name: 'John Ametepe',
-      role: 'Lead Developer',
+      role: 'Software Dev',
       image: getImagePath('/images/people/emmanuel.jpg'),
-      description: 'Our lead developer responsible for building innovative learning platforms and technical solutions that support our educational programs.',
+      description: 'Software Dev',
       email: 'johnametepe@itforyouthghana.org',
       linkedin: '#',
-      expertise: 'Software Development, Platform Engineering, Technical Training'
+      expertise: 'Software Development'
     }
   ]
 

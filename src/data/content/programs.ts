@@ -185,7 +185,7 @@ export const programs: ProgramsData = {
       duration: "TBD",
       participants: "15 women initial cohort",
       skills: ["Python for AI", "TensorFlow", "PyTorch", "Arduino", "Raspberry Pi", "Machine Learning", "Ethical AI"],
-      image: getImagePath("/images/randomPictures/groupworkUX.jpeg"),
+      image: getImagePath("/images/randomPictures/girlstaslkingUX.jpg"),
       highlights: ["Smart agriculture solutions", "Water management systems", "Health monitoring devices", "Community applications"],
       status: "60% curriculum complete"
     }

@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { Program } from '../../../data/programs'
 
 interface ProgramCardProps {
@@ -20,8 +21,8 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
       whileHover={{ y: -8 }}
       className="h-full"
     >
-      <a 
-        href={`/programs/${program.id}`}
+      <Link 
+        to={`/programs/${program.id}`}
         className="block h-full"
         style={{ textDecoration: 'none' }}
       >
@@ -83,7 +84,7 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     </motion.div>
   )
 }

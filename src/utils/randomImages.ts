@@ -19,7 +19,7 @@ const baseImages = [
   '/images/randomPictures/graduationspeaking.jpg',
   '/images/randomPictures/group_girls.jpg',
   '/images/randomPictures/groupofgirlsentrance.jpg',
-  '/images/randomPictures/groupworkUX.jpg',
+  '/images/randomPictures/UX4.jpg',
   '/images/randomPictures/groupworkstudents.jpg',
   '/images/randomPictures/happystudentscasual.jpg',
   '/images/randomPictures/maingraduationpic.jpg',
@@ -73,7 +73,7 @@ export const getRandomImageSet = (count: number): string[] => {
 // Kategorisierte Bildsets für spezielle Anwendungen
 const baseCategoryImages = {
   workshops: [
-    '/images/randomPictures/groupworkUX.jpg',
+    '/images/randomPictures/UX4.jpg',
     '/images/randomPictures/groupworkstudents.jpg',
     '/images/randomPictures/UXteacher.png',
     '/images/randomPictures/girlstaslkingUX.jpg',

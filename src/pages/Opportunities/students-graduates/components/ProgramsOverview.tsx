@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { content } from '../../../../data/content/index'
 import { programs } from '../../../../data/content/programs'
 import Modal from '../../../../components/Modal'
@@ -167,17 +168,16 @@ const ProgramsOverview: React.FC = () => {
                 
                 <div className="pt-6 border-t border-neutral-100 mt-auto">
                   {(activeTab === 'past' || activeTab === 'current') ? (
-                    <motion.button
-                      className="btn btn-primary w-full"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleProgramClick(program)}
+                    <Link
+                      to={`/training/${program.title.toLowerCase().replace(/\s+/g, '-')}`}
+                      className="btn btn-primary w-full text-center inline-block"
+                      style={{ textDecoration: 'none' }}
                     >
                       Learn More
-                    </motion.button>
+                    </Link>
                   ) : (
                     <motion.button
-                      className="btn btn-secondary w-full"
+                      className="btn btn-secondary w-full border-0 cursor-pointer"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => window.location.href = '/contact'}
@@ -233,15 +233,15 @@ const ProgramsOverview: React.FC = () => {
                 </div>
               </div>
 
-              <motion.a
-                href="/contact"
-                className="btn btn-primary inline-flex items-center space-x-3"
+              <motion.button
+                onClick={() => window.location.href = '/contact'}
+                className="btn btn-primary inline-flex items-center space-x-3 border-0 cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <span>Check Your Eligibility</span>
                 <span>→</span>
-              </motion.a>
+              </motion.button>
             </div>
           </div>
         </motion.div>

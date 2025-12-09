@@ -101,14 +101,14 @@ const SkillsPathways: React.FC = () => {
             <p className="text-lg mb-6 text-neutral-700 max-w-2xl mx-auto">
             Our career counselors will help you identify the best path based on your interests, 
             skills, and career goals. </p>
-            <motion.a
-              href="/contact"
-              className="btn btn-primary inline-block"
+            <motion.button
+              onClick={() => window.location.href = '/contact'}
+              className="btn btn-primary inline-block border-0 cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Get Career Guidance
-            </motion.a>
+            </motion.button>
           </div>
         </motion.div>
 

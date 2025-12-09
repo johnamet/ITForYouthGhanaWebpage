@@ -9,7 +9,7 @@ const heroSlides = [
     subtitle: 'Celebrating our students achievements as they complete their IT training journey'
   },
   {
-    image: getImagePath('/images/randomPictures/groupworkUX.jpg'),
+    image: getImagePath('/images/randomPictures/UX4.jpg'),
     title: 'UX Design Training',
     subtitle: 'Students mastering user experience design and digital product development'
   },

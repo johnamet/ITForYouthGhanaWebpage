@@ -77,7 +77,7 @@ const StatsSection: React.FC = () => {
               className="relative"
             >
               <img 
-                src={getImagePath("/images/randomPictures/petertalkingtostudentscoloful.jpg")} 
+                src={getImagePath("/images/randomPictures/peterblackboard.jpg")} 
                 alt="Tech training session with instructor" 
                 className="rounded-2xl shadow-lg w-full h-80 object-cover"
               />
@@ -96,7 +96,7 @@ const StatsSection: React.FC = () => {
               className="relative"
             >
               <img 
-                src={getImagePath("/images/randomPictures/group_girls.jpg")} 
+                src={getImagePath("/images/randomPictures/groupofgirlsentrance.jpg")} 
                 alt="Female students in tech education" 
                 className="rounded-2xl shadow-lg w-full h-80 object-cover"
               />
@@ -127,7 +127,7 @@ const StatsSection: React.FC = () => {
             >
               <div className="relative">
                 <img 
-                  src={getImagePath("/images/randomPictures/groupworkstudents.jpg")} 
+                  src={getImagePath("/images/randomPictures/redstudentgrouplesson.jpg")} 
                   alt="Students working together" 
                   className="rounded-xl w-full h-48 object-cover shadow-lg"
                 />
@@ -157,7 +157,7 @@ const StatsSection: React.FC = () => {
             >
               <div className="relative">
                 <img 
-                  src={getImagePath("/images/randomPictures/graduations.jpg")} 
+                  src={getImagePath("/images/randomPictures/maingraduationpic.jpg")} 
                   alt="Graduation ceremony" 
                   className="rounded-xl w-full h-48 object-cover shadow-lg"
                 />
@@ -180,37 +180,6 @@ const StatsSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Success Gallery */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 1.1 }}
-          className="mt-20"
-        >
-          <h4 className="text-xl font-semibold text-center mb-8" style={{ color: '#0c2d5a' }}>Success Stories</h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <img 
-              src={getImagePath("/images/randomPictures/happystudentscasual.jpg")} 
-              alt="Happy students after training" 
-              className="rounded-lg object-cover h-40 w-full shadow-md hover:shadow-lg transition-shadow duration-300"
-            />
-            <img 
-              src={getImagePath("/images/randomPictures/UX4.jpg")} 
-              alt="Modern tech learning environment" 
-              className="rounded-lg object-cover h-40 w-full shadow-md hover:shadow-lg transition-shadow duration-300"
-            />
-            <img 
-              src={getImagePath("/images/randomPictures/studentpresenting.jpg")} 
-              alt="Student presenting project" 
-              className="rounded-lg object-cover h-40 w-full shadow-md hover:shadow-lg transition-shadow duration-300"
-            />
-            <img 
-              src={getImagePath("/images/randomPictures/studentslistening.jpg")} 
-              alt="Students engaged in learning" 
-              className="rounded-lg object-cover h-40 w-full shadow-md hover:shadow-lg transition-shadow duration-300"
-            />
-          </div>
-        </motion.div>
       </div>
     </section>
   )

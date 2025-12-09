@@ -74,7 +74,7 @@ const MissionSection: React.FC = () => {
             />
             <div className="absolute inset-0 rounded-2xl" style={{ backgroundColor: 'rgba(12, 45, 90, 0.2)' }}></div>
             <div className="absolute bottom-4 left-4 rounded-lg p-4 text-white" style={{ backgroundColor: 'rgba(12, 45, 90, 0.95)' }}>
-              <p className="text-sm font-semibold text-white">Success Stories</p>
+              <p className="text-sm font-semibold text-white">Our Vision</p>
               <p className="text-xs text-white opacity-90">250+ youth trained and employed</p>
             </div>
           </motion.div>

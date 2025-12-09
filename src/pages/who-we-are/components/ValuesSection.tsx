@@ -10,12 +10,12 @@ const ValuesSection: React.FC = () => {
     {
       title: 'Inclusion',
       description: 'We believe technology education should be accessible to everyone, regardless of background, gender, or location.',
-      image: getImagePath('/images/randomPictures/groupworkstudents.jpg')
+      image: getImagePath('/images/randomPictures/studentgroupguys.jpg')
     },
     {
       title: 'Empowerment', 
       description: 'Our programs are designed to give participants the skills, confidence, and opportunities to transform their lives.',
-      image: getImagePath('/images/randomPictures/girlstaslkingUX.jpg')
+      image: getImagePath('/images/randomPictures/whiteLady.jpg')
     },
     {
       title: 'Innovation',
@@ -25,7 +25,7 @@ const ValuesSection: React.FC = () => {
     {
       title: 'Community',
       description: 'Strong communities are built through collaboration, mutual support, and shared commitment to growth.',
-      image: getImagePath('/images/randomPictures/happystudentscasual.jpg')
+      image: getImagePath('/images/randomPictures/graduation.jpg')
     }
   ]
 
