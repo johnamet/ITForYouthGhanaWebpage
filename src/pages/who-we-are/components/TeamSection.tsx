@@ -28,7 +28,7 @@ const TeamSection: React.FC = () => {
 {
   name: 'John Ametepe Agboku',
   role: 'Software Developer & Tech Moderator',
-  image: getImagePath('/images/people/agboku1.jpg'),
+  image: getImagePath('/images/people/agboku1.png'),
   description: 'John Ametepe Agboku is a Software Developer and Tech Moderator at IT For Youth Ghana, dedicated to empowering young people through practical technology training and mentorship. He focuses on building accessible, scalable, and impactful digital solutions that prepare learners for real-world careers.',
   email: 'johnametepe@itforyouthghana.org',
   linkedin: 'https://www.linkedin.com/in/jaagboku/',
