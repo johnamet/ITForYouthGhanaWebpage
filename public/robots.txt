@@ -1,0 +1,42 @@
+# Robots.txt for IT for Youth Ghana
+# Generated for SEO optimization
+
+# Allow all bots
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+Disallow: /internal/
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /_next/
+Disallow: /.next/
+Disallow: /node_modules/
+Disallow: /build/
+Disallow: /dist/
+
+# Crawl delay (2 seconds between requests)
+Crawl-delay: 2
+Request-rate: 30/60
+
+# Specific rules for Googlebot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+# Sitemap location
+Sitemap: https://itforyouthghana.org/sitemap.xml
+Sitemap: https://itforyouthghana.org/public/sitemap.xml
