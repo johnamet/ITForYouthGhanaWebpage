@@ -25,15 +25,16 @@ const TeamSection: React.FC = () => {
       linkedin: 'https://www.linkedin.com/in/mireio-trinley',
       expertise: 'Software Development'
     },
-    {
-      name: 'John Ametepe',
-      role: 'Software Dev',
-      image: getImagePath('/images/people/emmanuel.jpg'),
-      description: 'Software Dev',
-      email: 'johnametepe@itforyouthghana.org',
-      linkedin: '#',
-      expertise: 'Software Development'
-    }
+{
+  name: 'John Ametepe Agboku',
+  role: 'Software Developer & Tech Moderator',
+  image: getImagePath('/images/people/agboku1.jpg'),
+  description: 'John Ametepe Agboku is a Software Developer and Tech Moderator at IT For Youth Ghana, dedicated to empowering young people through practical technology training and mentorship. He focuses on building accessible, scalable, and impactful digital solutions that prepare learners for real-world careers.',
+  email: 'johnametepe@itforyouthghana.org',
+  linkedin: 'https://www.linkedin.com/in/jaagboku/',
+  github: 'https://github.com/johnamet',
+  expertise: 'Software Development, Data Analytics, Tech Education, Mentorship'
+},
   ]
 
   const boardMembers = [
@@ -79,7 +80,7 @@ const TeamSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-20"
         >
-          
+
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {coreTeam.map((member, index) => (
               <motion.div
@@ -91,25 +92,25 @@ const TeamSection: React.FC = () => {
                 className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 text-center border border-neutral-100 h-full flex flex-col"
               >
                 <div className="relative mb-6">
-                  <img 
-                    src={member.image} 
+                  <img
+                    src={member.image}
                     alt={member.name}
                     className="w-32 h-32 rounded-full object-cover mx-auto" style={{ border: '4px solid rgba(12, 45, 90, 0.2)' }}
                   />
                 </div>
-                
+
                 <h4 className="text-xl font-bold mb-2" style={{ color: '#0c2d5a' }}>
                   {member.name}
                 </h4>
-                
+
                 <p className="font-semibold mb-3" style={{ color: '#0c2d5a' }}>
                   {member.role}
                 </p>
-                
+
                 <p className="text-sm text-neutral-600 mb-4 font-medium">
                   {member.expertise}
                 </p>
-                
+
                 <p className="text-body text-sm leading-relaxed mb-6 flex-grow">
                   {member.description}
                 </p>
@@ -117,7 +118,7 @@ const TeamSection: React.FC = () => {
                 {/* Contact Links */}
                 <div className="flex justify-center gap-3 mt-auto">
                   {member.linkedin !== '#' && (
-                    <a 
+                    <a
                       href={member.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -152,7 +153,7 @@ const TeamSection: React.FC = () => {
                       LinkedIn
                     </a>
                   )}
-                  <a 
+                  <a
                     href={`mailto:${member.email}`}
                     className="flex items-center gap-2"
                     style={{
@@ -313,7 +314,7 @@ const TeamSection: React.FC = () => {
         </motion.div>
 
 
-        
+
       </div>
     </section>
   )
