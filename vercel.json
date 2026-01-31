@@ -1,11 +1,9 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "cleanUrls": true,
-  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/(?!.*\\.(?:txt|json|xml|js|css|png|jpg|jpeg|gif|svg|ico|webp|woff2?|ttf|eot|manifest|txt)$).*",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
