@@ -7,7 +7,7 @@ const PartnersSection: React.FC = () => {
   const isInView = useInView(ref, { once: true, amount: 0.2 })
 
   const handlePartnerWithUs = () => {
-    window.location.href = '/partners'
+    window.location.href = '/who-we-are/partners'
   }
 
   const partners = [
@@ -17,7 +17,7 @@ const PartnersSection: React.FC = () => {
       type: 'Strategic Partner'
     },
     {
-      name: 'Partner Organization 2', 
+      name: 'Partner Organization 2',
       image: getImagePath('/images/partnerorga/Download (1).jpg'),
       type: 'Technology Partner'
     },
@@ -75,28 +75,28 @@ const PartnersSection: React.FC = () => {
               key={partner.name}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ 
-                duration: 0.6, 
+              transition={{
+                duration: 0.6,
                 delay: 0.3 + index * 0.1,
                 type: "spring",
                 stiffness: 100
               }}
-              whileHover={{ 
-                y: -10, 
+              whileHover={{
+                y: -10,
                 scale: 1.05,
-                transition: { duration: 0.3 } 
+                transition: { duration: 0.3 }
               }}
               className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-neutral-100 group"
             >
               <div className="flex flex-col items-center">
                 <div className="w-24 h-16 mb-4 flex items-center justify-center overflow-hidden rounded-lg bg-neutral-50 transition-colors duration-300 p-2">
-                  <img 
-                    src={partner.image} 
+                  <img
+                    src={partner.image}
                     alt={partner.name}
                     className="w-full h-full object-contain transition-all duration-300"
                   />
                 </div>
-                
+
               </div>
             </motion.div>
           ))}

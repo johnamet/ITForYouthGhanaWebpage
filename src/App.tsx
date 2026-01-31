@@ -51,7 +51,7 @@ const PageLoading: React.FC = () => (
 function App() {
   return (
     <HelmetProvider>
-      <Router 
+      <Router
         basename=""
         future={{
           v7_startTransition: true,
@@ -67,11 +67,12 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/who-we-are" element={<WhoWeAre />} />
+                <Route path="/who-we-are/partners" element={<Partners />} />
                 {/* New routes */}
                 <Route path="/opportunities/students-graduates" element={<StudentsGraduates />} />
                 <Route path="/opportunities/businesses" element={<Businesses />} />
                 <Route path="/opportunities/volunteers" element={<Volunteers />} />
-                
+
                 {/* Legacy redirects for old URLs */}
                 <Route path="/what-we-offer/students-graduates" element={<StudentsGraduates />} />
                 <Route path="/what-we-offer/businesses" element={<Businesses />} />
