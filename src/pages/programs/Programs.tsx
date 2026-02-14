@@ -8,6 +8,7 @@ import ProgramFilter from './components/ProgramFilter'
 import ProgramGrid from './components/ProgramGrid'
 import ProgramModal from './components/ProgramModal'
 import { useCourses } from '../../hooks/useCourses'
+import { getImagePath } from '../../utils/randomImages'
 
 interface Program {
   title: string
@@ -32,15 +33,33 @@ const Programs: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<'current' | 'past' | 'future'>('current')
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null)
   const [showModal, setShowModal] = useState(false)
+  const { courses, loading, error, retry } = useCourses()
 
-  // Kategorisierte Programme
-  const currentPrograms: Program[] = (content.programs.current || []).map(program => ({
+  const fallbackCurrentPrograms: Program[] = (content.programs.current || []).map(program => ({
     ...program,
     requirements: program.prerequisites || 'No prior experience required',
     nextStart: '10/02/2025',
     status: 'current' as const,
     type: 'Currently Active'
   }))
+
+  const apiCurrentPrograms: Program[] = courses
+    .filter(course => course.status === 'active')
+    .map(course => ({
+      title: course.title,
+      subtitle: `${course.level.charAt(0).toUpperCase()}${course.level.slice(1)} Course`,
+      description: course.shortDescription || course.description,
+      duration: course.duration.displayText,
+      participants: course.enrollment?.capacity ? `Up to ${course.enrollment.capacity} participants` : undefined,
+      image: course.image,
+      skills: course.skills || [],
+      requirements: course.prerequisites?.join(', ') || 'No prior experience required',
+      status: 'current' as const,
+      type: 'Currently Active',
+      nextStart: course.startDate
+    }))
+
+  const currentPrograms = apiCurrentPrograms.length > 0 ? apiCurrentPrograms : fallbackCurrentPrograms
 
   const pastPrograms: Program[] = [
     {
@@ -73,9 +92,20 @@ const Programs: React.FC = () => {
 
   const futurePrograms: Program[] = content.programs.future?.map(program => ({
     ...program,
+    requirements: 'No prior experience required',
     status: 'future' as const,
     type: 'Coming Soon'
   })) || []
+
+  const allPrograms: Record<'current' | 'past' | 'future', Program[]> = {
+    current: currentPrograms,
+    past: pastPrograms,
+    future: futurePrograms
+  }
+
+  const currentCount = allPrograms.current.length
+  const pastCount = allPrograms.past.length
+  const futureCount = allPrograms.future.length
 
   const filteredPrograms = allPrograms[activeFilter]
 
@@ -230,7 +260,7 @@ const Programs: React.FC = () => {
                         <div className="mb-4">
                           <h4 className="font-semibold text-primary mb-2 text-sm">Key Technologies:</h4>
                           <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto">
-                            {program.skills.map((skill, skillIndex) => (
+                            {program.skills?.map((skill, skillIndex) => (
                               <span key={skillIndex} className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs whitespace-nowrap">
                                 {skill}
                               </span>
@@ -241,7 +271,7 @@ const Programs: React.FC = () => {
                         <div>
                           <h4 className="font-semibold text-primary mb-2 text-sm">Real-World Applications:</h4>
                           <div className="flex flex-wrap gap-1 max-h-16 overflow-y-auto">
-                            {program.highlights.map((highlight, highlightIndex) => (
+                            {program.highlights?.map((highlight, highlightIndex) => (
                               <span key={highlightIndex} className="bg-accent/10 text-accent px-2 py-1 rounded-full text-xs whitespace-nowrap">
                                 {highlight}
                               </span>

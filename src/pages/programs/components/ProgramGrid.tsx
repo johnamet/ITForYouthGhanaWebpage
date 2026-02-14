@@ -43,7 +43,10 @@ const ProgramSkeleton: React.FC = () => (
 const ProgramGrid: React.FC<ProgramGridProps> = ({
   programs,
   activeFilter,
-  onProgramClick
+  onProgramClick,
+  loading = false,
+  error = null,
+  onRetry
 }) => {
   // Show loading state
   if (loading && programs.length === 0) {
@@ -75,7 +78,7 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({
             className="btn btn-primary"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onRetry}
+            onClick={() => onRetry?.()}
           >
             Try Again
           </motion.button>

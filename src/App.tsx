@@ -22,6 +22,9 @@ const Donate = React.lazy(() => import('./pages/Donate'))
 const Partners = React.lazy(() => import('./pages/Partners'))
 const Careers = React.lazy(() => import('./pages/Careers'))
 const TechEmpowerment = React.lazy(() => import('./pages/TechEmpowerment'))
+const ImpactPage = React.lazy(() => import('./pages/impact/Impact'))
+const News = React.lazy(() => import('./pages/News'))
+const Community = React.lazy(() => import('./pages/Community'))
 const Error404 = React.lazy(() => import('./pages/Error404'))
 const Error500 = React.lazy(() => import('./pages/Error500'))
 
@@ -31,6 +34,7 @@ const ProgramDetail = React.lazy(() => import('./components/programs/ProgramDeta
 const TrainingProgramDetail = React.lazy(() => import('./components/programs/TrainingProgramDetail'))
 const CategoryPage = React.lazy(() => import('./pages/programs/CategoryPage'))
 const CourseDetailPage = React.lazy(() => import('./pages/programs/CourseDetailPage'))
+const ApiCourseDetailPage = React.lazy(() => import('./pages/programs/ApiCourseDetailPage'))
 
 // Partnership pages
 const EducationalPartnerships = React.lazy(() => import('./pages/partnerships/educational-partnerships/EducationalPartnerships'))
@@ -84,9 +88,13 @@ function App() {
                 <Route path="/how-it-works/businesses" element={<BusinessesProcess />} />
                 <Route path="/how-it-works/volunteers" element={<VolunteersProcess />} />
                 <Route path="/testimonials" element={<Testimonials />} />
+                <Route path="/impact" element={<ImpactPage />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/community" element={<Community />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/donate" element={<Donate />} />
                 <Route path="/partners" element={<Partners />} />
+                <Route path="/partnerships" element={<Partners />} />
                 <Route path="/partnerships/educational-partnerships" element={<EducationalPartnerships />} />
                 <Route path="/partnerships/corporate-sponsorship" element={<CorporateSponsorship />} />
                 <Route path="/partnerships/government-collaboration" element={<GovernmentCollaboration />} />
@@ -95,6 +103,7 @@ function App() {
                 <Route path="/partnerships/technology-partners" element={<TechnologyPartners />} />
                 <Route path="/programs" element={<ProgramsPage />} />
                 {/* Course category and detail pages */}
+                <Route path="/programs/course/:courseSlug" element={<ApiCourseDetailPage />} />
                 <Route path="/programs/:category/:courseId" element={<CourseDetailPage />} />
                 <Route path="/programs/:category" element={<CategoryPage />} />
                 {/* Legacy program detail routes */}

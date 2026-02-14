@@ -157,7 +157,8 @@ const ProgramModal: React.FC<ProgramModalProps> = ({
                       className="btn btn-primary w-full shadow-lg shadow-blue-900/20"
                       onClick={() => {
                         onClose()
-                        window.location.href = '/contact'
+                        const courseParam = encodeURIComponent(program.title.toLowerCase().replace(/\s+/g, '-'))
+                        window.location.href = `https://portal.itforyouthghana.org?course=${courseParam}`
                       }}
                     >
                       Apply Now

@@ -1,61 +1,53 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getImagePath } from '../../utils/randomImages'
+import { fetchCourses } from '../../lib/api/courseApi'
+
+interface NavigationSubItem {
+  id: string
+  label: string
+  path: string
+}
+
+interface NavigationItem {
+  id: string
+  label: string
+  path?: string
+  subItems?: NavigationSubItem[]
+}
 
 // NEW NAVIGATION STRUCTURE - Cleaner and more intuitive
-const NAVIGATION_CONFIG = [
+const INITIAL_NAVIGATION_CONFIG: NavigationItem[] = [
   {
     id: 'home',
     label: 'Home',
     path: '/'
   },
-   {
+  {
     id: 'about',
     label: 'About',
     subItems: [
       { id: 'who-we-are', label: 'Who We Are', path: '/who-we-are' },
-      { id: 'impact', label: 'Our Impact', path: '/testimonials' },
+      { id: 'impact', label: 'Our Impact', path: '/impact' },
       { id: 'testimonials', label: 'Testimonials', path: '/testimonials' },
       { id: 'partners', label: 'Our Partners', path: '/partners' },
       { id: 'news', label: 'News & Updates', path: '/news' }
     ]
   },
   {
-    id: 'courses',
-    label: 'Apply For Training',
+    id: 'what-we-do',
+    label: 'What We Do',
     subItems: [
-      {
-        id: 'web-dev',
-        label: 'Web Development',
-        path: '/programs/web-development'
-      },
-      {
-        id: 'cybersecurity',
-        label: 'Cybersecurity',
-        path: '/programs/cybersecurity'
-      },
-      {
-        id: 'data-analytics',
-        label: 'Data Analytics',
-        path: '/programs/data-analytics'
-      },
-      {
-        id: 'graphic-design',
-        label: 'Graphic Design',
-        path: '/programs/graphic-design'
-      },
-      {
-        id: 'view-all',
-        label: 'View All Courses',
-        path: '/programs'
-      }
+      { id: 'programs', label: 'Our Programs', path: '/programs' },
+      { id: 'partnerships', label: 'Partnerships', path: '/partnerships' },
+      { id: 'impact-stories', label: 'Impact & Success Stories', path: '/impact' },
+      { id: 'community', label: 'Community Outreach', path: '/community' }
     ]
   },
   {
-    id: 'apply',
-    label: 'Apply Now',
-    path: '/who-can-apply'
+    id: 'apply-for-training',
+    label: 'Apply for Training',
+    subItems: []
   },
   {
     id: 'for-organizations',
@@ -83,9 +75,37 @@ const NAVIGATION_CONFIG = [
 const MainNavigation: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [navigationConfig, setNavigationConfig] = useState<NavigationItem[]>(INITIAL_NAVIGATION_CONFIG)
   const location = useLocation()
 
-  const isActivePath = (path?: string, subItems?: any[]) => {
+  useEffect(() => {
+    fetchCourses()
+      .then(courses => {
+        const courseItems = courses.map(course => ({
+          id: course.slug,
+          label: course.title,
+          path: `/programs/course/${course.slug}`
+        }))
+        const subItems = [
+          ...courseItems,
+          {
+            id: 'view-all-courses',
+            label: 'View All Courses',
+            path: '/programs'
+          }
+        ]
+        setNavigationConfig(prev =>
+          prev.map(item =>
+            item.id === 'apply-for-training'
+              ? { ...item, subItems }
+              : item
+          )
+        )
+      })
+      .catch(err => console.error('Failed to fetch courses for navigation:', err))
+  }, [])
+
+  const isActivePath = (path?: string, subItems?: NavigationSubItem[]) => {
     if (path) return location.pathname === path
     if (subItems) {
       return subItems.some(item => location.pathname === item.path)
@@ -148,7 +168,7 @@ const MainNavigation: React.FC = () => {
 
             {/* Desktop & Tablet Navigation - Clean & Professional */}
             <div className="hidden md:flex items-center md:space-x-0.5 lg:space-x-1">
-              {NAVIGATION_CONFIG.filter(item => item.id !== 'donate' && item.id !== 'apply').map((item) => (
+              {navigationConfig.filter(item => item.id !== 'donate' && item.id !== 'apply').map((item) => (
                 <div
                   key={item.id}
                   className="relative"
@@ -332,7 +352,7 @@ const MainNavigation: React.FC = () => {
                 className="md:hidden border-t border-neutral-200 bg-white"
               >
                 <div className="py-4">
-                  {NAVIGATION_CONFIG.filter(item => item.id !== 'donate' && item.id !== 'apply').map((item) => (
+                  {navigationConfig.filter(item => item.id !== 'donate' && item.id !== 'apply').map((item) => (
                     <div key={item.id} className="px-4">
                       {item.path ? (
                         <Link

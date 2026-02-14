@@ -9,7 +9,7 @@ import {
 } from '../../types/course'
 
 // Configuration
-const COURSE_API_ENDPOINT = 'https://portal.itforyouthghana.org/api/courses'
+const COURSE_API_ENDPOINT = import.meta.env.VITE_COURSE_API_ENDPOINT || 'https://portal.itforyouthghana.org/api/courses'
 const CACHE_KEY = 'courses_cache_v2' // v2 indicates new structure
 const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
 const REQUEST_TIMEOUT = 10000 // 10 seconds
@@ -177,11 +177,11 @@ export const fetchCourseById = async (courseId: string): Promise<Course | null> 
     console.log('[v0] Fetching course by ID:', courseId)
     const courses = await fetchCourses(true)
     const course = courses.find(course => course.id === courseId) || null
-    
+
     if (!course) {
       console.warn('[v0] Course not found:', courseId)
     }
-    
+
     return course
   } catch (error) {
     console.error('[v0] Error fetching course by ID:', error)
