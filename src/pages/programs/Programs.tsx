@@ -1,4 +1,4 @@
-// NEU: Programme-Seite mit rechten Filter-Buttons und Kurs-Popups überarbeitet
+// Refactored Programs page with dynamic API-based courses
 import React, { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { content } from '../../data/content/index'
@@ -7,7 +7,7 @@ import ProgramsHero from './components/ProgramsHero'
 import ProgramFilter from './components/ProgramFilter'
 import ProgramGrid from './components/ProgramGrid'
 import ProgramModal from './components/ProgramModal'
-import { getImagePath } from '../../utils/randomImages'
+import { useCourses } from '../../hooks/useCourses'
 
 interface Program {
   title: string
@@ -33,54 +33,60 @@ const Programs: React.FC = () => {
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null)
   const [showModal, setShowModal] = useState(false)
 
-  // Kategorisierte Programme
-  const currentPrograms: Program[] = content.programs.main.map(program => ({
-    ...program,
-    nextStart: '10/02/2025',
-    status: 'current' as const,
-    type: 'Currently Active'
-  }))
+  // Fetch courses from API
+  const { courses, loading, error, retry } = useCourses()
 
-  const pastPrograms: Program[] = [
-    {
-      title: 'Digital Literacy Bootcamp 2023',
-      subtitle: 'Foundation Skills',
-      description: 'Basic computer skills and digital literacy for rural communities.',
-      duration: '6 weeks',
-      participants: '120 graduates',
-      image: getImagePath('/images/randomPictures/studentsBackcoding.jpg'),
-      skills: ['Computer Basics', 'Internet Navigation', 'Digital Safety', 'Email & Communication'],
-      requirements: 'No prior experience required',
-      status: 'past' as const,
-      type: 'Completed Program',
-      completedDate: 'December 2023'
-    },
-    {
-      title: 'Web Development Intensive 2022',
-      subtitle: 'Full Stack Development',
-      description: 'Comprehensive web development training with real-world projects.',
-      duration: '12 weeks',
-      participants: '45 graduates',
-      image: getImagePath('/images/randomPictures/peterblackboard.jpg'),
-      skills: ['HTML/CSS', 'JavaScript', 'React', 'Node.js', 'Database Design'],
-      requirements: 'Basic computer skills',
-      status: 'past' as const,
-      type: 'Completed Program',
-      completedDate: 'August 2022'
+  // Transform API courses to Program interface format
+  const transformApiCoursesToPrograms = (): {
+    current: Program[]
+    past: Program[]
+    future: Program[]
+  } => {
+    const categorized = {
+      current: [] as Program[],
+      past: [] as Program[],
+      future: [] as Program[]
     }
-  ]
 
-  const futurePrograms: Program[] = content.programs.future?.map(program => ({
-    ...program,
-    status: 'future' as const,
-    type: 'Coming Soon'
-  })) || []
+    // Map API courses to programs (assuming all API courses are "current")
+    courses.forEach(course => {
+      const program: Program = {
+        title: course.title,
+        subtitle: course.level || 'Professional Training',
+        description: course.description,
+        duration: course.duration,
+        participants: `${course.enrolled || 0}/${course.capacity || 'Unlimited'} enrolled`,
+        image: course.image,
+        skills: course.skills || [],
+        requirements: course.requirements || 'No prerequisites',
+        status: 'current',
+        type: 'Currently Active',
+        nextStart: course.startDate,
+        careerOutcomes: course.careerOutcomes,
+        highlights: course.highlights
+      }
+      categorized.current.push(program)
+    })
 
-  const filteredPrograms = {
-    current: currentPrograms,
-    past: pastPrograms,
-    future: futurePrograms
-  }[activeFilter]
+    // Add fallback programs from content if available (past/future programs)
+    if (content.programs.future) {
+      const futureProgs = content.programs.future.map(program => ({
+        ...program,
+        status: 'future' as const,
+        type: 'Coming Soon'
+      }))
+      categorized.future = futureProgs
+    }
+
+    return categorized
+  }
+
+  const allPrograms = transformApiCoursesToPrograms()
+  const currentCount = allPrograms.current.length
+  const pastCount = allPrograms.past.length
+  const futureCount = allPrograms.future.length
+
+  const filteredPrograms = allPrograms[activeFilter]
 
   const handleProgramClick = (program: Program) => {
     setSelectedProgram(program)
@@ -123,16 +129,19 @@ const Programs: React.FC = () => {
             <ProgramFilter
               activeFilter={activeFilter}
               setActiveFilter={setActiveFilter}
-              currentCount={currentPrograms.length}
-              pastCount={pastPrograms.length}
-              futureCount={futurePrograms.length}
+              currentCount={currentCount}
+              pastCount={pastCount}
+              futureCount={futureCount}
             />
 
-            {/* Program Cards Grid */}
+            {/* Program Cards Grid with Loading/Error States */}
             <ProgramGrid
               programs={filteredPrograms}
               activeFilter={activeFilter}
               onProgramClick={handleProgramClick}
+              loading={loading}
+              error={error}
+              onRetry={retry}
             />
           </div>
         </section>
@@ -182,7 +191,7 @@ const Programs: React.FC = () => {
         </section>
 
         {/* Future Programs */}
-        {content.programs.future && content.programs.future.length > 0 && (
+        {futureCount > 0 && (
           <section className="py-20 bg-gradient-to-r from-primary/5 to-accent/5">
             <div className="container">
               <motion.div
@@ -198,7 +207,7 @@ const Programs: React.FC = () => {
               </motion.div>
 
               <div className="grid md:grid-cols-1 gap-8 max-w-4xl mx-auto">
-                {content.programs.future.map((program, index) => (
+                {allPrograms.future.map((program, index) => (
                   <motion.div
                     key={program.title}
                     initial={{ opacity: 0, y: 50 }}
@@ -261,10 +270,10 @@ const Programs: React.FC = () => {
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => {
-                            alert('Thank you for your interest! We will contact you when this program becomes available.')
+                            window.location.href = 'https://portal.itforyouthghana.org'
                           }}
                         >
-                          Get Updates
+                          Register Interest
                         </motion.button>
                       </div>
                     </div>
