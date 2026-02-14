@@ -2,7 +2,7 @@
 import { Course, CourseApiResponse, transformCourseData } from '../../types/course'
 
 // Configuration
-const COURSE_API_ENDPOINT = 'https://portal.itforyouthghana.org/api/courses'
+const COURSE_API_ENDPOINT = 'https://papi.itforyouthghana.org/api/courses'
 const CACHE_KEY = 'courses_cache'
 const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
 
@@ -23,13 +23,13 @@ const getCachedCourses = (): Course[] | null => {
   try {
     const cached = sessionStorage.getItem(CACHE_KEY)
     if (!cached) return null
-    
+
     const cacheEntry: CacheEntry = JSON.parse(cached)
     if (!isCacheValid(cacheEntry)) {
       sessionStorage.removeItem(CACHE_KEY)
       return null
     }
-    
+
     return cacheEntry.data
   } catch (error) {
     console.error('[v0] Error reading course cache:', error)
@@ -68,7 +68,7 @@ export const fetchCourses = async (
     console.log('[v0] Fetching courses from API...')
 
     let lastError: Error | null = null
-    
+
     for (let attempt = 0; attempt < retries; attempt++) {
       try {
         const response = await fetch(COURSE_API_ENDPOINT, {
@@ -106,7 +106,7 @@ export const fetchCourses = async (
         return courses
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error))
-        
+
         // If this is the last retry, throw the error
         if (attempt === retries - 1) {
           throw lastError
@@ -142,7 +142,7 @@ export const searchCourses = async (query: string): Promise<Course[]> => {
   try {
     const courses = await fetchCourses(true)
     const lowerQuery = query.toLowerCase()
-    
+
     return courses.filter(course =>
       course.title.toLowerCase().includes(lowerQuery) ||
       course.description.toLowerCase().includes(lowerQuery) ||
