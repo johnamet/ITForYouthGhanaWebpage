@@ -17,57 +17,47 @@ const ProgramFilter: React.FC<ProgramFilterProps> = ({
   futureCount
 }) => {
   const filters = [
-    { key: 'current' as const, label: 'Current', icon: 'CUR', count: currentCount },
-    { key: 'past' as const, label: 'Past', icon: 'PAS', count: pastCount },
-    { key: 'future' as const, label: 'Future', icon: 'FUT', count: futureCount }
+    { key: 'current' as const, label: 'Current', count: currentCount },
+    { key: 'future' as const, label: 'Future', count: futureCount },
+    { key: 'past' as const, label: 'Past', count: pastCount }
   ]
 
   return (
-    <>
-      {/* Mobile Filter - Horizontal */}
-      <div className="mobile-only mb-8">
-        <div className="flex justify-center gap-4 overflow-x-auto pb-2">
-          {filters.map((filter) => (
-            <motion.button
-              key={filter.key}
-              onClick={() => setActiveFilter(filter.key)}
-              className={`filter-button min-w-fit ${
-                activeFilter === filter.key ? 'active' : ''
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              title={`${filter.label} Programs (${filter.count})`}
-            >
-              <div className="text-center px-4">
-                <div className="font-bold text-sm mb-1">{filter.label}</div>
-                <div className="text-xs">({filter.count})</div>
-              </div>
-            </motion.button>
-          ))}
+    <div className="mb-12">
+      {/* Centered Pill Filter for all screens */}
+      <div className="flex justify-center">
+        <div className="bg-slate-100 p-1.5 rounded-full inline-flex relative shadow-inner">
+          {filters.map((filter) => {
+            const isActive = activeFilter === filter.key
+            return (
+              <button
+                key={filter.key}
+                onClick={() => setActiveFilter(filter.key)}
+                className={`
+                  relative z-10 flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300
+                  ${isActive ? 'text-primary' : 'text-slate-500 hover:text-slate-700'}
+                `}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeFilterPill"
+                    className="absolute inset-0 bg-white shadow-sm rounded-full border border-slate-200"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-20">{filter.label}</span>
+                <span className={`
+                  relative z-20 text-xs py-0.5 px-2 rounded-full transition-colors
+                  ${isActive ? 'bg-primary/10 text-primary' : 'bg-slate-200 text-slate-500'}
+                `}>
+                  {filter.count}
+                </span>
+              </button>
+            )
+          })}
         </div>
       </div>
-
-      {/* Desktop Filter - Fixed Right */}
-      <div className="desktop-only fixed right-6 top-1/2 transform -translate-y-1/2 z-40 space-y-4">
-        {filters.map((filter) => (
-          <motion.button
-            key={filter.key}
-            onClick={() => setActiveFilter(filter.key)}
-            className={`filter-button ${
-              activeFilter === filter.key ? 'active' : ''
-            }`}
-            whileHover={{ scale: 1.05, x: -5 }}
-            whileTap={{ scale: 0.95 }}
-            title={`${filter.label} Programs (${filter.count})`}
-          >
-            <div className="text-center">
-              <div className="font-bold text-lg mb-1">{filter.icon}</div>
-              <div className="text-xs">{filter.count}</div>
-            </div>
-          </motion.button>
-        ))}
-      </div>
-    </>
+    </div>
   )
 }
 

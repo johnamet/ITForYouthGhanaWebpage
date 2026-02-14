@@ -11,46 +11,47 @@ const WhoCanApply: React.FC = () => {
     navigateToPage('/contact')
   }
 
+  // UPDATED: Focus on individual learners only
   const eligibilityCategories = [
     {
-      title: 'Students & Recent Graduates',
+      title: 'High School Graduates',
       requirements: [
-        'Age 18-35 years old',
-        'Basic literacy in English',
-        'Passion for learning technology',
-        'Commitment to complete the program'
+        'Completed secondary school (WASSCE/GCE)',
+        'Age 18-30 years old',
+        'Basic English literacy',
+        'No prior tech experience needed'
       ],
-      description: 'Perfect for those looking to start or transition into a tech career'
+      description: 'Start your tech career right after secondary school with professional training'
+    },
+    {
+      title: 'University/Diploma Students',
+      requirements: [
+        'Currently enrolled or recently graduated',
+        'Any field of study welcome',
+        'Available for program duration',
+        'Eager to gain practical tech skills'
+      ],
+      description: 'Complement your degree with in-demand tech skills for better career prospects'
     },
     {
       title: 'Career Changers',
       requirements: [
         'Any educational background',
-        'Motivation to learn new skills',
-        'Available for full program duration',
-        'Basic computer literacy helpful but not required'
+        'Currently employed or seeking employment',
+        'Motivation to transition into tech',
+        'Commitment to complete the program'
       ],
-      description: 'Ideal for professionals seeking to pivot into the tech industry'
+      description: 'Switch careers into the fast-growing tech industry with our support'
     },
     {
-      title: 'Entrepreneurs',
+      title: 'Career Upgraders',
       requirements: [
-        'Business idea or existing small business',
-        'Interest in digital solutions',
-        'Commitment to community impact',
-        'Willingness to share knowledge with others'
+        'Working professionals seeking advancement',
+        'Basic computer literacy helpful',
+        'Clear career development goals',
+        'Dedicated to skill improvement'
       ],
-      description: 'Great for those wanting to digitize their business or create tech solutions'
-    },
-    {
-      title: 'Community Leaders',
-      requirements: [
-        'Active in local community',
-        'Interest in teaching others',
-        'Commitment to spreading digital literacy',
-        'Leadership experience preferred'
-      ],
-      description: 'Perfect for multiplying our impact through community outreach'
+      description: 'Level up your current career with new tech skills and certifications'
     }
   ]
 
@@ -58,10 +59,10 @@ const WhoCanApply: React.FC = () => {
     <>
       <SEO
         title="Who Can Apply - IT for Youth Ghana"
-        description="Find out if you're eligible for our professional tech training programs. Open to students, career changers, entrepreneurs, and community leaders."
+        description="Individual tech training programs for students, graduates, and professionals. Start your tech career or upgrade your skills with our professional training."
         canonical="/who-can-apply"
       />
-      
+
       <div id="main-content" className="min-h-screen bg-white pt-24">
         {/* Hero Section */}
         <section className="relative py-24 overflow-hidden" style={{ backgroundColor: '#0c2d5a' }}>
@@ -76,12 +77,12 @@ const WhoCanApply: React.FC = () => {
                 Who Can Apply
               </h1>
               <p className="text-lead text-white/90 mb-8">
-                Opportunities for Everyone
+                Individual Training Programs for Students & Professionals
               </p>
               <p className="text-xl mb-12 text-white/80 leading-relaxed max-w-3xl mx-auto">
-                Our programs are designed to be inclusive and accessible. Find out if you qualify for our professional tech training and support programs.
+                Our programs are designed for individuals looking to start or advance their tech careers. Whether you're a student, graduate, or working professional - we have a path for you.
               </p>
-              
+
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -105,10 +106,26 @@ const WhoCanApply: React.FC = () => {
                   See Requirements
                 </motion.button>
               </motion.div>
+
+              {/* NEW: Link to Corporate Training */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="mt-8 pt-6 border-t border-white/20"
+              >
+                <p className="text-white/70 text-sm mb-2">Looking for corporate or team training?</p>
+                <button
+                  onClick={() => navigateToPage('/partnerships/corporate-sponsorship')}
+                  className="text-white hover:text-white/90 underline text-sm font-medium"
+                >
+                  View Corporate Training Services →
+                </button>
+              </motion.div>
             </motion.div>
           </div>
         </section>
-        
+
         {/* Eligibility Categories */}
         <section id="eligibility" ref={ref} className="section bg-white">
           <div className="container">
@@ -118,9 +135,9 @@ const WhoCanApply: React.FC = () => {
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="heading-lg mb-6" style={{ color: '#0c2d5a' }}>Eligibility Categories</h2>
+              <h2 className="heading-lg mb-6" style={{ color: '#0c2d5a' }}>Who Qualifies?</h2>
               <p className="text-lead text-center max-w-4xl mx-auto text-neutral-800">
-                We welcome applications from diverse backgrounds. Here are our main eligibility categories:
+                We welcome individual applicants from all backgrounds. Check which category fits you best:
               </p>
             </motion.div>
 
@@ -135,17 +152,15 @@ const WhoCanApply: React.FC = () => {
                   className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border group"
                   style={{ borderColor: 'rgba(12, 45, 90, 0.1)' }}
                 >
-                 
-                  
                   <h3 className="heading-sm mb-4 group-hover:text-opacity-80 transition-colors duration-300" style={{ color: '#0c2d5a' }}>
                     {category.title}
                   </h3>
-                  
+
                   <p className="text-body mb-6 text-neutral-700 leading-relaxed group-hover:text-neutral-800 transition-colors duration-300">
                     {category.description}
                   </p>
-                  
-                  <div 
+
+                  <div
                     className="rounded-xl p-4 transition-colors duration-300"
                     style={{ backgroundColor: 'rgba(12, 45, 90, 0.1)' }}
                   >
@@ -171,8 +186,8 @@ const WhoCanApply: React.FC = () => {
               className="rounded-2xl p-12 text-center max-w-6xl mx-auto"
               style={{ backgroundColor: 'rgba(12, 45, 90, 0.05)' }}
             >
-              <h3 className="heading-md mb-8" style={{ color: '#0c2d5a' }}>Special Considerations</h3>
-              
+              <h3 className="heading-md mb-8" style={{ color: '#0c2d5a' }}>What You Get</h3>
+
               <div className="grid md:grid-cols-2 gap-12 mb-12">
                 <motion.div
                   initial={{ opacity: 0, x: -30 }}
@@ -180,16 +195,15 @@ const WhoCanApply: React.FC = () => {
                   transition={{ duration: 0.6, delay: 0.8 }}
                   className="bg-white rounded-xl p-6 shadow-lg"
                 >
-                  
                   <h4 className="text-left space-y-3 heading-sm mb-4" style={{ color: '#0c2d5a' }}>Priority Given To:</h4>
                   <ul className="text-left space-y-3">
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0c2d5a' }}></div>
-                      <span className="text-body">Women and girls (40%+ target)</span>
+                      <span className="text-body">Women and girls (70%+ of our students)</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0c2d5a' }}></div>
-                      <span className="text-body">Rural and underserved communities</span>
+                      <span className="text-body">Underserved and rural communities</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0c2d5a' }}></div>
@@ -197,35 +211,34 @@ const WhoCanApply: React.FC = () => {
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0c2d5a' }}></div>
-                      <span className="text-body">Demonstrated financial need</span>
+                      <span className="text-body">Demonstrated commitment and financial need</span>
                     </li>
                   </ul>
                 </motion.div>
-                
+
                 <motion.div
                   initial={{ opacity: 0, x: 30 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.6, delay: 1.0 }}
                   className="bg-white rounded-xl p-6 shadow-lg"
                 >
-                  
-                  <h4 className=" text-left space-y-3 heading-sm mb-4" style={{ color: '#0c2d5a' }}>What We Provide:</h4>
+                  <h4 className="text-left space-y-3 heading-sm mb-4" style={{ color: '#0c2d5a' }}>Included in Your Training:</h4>
                   <ul className="text-left space-y-3">
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0c2d5a' }}></div>
-                      <span className="text-body">Professional tech training</span>
+                      <span className="text-body">Professional tech training & certification</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0c2d5a' }}></div>
-                      <span className="text-body">All necessary equipment</span>
+                      <span className="text-body">All necessary equipment & software</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0c2d5a' }}></div>
-                      <span className="text-body">Career support and mentorship</span>
+                      <span className="text-body">Career counseling & job placement support</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#0c2d5a' }}></div>
-                      <span className="text-body">Network access and opportunities</span>
+                      <span className="text-body">Professional network & mentorship</span>
                     </li>
                   </ul>
                 </motion.div>
@@ -249,7 +262,7 @@ const WhoCanApply: React.FC = () => {
                   className="btn btn-secondary"
                   whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,0,0,0.2)" }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => navigateToPage('/opportunities')}
+                  onClick={() => navigateToPage('/programs')}
                 >
                   View Programs
                 </motion.button>
@@ -257,8 +270,35 @@ const WhoCanApply: React.FC = () => {
             </motion.div>
           </div>
         </section>
+
+        {/* NEW: Corporate Training CTA Section */}
+        <section className="py-16" style={{ backgroundColor: '#f8f9fa' }}>
+          <div className="container">
+            <div className="max-w-4xl mx-auto text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <h3 className="heading-md mb-4" style={{ color: '#0c2d5a' }}>
+                  Looking to Train Your Team or Organization?
+                </h3>
+                <p className="text-body mb-8 text-neutral-700">
+                  We offer customized corporate training programs, workshops, and capacity building for businesses, NGOs, schools, and government organizations.
+                </p>
+                <motion.button
+                  className="btn btn-primary"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigateToPage('/partnerships/corporate-sponsorship')}
+                >
+                  Explore Corporate Training →
+                </motion.button>
+              </motion.div>
+            </div>
+          </div>
+        </section>
       </div>
-      
     </>
   )
 }

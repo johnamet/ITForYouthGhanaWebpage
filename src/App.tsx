@@ -29,6 +29,8 @@ const Error500 = React.lazy(() => import('./pages/Error500'))
 const ProgramsPage = React.lazy(() => import('./pages/programs/Programs'))
 const ProgramDetail = React.lazy(() => import('./components/programs/ProgramDetail'))
 const TrainingProgramDetail = React.lazy(() => import('./components/programs/TrainingProgramDetail'))
+const CategoryPage = React.lazy(() => import('./pages/programs/CategoryPage'))
+const CourseDetailPage = React.lazy(() => import('./pages/programs/CourseDetailPage'))
 
 // Partnership pages
 const EducationalPartnerships = React.lazy(() => import('./pages/partnerships/educational-partnerships/EducationalPartnerships'))
@@ -92,7 +94,10 @@ function App() {
                 <Route path="/partnerships/international-development" element={<InternationalDevelopment />} />
                 <Route path="/partnerships/technology-partners" element={<TechnologyPartners />} />
                 <Route path="/programs" element={<ProgramsPage />} />
-                <Route path="/programs/:programId" element={<ProgramDetail />} />
+                {/* Course category and detail pages */}
+                <Route path="/programs/:category/:courseId" element={<CourseDetailPage />} />
+                <Route path="/programs/:category" element={<CategoryPage />} />
+                {/* Legacy program detail routes */}
                 <Route path="/training/:programId" element={<TrainingProgramDetail />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/tech-empowerment" element={<TechEmpowerment />} />

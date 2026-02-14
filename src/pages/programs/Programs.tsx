@@ -33,58 +33,49 @@ const Programs: React.FC = () => {
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null)
   const [showModal, setShowModal] = useState(false)
 
-  // Fetch courses from API
-  const { courses, loading, error, retry } = useCourses()
+  // Kategorisierte Programme
+  const currentPrograms: Program[] = (content.programs.current || []).map(program => ({
+    ...program,
+    requirements: program.prerequisites || 'No prior experience required',
+    nextStart: '10/02/2025',
+    status: 'current' as const,
+    type: 'Currently Active'
+  }))
 
-  // Transform API courses to Program interface format
-  const transformApiCoursesToPrograms = (): {
-    current: Program[]
-    past: Program[]
-    future: Program[]
-  } => {
-    const categorized = {
-      current: [] as Program[],
-      past: [] as Program[],
-      future: [] as Program[]
+  const pastPrograms: Program[] = [
+    {
+      title: 'Digital Literacy Bootcamp 2023',
+      subtitle: 'Foundation Skills',
+      description: 'Basic computer skills and digital literacy for rural communities.',
+      duration: '6 weeks',
+      participants: '120 graduates',
+      image: getImagePath('/images/randomPictures/studentsBackcoding.jpg'),
+      skills: ['Computer Basics', 'Internet Navigation', 'Digital Safety', 'Email & Communication'],
+      requirements: 'No prior experience required',
+      status: 'past' as const,
+      type: 'Completed Program',
+      completedDate: 'December 2023'
+    },
+    {
+      title: 'Web Development Intensive 2022',
+      subtitle: 'Full Stack Development',
+      description: 'Comprehensive web development training with real-world projects.',
+      duration: '12 weeks',
+      participants: '45 graduates',
+      image: getImagePath('/images/randomPictures/peterblackboard.jpg'),
+      skills: ['HTML/CSS', 'JavaScript', 'React', 'Node.js', 'Database Design'],
+      requirements: 'Basic computer skills',
+      status: 'past' as const,
+      type: 'Completed Program',
+      completedDate: 'August 2022'
     }
+  ]
 
-    // Map API courses to programs (assuming all API courses are "current")
-    courses.forEach(course => {
-      const program: Program = {
-        title: course.title,
-        subtitle: course.level || 'Professional Training',
-        description: course.description,
-        duration: course.duration,
-        participants: `${course.enrolled || 0}/${course.capacity || 'Unlimited'} enrolled`,
-        image: course.image,
-        skills: course.skills || [],
-        requirements: course.requirements || 'No prerequisites',
-        status: 'current',
-        type: 'Currently Active',
-        nextStart: course.startDate,
-        careerOutcomes: course.careerOutcomes,
-        highlights: course.highlights
-      }
-      categorized.current.push(program)
-    })
-
-    // Add fallback programs from content if available (past/future programs)
-    if (content.programs.future) {
-      const futureProgs = content.programs.future.map(program => ({
-        ...program,
-        status: 'future' as const,
-        type: 'Coming Soon'
-      }))
-      categorized.future = futureProgs
-    }
-
-    return categorized
-  }
-
-  const allPrograms = transformApiCoursesToPrograms()
-  const currentCount = allPrograms.current.length
-  const pastCount = allPrograms.past.length
-  const futureCount = allPrograms.future.length
+  const futurePrograms: Program[] = content.programs.future?.map(program => ({
+    ...program,
+    status: 'future' as const,
+    type: 'Coming Soon'
+  })) || []
 
   const filteredPrograms = allPrograms[activeFilter]
 
@@ -100,7 +91,7 @@ const Programs: React.FC = () => {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Tech Programs - Programming Courses Ghana"
         description="Explore our comprehensive technology programs in Ghana. Web development, data science, mobile app development courses with 70% female participation."
         canonical="/programs"
@@ -224,7 +215,7 @@ const Programs: React.FC = () => {
                           </span>
                         </div>
                         <p className="text-body mb-4 leading-relaxed">{program.description}</p>
-                        
+
                         <div className="responsive-grid responsive-grid-md-2 gap-4 mb-4">
                           <div>
                             <h4 className="font-semibold text-primary mb-2 text-sm">Initial Cohort:</h4>
@@ -258,7 +249,7 @@ const Programs: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="text-center">
                         <img
                           src={program.image}

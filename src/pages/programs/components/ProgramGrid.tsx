@@ -40,13 +40,10 @@ const ProgramSkeleton: React.FC = () => (
   </div>
 )
 
-const ProgramGrid: React.FC<ProgramGridProps> = ({ 
-  programs, 
-  activeFilter, 
-  onProgramClick,
-  loading = false,
-  error = null,
-  onRetry = () => {}
+const ProgramGrid: React.FC<ProgramGridProps> = ({
+  programs,
+  activeFilter,
+  onProgramClick
 }) => {
   // Show loading state
   if (loading && programs.length === 0) {
@@ -109,53 +106,78 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({
 
   // Show courses grid
   return (
-    <motion.div 
+    <motion.div
       key={activeFilter}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       className="responsive-grid responsive-grid-md-2 responsive-grid-lg-3 mb-16"
     >
       {programs.map((program, index) => (
         <motion.div
           key={program.title}
-          initial={{ opacity: 0, y: 50 }}
+          layout
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: index * 0.1 }}
-          whileHover={{ y: -10, transition: { duration: 0.3 } }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
           onClick={() => onProgramClick(program)}
-          className="card overflow-hidden cursor-pointer group"
+          className="card group cursor-pointer p-0 h-full border-0 overflow-hidden"
+          style={{ minHeight: '400px' }} // Taller cards
         >
-          <div className="relative h-48 overflow-hidden">
+          {/* Image Container with Zoom Effect */}
+          <div className="relative h-56 overflow-hidden">
+            <div className="absolute inset-0 bg-primary/20 z-10 group-hover:bg-primary/0 transition-colors duration-500" />
             <img
               src={program.image}
               alt={program.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
             />
-            <div className="absolute top-4 right-4">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                program.status === 'current' ? 'bg-success text-white' :
-                program.status === 'past' ? 'bg-neutral-500 text-white' :
-                'bg-accent text-white'
-              }`}>
+
+            {/* Badges */}
+            <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+              <span className={`badge border-0 shadow-lg ${program.status === 'current' ? 'bg-white text-green-700' :
+                  program.status === 'past' ? 'bg-slate-800 text-white' :
+                    'bg-blue-600 text-white'
+                }`}>
                 {program.type}
               </span>
             </div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="heading-sm text-white mb-1">{program.title}</h3>
-              <p className="text-sm opacity-90">{program.subtitle}</p>
-            </div>
           </div>
-          
-          <div className="card-body">
-            <p className="text-body mb-4 line-clamp-3">{program.description}</p>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-primary font-semibold">
-                {program.status === 'past' ? program.completedDate :
-                 program.status === 'future' ? 'Development' :
-                 program.participants}
-              </span>
-              <span className="text-accent font-semibold">Details →</span>
+
+          {/* Content */}
+          <div className="p-8 flex flex-col flex-1 relative bg-white">
+            <h3 className="heading-sm mb-2 group-hover:text-primary-light transition-colors">
+              {program.title}
+            </h3>
+            <p className="text-sm text-primary/60 font-medium mb-4 uppercase tracking-wider">
+              {program.subtitle}
+            </p>
+
+            <p className="text-body text-sm mb-6 line-clamp-3 flex-1">
+              {program.description}
+            </p>
+
+            <div className="flex items-center justify-between pt-6 border-t border-slate-100 mt-auto">
+              <div className="flex flex-col">
+                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wide">
+                  {program.status === 'past' ? 'Completed' : 'Start Date'}
+                </span>
+                <span className="text-sm font-bold text-primary">
+                  {program.status === 'past' ? program.completedDate :
+                    program.status === 'future' ? program.nextStart || 'TBA' :
+                      program.nextStart}
+                </span>
+              </div>
+
+              <motion.div
+                className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors"
+                whileHover={{ rotate: 90 }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </motion.div>
             </div>
           </div>
         </motion.div>
