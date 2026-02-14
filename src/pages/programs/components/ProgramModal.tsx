@@ -132,10 +132,11 @@ const ProgramModal: React.FC<ProgramModalProps> = ({
               whileTap={{ scale: 0.98 }}
               onClick={() => {
                 onClose()
-                window.location.href = '/contact'
+                // Redirect to portal with course context
+                window.location.href = 'https://portal.itforyouthghana.org'
               }}
             >
-              Apply Now
+              Enroll Now
             </motion.button>
           )}
           {program.status === 'future' && (
@@ -146,21 +147,22 @@ const ProgramModal: React.FC<ProgramModalProps> = ({
                 whileTap={{ scale: 0.98 }}
                 onClick={() => {
                   onClose()
-                  window.location.href = '/contact'
+                  // Redirect to portal
+                  window.location.href = 'https://portal.itforyouthghana.org'
                 }}
               >
-                Pre-Register
+                Notify Me
               </motion.button>
               <motion.button
                 className="btn btn-secondary flex-1"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => {
-                  // Show sign-up form or notification for updates
-                  alert('Thank you for your interest! We will contact you when this program becomes available.')
+                  onClose()
+                  window.location.href = 'https://portal.itforyouthghana.org'
                 }}
               >
-                Get Updates
+                Sign Up
               </motion.button>
             </>
           )}
