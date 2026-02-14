@@ -1,4 +1,4 @@
-import { getImagePath } from '../../utils/randomImages'
+import { getImagePath } from '../utils/randomImages'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
@@ -18,13 +18,14 @@ const DualNavbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Login-Funktionen (Platzhalter)
+  const PORTAL_BASE_URL = import.meta.env.VITE_PORTAL_URL || 'https://portal.itforyouthghana.org'
+
   const handleLogin = () => {
-    alert('Login functionality coming soon!')
+    window.location.href = `${PORTAL_BASE_URL}/login`
   }
 
   const handleRegister = () => {
-    alert('Register functionality coming soon!')
+    window.location.href = `${PORTAL_BASE_URL}/register`
   }
 
   // Hauptnavigation
@@ -73,8 +74,8 @@ const DualNavbar: React.FC = () => {
       {/* Haupt-Navigation */}
       <motion.header
         className={`bg-white transition-all duration-300 ${
-          isScrolled 
-            ? 'shadow-lg border-b border-neutral-200 py-3' 
+          isScrolled
+            ? 'shadow-lg border-b border-neutral-200 py-3'
             : 'shadow-md py-4'
         }`}
         initial={{ y: -100 }}
@@ -84,19 +85,19 @@ const DualNavbar: React.FC = () => {
         <div className="container">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               onClick={() => setTimeout(() => window.scrollTo(0, 0), 100)}
               className="flex items-center"
             >
-              <motion.div 
+              <motion.div
                 className="flex items-center"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
-                <img 
-                  src={getImagePath("/images/logo/logo.jpg")} 
-                  alt="IT for Youth Ghana" 
+                <img
+                  src={getImagePath("/images/logo/logo.jpg")}
+                  alt="IT for Youth Ghana"
                   className={`w-auto object-contain transition-all duration-300 max-w-[120px] ${
                     isScrolled ? 'h-6' : 'h-8'
                   }`}
@@ -240,7 +241,7 @@ const DualNavbar: React.FC = () => {
                       {item.name}
                     </Link>
                   ))}
-                  
+
                   <div className="border-t border-neutral-200 pt-4 mt-4">
                     <div className="text-sm font-medium text-neutral-700 px-4 mb-2">WHAT WE DO</div>
                     {whatWeDoItems.map((item) => (

@@ -121,12 +121,14 @@ const MainNavigation: React.FC = () => {
     setActiveDropdown(null)
   }
 
+  const PORTAL_BASE_URL = import.meta.env.VITE_PORTAL_URL || 'https://portal.itforyouthghana.org'
+
   const handleLoginClick = () => {
-    alert('Login functionality coming soon!')
+    window.location.href = `${PORTAL_BASE_URL}/login`
   }
 
   const handleRegisterClick = () => {
-    alert('Registration functionality coming soon!')
+    window.location.href = `${PORTAL_BASE_URL}/register`
   }
 
   return (
