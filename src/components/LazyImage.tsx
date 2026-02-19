@@ -92,7 +92,13 @@ const LazyImage: React.FC<LazyImageProps> = ({
   }
 
   return (
-    <div ref={imgRef} className="relative overflow-hidden">
+    <div 
+      ref={imgRef} 
+      className="relative overflow-hidden w-full h-full"
+      style={{
+        aspectRatio: width && height ? `${width}/${height}` : undefined
+      }}
+    >
       {/* Placeholder */}
       {!isLoaded && !hasError && (
         bluePlaceholder ? (
@@ -107,10 +113,10 @@ const LazyImage: React.FC<LazyImageProps> = ({
             alt=""
             className={`absolute inset-0 w-full h-full object-cover ${className}`}
             aria-hidden="true"
+            style={{ aspectRatio: width && height ? `${width}/${height}` : 'auto' }}
           />
         )
       )}
-
 
       {/* Actual Image - Optimiert für langsame Internetverbindungen */}
       {(isInView || priority) && (
@@ -120,7 +126,9 @@ const LazyImage: React.FC<LazyImageProps> = ({
           loading={priority ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={priority ? "high" : "low"}
+          crossOrigin="anonymous"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          style={{ aspectRatio: width && height ? `${width}/${height}` : 'auto' }}
         />
       )}
     </div>

@@ -129,12 +129,15 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({
           style={{ minHeight: '400px' }} // Taller cards
         >
           {/* Image Container with Zoom Effect */}
-          <div className="relative h-56 overflow-hidden">
+          <div className="relative w-full h-56 overflow-hidden" style={{ aspectRatio: '16/9' }}>
             <div className="absolute inset-0 bg-primary/20 z-10 group-hover:bg-primary/0 transition-colors duration-500" />
             <img
               src={program.image}
               alt={program.title}
               className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+              style={{ aspectRatio: '16/9', display: 'block' }}
+              crossOrigin="anonymous"
+              decoding="async"
             />
 
             {/* Badges */}

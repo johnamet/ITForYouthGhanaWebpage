@@ -91,11 +91,14 @@ const TeamSection: React.FC = () => {
                 whileHover={{ y: -10, transition: { duration: 0.3 } }}
                 className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 text-center border border-neutral-100 h-full flex flex-col"
               >
-                <div className="relative mb-6">
+                <div className="relative mb-6" style={{ width: '128px', height: '128px', margin: '0 auto' }}>
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-32 h-32 rounded-full object-cover mx-auto" style={{ border: '4px solid rgba(12, 45, 90, 0.2)' }}
+                    className="w-32 h-32 rounded-full object-cover mx-auto"
+                    style={{ border: '4px solid rgba(12, 45, 90, 0.2)', aspectRatio: '1/1', display: 'block' }}
+                    crossOrigin="anonymous"
+                    decoding="async"
                   />
                 </div>
 

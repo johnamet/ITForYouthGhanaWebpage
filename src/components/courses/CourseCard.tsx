@@ -29,11 +29,14 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, categorySlug, index = 0
             >
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-full group hover:shadow-2xl transition-all duration-300 border border-gray-100">
                     {/* Course Image */}
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative w-full h-48 overflow-hidden" style={{ aspectRatio: '4/3' }}>
                         <img
                             src={course.image}
                             alt={course.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            style={{ aspectRatio: '4/3', display: 'block' }}
+                            crossOrigin="anonymous"
+                            decoding="async"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 

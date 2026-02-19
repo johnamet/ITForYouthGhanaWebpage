@@ -28,11 +28,14 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
       >
         <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-full border flex flex-col" style={{ borderColor: 'rgba(12, 45, 90, 0.1)' }}>
           {/* Image */}
-          <div className="relative h-48 overflow-hidden rounded-t-xl flex-shrink-0">
+          <div className="relative w-full h-48 overflow-hidden rounded-t-xl flex-shrink-0" style={{ aspectRatio: '4/3' }}>
             <img 
               src={program.image} 
               alt={program.title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              style={{ aspectRatio: '4/3', display: 'block' }}
+              crossOrigin="anonymous"
+              decoding="async"
             />
             <div className="absolute inset-0 rounded-t-xl" style={{ backgroundColor: 'rgba(12, 45, 90, 0.2)' }}></div>
           </div>
