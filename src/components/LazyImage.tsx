@@ -71,11 +71,13 @@ const LazyImage: React.FC<LazyImageProps> = ({
     setHasError(true)
     if (onError) onError()
     
-    // Set blue placeholder on error
+    // Set blue placeholder on error with proper fallback
     const target = event.target as HTMLImageElement
-    const placeholderWidth = width || target.width || 400
-    const placeholderHeight = height || target.height || 300
-    target.src = createBluePlaceholder(placeholderWidth, placeholderHeight)
+    const placeholderWidth = width || target.naturalWidth || target.width || 400
+    const placeholderHeight = height || target.naturalHeight || target.height || 300
+    target.src = createBluePlaceholder(Math.max(100, placeholderWidth), Math.max(100, placeholderHeight))
+    target.style.objectFit = 'cover'
+    target.style.objectPosition = 'center'
   }
 
   const imageProps = {

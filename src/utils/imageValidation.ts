@@ -22,52 +22,72 @@ export const getOptimizedImagePath = (path: string): string => {
   return fullPath
 }
 
-// Create blue placeholder for missing images
+// Create blue placeholder for missing images - optimized for smooth rendering
 export const createBluePlaceholder = (width: number = 400, height: number = 300): string => {
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')!
-  
-  canvas.width = width
-  canvas.height = height
-  
-  // Create blue gradient background
-  const gradient = ctx.createLinearGradient(0, 0, width, height)
-  gradient.addColorStop(0, '#0c2d5a') // --color-primary
-  gradient.addColorStop(1, '#1a3d6d') // --color-primary-light
-  
-  ctx.fillStyle = gradient
-  ctx.fillRect(0, 0, width, height)
-  
-  // Add simple geometric shape in center
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'
-  const centerX = width / 2
-  const centerY = height / 2
-  const size = Math.min(width, height) * 0.2
-  
-  // Draw simple rectangle outline
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)'
-  ctx.lineWidth = 3
-  ctx.strokeRect(centerX - size, centerY - size, size * 2, size * 2)
-  
-  // Draw smaller inner rectangle
-  ctx.strokeRect(centerX - size * 0.6, centerY - size * 0.6, size * 1.2, size * 1.2)
-  
-  return canvas.toDataURL()
+  try {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d', { alpha: false })
+    
+    if (!ctx) {
+      // Fallback to solid color data URL if canvas fails
+      return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect width="400" height="300" fill="%230c2d5a"/%3E%3C/svg%3E'
+    }
+    
+    // Set canvas dimensions with proper pixel ratio for crisp rendering
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = width * dpr
+    canvas.height = height * dpr
+    ctx.scale(dpr, dpr)
+    
+    // Create blue gradient background
+    const gradient = ctx.createLinearGradient(0, 0, width, height)
+    gradient.addColorStop(0, '#0c2d5a') // --color-primary
+    gradient.addColorStop(1, '#1a3d6d') // --color-primary-light
+    
+    ctx.fillStyle = gradient
+    ctx.fillRect(0, 0, width, height)
+    
+    // Add simple geometric shape in center for visual interest
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
+    const centerX = width / 2
+    const centerY = height / 2
+    const size = Math.min(width, height) * 0.2
+    
+    // Draw circles instead of rectangles for smoother appearance
+    ctx.beginPath()
+    ctx.arc(centerX, centerY, size, 0, Math.PI * 2)
+    ctx.fill()
+    
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)'
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.arc(centerX, centerY, size * 1.3, 0, Math.PI * 2)
+    ctx.stroke()
+    
+    return canvas.toDataURL('image/png', 0.9)
+  } catch (error) {
+    console.warn('Canvas rendering failed, using SVG fallback:', error)
+    // Fallback SVG with gradient-like appearance
+    return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Cdefs%3E%3ClinearGradient id="g" x1="0" y1="0" x2="100" y2="100"%3E%3Cstop offset="0%25" stop-color="%230c2d5a"/%3E%3Cstop offset="100%25" stop-color="%231a3d6d"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="400" height="300" fill="url(%23g)"/%3E%3C/svg%3E'
+  }
 }
 
-// Fallback image handler
+// Fallback image handler with proper error recovery
 export const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
   const target = event.target as HTMLImageElement
   
   // Get original dimensions or use defaults
-  const width = target.naturalWidth || target.width || 400
-  const height = target.naturalHeight || target.height || 300
+  const width = target.naturalWidth || target.width || target.offsetWidth || 400
+  const height = target.naturalHeight || target.height || target.offsetHeight || 300
   
   console.warn(`Image failed to load: ${target.src}. Using blue placeholder.`)
   
   // Create and set blue placeholder
-  target.src = createBluePlaceholder(width, height)
+  target.src = createBluePlaceholder(Math.max(100, width), Math.max(100, height))
   target.style.objectFit = 'cover'
+  target.style.objectPosition = 'center'
+  // Prevent infinite error loops
+  target.style.minHeight = '100px'
 }
 
 // Image preloader for critical images

@@ -794,14 +794,36 @@ body {
     line-height: 1.7;
   }
 
-  /* ADDED: Better image accessibility */
+  /* IMPROVED: Better image rendering and accessibility */
   img {
     max-width: 100%;
     height: auto;
+    display: block;
+    /* Prevent image distortion */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  /* Ensure images with explicit dimensions maintain aspect ratio */
+  img[width][height] {
+    aspect-ratio: attr(width) / attr(height);
+  }
+
+  /* Fix distorted images with proper object-fit defaults */
+  img[class*="object-"] {
+    width: 100%;
+    height: 100%;
   }
 
   img:not([alt]) {
     border: 3px solid var(--color-primary);
+  }
+
+  /* Smooth image transitions and prevent flickering */
+  img {
+    transition: opacity 0.3s ease-out;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
   /* ENHANCED: Responsive Mobile-First Design Utilities */

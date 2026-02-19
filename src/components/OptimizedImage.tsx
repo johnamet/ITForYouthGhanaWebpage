@@ -38,15 +38,19 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
   const handleImageErrorEvent = (event: React.SyntheticEvent<HTMLImageElement>) => {
     console.warn(`🖼️ Image failed to load: ${src}`)
-    setHasError(true)
-    setIsLoading(false)
-    onError?.()
     
-    // Use fallback if provided, otherwise use default error handler
+    // If we have a fallback and haven't already tried it, use it
     if (fallbackSrc && !hasError) {
+      setHasError(true)
+      setIsLoading(false)
+      onError?.()
       return // Let React re-render with fallback
     }
     
+    // Otherwise use the error handler for placeholder
+    setHasError(true)
+    setIsLoading(false)
+    onError?.()
     handleImageError(event)
   }
 
@@ -63,12 +67,17 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         src={finalSrc}
         alt={alt}
         className={className}
-        style={style}
+        style={{
+          ...style,
+          objectFit: style?.objectFit || 'cover',
+          objectPosition: style?.objectPosition || 'center',
+        }}
         loading={loading}
         onLoad={handleImageLoad}
         onError={handleImageErrorEvent}
         // Accessibility improvements
         decoding="async"
+        crossOrigin="anonymous"
         // Performance hint
         fetchPriority={loading === 'eager' ? 'high' : 'auto'}
       />
