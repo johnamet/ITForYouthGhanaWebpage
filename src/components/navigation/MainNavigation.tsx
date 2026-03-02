@@ -76,6 +76,7 @@ const INITIAL_NAVIGATION_CONFIG: NavigationItem[] = [
 const MainNavigation: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [mobileExpandedItems, setMobileExpandedItems] = useState<Record<string, boolean>>({})
   const [navigationConfig, setNavigationConfig] = useState<NavigationItem[]>(INITIAL_NAVIGATION_CONFIG)
   const location = useLocation()
 
@@ -129,6 +130,26 @@ const MainNavigation: React.FC = () => {
 
   const handleMouseLeave = () => {
     setActiveDropdown(null)
+  }
+
+  const toggleMobileSubMenu = (itemId: string) => {
+    setMobileExpandedItems(prev => ({
+      ...prev,
+      [itemId]: !prev[itemId]
+    }))
+  }
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
+    setMobileExpandedItems({})
+  }
+
+  const handleMobileMenuToggle = () => {
+    if (isMobileMenuOpen) {
+      closeMobileMenu()
+      return
+    }
+    setIsMobileMenuOpen(true)
   }
 
   const PORTAL_BASE_URL = import.meta.env.VITE_PORTAL_URL || 'https://portal.itforyouthghana.org'
@@ -340,7 +361,7 @@ const MainNavigation: React.FC = () => {
             {/* Mobile Menu Button - Clean */}
             <button
               className="md:hidden p-2 rounded-lg hover:bg-neutral-100 transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={handleMobileMenuToggle}
               aria-label="Toggle menu"
             >
               <div className="w-6 h-6 flex flex-col justify-center items-center">
@@ -361,7 +382,8 @@ const MainNavigation: React.FC = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="md:hidden border-t border-neutral-200 bg-white"
+                className="md:hidden border-t border-neutral-200 bg-white overflow-y-auto overscroll-contain"
+                style={{ maxHeight: 'calc(100dvh - 112px)' }}
               >
                 <div className="py-4">
                   {navigationConfig.filter(item => item.id !== 'donate' && item.id !== 'apply').map((item) => (
@@ -373,30 +395,63 @@ const MainNavigation: React.FC = () => {
                             ? ''
                             : 'text-neutral-700 hover:text-[#0c2d5a]'
                             }`}
-                          onClick={() => setIsMobileMenuOpen(false)}
+                          onClick={closeMobileMenu}
                         >
                           {item.label}
                         </Link>
                       ) : (
                         <>
-                          <div className="py-3 font-medium text-neutral-700">
-                            {item.label}
-                          </div>
-                          {item.subItems && (
-                            <div className="pl-4 space-y-1 mb-2">
-                              {item.subItems.map((subItem) => (
-                                <Link
-                                  key={subItem.id}
-                                  to={subItem.path!}
-                                  className={`block py-2 text-sm transition-colors duration-200 ${location.pathname === subItem.path
-                                    ? 'text-[#0c2d5a] font-medium'
-                                    : 'text-neutral-600 hover:text-[#0c2d5a]'
-                                    }`}
-                                  onClick={() => setIsMobileMenuOpen(false)}
+                          {item.subItems && item.subItems.length > 0 ? (
+                            <>
+                              <button
+                                type="button"
+                                className={`w-full py-3 font-medium transition-colors duration-200 flex items-center justify-between ${isActivePath(item.path, item.subItems)
+                                  ? 'text-[#0c2d5a]'
+                                  : 'text-neutral-700 hover:text-[#0c2d5a]'
+                                  }`}
+                                onClick={() => toggleMobileSubMenu(item.id)}
+                                aria-expanded={Boolean(mobileExpandedItems[item.id])}
+                                aria-controls={`mobile-submenu-${item.id}`}
+                              >
+                                <span>{item.label}</span>
+                                <svg
+                                  className={`w-4 h-4 transition-transform duration-200 ${mobileExpandedItems[item.id] ? 'rotate-180' : ''}`}
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
                                 >
-                                  {subItem.label}
-                                </Link>
-                              ))}
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </button>
+                              <AnimatePresence initial={false}>
+                                {mobileExpandedItems[item.id] && (
+                                  <motion.div
+                                    id={`mobile-submenu-${item.id}`}
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="pl-4 space-y-1 mb-2 overflow-hidden"
+                                  >
+                                    {item.subItems.map((subItem) => (
+                                      <Link
+                                        key={subItem.id}
+                                        to={subItem.path!}
+                                        className={`block py-2 text-sm transition-colors duration-200 ${location.pathname === subItem.path
+                                          ? 'text-[#0c2d5a] font-medium'
+                                          : 'text-neutral-600 hover:text-[#0c2d5a]'
+                                          }`}
+                                        onClick={closeMobileMenu}
+                                      >
+                                        {subItem.label}
+                                      </Link>
+                                    ))}
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </>
+                          ) : (
+                            <div className="py-3 font-medium text-neutral-700">
+                              {item.label}
                             </div>
                           )}
                         </>
@@ -423,7 +478,7 @@ const MainNavigation: React.FC = () => {
                         display: 'block',
                         textAlign: 'center'
                       }}
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={closeMobileMenu}
                     >
                       Apply Now
                     </Link>
@@ -449,7 +504,7 @@ const MainNavigation: React.FC = () => {
                         transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                         backdropFilter: 'blur(10px)'
                       }}
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={closeMobileMenu}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.boxShadow = '0 10px 25px rgba(12, 45, 90, 0.4)'
                         e.currentTarget.style.background = '#0c2d5a'
