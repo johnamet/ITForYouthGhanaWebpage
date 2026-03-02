@@ -39,6 +39,7 @@ const ApiCourseDetailPage = React.lazy(() => import('./pages/programs/ApiCourseD
 // Partnership pages
 const EducationalPartnerships = React.lazy(() => import('./pages/partnerships/educational-partnerships/EducationalPartnerships'))
 const CorporateSponsorship = React.lazy(() => import('./pages/partnerships/corporate-sponsorship/CorporateSponsorship'))
+const CorporateTraining = React.lazy(() => import('./pages/partnerships/corporate-training/CorporateTraining'))
 const GovernmentCollaboration = React.lazy(() => import('./pages/partnerships/government-collaboration/GovernmentCollaboration'))
 const NgoAndFoundationPartnerships = React.lazy(() => import('./pages/partnerships/ngo-and-foundation-partnerships/NgoAndFoundationPartnerships'))
 const InternationalDevelopment = React.lazy(() => import('./pages/partnerships/international-development/InternationalDevelopment'))
@@ -97,6 +98,7 @@ function App() {
                 <Route path="/partnerships" element={<Partners />} />
                 <Route path="/partnerships/educational-partnerships" element={<EducationalPartnerships />} />
                 <Route path="/partnerships/corporate-sponsorship" element={<CorporateSponsorship />} />
+                <Route path="/partnerships/corporate-training" element={<CorporateTraining />} />
                 <Route path="/partnerships/government-collaboration" element={<GovernmentCollaboration />} />
                 <Route path="/partnerships/ngo-and-foundation-partnerships" element={<NgoAndFoundationPartnerships />} />
                 <Route path="/partnerships/international-development" element={<InternationalDevelopment />} />

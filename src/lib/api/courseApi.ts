@@ -1,290 +1,450 @@
 // API data access layer for course-related operations
 // Handles data transformation, caching, and error recovery
-import {
-  Course,
-  CourseApiResponse,
-  RawApiResponse,
-  transformCourseData,
-  createMockCourse
-} from '../../types/course'
+import { Course, CourseCategory, transformCourseData } from "../../types/course";
 
 // Configuration
-const COURSE_API_ENDPOINT = import.meta.env.VITE_COURSE_API_ENDPOINT || 'https://portal.itforyouthghana.org/api/courses'
-const CACHE_KEY = 'courses_cache_v2' // v2 indicates new structure
-const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
-const REQUEST_TIMEOUT = 10000 // 10 seconds
-const MAX_RETRIES = 3
+const COURSE_API_ENDPOINT =
+  import.meta.env.VITE_COURSE_API_ENDPOINT || "https://portal.itforyouthghana.org/api/courses";
 
-interface CacheEntry {
-  data: Course[]
-  timestamp: number
+// Derive the public courses endpoint (supports /categories, /:id, /:id/apply-url)
+const PUBLIC_API_BASE = COURSE_API_ENDPOINT.replace(/\/api\/courses\/?$/, "/api/public/courses");
+
+const CACHE_KEY = "courses_cache_v3"; // v3 indicates stale-while-revalidate
+const CATEGORIES_CACHE_KEY = "course_categories_cache_v1";
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes (fresh)
+const STALE_DURATION = 30 * 60 * 1000; // 30 minutes (stale but usable)
+const REQUEST_TIMEOUT = 10000; // 10 seconds
+const MAX_RETRIES = 3;
+
+interface CacheEntry<T = Course[]> {
+  data: T;
+  timestamp: number;
 }
 
-// Utility function to check if cache is valid
-const isCacheValid = (cache: CacheEntry | null): boolean => {
-  if (!cache) return false
-  const now = Date.now()
-  return now - cache.timestamp < CACHE_DURATION
-}
+// Check if cache is fresh (< 5 min)
+const isCacheFresh = <T>(cache: CacheEntry<T> | null): boolean => {
+  if (!cache) return false;
+  return Date.now() - cache.timestamp < CACHE_DURATION;
+};
 
-// Utility function to get cached courses
-const getCachedCourses = (): Course[] | null => {
+// Check if cache is stale but still usable (< 30 min)
+const isCacheStale = <T>(cache: CacheEntry<T> | null): boolean => {
+  if (!cache) return false;
+  const age = Date.now() - cache.timestamp;
+  return age >= CACHE_DURATION && age < STALE_DURATION;
+};
+
+// Get cached data from sessionStorage
+function getCached<T>(key: string): CacheEntry<T> | null {
   try {
-    const cached = sessionStorage.getItem(CACHE_KEY)
-    if (!cached) return null
-
-    const cacheEntry: CacheEntry = JSON.parse(cached)
-    if (!isCacheValid(cacheEntry)) {
-      sessionStorage.removeItem(CACHE_KEY)
-      return null
+    const cached = sessionStorage.getItem(key);
+    if (!cached) return null;
+    const entry: CacheEntry<T> = JSON.parse(cached);
+    // Evict if older than stale duration
+    if (Date.now() - entry.timestamp >= STALE_DURATION) {
+      sessionStorage.removeItem(key);
+      return null;
     }
-
-    return cacheEntry.data
+    return entry;
   } catch (error) {
-    console.error('[v0] Error reading course cache:', error)
-    return null
+    console.error("[courseApi] Error reading cache:", error);
+    return null;
   }
 }
 
-// Utility function to cache courses
-const setCachedCourses = (courses: Course[]): void => {
+// Set cached data in sessionStorage
+function setCached<T>(key: string, data: T): void {
   try {
-    const cacheEntry: CacheEntry = {
-      data: courses,
-      timestamp: Date.now()
-    }
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify(cacheEntry))
+    const entry: CacheEntry<T> = { data, timestamp: Date.now() };
+    sessionStorage.setItem(key, JSON.stringify(entry));
   } catch (error) {
-    console.error('[v0] Error caching courses:', error)
+    console.error("[courseApi] Error writing cache:", error);
   }
 }
 
 /**
- * Fetches courses from the API with caching and retry logic
- * Handles the nested API response structure properly
- * @param useCache Whether to use cached data
- * @param retries Number of retry attempts
- * @returns Array of transformed courses
- * @throws Error if all retry attempts fail
+ * Fetches courses from the API with stale-while-revalidate caching.
+ * - Fresh cache (<5min): returns immediately
+ * - Stale cache (5-30min): returns stale data, revalidates in background
+ * - No cache: fetches with retry logic
  */
 export const fetchCourses = async (
   useCache: boolean = true,
-  retries: number = MAX_RETRIES
+  retries: number = MAX_RETRIES,
 ): Promise<Course[]> => {
-  try {
-    // Check cache first
-    if (useCache) {
-      const cachedCourses = getCachedCourses()
-      if (cachedCourses) {
-        console.log('[v0] Using cached courses, count:', cachedCourses.length)
-        return cachedCourses
-      }
+  // Fresh cache — return immediately
+  if (useCache) {
+    const cached = getCached<Course[]>(CACHE_KEY);
+    if (cached && isCacheFresh(cached)) {
+      console.log("[courseApi] Fresh cache hit, count:", cached.data.length);
+      return cached.data;
     }
 
-    console.log('[v0] Fetching courses from API:', COURSE_API_ENDPOINT)
-
-    let lastError: Error | null = null
-
-    for (let attempt = 0; attempt < retries; attempt++) {
-      try {
-        const response = await fetch(COURSE_API_ENDPOINT, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          signal: AbortSignal.timeout(REQUEST_TIMEOUT)
+    // Stale cache — return stale data and revalidate in background
+    if (cached && isCacheStale(cached)) {
+      console.log("[courseApi] Stale cache — serving stale, revalidating in background");
+      // Fire-and-forget background revalidation
+      fetchCoursesFromApi(retries)
+        .then((courses) => {
+          setCached(CACHE_KEY, courses);
+          console.log("[courseApi] Background revalidation complete, updated cache");
         })
+        .catch((err) => {
+          console.warn("[courseApi] Background revalidation failed:", err.message);
+        });
+      return cached.data;
+    }
+  }
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-        }
+  // No usable cache — fetch fresh
+  const courses = await fetchCoursesFromApi(retries);
+  setCached(CACHE_KEY, courses);
+  return courses;
+};
 
-        const rawData = await response.json()
-        console.log('[v0] Raw API response received, validating structure')
+/**
+ * Internal: fetch courses from the API with retry logic.
+ */
+async function fetchCoursesFromApi(retries: number): Promise<Course[]> {
+  console.log("[courseApi] Fetching courses from API:", COURSE_API_ENDPOINT);
 
-        // Handle the nested data.data structure from the API
-        const responseData = rawData as RawApiResponse
+  let lastError: Error | null = null;
 
-        // Validate outer response structure
-        if (!responseData.success) {
-          throw new Error(`API returned success: false - ${responseData.message}`)
-        }
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const response = await fetch(COURSE_API_ENDPOINT, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT),
+      });
 
-        // Navigate the nested data structure: data.data
-        const courseArray = responseData.data?.data
-        if (!Array.isArray(courseArray)) {
-          console.error('[v0] Unexpected data structure:', responseData)
-          throw new Error('Invalid API response: data.data is not an array')
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
-        console.log('[v0] Processing', courseArray.length, 'courses from API')
+      const rawData = await response.json();
 
-        // Transform and validate each course
-        const courses = courseArray
-          .map((rawCourse, index) => {
-            try {
-              return transformCourseData(rawCourse)
-            } catch (error) {
-              console.warn(`[v0] Failed to transform course at index ${index}:`, error)
-              return null
-            }
-          })
-          .filter((course): course is Course => course !== null)
+      if (!rawData.success) {
+        throw new Error(`API returned success: false - ${rawData.message}`);
+      }
 
-        if (courses.length === 0) {
-          console.warn('[v0] No valid courses after transformation')
-          // Don't fail - return empty array to allow UI to show empty state
-        } else {
-          console.log(`[v0] Successfully transformed ${courses.length} courses`)
-        }
+      const courseArray = rawData.data?.courses;
+      if (!Array.isArray(courseArray)) {
+        console.error("[courseApi] Unexpected data structure:", rawData);
+        throw new Error("Invalid API response: data.courses is not an array");
+      }
 
-        // Cache the results
-        setCachedCourses(courses)
-        return courses
-      } catch (error) {
-        lastError = error instanceof Error ? error : new Error(String(error))
-        console.warn(`[v0] Fetch attempt ${attempt + 1}/${retries} failed:`, lastError.message)
+      console.log("[courseApi] Processing", courseArray.length, "courses from API");
 
-        // If this is the last retry, log and prepare to throw
-        if (attempt === retries - 1) {
-          console.error('[v0] All retry attempts exhausted')
-          throw lastError
-        }
+      const courses = courseArray
+        .map((rawCourse: unknown, index: number) => {
+          try {
+            return transformCourseData(rawCourse);
+          } catch (error) {
+            console.warn(`[courseApi] Failed to transform course at index ${index}:`, error);
+            return null;
+          }
+        })
+        .filter((course: Course | null): course is Course => course !== null);
 
-        // Wait before retrying (exponential backoff)
-        const delayMs = Math.pow(2, attempt) * 1000
-        console.log(`[v0] Retrying in ${delayMs}ms...`)
-        await new Promise(resolve => setTimeout(resolve, delayMs))
+      console.log(`[courseApi] Successfully transformed ${courses.length} courses`);
+      return courses;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      console.warn(
+        `[courseApi] Fetch attempt ${attempt + 1}/${retries} failed:`,
+        lastError.message,
+      );
+
+      if (attempt < retries - 1) {
+        const delayMs = Math.pow(2, attempt) * 1000;
+        console.log(`[courseApi] Retrying in ${delayMs}ms...`);
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
     }
-
-    throw lastError || new Error('Failed to fetch courses after all retries')
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-    console.error('[v0] Course fetch failed:', errorMessage)
-    throw new Error(`Failed to fetch courses: ${errorMessage}`)
   }
+
+  throw lastError || new Error("Failed to fetch courses after all retries");
 }
 
 /**
- * Fetches a single course by ID
- * @param courseId Course identifier
- * @returns Course object or null if not found
+ * Fetches a single course by slug or ID using the public API detail endpoint.
+ * Falls back to finding from the full list if direct fetch fails.
+ */
+export const fetchCourseBySlug = async (slugOrId: string): Promise<Course | null> => {
+  try {
+    console.log("[courseApi] Fetching course by slug:", slugOrId);
+
+    const response = await fetch(`${PUBLIC_API_BASE}/${encodeURIComponent(slugOrId)}`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT),
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.warn("[courseApi] Course not found:", slugOrId);
+        return null;
+      }
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const rawData = await response.json();
+    if (!rawData.success || !rawData.data) {
+      throw new Error("Invalid response from course detail endpoint");
+    }
+
+    return transformCourseData(rawData.data);
+  } catch (error) {
+    console.warn("[courseApi] Direct course fetch failed, falling back to list:", error);
+    // Fallback: find from cached/full list
+    try {
+      const courses = await fetchCourses(true);
+      return courses.find((c) => c.slug === slugOrId || c.id === slugOrId) || null;
+    } catch {
+      return null;
+    }
+  }
+};
+
+/**
+ * Fetches a single course by ID (legacy — searches from full list)
  */
 export const fetchCourseById = async (courseId: string): Promise<Course | null> => {
   try {
-    console.log('[v0] Fetching course by ID:', courseId)
-    const courses = await fetchCourses(true)
-    const course = courses.find(course => course.id === courseId) || null
+    console.log("[courseApi] Fetching course by ID:", courseId);
+    const courses = await fetchCourses(true);
+    const course = courses.find((course) => course.id === courseId) || null;
 
     if (!course) {
-      console.warn('[v0] Course not found:', courseId)
+      console.warn("[courseApi] Course not found:", courseId);
     }
 
-    return course
+    return course;
   } catch (error) {
-    console.error('[v0] Error fetching course by ID:', error)
-    return null
+    console.error("[courseApi] Error fetching course by ID:", error);
+    return null;
+  }
+};
+
+/**
+ * Fetches course categories with counts from the public API.
+ * Uses stale-while-revalidate caching.
+ */
+export const fetchCourseCategories = async (): Promise<CourseCategory[]> => {
+  // Check cache
+  const cached = getCached<CourseCategory[]>(CATEGORIES_CACHE_KEY);
+  if (cached && isCacheFresh(cached)) {
+    console.log("[courseApi] Fresh categories cache hit");
+    return cached.data;
+  }
+
+  if (cached && isCacheStale(cached)) {
+    console.log("[courseApi] Stale categories cache — serving stale, revalidating");
+    fetchCategoriesFromApi()
+      .then((cats) => {
+        setCached(CATEGORIES_CACHE_KEY, cats);
+      })
+      .catch((err) => {
+        console.warn("[courseApi] Categories revalidation failed:", err.message);
+      });
+    return cached.data;
+  }
+
+  const categories = await fetchCategoriesFromApi();
+  setCached(CATEGORIES_CACHE_KEY, categories);
+  return categories;
+};
+
+async function fetchCategoriesFromApi(): Promise<CourseCategory[]> {
+  try {
+    const response = await fetch(`${PUBLIC_API_BASE}/categories`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const rawData = await response.json();
+    if (!rawData.success || !Array.isArray(rawData.data)) {
+      throw new Error("Invalid categories response");
+    }
+
+    return rawData.data as CourseCategory[];
+  } catch (error) {
+    console.error("[courseApi] Error fetching categories:", error);
+    return [];
   }
 }
 
 /**
  * Searches courses by title, description, or category
- * @param query Search query string
- * @returns Array of matching courses
  */
 export const searchCourses = async (query: string): Promise<Course[]> => {
   try {
-    console.log('[v0] Searching courses with query:', query)
-    const courses = await fetchCourses(true)
-    const lowerQuery = query.toLowerCase().trim()
+    console.log("[courseApi] Searching courses with query:", query);
+    const courses = await fetchCourses(true);
+    const lowerQuery = query.toLowerCase().trim();
 
-    if (!lowerQuery) return courses
+    if (!lowerQuery) return courses;
 
-    const results = courses.filter(course =>
-      course.title.toLowerCase().includes(lowerQuery) ||
-      course.description.toLowerCase().includes(lowerQuery) ||
-      course.shortDescription.toLowerCase().includes(lowerQuery) ||
-      (course.category?.toLowerCase().includes(lowerQuery) ?? false) ||
-      (course.skills?.some(skill => skill.toLowerCase().includes(lowerQuery)) ?? false)
-    )
+    const results = courses.filter(
+      (course) =>
+        course.title.toLowerCase().includes(lowerQuery) ||
+        course.description.toLowerCase().includes(lowerQuery) ||
+        course.shortDescription.toLowerCase().includes(lowerQuery) ||
+        (course.category?.toLowerCase().includes(lowerQuery) ?? false) ||
+        (course.skills?.some((skill) => skill.toLowerCase().includes(lowerQuery)) ?? false),
+    );
 
-    console.log(`[v0] Found ${results.length} matching courses`)
-    return results
+    console.log(`[courseApi] Found ${results.length} matching courses`);
+    return results;
   } catch (error) {
-    console.error('[v0] Error searching courses:', error)
-    return []
+    console.error("[courseApi] Error searching courses:", error);
+    return [];
   }
-}
+};
 
 /**
  * Filters courses by level
- * @param level Course difficulty level
- * @returns Array of courses at specified level
  */
-export const filterCoursesByLevel = async (level: 'beginner' | 'intermediate' | 'advanced'): Promise<Course[]> => {
+export const filterCoursesByLevel = async (
+  level: "beginner" | "intermediate" | "advanced",
+): Promise<Course[]> => {
   try {
-    console.log('[v0] Filtering courses by level:', level)
-    const courses = await fetchCourses(true)
-    return courses.filter(course => course.level === level)
+    console.log("[courseApi] Filtering courses by level:", level);
+    const courses = await fetchCourses(true);
+    return courses.filter((course) => course.level === level);
   } catch (error) {
-    console.error('[v0] Error filtering courses:', error)
-    return []
+    console.error("[courseApi] Error filtering courses:", error);
+    return [];
   }
-}
+};
 
 /**
  * Filters courses by category
- * @param category Course category
- * @returns Array of courses in specified category
  */
 export const filterCoursesByCategory = async (category: string): Promise<Course[]> => {
   try {
-    console.log('[v0] Filtering courses by category:', category)
-    const courses = await fetchCourses(true)
-    return courses.filter(course => course.category.toLowerCase() === category.toLowerCase())
+    console.log("[courseApi] Filtering courses by category:", category);
+    const courses = await fetchCourses(true);
+    return courses.filter((course) => course.category.toLowerCase() === category.toLowerCase());
   } catch (error) {
-    console.error('[v0] Error filtering courses:', error)
-    return []
+    console.error("[courseApi] Error filtering courses:", error);
+    return [];
   }
-}
+};
 
 /**
  * Clears the course cache
- * Useful for forcing a refresh of course data
  */
 export const clearCourseCache = (): void => {
   try {
-    sessionStorage.removeItem(CACHE_KEY)
-    console.log('[v0] Course cache cleared successfully')
+    sessionStorage.removeItem(CACHE_KEY);
+    sessionStorage.removeItem(CATEGORIES_CACHE_KEY);
+    console.log("[courseApi] Course cache cleared successfully");
   } catch (error) {
-    console.error('[v0] Error clearing cache:', error)
+    console.error("[courseApi] Error clearing cache:", error);
   }
-}
+};
 
 /**
  * Gets cache statistics for debugging
- * @returns Cache info including age and entry count
  */
 export const getCacheStats = (): { isCached: boolean; age?: number; entries?: number } | null => {
   try {
-    const cached = sessionStorage.getItem(CACHE_KEY)
+    const cached = sessionStorage.getItem(CACHE_KEY);
     if (!cached) {
-      return { isCached: false }
+      return { isCached: false };
     }
 
-    const cacheEntry = JSON.parse(cached) as { data: Course[]; timestamp: number }
-    const age = Date.now() - cacheEntry.timestamp
-    const ageSeconds = Math.round(age / 1000)
+    const cacheEntry = JSON.parse(cached) as { data: Course[]; timestamp: number };
+    const age = Date.now() - cacheEntry.timestamp;
+    const ageSeconds = Math.round(age / 1000);
 
     return {
       isCached: true,
       age: ageSeconds,
-      entries: cacheEntry.data.length
-    }
+      entries: cacheEntry.data.length,
+    };
   } catch (error) {
-    console.error('[v0] Error getting cache stats:', error)
-    return null
+    console.error("[courseApi] Error getting cache stats:", error);
+    return null;
   }
-}
+};
+
+/**
+ * Generates an apply URL for a specific course with UTM parameters.
+ */
+export const generateApplyUrl = async (
+  courseIdOrSlug: string,
+  utmParams?: { source?: string; medium?: string; campaign?: string },
+): Promise<{ apply_url: string; course_id?: string; course_name?: string } | null> => {
+  try {
+    const url = `${PUBLIC_API_BASE}/${encodeURIComponent(courseIdOrSlug)}/apply-url`;
+    console.log("[courseApi] Generating apply URL:", url);
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const rawData = await response.json();
+
+    if (!rawData.success || !rawData.data?.apply_url) {
+      throw new Error(`API returned success: false or missing apply_url`);
+    }
+
+    let applyUrl = rawData.data.apply_url;
+
+    // Append UTM parameters
+    const utm = {
+      utm_source: utmParams?.source || "main_site",
+      utm_medium: utmParams?.medium || "web",
+      ...(utmParams?.campaign ? { utm_campaign: utmParams.campaign } : {}),
+    };
+
+    const separator = applyUrl.includes("?") ? "&" : "?";
+    const utmString = Object.entries(utm)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join("&");
+
+    applyUrl = `${applyUrl}${separator}${utmString}`;
+
+    return {
+      apply_url: applyUrl,
+      course_id: rawData.data.course_id,
+      course_name: rawData.data.course_name,
+    };
+  } catch (error) {
+    console.error("[courseApi] Error generating apply URL:", error);
+
+    // Fallback: construct URL manually from course data
+    try {
+      const course = await fetchCourseBySlug(courseIdOrSlug);
+      if (course?.portalApplyUrl) {
+        let fallbackUrl = course.portalApplyUrl;
+        const utm = `utm_source=${utmParams?.source || "main_site"}&utm_medium=${utmParams?.medium || "web"}`;
+        fallbackUrl += (fallbackUrl.includes("?") ? "&" : "?") + utm;
+        return { apply_url: fallbackUrl };
+      }
+    } catch {
+      // Ignore fallback errors
+    }
+
+    return null;
+  }
+};

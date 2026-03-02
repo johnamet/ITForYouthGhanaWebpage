@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { generateApplyUrl } from '../../lib/api/courseApi'
 
 interface EnrollmentCTAProps {
     title?: string
@@ -8,6 +9,12 @@ interface EnrollmentCTAProps {
     price?: string
     startDate?: string
     format?: string
+    /** Direct portal apply URL — used as-is */
+    portalApplyUrl?: string
+    /** Course slug or ID — will call generateApplyUrl for a signed URL */
+    courseSlug?: string
+    /** Show "Enroll Free" instead of "Apply Now" */
+    isFree?: boolean
 }
 
 const EnrollmentCTA: React.FC<EnrollmentCTAProps> = ({
@@ -15,8 +22,47 @@ const EnrollmentCTA: React.FC<EnrollmentCTAProps> = ({
     subtitle = 'Join our next cohort and transform your career with in-demand tech skills.',
     price,
     startDate,
-    format
+    format,
+    portalApplyUrl,
+    courseSlug,
+    isFree = false,
 }) => {
+    const [loading, setLoading] = useState(false)
+
+    const handleApplyClick = useCallback(async () => {
+        // If a direct portal URL is provided, use it
+        if (portalApplyUrl) {
+            window.location.href = portalApplyUrl
+            return
+        }
+
+        // If a course slug is provided, generate a signed apply URL
+        if (courseSlug) {
+            setLoading(true)
+            try {
+                const result = await generateApplyUrl(courseSlug, {
+                    source: 'main_site',
+                    medium: 'web',
+                    campaign: 'enrollment_cta',
+                })
+                if (result?.apply_url) {
+                    window.location.href = result.apply_url
+                    return
+                }
+            } catch (err) {
+                console.error('[EnrollmentCTA] Failed to generate apply URL:', err)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        // Fallback: no slug or URL, use generic link (backward compatible)
+        return undefined
+    }, [portalApplyUrl, courseSlug])
+
+    const ctaLabel = isFree ? 'Enroll Free' : 'Apply Now'
+    const hasDynamicCTA = !!portalApplyUrl || !!courseSlug
+
     return (
         <section
             className="relative py-16 overflow-hidden"
@@ -79,20 +125,38 @@ const EnrollmentCTA: React.FC<EnrollmentCTAProps> = ({
                             {price && (
                                 <div className="mb-4">
                                     <span className="text-sm text-gray-500">Course Fee</span>
-                                    <p className="text-3xl font-bold" style={{ color: '#0c2d5a' }}>{price}</p>
+                                    <p className={`text-3xl font-bold ${isFree ? 'text-emerald-600' : ''}`} style={isFree ? {} : { color: '#0c2d5a' }}>
+                                        {price}
+                                    </p>
                                 </div>
                             )}
 
-                            <Link
-                                to="/who-can-apply"
-                                className="block w-full py-4 px-6 rounded-full font-semibold text-white transition-all duration-300 hover:opacity-90 hover:shadow-lg mb-4"
-                                style={{ backgroundColor: '#0c2d5a' }}
-                            >
-                                Apply Now
-                            </Link>
+                            {hasDynamicCTA ? (
+                                <motion.button
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.97 }}
+                                    onClick={handleApplyClick}
+                                    disabled={loading}
+                                    className={`block w-full py-4 px-6 rounded-full font-semibold text-white transition-all duration-300 hover:shadow-lg mb-4 ${isFree
+                                            ? 'bg-emerald-500 hover:bg-emerald-600'
+                                            : ''
+                                        } ${loading ? 'opacity-70 cursor-wait' : ''}`}
+                                    style={isFree ? {} : { backgroundColor: '#0c2d5a' }}
+                                >
+                                    {loading ? 'Redirecting...' : ctaLabel}
+                                </motion.button>
+                            ) : (
+                                <Link
+                                    to="/who-can-apply"
+                                    className="block w-full py-4 px-6 rounded-full font-semibold text-white transition-all duration-300 hover:opacity-90 hover:shadow-lg mb-4"
+                                    style={{ backgroundColor: '#0c2d5a' }}
+                                >
+                                    {ctaLabel}
+                                </Link>
+                            )}
 
                             <p className="text-sm text-gray-500">
-                                Limited spots available. Secure yours today!
+                                {isFree ? 'No payment required' : 'Limited spots available. Secure yours today!'}
                             </p>
 
                             <div className="mt-6 pt-4 border-t border-gray-100">

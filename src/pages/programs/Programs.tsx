@@ -1,123 +1,96 @@
-// Refactored Programs page with dynamic API-based courses
+// Refactored Programs page with dynamic API-based courses + search/filter
 import React, { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { content } from '../../data/content/index'
+// import { content } from '../../data/content/index' — removed: no more mock future programs
 import SEO from '../../components/SEO'
 import ProgramsHero from './components/ProgramsHero'
 import ProgramFilter from './components/ProgramFilter'
 import ProgramGrid from './components/ProgramGrid'
-import ProgramModal from './components/ProgramModal'
-import { useCourses } from '../../hooks/useCourses'
+import CourseSearchBar from './components/CourseSearchBar'
+import { useCourseFilters } from '../../hooks/useCourseFilters'
 import { getImagePath } from '../../utils/randomImages'
-
-interface Program {
-  title: string
-  subtitle: string
-  description: string
-  duration: string
-  participants?: string
-  image: string
-  skills?: string[]
-  requirements: string
-  status: 'current' | 'past' | 'future'
-  type: string
-  nextStart?: string
-  completedDate?: string
-  careerOutcomes?: string[]
-  highlights?: string[]
-}
+import { Course } from '../../types/course'
 
 const Programs: React.FC = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.1 })
-  const [activeFilter, setActiveFilter] = useState<'current' | 'past' | 'future'>('current')
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null)
-  const [showModal, setShowModal] = useState(false)
-  const { courses, loading, error, retry } = useCourses()
+  const [activeFilter, setActiveFilter] = useState<'current' | 'past'>('current')
 
-  const fallbackCurrentPrograms: Program[] = (content.programs.current || []).map(program => ({
-    ...program,
-    requirements: program.prerequisites || 'No prior experience required',
-    nextStart: '10/02/2025',
-    status: 'current' as const,
-    type: 'Currently Active'
-  }))
+  const {
+    filteredCourses,
+    categories,
+    loading,
+    error,
+    retry,
+    searchTerm,
+    setSearchTerm,
+    categoryFilter,
+    setCategoryFilter,
+    priceFilter,
+    setPriceFilter,
+    totalCount,
+    filteredCount,
+    hasActiveFilters,
+    clearFilters,
+    courses: allApiCourses,
+  } = useCourseFilters()
 
-  const apiCurrentPrograms: Program[] = courses
-    .filter(course => course.status === 'active')
-    .map(course => ({
-      title: course.title,
-      subtitle: `${course.level.charAt(0).toUpperCase()}${course.level.slice(1)} Course`,
-      description: course.shortDescription || course.description,
-      duration: course.duration.displayText,
-      participants: course.enrollment?.capacity ? `Up to ${course.enrollment.capacity} participants` : undefined,
-      image: course.image,
-      skills: course.skills || [],
-      requirements: course.prerequisites?.join(', ') || 'No prior experience required',
-      status: 'current' as const,
-      type: 'Currently Active',
-      nextStart: course.startDate
-    }))
+  // Dynamic courses from the API for 'current'
+  const currentPrograms: Course[] = filteredCourses
 
-  const currentPrograms = apiCurrentPrograms.length > 0 ? apiCurrentPrograms : fallbackCurrentPrograms
-
-  const pastPrograms: Program[] = [
+  // Mock data adapted to the Course interface format for past
+  const pastPrograms: Course[] = [
     {
+      id: 'past-1',
       title: 'Digital Literacy Bootcamp 2023',
-      subtitle: 'Foundation Skills',
+      slug: 'digital-literacy-2023',
+      shortDescription: 'Basic computer skills and digital literacy for rural communities.',
       description: 'Basic computer skills and digital literacy for rural communities.',
-      duration: '6 weeks',
-      participants: '120 graduates',
+      level: 'beginner',
+      category: 'Foundation Skills',
       image: getImagePath('/images/randomPictures/studentsBackcoding.jpg'),
+      pricing: { amount: 0, currency: 'GHS', isFree: true },
+      duration: { weeks: 6, displayText: '6 weeks' },
+      status: 'archived',
+      portalApplyUrl: '',
       skills: ['Computer Basics', 'Internet Navigation', 'Digital Safety', 'Email & Communication'],
-      requirements: 'No prior experience required',
-      status: 'past' as const,
+      prerequisites: ['No prior experience required'],
+      enrollment: { count: 120, capacity: 120 },
+      // Optional extra fields for mock display mapping
       type: 'Completed Program',
       completedDate: 'December 2023'
-    },
+    } as Course & { type: string, completedDate: string },
     {
+      id: 'past-2',
       title: 'Web Development Intensive 2022',
-      subtitle: 'Full Stack Development',
+      slug: 'web-dev-2022',
+      shortDescription: 'Comprehensive web development training with real-world projects.',
       description: 'Comprehensive web development training with real-world projects.',
-      duration: '12 weeks',
-      participants: '45 graduates',
+      level: 'intermediate',
+      category: 'Full Stack Development',
       image: getImagePath('/images/randomPictures/peterblackboard.jpg'),
+      pricing: { amount: 0, currency: 'GHS', isFree: true },
+      duration: { weeks: 12, displayText: '12 weeks' },
+      status: 'archived',
+      portalApplyUrl: '',
       skills: ['HTML/CSS', 'JavaScript', 'React', 'Node.js', 'Database Design'],
-      requirements: 'Basic computer skills',
-      status: 'past' as const,
+      prerequisites: ['Basic computer skills'],
+      enrollment: { count: 45, capacity: 50 },
       type: 'Completed Program',
       completedDate: 'August 2022'
-    }
+    } as Course & { type: string, completedDate: string }
   ]
 
-  const futurePrograms: Program[] = content.programs.future?.map(program => ({
-    ...program,
-    requirements: 'No prior experience required',
-    status: 'future' as const,
-    type: 'Coming Soon'
-  })) || []
-
-  const allPrograms: Record<'current' | 'past' | 'future', Program[]> = {
+  const allPrograms: Record<'current' | 'past', Course[]> = {
     current: currentPrograms,
     past: pastPrograms,
-    future: futurePrograms
   }
 
-  const currentCount = allPrograms.current.length
+  // For filter counts: use total API courses (unfiltered) for current
+  const currentCount = allApiCourses.filter(c => c.status === 'active').length || filteredCourses.length
   const pastCount = allPrograms.past.length
-  const futureCount = allPrograms.future.length
 
-  const filteredPrograms = allPrograms[activeFilter]
-
-  const handleProgramClick = (program: Program) => {
-    setSelectedProgram(program)
-    setShowModal(true)
-  }
-
-  const handleModalClose = () => {
-    setShowModal(false)
-    setSelectedProgram(null)
-  }
+  const filteredPrograms = allPrograms[activeFilter as 'current' | 'past'] || []
 
   return (
     <>
@@ -152,30 +125,38 @@ const Programs: React.FC = () => {
               setActiveFilter={setActiveFilter}
               currentCount={currentCount}
               pastCount={pastCount}
-              futureCount={futureCount}
             />
+
+            {/* Search/Filter Bar — only shown on 'current' tab */}
+            {activeFilter === 'current' && (
+              <CourseSearchBar
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                categoryFilter={categoryFilter}
+                onCategoryChange={setCategoryFilter}
+                priceFilter={priceFilter}
+                onPriceChange={setPriceFilter}
+                categories={categories}
+                totalCount={totalCount}
+                filteredCount={filteredCount}
+                hasActiveFilters={hasActiveFilters}
+                onClearFilters={clearFilters}
+              />
+            )}
 
             {/* Program Cards Grid with Loading/Error States */}
             <ProgramGrid
               programs={filteredPrograms}
               activeFilter={activeFilter}
-              onProgramClick={handleProgramClick}
-              loading={loading}
-              error={error}
+              loading={activeFilter === 'current' ? loading : false}
+              error={activeFilter === 'current' ? error : null}
               onRetry={retry}
             />
           </div>
         </section>
 
-        {/* Program Details Modal */}
-        <ProgramModal
-          isOpen={showModal}
-          onClose={handleModalClose}
-          program={selectedProgram}
-        />
-
         {/* Application Process */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-gray-50">
           <div className="container">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -189,7 +170,7 @@ const Programs: React.FC = () => {
             <div className="responsive-grid responsive-grid-sm-2 responsive-grid-lg-4">
               {[
                 { step: '1', title: 'Choose Program', description: 'Select the program that best fits your goals' },
-                { step: '2', title: 'Apply Online', description: 'Fill out our simple online application form' },
+                { step: '2', title: 'Apply Online', description: 'Fill out our simple online application form on the Portal' },
                 { step: '3', title: 'Interview', description: 'Brief conversation about your motivation and goals' },
                 { step: '4', title: 'Get Started', description: 'Welcome to IT for Youth Ghana!' }
               ].map((item, index) => (
@@ -211,99 +192,6 @@ const Programs: React.FC = () => {
           </div>
         </section>
 
-        {/* Future Programs */}
-        {futureCount > 0 && (
-          <section className="py-20 bg-gradient-to-r from-primary/5 to-accent/5">
-            <div className="container">
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8 }}
-                className="text-center mb-16"
-              >
-                <h2 className="heading-xl mb-6">Coming Soon</h2>
-                <p className="text-lead text-center max-w-3xl mx-auto">
-                  Innovative programs currently in development to expand our impact and reach
-                </p>
-              </motion.div>
-
-              <div className="grid md:grid-cols-1 gap-8 max-w-4xl mx-auto">
-                {allPrograms.future.map((program, index) => (
-                  <motion.div
-                    key={program.title}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: index * 0.2 }}
-                    className="card card-body border-l-4 border-accent overflow-hidden"
-                  >
-                    <div className="responsive-grid responsive-grid-md-2 gap-8 items-start">
-                      <div className="space-y-4 min-h-0">
-                        <div className="flex items-center mb-4">
-                          <h3 className="heading-md mr-4">{program.title}</h3>
-                          <span className="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm font-medium">
-                            {program.subtitle}
-                          </span>
-                        </div>
-                        <p className="text-body mb-4 leading-relaxed">{program.description}</p>
-
-                        <div className="responsive-grid responsive-grid-md-2 gap-4 mb-4">
-                          <div>
-                            <h4 className="font-semibold text-primary mb-2 text-sm">Initial Cohort:</h4>
-                            <p className="text-body text-sm">{program.participants}</p>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-primary mb-2 text-sm">Development Status:</h4>
-                            <p className="text-body text-sm">{program.status}</p>
-                          </div>
-                        </div>
-
-                        <div className="mb-4">
-                          <h4 className="font-semibold text-primary mb-2 text-sm">Key Technologies:</h4>
-                          <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto">
-                            {program.skills?.map((skill, skillIndex) => (
-                              <span key={skillIndex} className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs whitespace-nowrap">
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div>
-                          <h4 className="font-semibold text-primary mb-2 text-sm">Real-World Applications:</h4>
-                          <div className="flex flex-wrap gap-1 max-h-16 overflow-y-auto">
-                            {program.highlights?.map((highlight, highlightIndex) => (
-                              <span key={highlightIndex} className="bg-accent/10 text-accent px-2 py-1 rounded-full text-xs whitespace-nowrap">
-                                {highlight}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="text-center">
-                        <img
-                          src={program.image}
-                          alt={program.title}
-                          className="w-full h-64 object-cover rounded-xl shadow-lg mb-4"
-                        />
-                        <motion.button
-                          className="btn btn-accent"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => {
-                            window.location.href = 'https://portal.itforyouthghana.org'
-                          }}
-                        >
-                          Register Interest
-                        </motion.button>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
       </div>
     </>
   )

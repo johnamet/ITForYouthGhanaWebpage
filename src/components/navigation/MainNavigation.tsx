@@ -53,7 +53,8 @@ const INITIAL_NAVIGATION_CONFIG: NavigationItem[] = [
     id: 'for-organizations',
     label: 'For Organizations',
     subItems: [
-      { id: 'corporate-training', label: 'Corporate Training', path: '/partnerships/corporate-sponsorship' },
+      { id: 'corporate-training', label: 'Corporate Training', path: '/partnerships/corporate-training' },
+      { id: 'corporate-sponsorship', label: 'Corporate Sponsorship', path: '/partnerships/corporate-sponsorship' },
       { id: 'educational', label: 'Educational Partnerships', path: '/partnerships/educational-partnerships' },
       { id: 'government', label: 'Government Programs', path: '/partnerships/government-collaboration' },
       { id: 'ngo', label: 'NGO & Foundation', path: '/partnerships/ngo-and-foundation-partnerships' },
@@ -81,6 +82,11 @@ const MainNavigation: React.FC = () => {
   useEffect(() => {
     fetchCourses()
       .then(courses => {
+        if (courses.length === 0) {
+          // No courses — hide the "Apply for Training" nav item entirely
+          setNavigationConfig(prev => prev.filter(item => item.id !== 'apply-for-training'))
+          return
+        }
         const courseItems = courses.map(course => ({
           id: course.slug,
           label: course.title,
@@ -102,7 +108,11 @@ const MainNavigation: React.FC = () => {
           )
         )
       })
-      .catch(err => console.error('Failed to fetch courses for navigation:', err))
+      .catch(err => {
+        console.error('Failed to fetch courses for navigation:', err)
+        // On failure, hide the nav item so it doesn't show an empty dropdown
+        setNavigationConfig(prev => prev.filter(item => item.id !== 'apply-for-training'))
+      })
   }, [])
 
   const isActivePath = (path?: string, subItems?: NavigationSubItem[]) => {

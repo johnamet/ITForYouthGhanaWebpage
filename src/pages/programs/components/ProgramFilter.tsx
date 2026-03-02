@@ -2,11 +2,10 @@ import React from 'react'
 import { motion } from 'framer-motion'
 
 interface ProgramFilterProps {
-  activeFilter: 'current' | 'past' | 'future'
-  setActiveFilter: (filter: 'current' | 'past' | 'future') => void
+  activeFilter: 'current' | 'past'
+  setActiveFilter: (filter: 'current' | 'past') => void
   currentCount: number
   pastCount: number
-  futureCount: number
 }
 
 const ProgramFilter: React.FC<ProgramFilterProps> = ({
@@ -14,11 +13,9 @@ const ProgramFilter: React.FC<ProgramFilterProps> = ({
   setActiveFilter,
   currentCount,
   pastCount,
-  futureCount
 }) => {
   const filters = [
     { key: 'current' as const, label: 'Current', count: currentCount },
-    { key: 'future' as const, label: 'Future', count: futureCount },
     { key: 'past' as const, label: 'Past', count: pastCount }
   ]
 
