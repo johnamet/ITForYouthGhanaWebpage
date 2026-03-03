@@ -1,6 +1,6 @@
 // API data access layer for course-related operations
 // Handles data transformation, caching, and error recovery
-import { Course, CourseCategory, transformCourseData } from "../../types/course";
+import { Course, CourseCategory, transformCourseData, RawApiResponse } from "../../types/course";
 
 // Configuration
 const COURSE_API_ENDPOINT =
@@ -20,6 +20,51 @@ interface CacheEntry<T = Course[]> {
   data: T;
   timestamp: number;
 }
+
+const extractCoursesFromResponse = (rawData: unknown): unknown[] | null => {
+  if (typeof rawData !== "object" || rawData === null) return null;
+  const response = rawData as Partial<RawApiResponse> & {
+    data?: { data?: unknown[]; courses?: unknown[] };
+  };
+
+  if (Array.isArray(response.data?.data)) return response.data.data;
+  if (Array.isArray(response.data?.courses)) return response.data.courses; // Legacy shape
+  return null;
+};
+
+const extractCourseFromDetailResponse = (rawData: unknown): unknown | null => {
+  if (typeof rawData !== "object" || rawData === null) return null;
+  const response = rawData as {
+    data?: unknown | { data?: unknown };
+  };
+  if (response.data && typeof response.data === "object" && response.data !== null && "data" in response.data) {
+    return (response.data as { data?: unknown }).data ?? null;
+  }
+  return response.data ?? null;
+};
+
+const normalizeCategory = (raw: unknown): CourseCategory | null => {
+  if (typeof raw !== "object" || raw === null) return null;
+  const category = raw as Record<string, unknown>;
+  const id = typeof category.id === "string" ? category.id : null;
+  const name = typeof category.name === "string" ? category.name : null;
+  if (!id || !name) return null;
+
+  const rawCount = category.course_count ?? category.courseCount ?? 0;
+  const count =
+    typeof rawCount === "number"
+      ? rawCount
+      : typeof rawCount === "string"
+        ? parseInt(rawCount, 10) || 0
+        : 0;
+
+  return {
+    id,
+    name,
+    description: typeof category.description === "string" ? category.description : null,
+    course_count: count,
+  };
+};
 
 // Check if cache is fresh (< 5 min)
 const isCacheFresh = <T>(cache: CacheEntry<T> | null): boolean => {
@@ -131,10 +176,10 @@ async function fetchCoursesFromApi(retries: number): Promise<Course[]> {
         throw new Error(`API returned success: false - ${rawData.message}`);
       }
 
-      const courseArray = rawData.data?.courses;
+      const courseArray = extractCoursesFromResponse(rawData);
       if (!Array.isArray(courseArray)) {
         console.error("[courseApi] Unexpected data structure:", rawData);
-        throw new Error("Invalid API response: data.courses is not an array");
+        throw new Error("Invalid API response: expected course array in data.data");
       }
 
       console.log("[courseApi] Processing", courseArray.length, "courses from API");
@@ -197,7 +242,7 @@ export const fetchCourseBySlug = async (slugOrId: string): Promise<Course | null
       throw new Error("Invalid response from course detail endpoint");
     }
 
-    return transformCourseData(rawData.data);
+    return transformCourseData(extractCourseFromDetailResponse(rawData));
   } catch (error) {
     console.warn("[courseApi] Direct course fetch failed, falling back to list:", error);
     // Fallback: find from cached/full list
@@ -276,7 +321,9 @@ async function fetchCategoriesFromApi(): Promise<CourseCategory[]> {
       throw new Error("Invalid categories response");
     }
 
-    return rawData.data as CourseCategory[];
+    return rawData.data
+      .map((item: unknown) => normalizeCategory(item))
+      .filter((item: CourseCategory | null): item is CourseCategory => item !== null);
   } catch (error) {
     console.error("[courseApi] Error fetching categories:", error);
     return [];
