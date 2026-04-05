@@ -1,421 +1,441 @@
-# Programs Page Architecture
+# IT For Youth Ghana - Architecture Guide
 
-## System Architecture
+This document outlines the structure and organization of the IT For Youth Ghana website rebuilt with modern best practices.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Programs Page (UI)                       │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-                           ▼
-        ┌──────────────────────────────────────┐
-        │   Programs.tsx (Main Component)      │
-        │  - State Management                  │
-        │  - Filter Logic                      │
-        │  - Modal Handling                    │
-        └──────────────────┬───────────────────┘
-                           │
-                           ▼
-            ┌──────────────────────────────┐
-            │    useCourses() Hook         │
-            │  - Automatic Fetching        │
-            │  - Loading State             │
-            │  - Error Handling            │
-            │  - Retry Logic               │
-            └──────────────┬───────────────┘
-                           │
-                           ▼
-        ┌──────────────────────────────────────┐
-        │   courseApi.ts (Data Layer)          │
-        │  - API Communication                 │
-        │  - Retry Logic                       │
-        │  - Caching (5-min TTL)               │
-        │  - Data Validation                   │
-        │  - Error Handling                    │
-        └──────────────┬───────────────────────┘
-                       │
-                       ▼
-    ┌──────────────────────────────────────────┐
-    │  TypeScript Types (course.ts)            │
-    │  - Course Interface                      │
-    │  - CourseApiResponse                     │
-    │  - Validation Functions                  │
-    │  - Transform Functions                   │
-    └──────────────┬───────────────────────────┘
-                   │
-                   ▼
-    ┌──────────────────────────────────────────┐
-    │  API: https://portal.itforyouthghana...  │
-    │  GET /api/courses                        │
-    │  Returns: { success, data: Course[] }    │
-    └──────────────────────────────────────────┘
-```
+## Quick Overview
 
-## Component Hierarchy
+The application uses a **Hybrid Feature-First Architecture** combining:
+- **Feature-Sliced Design (FSD)**: Layer-based organization
+- **React Router v6 Data Patterns**: Enhanced routing
+- **Modular Features**: Self-contained feature modules
+
+## Directory Structure
 
 ```
-Programs.tsx (Main Page)
-├── ProgramsHero (Hero Section)
-├── ProgramFilter (Filter Controls)
-├── ProgramGrid (Course Display)
-│   ├── ProgramCard (Individual Course)
-│   │   ├── Image with Status Badge
-│   │   ├── Title & Subtitle
-│   │   └── Description
-│   ├── LoadingSkeleton (While loading)
-│   ├── ErrorState (On error)
-│   └── EmptyState (No courses)
-└── ProgramModal (Detail Modal)
-    ├── Course Image
-    ├── Course Details
-    ├── Skills & Technologies
-    ├── Career Outcomes
-    └── Action Buttons
-        ├── Enroll Now (→ Portal)
-        ├── Notify Me (→ Portal)
-        └── Sign Up (→ Portal)
+src/
+├── app/                    # Application core
+│   ├── routes.tsx         # Centralized route configuration
+│   ├── types.ts           # App-level types
+│   ├── hooks/             # App-level hooks
+│   └── providers.tsx      # Global providers (future)
+│
+├── shared/                # Shared across entire app
+│   ├── components/        # Reusable UI components
+│   │   ├── layout/       # Layout components (Header, Footer, MainLayout)
+│   │   └── sections/     # Page section building blocks
+│   ├── hooks/            # Shared custom hooks
+│   ├── utils/            # Utility functions
+│   ├── types/            # Common type definitions
+│   ├── constants/        # App constants and config
+│   └── config/           # Environment and feature flags
+│
+├── entities/             # Business entity models
+│   ├── course/          # Course/Program entity
+│   │   ├── types.ts
+│   │   ├── api.ts
+│   │   └── index.ts
+│   ├── program/
+│   ├── partner/
+│   └── volunteer/
+│
+├── features/            # Feature modules (business logic)
+│   ├── authentication/  # User auth
+│   ├── search/         # Search functionality
+│   ├── enrollment/     # Course enrollment
+│   ├── donations/      # Donations
+│   └── [feature]/      # Add more as needed
+│
+├── pages/              # Page-level features (routes)
+│   ├── Home/           # Home page
+│   ├── programs/       # Programs listing and detail
+│   ├── opportunities/  # Opportunities pages
+│   └── [page]/         # Other pages
+│
+└── App.tsx            # Main app component
 ```
 
-## Data Structure
+## Key Concepts
 
-### Course Type
+### 1. Centralized Routing (`src/app/routes.tsx`)
+
+All routes are defined in one place with metadata:
+
 ```typescript
-interface Course {
-  id: string                    // Unique identifier
-  title: string                 // Course name
-  description: string           // Full description
-  image: string                 // Course image URL
-  duration: string              // e.g., "6 weeks"
-  level: string                 // Beginner/Intermediate/Advanced
-  category: string              // e.g., "Web Development"
-  instructor?: string           // Optional instructor name
-  capacity?: number             // Max students
-  enrolled?: number             // Current enrollment
-  skills?: string[]             // Tech skills covered
-  requirements?: string         // Prerequisites
-  startDate?: string            // Start date
-  highlights?: string[]         // Key highlights
-  careerOutcomes?: string[]      // Expected outcomes
+{
+  path: '/programs',
+  handle: {
+    title: 'Programs',
+    description: 'Browse our training programs'
+  },
+  children: [
+    // Child routes
+  ]
 }
 ```
 
-### Program Type (Internal)
+**Benefits:**
+- Single source of truth for routing
+- Easy to add SEO metadata
+- Simpler to maintain and extend
+- Better type safety
+
+### 2. Entity Layer (`src/entities/`)
+
+Represents core business models:
+
+```
+course/
+├── types.ts     # Interfaces: Course, CourseCategory
+├── api.ts       # API calls: courseApi.getAll(), getBySlug()
+└── index.ts     # Public exports
+```
+
+**Use when:**
+- Defining data models that are used across the app
+- Creating data fetching functions
+- Need to share entities across multiple features
+
+### 3. Features Layer (`src/features/`)
+
+Self-contained business logic modules:
+
+```
+enrollment/
+├── api.ts           # Enrollment API
+├── hooks/
+│   └── useEnrollment.ts
+├── components/
+│   └── EnrollmentForm.tsx
+└── index.ts
+```
+
+**Use when:**
+- Building feature-specific functionality
+- Creating reusable business logic
+- Multiple pages need same feature
+
+### 4. Pages Layer (`src/pages/`)
+
+Page-level implementations that combine entities and features:
+
+```
+programs/
+├── Programs.tsx          # Main page component
+├── CourseDetail.tsx      # Course detail page
+├── components/           # Page-specific components
+├── hooks/               # Page-specific hooks
+└── loader.ts            # React Router data loader
+```
+
+### 5. Shared Layer (`src/shared/`)
+
+Cross-app utilities, components, and configurations:
+
+```
+shared/
+├── components/layout/    # MainLayout, PageHeader
+├── components/sections/  # HeroSection, CTASection, FeatureGrid
+├── hooks/               # useMediaQuery, useScrollPosition
+├── utils/               # formatters, validators
+└── constants/           # Navigation, social links
+```
+
+## Import Guidelines
+
+Follow this dependency flow (top can import from bottom):
+
+```
+app
+ ↓
+pages
+ ↓
+features → entities
+ ↓
+shared
+```
+
+### Allowed Imports:
+✅ `pages/` can import from `features/`, `entities/`, `shared/`
+✅ `features/` can import from `entities/`, `shared/`
+✅ `shared/` can import from other `shared/` modules
+✅ `entities/` can import from `shared/`
+
+### Prohibited Imports:
+❌ `shared/` should NOT import from `features/`, `pages/`, `app/`
+❌ `entities/` should NOT import from `features/`, `pages/`, `app/`
+❌ `features/` should NOT import from `pages/` (circular)
+
+## Component Organization
+
+### Layout Components (`shared/components/layout/`)
+Used globally across pages:
+- `MainLayout` - Main page layout with header and footer
+- `PageHeader` - Consistent page header component
+- `TwoColumnLayout` - For sidebar layouts (future)
+
+### Section Components (`shared/components/sections/`)
+Reusable page sections:
+- `HeroSection` - Hero banner with CTA
+- `CTASection` - Call-to-action area
+- `FeatureGrid` - Grid of features/benefits
+
+### Page-Specific Components (`pages/[page]/components/`)
+Only used within a single page:
+- Should be imported locally, not globally
+- Can reference entities and shared components
+
+### Feature Components (`features/[feature]/components/`)
+Specific to a business feature:
+- Example: `EnrollmentForm` in `features/enrollment/components/`
+- Can be used in multiple pages
+
+## Routing Strategy
+
+### Simple Routes
 ```typescript
-interface Program {
-  title: string
-  subtitle: string
-  description: string
-  duration: string
-  participants?: string
-  image: string
-  skills?: string[]
-  requirements: string
-  status: 'current' | 'past' | 'future'
-  type: string
-  nextStart?: string
-  completedDate?: string
-  careerOutcomes?: string[]
-  highlights?: string[]
+{
+  path: 'home',
+  element: <HomePage />,
+  handle: { title: 'Home' }
 }
 ```
 
-## State Management
-
-### Programs.tsx State
+### Nested Routes
 ```typescript
-- activeFilter: 'current' | 'past' | 'future'  // Current tab
-- selectedProgram: Program | null               // Modal content
-- showModal: boolean                            // Modal visibility
+{
+  path: 'programs',
+  children: [
+    { path: '', element: <ProgramsList /> },
+    { path: ':slug', element: <ProgramDetail /> }
+  ]
+}
 ```
 
-### useCourses Hook State
+### Route Groups (Logical, no URL impact)
 ```typescript
-- courses: Course[]           // Fetched courses
-- loading: boolean           // Fetching status
-- error: Error | null        // Error if any
-- retry: () => void          // Retry function
+{
+  path: 'opportunities',
+  children: [
+    { path: 'students', element: <StudentsPage /> },
+    { path: 'businesses', element: <BusinessesPage /> }
+  ]
+}
 ```
 
-### ProgramGrid Props
+## Data Fetching Pattern
+
+### Option 1: Using Loaders (Recommended for pages)
 ```typescript
-- programs: Program[]         // Filtered programs
-- activeFilter: 'current' | 'past' | 'future'
-- onProgramClick: Function   // Click handler
-- loading?: boolean          // Show skeleton
-- error?: Error | null       // Show error
-- onRetry?: Function        // Retry handler
+// pages/programs/loader.ts
+export const programsLoader = async () => {
+  const response = await courseApi.getAll()
+  return { courses: response.courses }
+}
+
+// pages/programs/Programs.tsx
+function ProgramsPage() {
+  const { courses } = useLoaderData<typeof programsLoader>()
+  return <div>{/* render courses */}</div>
+}
 ```
 
-## API Flow Diagram
-
-```
-User Opens Programs Page
-          │
-          ▼
-   Programs Component Mount
-          │
-          ▼
-   useCourses Hook Triggered
-          │
-          ▼
-   Check sessionStorage Cache
-          │
-    ┌─────┴─────┐
-    │           │
-    ▼           ▼
-  Valid      Invalid/Empty
-  Cache      
-    │           │
-    │           ▼
-    │      Fetch from API
-    │           │
-    │      ┌────┴────┐
-    │      │          │
-    │      ▼          ▼
-    │    Success    Error
-    │      │          │
-    │      ▼          ▼
-    │   Validate   Retry Logic
-    │      │      ┌──┴──┬──┐
-    │      ▼      │     │  │
-    │   Transform │  1s 2s 4s
-    │      │      │     │  │
-    │      ▼      └──┬──┴──┘
-    │   Cache        │
-    │      │         ▼
-    └──────┼──────Success
-           │
-           ▼
-    Update UI State
-           │
-    ┌──────┴──────┐
-    │             │
-    ▼             ▼
-  Loading      Courses
-   State       Display
-    │             │
-    │      ┌──────┴──────┐
-    │      │             │
-    │      ▼             ▼
-    │   Transform    Modal Click
-    │      │             │
-    │      ▼             ▼
-    │   Display      Redirect to
-    │   Skeleton     Portal
-    │      │
-    │      ▼
-    │   Ready
+### Option 2: Using Hooks (Components)
+```typescript
+function EnrollmentForm() {
+  const { enroll, loading } = useEnrollment()
+  
+  const handleSubmit = async (data) => {
+    await enroll(data)
+  }
+  
+  return <form onSubmit={handleSubmit}>{/* ... */}</form>
+}
 ```
 
-## Error Handling Flow
+## Adding New Features
 
-```
-API Call Failed
-      │
-      ▼
-  Catch Error
-      │
-      ▼
-  Set Error State
-      │
-      ▼
-  Show Error UI
-      │
-      ├─── User clicks "Try Again"
-      │
-      ▼
-  Attempt Retry (1/3)
-      │
-    ┌─┴─┐
-    │   │
-    ▼   ▼
-  OK  Fail
-    │   │
-    │   └─── Wait 1 second
-    │        │
-    │        ▼
-    │        Retry (2/3)
-    │        │
-    │        └─── (exponential backoff)
-    │
-    ▼
-  Success
-    │
-    ▼
-  Update UI
+### Step 1: Define Data Model
+```typescript
+// src/entities/[entity]/types.ts
+export interface MyEntity {
+  id: string
+  name: string
+}
+
+// src/entities/[entity]/api.ts
+export const myEntityApi = {
+  getAll: async () => { /* ... */ },
+  getById: async (id: string) => { /* ... */ }
+}
+
+// src/entities/[entity]/index.ts
+export { myEntityApi }
+export type { MyEntity }
 ```
 
-## Caching Strategy
+### Step 2: Create Feature Module
+```typescript
+// src/features/[feature]/types.ts
+export interface FeatureState { /* ... */ }
 
-```
-Session Storage
-      │
-      ├─── Courses Data
-      │    ├─── Cache Key: 'courses_cache'
-      │    └─── Content: { data: Course[], timestamp }
-      │
-      └─── TTL: 5 minutes
-           │
-           └─── Auto-invalidate if expired
-                │
-                └─── Fresh API call
+// src/features/[feature]/hooks/useFeature.ts
+export function useFeature() {
+  // Business logic here
+}
+
+// src/features/[feature]/index.ts
+export { useFeature }
 ```
 
-## Data Transformation Pipeline
-
-```
-Raw API Response
-      │
-      ▼
-Validate Structure
-      │
-    ┌─┴─┐
-    │   │
-    ▼   ▼
-  Valid Invalid
-    │     │
-    │     └─── Return null
-    │          (Filtered out)
-    │
-    ▼
-Transform Each Course
-    │
-    ├─── Validate required fields
-    ├─── Apply defaults
-    ├─── Clean data
-    └─── Return Course object
-           │
-           ▼
-    Course[] Array
-           │
-           ▼
-    Categorize by Status
-           │
-    ┌──────┼──────┐
-    │      │      │
-    ▼      ▼      ▼
-  Current Past  Future
-    │      │      │
-    └──────┴──────┘
-           │
-           ▼
-    Filtered Display
+### Step 3: Use in Pages
+```typescript
+// src/pages/[page]/[Page].tsx
+function MyPage() {
+  const { data } = useFeature()
+  return <div>{/* Use data */}</div>
+}
 ```
 
-## Request Lifecycle
+## Type Safety
+
+All TypeScript types should be clearly organized:
 
 ```
-1. Request Initiated
-   ├─ URL: https://portal.itforyouthghana.org/api/courses
-   ├─ Method: GET
-   ├─ Headers: Content-Type: application/json
-   └─ Timeout: 10 seconds
-
-2. Retry Logic (on failure)
-   ├─ Attempt 1: Immediate
-   ├─ Attempt 2: Wait 1s, then retry
-   ├─ Attempt 3: Wait 2s, then retry
-   └─ Attempt 4: Wait 4s, then retry
-
-3. Response Handling
-   ├─ Status 200: Parse & Validate
-   ├─ Status Error: Throw & Retry
-   └─ Timeout: Throw & Retry
-
-4. Cache Management
-   ├─ Success: Store in sessionStorage
-   ├─ Expiry: 5 minutes
-   └─ Clear: Manual or auto-expiry
-
-5. State Update
-   ├─ Success: Update courses state
-   ├─ Error: Set error state
-   └─ Finally: Set loading = false
+shared/types/common.ts      # Shared types
+app/types.ts                # App-level types
+entities/[entity]/types.ts  # Entity-specific types
+features/[feature]/types.ts # Feature-specific types
+pages/[page]/types.ts       # Page-specific types
 ```
 
-## Performance Characteristics
+## Performance Optimization
 
-| Operation | Time | Notes |
-|-----------|------|-------|
-| Cache Hit | <1ms | Instant from sessionStorage |
-| API Call | 1-3s | Network dependent |
-| Timeout | 10s | Max wait time |
-| Retry 1 | 1s | After first failure |
-| Retry 2 | 2s | After second failure |
-| Retry 3 | 4s | After third failure |
-| Max Total | ~20s | With retries |
-| Skeleton Show | 100ms | Animation start |
-
-## Security Flow
-
-```
-Request
-   │
-   ├─ HTTPS Only
-   ├─ Content-Type Validation
-   ├─ Origin Check (Browser CORS)
-   └─ No Auth Required
-           │
-           ▼
-Response
-   │
-   ├─ Content-Type Check
-   ├─ JSON Parse (safe)
-   ├─ Structure Validation
-   ├─ Field Type Check
-   └─ No XSS Vulnerability
-           │
-           ▼
-Storage
-   │
-   ├─ sessionStorage Only
-   ├─ No Sensitive Data
-   ├─ Auto-clear on Logout
-   └─ Page-level isolation
-           │
-           ▼
-Display
-   │
-   ├─ React Escaping
-   ├─ No innerHTML
-   ├─ Safe Rendering
-   └─ No Injection Risk
+### Code Splitting
+Routes are lazy-loaded automatically using `React.lazy()`:
+```typescript
+const Home = React.lazy(() => import('../pages/Home'))
 ```
 
-## Browser Compatibility
-
-- ✅ Modern browsers (Chrome, Firefox, Safari, Edge)
-- ✅ sessionStorage support
-- ✅ AbortSignal.timeout() support
-- ✅ ES6+ JavaScript
-- ✅ React 18.x
-
-## Accessibility Architecture
-
-```
-Screen Reader Support
-   │
-   ├─ Semantic HTML
-   ├─ ARIA Labels
-   ├─ Image Alt Text
-   └─ Error Messages
-
-Keyboard Navigation
-   │
-   ├─ Tab Order
-   ├─ Focus Management
-   ├─ Click Handlers
-   └─ Escape Key Support
-
-Color & Contrast
-   │
-   ├─ WCAG AA Compliant
-   ├─ No Color Only Info
-   └─ Clear Visual States
+### Image Optimization
+```typescript
+// Use NextGen image formats
+<img src="/image.webp" alt="description" loading="lazy" />
 ```
 
----
+### Caching
+Implement TanStack Query (React Query) for server state:
+```typescript
+const { data } = useQuery({
+  queryKey: ['courses'],
+  queryFn: () => courseApi.getAll()
+})
+```
 
-**Architecture Version:** 1.0  
-**Last Updated:** 2026-02-14  
-**Status:** Production Ready ✅
+## Common Patterns
+
+### Form Handling with Actions
+```typescript
+// pages/contact/actions.ts
+export const contactAction = async ({ request }) => {
+  const formData = await request.formData()
+  // Process form
+}
+
+// pages/contact/Contact.tsx
+function ContactPage() {
+  const actionData = useActionData()
+  return <Form method="post">{/* ... */}</Form>
+}
+```
+
+### Conditional Rendering by Role
+```typescript
+function AdminPage() {
+  const { user } = useAuth()
+  
+  if (user?.role !== 'admin') {
+    return <Navigate to="/" />
+  }
+  
+  return <AdminPanel />
+}
+```
+
+### Global State
+Use Context for small amounts of global state:
+```typescript
+const AuthContext = createContext()
+
+function useAuth() {
+  return useContext(AuthContext)
+}
+```
+
+## Development Workflow
+
+### Running the App
+```bash
+npm run dev
+```
+
+### Building
+```bash
+npm run build
+```
+
+### Type Checking
+```bash
+npm run type-check
+```
+
+## Best Practices
+
+1. **Keep components small** - Break into smaller components
+2. **Use TypeScript** - Define types for all data
+3. **Separate concerns** - Keep UI, logic, and data separate
+4. **Reuse components** - Put shared components in `shared/`
+5. **Document features** - Add README.md to complex features
+6. **Import order** - React → external → app imports
+7. **Naming conventions** - Use consistent, descriptive names
+
+## Migration from Old Structure
+
+The new structure coexists with the old. To migrate a page:
+
+1. Keep old page in `pages/`
+2. Create new page structure
+3. Update route in `app/routes.tsx`
+4. Delete old page when new is ready
+
+Example:
+```typescript
+// Before
+<Route path="/programs" element={<OldProgramsPage />} />
+
+// After
+<Route path="/programs" element={<NewProgramsPage />} />
+```
+
+## Troubleshooting
+
+### Routes not rendering?
+- Check `app/routes.tsx` for correct path
+- Ensure lazy imports are correct
+- Check browser console for errors
+
+### Import errors?
+- Follow the dependency flow (no circular imports)
+- Check file paths match exactly
+- Use index.ts for clean exports
+
+### Types not working?
+- Run `npm run type-check`
+- Ensure types are exported from index.ts
+- Check tsconfig.json paths
+
+## Resources
+
+- [React Router Docs](https://reactrouter.com/)
+- [Feature-Sliced Design](https://feature-sliced.design/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS](https://tailwindcss.com/)
