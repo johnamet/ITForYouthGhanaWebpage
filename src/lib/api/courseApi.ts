@@ -7,8 +7,7 @@ const COURSE_API_ENDPOINT =
   import.meta.env.VITE_COURSE_API_ENDPOINT || "https://portal.itforyouthghana.org/api/courses";
 
 // Derive the public courses endpoint (supports /categories, /:id, /:id/apply-url)
-const PUBLIC_API_BASE = COURSE_API_ENDPOINT.replace(/\/api\/courses\/?$/, "/api/public/courses");
-
+const PUBLIC_API_BASE = COURSE_API_ENDPOINT
 const CACHE_KEY = "courses_cache_v3"; // v3 indicates stale-while-revalidate
 const CATEGORIES_CACHE_KEY = "course_categories_cache_v1";
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes (fresh)
@@ -33,6 +32,7 @@ const extractCoursesFromResponse = (rawData: unknown): unknown[] | null => {
 };
 
 const extractCourseFromDetailResponse = (rawData: unknown): unknown | null => {
+  console.log("[courseApi] Extracting course from detail response:", rawData);
   if (typeof rawData !== "object" || rawData === null) return null;
   const response = rawData as {
     data?: unknown | { data?: unknown };
@@ -229,6 +229,7 @@ export const fetchCourseBySlug = async (slugOrId: string): Promise<Course | null
       signal: AbortSignal.timeout(REQUEST_TIMEOUT),
     });
 
+
     if (!response.ok) {
       if (response.status === 404) {
         console.warn("[courseApi] Course not found:", slugOrId);
@@ -238,6 +239,9 @@ export const fetchCourseBySlug = async (slugOrId: string): Promise<Course | null
     }
 
     const rawData = await response.json();
+
+    console.log("[courseApi] Raw course detail response:", rawData);
+
     if (!rawData.success || !rawData.data) {
       throw new Error("Invalid response from course detail endpoint");
     }

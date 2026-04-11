@@ -11,7 +11,7 @@ export default {
         primary: {
           DEFAULT: '#0152be', // Basis-Primärfarbe
           50: '#eff8ff',
-          100: '#dbeeff', 
+          100: '#dbeeff',
           200: '#bfe2ff',
           300: '#93d0ff',
           400: '#60b4ff',
@@ -27,7 +27,7 @@ export default {
           DEFAULT: '#0a1a3a', // Sehr dunkles Blau für Kontrast
           50: '#eff8ff',
           100: '#dbeeff',
-          200: '#bfe2ff', 
+          200: '#bfe2ff',
           300: '#93d0ff',
           400: '#60b4ff',
           500: '#3b96ff',
@@ -132,7 +132,7 @@ export default {
       spacing: {
         // CHANGED: UX-optimierte Spacing-Tokens (4px-Basis für konsistente Abstände)
         '1': '0.25rem',   // 4px
-        '2': '0.5rem',    // 8px  
+        '2': '0.5rem',    // 8px
         '3': '0.75rem',   // 12px
         '4': '1rem',      // 16px - Mobile base padding
         '5': '1.25rem',   // 20px - Tablet padding
@@ -154,5 +154,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 }
