@@ -1,4 +1,11 @@
-// Navigation utility functions
+import { NavigateFunction } from 'react-router-dom'
+
+let navigateFunction: NavigateFunction | null = null
+
+export const setNavigateFunction = (navigate: NavigateFunction) => {
+  navigateFunction = navigate
+}
+
 export const scrollToTop = () => {
   window.scrollTo({
     top: 0,
@@ -6,19 +13,13 @@ export const scrollToTop = () => {
   })
 }
 
-export const navigateToPage = (path: string, delay: number = 0) => {
-  // Immediately scroll to top
-  window.scrollTo(0, 0)
-  
-  // In development, log the navigation attempt
-  if (import.meta.env.DEV) {
-    console.log('Navigation attempt to:', path)
-    console.log('Use React Router Links instead of navigateToPage for SPA navigation')
+export const navigateToPage = (path: string) => {
+  if (navigateFunction) {
+    navigateFunction(path)
+  } else {
+    console.warn('Navigate function not set. Use setNavigateFunction in your root component.')
+    window.location.href = path
   }
-  
-  // NOTE: This function should NOT be used in a React SPA
-  // Use Link components or useNavigate hook instead
-  // Only use for external links or fallback scenarios
 }
 
 export const scrollToSection = (sectionId: string) => {
