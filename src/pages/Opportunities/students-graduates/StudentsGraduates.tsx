@@ -9,7 +9,7 @@ import { navigateToPage } from '../../../utils/navigation'
 
 const StudentsGraduates: React.FC = () => {
   const handleApplyNow = () => {
-    navigateToPage('/contact')
+    navigateToPage('/programs')
   }
 
 
