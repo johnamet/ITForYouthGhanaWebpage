@@ -9,7 +9,7 @@ const StudentsProcess: React.FC = () => {
   const isInView = useInView(ref, { once: true, amount: 0.1 }) // Reduced threshold for faster trigger
 
   const handleStartApplication = () => {
-    navigateToPage('/contact')
+    navigateToPage('/programs')
   }
 
   // Memoize steps to prevent re-renders
