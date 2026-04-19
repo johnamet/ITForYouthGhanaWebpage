@@ -8,7 +8,7 @@ const WhoCanApply: React.FC = () => {
   const isInView = useInView(ref, { once: true, amount: 0.2 })
 
   const handleApplyNow = () => {
-    navigateToPage('/contact')
+    navigateToPage('/programs')
   }
 
   // UPDATED: Focus on individual learners only
