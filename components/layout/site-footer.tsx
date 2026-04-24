@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { NewsletterSignupForm } from "@/components/shared/newsletter-signup-form";
+
 const footerNav = [
   {
     heading: "Who We Are",
@@ -172,7 +174,11 @@ export function SiteFooter() {
               Get programme updates, events, and impact stories directly in your inbox.
             </p>
           </div>
-          <NewsletterForm />
+          <NewsletterSignupForm
+            variant="compact"
+            interest="footer"
+            className="max-w-sm"
+          />
         </div>
       </div>
 
@@ -196,30 +202,5 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
-  );
-}
-
-// ── Inline newsletter form — kept as a server component, progressively enhanced ──
-function NewsletterForm() {
-  return (
-    <form
-      action="/api/newsletter"
-      method="POST"
-      className="flex w-full max-w-sm overflow-hidden rounded-full border border-white/15 bg-white/8"
-    >
-      <input
-        type="email"
-        name="email"
-        required
-        placeholder="Your email address"
-        className="flex-1 bg-transparent px-4 py-2.5 text-[0.8rem] text-white placeholder:text-white/30 outline-none"
-      />
-      <button
-        type="submit"
-        className="rounded-full bg-brand-gold px-5 py-2.5 text-[0.75rem] font-bold text-brand-ink transition hover:bg-brand-gold/90"
-      >
-        Subscribe
-      </button>
-    </form>
   );
 }

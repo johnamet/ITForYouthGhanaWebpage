@@ -1,19 +1,14 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
+
+import { WhatWeDoOverviewPage } from "@/components/what-we-do/what-we-do-overview-page";
 import { initiatives } from "@/lib/content/site-config";
 
-const page = buildHubPage(
-  "what-we-do",
-  "What We Do",
-  "Eight initiative routes have been carved into the new architecture and are ready for richer storytelling.",
-  initiatives.map((initiative) => ({
-    title: initiative.title,
-    description: initiative.description,
-    href: `/what-we-do/${initiative.slug}`,
-    eyebrow: initiative.eyebrow,
-  })),
-);
+export const metadata: Metadata = {
+  title: "What We Do",
+  description:
+    "Explore the eight initiatives through which IT For Youth Ghana expands digital opportunity for young people, schools, communities, and partners.",
+};
 
 export default function WhatWeDoPage() {
-  return <ContentPage page={page} />;
+  return <WhatWeDoOverviewPage initiatives={initiatives} />;
 }

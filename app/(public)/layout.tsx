@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
+import { FloatingElements } from "@/components/layout/floating-elements";
 import { SiteHeader }      from "@/components/layout/site-header";
 import { SiteFooter }      from "@/components/layout/site-footer";
-import { activeAnnouncement } from "@/lib/content/site-config";
+import { activeAnnouncement, floatingElementsContent } from "@/lib/content/site-config";
 
 import "@/app/globals.css";
 
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AnnouncementBar announcement={activeAnnouncement} />
         <SiteHeader />
         <main>{children}</main>
+        <FloatingElements content={floatingElementsContent} />
         <SiteFooter />
       </body>
     </html>

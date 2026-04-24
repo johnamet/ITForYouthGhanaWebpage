@@ -2,23 +2,27 @@ import {
   heroSlides,
   heroStats,
   homepageTicker,
-  featuredPrograms,
+  programmeShowcase,
+  activeDonationCampaign,
+  featuredStory,
+  articles,
   testimonials,
   partners,
-  upcomingEvents,
-  publicHubs,
+  joinCtaCards,
+  newsletterSignupContent,
 } from "@/lib/content/site-config";
 
 import { HeroSlideshow } from "@/components/home/hero-slideshow";
 import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { ImpactCounter } from "@/components/home/impact-counter";
-import { FeaturedPrograms } from "@/components/home/featured-programs";
-import { CtaStrip } from "@/components/home/cta-strip";
+import { ProgrammeShowcase } from "@/components/home/programme-showcase";
+import { DonationCampaign } from "@/components/home/donation-campaign";
+import { FeaturedStoryVideo } from "@/components/home/featured-story-video";
+import { LatestNewsGrid } from "@/components/home/latest-news-grid";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
 import { PartnersStrip } from "@/components/home/patrners-strip";
-import { UpcomingEvents } from "@/components/home/upcoming-events";
-import { SectionHeading } from "@/components/shared/section-heading";
-import { RouteCardGrid } from "@/components/shared/route-card-grid";
+import { JoinCtaBlock } from "@/components/home/join-cta-block";
+import { NewsletterSignupSection } from "@/components/home/newsletter-signup-section";
 
 export function HomepageSections() {
   return (
@@ -32,36 +36,29 @@ export function HomepageSections() {
       {/* 3 ── Impact counter */}
       <ImpactCounter stats={heroStats} />
 
-      {/* 4 ── Featured programs — editorial layout */}
-      <FeaturedPrograms programs={featuredPrograms} />
+      {/* 4 ── Programme showcase */}
+      <ProgrammeShowcase items={programmeShowcase} />
 
-      {/* 5 ── Gold CTA strip */}
-      <CtaStrip
-        heading="Ready to change a young person's future?"
-        subtext="Partner with us, sponsor a scholarship, or refer someone to our next cohort."
-        cta={{ label: "Partner with us today", href: "/partner-with-us" }}
-      />
+      {/* 5 ── Donation campaign */}
+      <DonationCampaign campaign={activeDonationCampaign} />
 
-      {/* 6 ── Student testimonials */}
+      {/* 6 ── Featured story / video */}
+      <FeaturedStoryVideo story={featuredStory} />
+
+      {/* 7 ── Latest news & blog */}
+      <LatestNewsGrid articles={articles} />
+
+      {/* 8 ── Student testimonials */}
       <TestimonialsSection testimonials={testimonials} />
 
-      {/* 7 ── Partner strip */}
+      {/* 9 ── Partner strip */}
       <PartnersStrip partners={partners} />
 
-      {/* 8 ── Upcoming events */}
-      <UpcomingEvents events={upcomingEvents} />
+      {/* 10 ── Apply / join CTA block */}
+      <JoinCtaBlock cards={joinCtaCards} />
 
-      {/* 9 ── Navigation hubs */}
-      <section className="px-6 py-20 lg:px-10">
-        <div className="mx-auto max-w-6xl space-y-10">
-          <SectionHeading
-            eyebrow="Navigate the platform"
-            title="Everything you need, right where you'd expect it"
-            description="Our information architecture is designed for students, donors, and partners alike."
-          />
-          <RouteCardGrid cards={publicHubs} />
-        </div>
-      </section>
+      {/* 11 ── Newsletter signup */}
+      <NewsletterSignupSection content={newsletterSignupContent} />
     </div>
   );
 }

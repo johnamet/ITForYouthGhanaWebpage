@@ -1,0 +1,174 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Play, X } from "lucide-react";
+
+export type FeaturedStoryContent = {
+  id: string;
+  label: string;
+  headline: string;
+  quote: string;
+  name: string;
+  role: string;
+  programme: string;
+  backgroundImage: string;
+  videoUrl?: string;
+  primaryCtaLabel: string;
+  secondaryCta: { label: string; href: string };
+};
+
+type FeaturedStoryVideoProps = {
+  story: FeaturedStoryContent;
+};
+
+function toEmbedUrl(url?: string) {
+  if (!url) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(url);
+
+    if (parsed.hostname.includes("youtu.be")) {
+      const id = parsed.pathname.replace("/", "");
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : null;
+    }
+
+    if (parsed.hostname.includes("youtube.com")) {
+      if (parsed.pathname.startsWith("/embed/")) {
+        return `${parsed.origin}${parsed.pathname}?autoplay=1&rel=0`;
+      }
+
+      const id = parsed.searchParams.get("v");
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : null;
+    }
+
+    if (parsed.hostname.includes("vimeo.com")) {
+      const id = parsed.pathname.split("/").filter(Boolean).pop();
+      return id
+        ? `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`
+        : null;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const embedUrl = useMemo(() => toEmbedUrl(story.videoUrl), [story.videoUrl]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  return (
+    <>
+      <section className="bg-white px-6 pb-20 lg:px-10">
+        <div className="mx-auto max-w-6xl">
+          <div className="relative min-h-[34rem] overflow-hidden rounded-[36px] bg-brand-navy shadow-[0_20px_55px_rgba(12,45,90,0.2)]">
+            <Image
+              src={story.backgroundImage}
+              alt={story.headline}
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(12,45,90,0.88)_0%,rgba(12,45,90,0.52)_46%,rgba(12,45,90,0.16)_100%)]" />
+
+            <div className="relative flex min-h-[34rem] items-end p-6 sm:p-10">
+              <div className="max-w-2xl rounded-[28px] bg-brand-navy/60 p-7 text-white backdrop-blur-md sm:p-9">
+                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                  {story.label}
+                </p>
+                <h2 className="mt-4 font-heading text-3xl font-bold leading-tight sm:text-4xl">
+                  {story.headline}
+                </h2>
+                <blockquote className="mt-5 text-base leading-8 text-white/82 sm:text-lg">
+                  &ldquo;{story.quote}&rdquo;
+                </blockquote>
+                <div className="mt-6 border-l-2 border-brand-gold pl-4">
+                  <p className="font-semibold text-white">{story.name}</p>
+                  <p className="mt-1 text-sm text-white/70">
+                    {story.role} · {story.programme}
+                  </p>
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+                    disabled={!embedUrl}
+                  >
+                    <Play className="h-4 w-4" />
+                    {story.primaryCtaLabel}
+                  </button>
+                  <Link
+                    href={story.secondaryCta.href}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/15"
+                  >
+                    {story.secondaryCta.label}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {isOpen && embedUrl ? (
+        <div
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 px-4 py-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label={story.primaryCtaLabel}
+          onClick={() => setIsOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-5xl overflow-hidden rounded-[28px] bg-black shadow-[0_25px_70px_rgba(0,0,0,0.45)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/65 text-white transition hover:bg-black/80"
+              aria-label="Close video"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="aspect-video">
+              <iframe
+                src={embedUrl}
+                title={story.headline}
+                className="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
+}

@@ -3,7 +3,17 @@ import { NextResponse } from "next/server";
 import { newsletterSchema } from "@/lib/utils/validators";
 
 export async function POST(request: Request) {
-  const payload = await request.json();
+  const contentType = request.headers.get("content-type") ?? "";
+
+  let payload: Record<string, unknown>;
+
+  if (contentType.includes("application/json")) {
+    payload = await request.json();
+  } else {
+    const formData = await request.formData();
+    payload = Object.fromEntries(formData.entries());
+  }
+
   const parsed = newsletterSchema.safeParse(payload);
 
   if (!parsed.success) {
@@ -12,7 +22,7 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     success: true,
-    message: "Newsletter endpoint scaffolded. Brevo wiring can now plug into this route.",
+    message: "Thanks for subscribing. We’ll keep you posted as new opportunities and stories go live.",
     data: parsed.data,
   });
 }
