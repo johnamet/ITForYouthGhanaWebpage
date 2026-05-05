@@ -19,7 +19,7 @@ import type { Partner }         from "@/components/home/patrners-strip";
 import type { EventItem }       from "@/components/home/upcoming-events";
 import type { Announcement }    from "@/components/layout/announcement-bar";
 import type { AdminNavItem }    from "@/types/admin";
-import type { ArticleSeed, InitiativePage, SitePage } from "@/types/content";
+import type { ArticleSeed, InitiativePage } from "@/types/content";
 
 // ─── Shared types (keep in sync with @/types/content) ────────────────────────
 
@@ -41,15 +41,6 @@ export type NavItem = {
   label: string;
   href: string;
   items?: { label: string; href: string }[];
-};
-
-type ScaffoldPageConfig = {
-  slug: string;
-  eyebrow: string;
-  title: string;
-  description: string;
-  intro: string;
-  primaryCta: { label: string; href: string };
 };
 
 // ─── Announcement bar ─────────────────────────────────────────────────────────
@@ -215,29 +206,6 @@ export const homepageTicker: MarqueeTickerContent = {
     { label: "Cohort 7 Applications Open Until May 31, 2026" },
   ],
 };
-
-function buildScaffoldPage(config: ScaffoldPageConfig): SitePage {
-  return {
-    slug: config.slug,
-    eyebrow: config.eyebrow,
-    title: config.title,
-    description: config.description,
-    intro: config.intro,
-    stats: heroStats,
-    sections: [
-      {
-        title: "Foundation now in place",
-        body: "This route is live inside the new App Router structure with placeholder content that can be replaced by richer CMS-driven storytelling in the next implementation passes.",
-      },
-      {
-        title: "What comes next",
-        body: "The next phase will deepen this page with stronger visuals, richer structured sections, and route-specific content instead of shared scaffold copy.",
-      },
-    ],
-    ctas: [config.primaryCta, { label: "Contact the team", href: "/contact" }],
-    related: [],
-  };
-}
 
 type InitiativeSeedConfig = {
   slug: string;
@@ -931,84 +899,6 @@ export const initiatives: InitiativePage[] = [
       { href: "/what-we-do/code-impact-challenge", eyebrow: "Next step", title: "Code Impact Challenge", description: "See where club learners can stretch into more applied building work." },
       { href: "/apply-for-training/who-can-apply", eyebrow: "Apply", title: "Who Can Apply", description: "Understand the training routes available for learners ready to go deeper." },
     ],
-  }),
-];
-
-export const organisationPages: SitePage[] = [
-  buildScaffoldPage({
-    slug: "corporate-training",
-    eyebrow: "For organisations",
-    title: "Corporate Training",
-    description: "Custom digital skills training for teams, institutions, and mission-aligned partners.",
-    intro: "This route will later carry service tiers, delivery formats, and case studies.",
-    primaryCta: { label: "Contact us", href: "/contact" },
-  }),
-  buildScaffoldPage({
-    slug: "sponsorships",
-    eyebrow: "For organisations",
-    title: "Sponsorships",
-    description: "Support cohorts, scholarships, events, and growth initiatives through focused sponsorship pathways.",
-    intro: "This page will become the public-facing home for sponsor value, recognition, and campaign impact.",
-    primaryCta: { label: "Donate now", href: "/donate" },
-  }),
-  buildScaffoldPage({
-    slug: "hire-graduates",
-    eyebrow: "For organisations",
-    title: "Hire Our Graduates",
-    description: "A direct route for employers seeking emerging talent from IT For Youth Ghana programmes.",
-    intro: "This route will grow into a bridge between employer demand and the graduate talent story.",
-    primaryCta: { label: "Start a conversation", href: "/contact" },
-  }),
-  buildScaffoldPage({
-    slug: "staff-volunteering",
-    eyebrow: "For organisations",
-    title: "Staff Volunteering",
-    description: "Structured opportunities for teams to mentor, teach, and contribute skills through ITFY programmes.",
-    intro: "This route is ready to expand into volunteering formats, expectations, and team-engagement stories.",
-    primaryCta: { label: "Partner with us", href: "/partner-with-us" },
-  }),
-];
-
-export const partnershipPages: SitePage[] = [
-  buildScaffoldPage({
-    slug: "educational",
-    eyebrow: "Partnership track",
-    title: "Educational Institutions",
-    description: "Collaborations with schools, universities, and learning communities that expand access and outcomes.",
-    intro: "This page is the future home for school partnership models and institutional collaboration stories.",
-    primaryCta: { label: "Reach out", href: "/contact" },
-  }),
-  buildScaffoldPage({
-    slug: "government",
-    eyebrow: "Partnership track",
-    title: "Government",
-    description: "Civic collaboration routes for scalable youth and digital empowerment programmes.",
-    intro: "This route will support future institutional messaging, programme scale stories, and alignment outcomes.",
-    primaryCta: { label: "Partner with us", href: "/contact" },
-  }),
-  buildScaffoldPage({
-    slug: "ngo-foundations",
-    eyebrow: "Partnership track",
-    title: "NGOs & Foundations",
-    description: "Mission-aligned partnerships for programme delivery, funding, and broader reach.",
-    intro: "This route is prepared for funder-fit narrative, implementation models, and collaborative outcomes.",
-    primaryCta: { label: "Explore impact", href: "/our-impact/reports" },
-  }),
-  buildScaffoldPage({
-    slug: "international-development",
-    eyebrow: "Partnership track",
-    title: "International Development",
-    description: "A dedicated route for agencies and funders seeking credible, locally grounded delivery.",
-    intro: "This page is ready for donor-facing storytelling, SDG alignment, and evidence-led positioning.",
-    primaryCta: { label: "Explore SDGs", href: "/our-impact/sdgs" },
-  }),
-  buildScaffoldPage({
-    slug: "technology",
-    eyebrow: "Partnership track",
-    title: "Technology Companies",
-    description: "Ways for technology firms to sponsor, mentor, partner, and hire through ITFY Ghana.",
-    intro: "This route will become the ecosystem-facing home for talent alignment, volunteering, and sponsorship.",
-    primaryCta: { label: "Hire our graduates", href: "/for-organisations/hire-graduates" },
   }),
 ];
 

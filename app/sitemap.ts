@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 
+import { organisationServices } from "@/lib/content/organisation-config";
+import { partnershipTracks } from "@/lib/content/partnership-config";
 import {
   articles,
   initiatives,
-  organisationPages,
-  partnershipPages,
   publicNavigation,
 } from "@/lib/content/site-config";
 
@@ -33,8 +33,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/donate",
     ...publicNavigation.map((item) => item.href),
     ...initiatives.map((page) => `/what-we-do/${page.slug}`),
-    ...organisationPages.map((page) => `/for-organisations/${page.slug}`),
-    ...partnershipPages.map((page) => `/partner-with-us/${page.slug}`),
+    ...organisationServices.map((page) => `/for-organisations/${page.slug}`),
+    ...partnershipTracks.map((page) => `/partner-with-us/${page.slug}`),
     ...articles.map((article) => `/news-and-updates/${article.category}/${article.slug}`),
   ];
 

@@ -1,20 +1,14 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "testimonials",
-  "Testimonials",
-  "Prepared for a mix of written stories, video clips, and homepage-selected social proof.",
-  [
-    {
-      title: "News & Updates",
-      description: "Keep stories fresh with supporting news and blog content.",
-      href: "/news-and-updates",
-      eyebrow: "Story path",
-    },
-  ],
-);
+import { ImpactTestimonialsPage } from "@/components/impact/impact-testimonials-page";
+import { impactTestimonialsContent } from "@/lib/content/impact-config";
+
+export const metadata: Metadata = {
+  title: "Testimonials | IT For Youth Ghana",
+  description:
+    "Read and watch learner, school, and partner stories that show the human side of IT For Youth Ghana's impact.",
+};
 
 export default function TestimonialsPage() {
-  return <ContentPage page={page} />;
+  return <ImpactTestimonialsPage content={impactTestimonialsContent} />;
 }

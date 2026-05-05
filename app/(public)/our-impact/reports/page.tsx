@@ -1,26 +1,14 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "impact-reports",
-  "Impact Reports",
-  "A reporting-focused route for charts, downloads, narrative proof, and future annual report assets.",
-  [
-    {
-      title: "Testimonials",
-      description: "Pair hard numbers with participant and partner stories.",
-      href: "/our-impact/testimonials",
-      eyebrow: "Impact path",
-    },
-    {
-      title: "UN SDGs",
-      description: "Show how programmes align with broader development outcomes.",
-      href: "/our-impact/sdgs",
-      eyebrow: "Impact path",
-    },
-  ],
-);
+import { ImpactReportsPage as ImpactReportsTemplate } from "@/components/impact/impact-reports-page";
+import { impactReportsContent } from "@/lib/content/impact-config";
+
+export const metadata: Metadata = {
+  title: "Impact Reports | IT For Youth Ghana",
+  description:
+    "Read IT For Youth Ghana impact briefs, evidence themes, and the reporting context behind the work.",
+};
 
 export default function ImpactReportsPage() {
-  return <ContentPage page={page} />;
+  return <ImpactReportsTemplate content={impactReportsContent} />;
 }

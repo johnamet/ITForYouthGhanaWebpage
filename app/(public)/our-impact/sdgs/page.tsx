@@ -1,20 +1,14 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "sdgs",
-  "UN SDGs",
-  "This route is ready for impact-to-SDG mapping and donor-facing credibility storytelling.",
-  [
-    {
-      title: "International Development",
-      description: "Tie SDG alignment directly into the dedicated partner track.",
-      href: "/partner-with-us/international-development",
-      eyebrow: "Partner path",
-    },
-  ],
-);
+import { ImpactSdgsPage } from "@/components/impact/impact-sdgs-page";
+import { impactSdgsContent } from "@/lib/content/impact-config";
+
+export const metadata: Metadata = {
+  title: "UN SDGs | IT For Youth Ghana",
+  description:
+    "See how IT For Youth Ghana's work aligns with education, gender, work, innovation, inequality, and partnership goals.",
+};
 
 export default function SdgsPage() {
-  return <ContentPage page={page} />;
+  return <ImpactSdgsPage content={impactSdgsContent} />;
 }

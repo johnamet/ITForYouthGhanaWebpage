@@ -1,20 +1,36 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { ContentPage } from "@/components/shared/content-page";
-import { partnershipPages } from "@/lib/content/site-config";
+import { PartnershipTrackPage as PartnershipTrackTemplate } from "@/components/partnerships/partnership-track-page";
+import { partnershipTracks } from "@/lib/content/partnership-config";
 
 type PartnershipDetailPageProps = {
   params: { slug: string };
 };
 
 export function generateStaticParams() {
-  return partnershipPages.map((page) => ({ slug: page.slug }));
+  return partnershipTracks.map((page) => ({ slug: page.slug }));
+}
+
+export function generateMetadata({ params }: PartnershipDetailPageProps): Metadata {
+  const page = partnershipTracks.find((entry) => entry.slug === params.slug);
+
+  if (!page) {
+    return {
+      title: "Partner With Us | IT For Youth Ghana",
+    };
+  }
+
+  return {
+    title: `${page.title} | IT For Youth Ghana`,
+    description: page.description,
+  };
 }
 
 export default function PartnershipDetailPage({ params }: PartnershipDetailPageProps) {
-  const page = partnershipPages.find((entry) => entry.slug === params.slug);
+  const page = partnershipTracks.find((entry) => entry.slug === params.slug);
   if (!page) {
     notFound();
   }
-  return <ContentPage page={page} />;
+  return <PartnershipTrackTemplate page={page} />;
 }

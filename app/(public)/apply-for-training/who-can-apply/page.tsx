@@ -1,20 +1,13 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "who-can-apply",
-  "Who Can Apply",
-  "Eligibility guidance now sits inside the new learner pathway instead of living as a disconnected legacy route.",
-  [
-    {
-      eyebrow: "Next step",
-      title: "Browse Courses",
-      description: "See the portal-backed catalog inside the new route structure.",
-      href: "/apply-for-training/courses",
-    },
-  ],
-);
+import { TrainingWhoCanApplyPage } from "@/components/training/training-who-can-apply-page";
+
+export const metadata: Metadata = {
+  title: "Who Can Apply | IT For Youth Ghana",
+  description:
+    "See who IT For Youth Ghana training programmes are designed for and how to judge your fit before applying.",
+};
 
 export default function WhoCanApplyPage() {
-  return <ContentPage page={page} />;
+  return <TrainingWhoCanApplyPage />;
 }

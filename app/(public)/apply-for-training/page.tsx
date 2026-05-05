@@ -1,32 +1,14 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "apply-for-training",
-  "Apply for Training",
-  "The learner journey now has a cleaner structure, with public guidance and retained portal compatibility.",
-  [
-    {
-      eyebrow: "Learner path",
-      title: "Who Can Apply",
-      description: "Eligibility guidance and audience fit.",
-      href: "/apply-for-training/who-can-apply",
-    },
-    {
-      eyebrow: "Learner path",
-      title: "Browse Courses",
-      description: "New route backed by the migrated course integration layer.",
-      href: "/apply-for-training/courses",
-    },
-    {
-      eyebrow: "Learner path",
-      title: "How It Works",
-      description: "An application-to-onboarding story tailored to the new IA.",
-      href: "/apply-for-training/how-it-works",
-    },
-  ],
-);
+import { ApplyForTrainingOverviewPage } from "@/components/training/apply-for-training-overview-page";
+import { trainingLandingContent } from "@/lib/content/training-config";
+
+export const metadata: Metadata = {
+  title: "Apply for Training | IT For Youth Ghana",
+  description:
+    "Explore eligibility, course pathways, cohort timing, and the learner journey for IT For Youth Ghana training programmes.",
+};
 
 export default function ApplyForTrainingPage() {
-  return <ContentPage page={page} />;
+  return <ApplyForTrainingOverviewPage content={trainingLandingContent} />;
 }

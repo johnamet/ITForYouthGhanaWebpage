@@ -1,13 +1,17 @@
 export const dynamic = "force-dynamic";
 
-import { ProgramsOverview } from "@/components/programs/programs-overview";
-import { getCourseCatalog } from "@/lib/api/courses";
+import type { Metadata } from "next";
+
+import { TrainingCourseListingPage } from "@/components/training/training-course-listing-page";
+import { getTrainingCatalog } from "@/lib/api/training";
+
+export const metadata: Metadata = {
+  title: "Browse Courses | IT For Youth Ghana",
+  description:
+    "Find your path in tech with filterable IT For Youth Ghana training courses, upcoming cohorts, and a clear application process.",
+};
 
 export default async function TrainingCoursesPage() {
-  const courses = await getCourseCatalog();
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <ProgramsOverview courses={courses} />
-    </div>
-  );
+  const courses = await getTrainingCatalog();
+  return <TrainingCourseListingPage courses={courses} />;
 }
