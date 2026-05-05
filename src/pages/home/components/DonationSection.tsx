@@ -7,24 +7,36 @@ const DonationSection: React.FC = () => {
 
   const fundingGoals = [
     {
-      amount: '$50',
-      impact: 'Provides coding materials for 1 student for a month',
-      supporters: 143
+      amount: '$10',
+      impact: 'Will provide a girl with internet access for one month to practice coding',
     },
     {
-      amount: '$150',
-      impact: 'Sponsors complete training for 1 girl in tech',
-      supporters: 89
+      amount: '$25',
+      impact: 'Will supply learning materials & mentorship for 1 girl',
+    },
+    {
+      amount: '$50',
+      impact: 'Will sponsor a hands-on coding workshop for 5 girls',
+    },
+    {
+      amount: '$100',
+      impact: 'Will equip 1 girl with shared access to a laptop for training',
+    },
+    {
+      amount: '$250',
+      impact: 'Will support a local coding club with training & mentorship for 10 girls',
     },
     {
       amount: '$500',
-      impact: 'Funds a full coding bootcamp for 5 students',
-      supporters: 34
+      impact: 'Will provide a laptop + software for a club',
     },
     {
       amount: '$1,000',
-      impact: 'Establishes a tech lab in an underserved community',
-      supporters: 12
+      impact: 'Will fund a national girls\' coding competition or conference',
+    },
+    {
+      amount: '$10,000',
+      impact: 'Will build a complete innovation lab in a remote community',
     }
   ]
 
@@ -41,7 +53,7 @@ const DonationSection: React.FC = () => {
           <h2 className="heading-lg mb-6" style={{ color: '#0c2d5a' }}>Join Our Mission</h2>
           <div className="text-container">
             <p className="text-lead text-center mb-8">
-              Every donation directly impacts a young person's future in technology. 
+              Every donation directly impacts a young person's future in technology.
               Help us reach our goal of training 1,000 girls in coding and digital skills.
             </p>
           </div>
@@ -50,19 +62,19 @@ const DonationSection: React.FC = () => {
           <div className="max-w-2xl mx-auto mb-8">
             <div className="flex justify-between text-sm text-neutral-600 mb-2">
               <span>Progress</span>
-              <span>67% funded</span>
+              <span>0.14% funded</span>
             </div>
             <div className="w-full bg-neutral-200 rounded-full h-3">
               <motion.div
                 initial={{ width: 0 }}
-                animate={isInView ? { width: '67%' } : {}}
+                animate={isInView ? { width: '0.14%' } : {}}
                 transition={{ duration: 1.5, delay: 0.5 }}
                 className="bg-gradient-to-r from-[#0c2d5a] to-[#1a3d6a] h-3 rounded-full"
               ></motion.div>
             </div>
             <div className="flex justify-between text-lg font-semibold mt-2" style={{ color: '#0c2d5a' }}>
-              <span>$45,230 raised</span>
-              <span>$67,500 goal</span>
+              <span>$70 raised</span>
+              <span>$50,000 goal</span>
             </div>
           </div>
         </motion.div>
@@ -89,9 +101,6 @@ const DonationSection: React.FC = () => {
                 <p className="text-sm text-neutral-700 mb-4 min-h-[3rem]">
                   {goal.impact}
                 </p>
-                <div className="text-xs text-neutral-500 mb-4">
-                  {goal.supporters} supporters
-                </div>
                 <motion.a
                   href="https://www.globalgiving.org/projects/coding-and-digital-skills-for-1000-girls-in-ghana/"
                   target="_blank"
@@ -177,7 +186,7 @@ const DonationSection: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </motion.a>
-          
+
           <p className="text-sm text-neutral-600 mt-4 max-w-md mx-auto">
             Secure donation through GlobalGiving. Your contribution is tax-deductible and goes directly to program costs.
           </p>
