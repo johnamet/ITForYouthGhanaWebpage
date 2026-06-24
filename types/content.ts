@@ -119,15 +119,62 @@ export interface InitiativePage extends SitePage {
   applyCta: InitiativeApplyCta;
 }
 
+export type ArticleCategory = "news" | "blogs";
+
+export type ArticleStatus = "draft" | "published" | "archived";
+
+export type ArticleDisplayType = "News" | "Blog" | "Event" | "Press";
+
+export interface ArticleAuthor {
+  name: string;
+  role: string;
+  avatar?: string;
+}
+
+export interface ArticleSeo {
+  title: string;
+  description: string;
+  ogImage?: string;
+}
+
 export interface ArticleSeed {
+  id?: string;
   slug: string;
-  category: "news" | "blogs";
+  category: ArticleCategory;
+  status?: ArticleStatus;
+  type?: ArticleDisplayType;
   title: string;
   excerpt: string;
   publishedAt: string;
+  updatedAt?: string;
   coverImage?: string;
+  coverAlt?: string;
+  tags?: string[];
+  author?: ArticleAuthor;
+  featured?: boolean;
+  seo?: ArticleSeo;
   readTimeMinutes?: number;
   content: string[];
+  contentHtml?: string;
+}
+
+export interface NewsHubContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  editorialPillars: ContentBlock[];
+  routeCards: RouteCard[];
+}
+
+export interface ArticleCategoryContent {
+  category: ArticleCategory;
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  emptyState: string;
 }
 
 export interface TrainingFocusCard {
@@ -450,4 +497,47 @@ export interface ImpactSdgsContent {
   goals: ImpactSdgGoal[];
   alignmentPrinciples: string[];
   related: RouteCard[];
+}
+
+export type ContactEnquiryType =
+  | "training"
+  | "organisation"
+  | "partnership"
+  | "donation"
+  | "media"
+  | "volunteering"
+  | "general";
+
+export type PreferredContactMethod = "email" | "phone" | "either";
+
+export interface ContactChannel {
+  label: string;
+  value: string;
+  description: string;
+  href: string;
+}
+
+export interface ContactEnquiryOption {
+  value: ContactEnquiryType;
+  label: string;
+  description: string;
+}
+
+export interface ContactResponseStep {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface ContactPageContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  channels: ContactChannel[];
+  enquiryOptions: ContactEnquiryOption[];
+  responseSteps: ContactResponseStep[];
+  routeCards: RouteCard[];
+  privacyNote: string;
 }

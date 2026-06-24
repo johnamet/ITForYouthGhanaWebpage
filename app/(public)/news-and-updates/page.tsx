@@ -1,26 +1,22 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "news-and-updates",
-  "News & Updates",
-  "The article system now has stable list and detail routes for both news and blog content.",
-  [
-    {
-      title: "News",
-      description: "Operational updates, announcements, and time-sensitive stories.",
-      href: "/news-and-updates/news",
-      eyebrow: "Article type",
-    },
-    {
-      title: "Blogs",
-      description: "Thought leadership, reflections, and longer-form writing.",
-      href: "/news-and-updates/blogs",
-      eyebrow: "Article type",
-    },
-  ],
-);
+import { NewsHubPage } from "@/components/news/news-hub-page";
+import {
+  getPublishedArticles,
+  newsHubContent,
+} from "@/lib/content/news-config";
+
+export const metadata: Metadata = {
+  title: "News & Updates | IT For Youth Ghana",
+  description:
+    "Programme news, blog reflections, events, and public updates from IT For Youth Ghana.",
+};
 
 export default function NewsAndUpdatesPage() {
-  return <ContentPage page={page} />;
+  return (
+    <NewsHubPage
+      content={newsHubContent}
+      articles={getPublishedArticles()}
+    />
+  );
 }

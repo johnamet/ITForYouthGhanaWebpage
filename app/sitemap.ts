@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 import { organisationServices } from "@/lib/content/organisation-config";
 import { partnershipTracks } from "@/lib/content/partnership-config";
+import { getPublishedArticles } from "@/lib/content/news-config";
 import {
-  articles,
   initiatives,
   publicNavigation,
 } from "@/lib/content/site-config";
@@ -35,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...initiatives.map((page) => `/what-we-do/${page.slug}`),
     ...organisationServices.map((page) => `/for-organisations/${page.slug}`),
     ...partnershipTracks.map((page) => `/partner-with-us/${page.slug}`),
-    ...articles.map((article) => `/news-and-updates/${article.category}/${article.slug}`),
+    ...getPublishedArticles().map((article) => `/news-and-updates/${article.category}/${article.slug}`),
   ];
 
   return Array.from(new Set(routes)).map((route) => ({

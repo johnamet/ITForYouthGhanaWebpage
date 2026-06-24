@@ -3,25 +3,16 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { SectionHeading } from "@/components/shared/section-heading";
+import {
+  getArticleLabel,
+  getArticleReadTime,
+} from "@/lib/content/news-config";
 import { formatDate } from "@/lib/utils/formatters";
 import type { ArticleSeed } from "@/types/content";
 
 type LatestNewsGridProps = {
   articles: ArticleSeed[];
 };
-
-function getArticleLabel(category: ArticleSeed["category"]) {
-  return category === "blogs" ? "Blog" : "News";
-}
-
-function getReadTime(article: ArticleSeed) {
-  if (article.readTimeMinutes) {
-    return article.readTimeMinutes;
-  }
-
-  const words = `${article.excerpt} ${article.content.join(" ")}`.trim().split(/\s+/).length;
-  return Math.max(2, Math.ceil(words / 180));
-}
 
 export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
   const latest = [...articles]
@@ -70,7 +61,7 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/45 via-brand-navy/10 to-transparent" />
                 <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-brand-navy">
-                  {getArticleLabel(article.category)}
+                  {getArticleLabel(article)}
                 </div>
               </div>
 
@@ -78,7 +69,7 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   <span>{formatDate(article.publishedAt)}</span>
                   <span className="h-1 w-1 rounded-full bg-brand-gold" />
-                  <span>{getReadTime(article)} min read</span>
+                  <span>{getArticleReadTime(article)} min read</span>
                 </div>
 
                 <div className="space-y-3">

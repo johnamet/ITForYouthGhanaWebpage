@@ -19,7 +19,9 @@ import type { Partner }         from "@/components/home/patrners-strip";
 import type { EventItem }       from "@/components/home/upcoming-events";
 import type { Announcement }    from "@/components/layout/announcement-bar";
 import type { AdminNavItem }    from "@/types/admin";
-import type { ArticleSeed, InitiativePage } from "@/types/content";
+import type { InitiativePage } from "@/types/content";
+
+export { articles } from "@/lib/content/news-config";
 
 // ─── Shared types (keep in sync with @/types/content) ────────────────────────
 
@@ -900,79 +902,6 @@ export const initiatives: InitiativePage[] = [
       { href: "/apply-for-training/who-can-apply", eyebrow: "Apply", title: "Who Can Apply", description: "Understand the training routes available for learners ready to go deeper." },
     ],
   }),
-];
-
-export const articles: ArticleSeed[] = [
-  {
-    slug: "cohort-7-scholarship-campaign",
-    category: "news",
-    title: "ITFY launches a scholarship campaign for Cohort 7 applicants",
-    excerpt: "The new campaign focuses on tuition support, devices, and mentoring so more learners can enter the next intake without cost becoming a blocker.",
-    publishedAt: "2026-04-23",
-    coverImage: "/images/randomPictures/UXteacher.png",
-    readTimeMinutes: 4,
-    content: [
-      "The Cohort 7 scholarship campaign is designed to remove the barriers that keep talented young people from starting their digital journey.",
-      "This phase of fundraising supports tuition waivers, learning devices, and wraparound mentorship for participants who are ready to take the next step.",
-      "The campaign also gives partners and donors a clearer way to connect their support directly to learner outcomes.",
-    ],
-  },
-  {
-    slug: "community-tech-clubs-expansion",
-    category: "news",
-    title: "Community tech clubs are expanding into more schools this term",
-    excerpt: "A new rollout plan is helping ITFY strengthen recurring access points for students who need more than one-off exposure to technology.",
-    publishedAt: "2026-04-21",
-    coverImage: "/images/randomPictures/studentsblueclothing.jpg",
-    readTimeMinutes: 3,
-    content: [
-      "The next expansion of school-based tech clubs is focused on consistency, not just reach.",
-      "By working with school leaders and local facilitators, the programme is building spaces where students can keep practicing over time.",
-      "That recurring engagement is a key part of turning interest into confidence and confidence into pathway decisions.",
-    ],
-  },
-  {
-    slug: "rebuild-foundation-update",
-    category: "news",
-    title: "The website rebuild foundation is now live",
-    excerpt: "The new Next.js structure is in place with aligned navigation, homepage scaffolding, and stronger route foundations.",
-    publishedAt: "2026-04-18",
-    coverImage: "/images/randomPictures/maingraduationpic.jpg",
-    readTimeMinutes: 4,
-    content: [
-      "The IT For Youth Ghana website rebuild has moved into an active implementation phase.",
-      "This foundation pass establishes the public information architecture, the shared layout system, and the top-of-homepage experience.",
-      "Upcoming passes will deepen the homepage, expand route-specific storytelling, and connect the future CMS.",
-    ],
-  },
-  {
-    slug: "why-homepage-clarity-matters",
-    category: "blogs",
-    title: "Why homepage clarity matters for growing mission-driven teams",
-    excerpt: "A stronger homepage sequence makes trust, urgency, and discovery easier for learners, funders, and partners.",
-    publishedAt: "2026-04-19",
-    coverImage: "/images/randomPictures/mireiotalking.jpg",
-    readTimeMinutes: 5,
-    content: [
-      "For a growing NGO, the homepage has to do more than look polished. It has to guide multiple audiences quickly and clearly.",
-      "That is why this rebuild gives special attention to the opening sequence: announcement, hero, ticker, and impact proof.",
-      "That stack helps users understand the mission, the urgency, and the pathways available to them in just a few seconds.",
-    ],
-  },
-  {
-    slug: "why-partnership-storytelling-builds-trust",
-    category: "blogs",
-    title: "Why partnership storytelling matters when an NGO is scaling",
-    excerpt: "Partners do not just need a donation page. They need evidence, clarity, and a fast way to see where they fit in the mission.",
-    publishedAt: "2026-04-17",
-    coverImage: "/images/randomPictures/groupworkstudents.jpg",
-    readTimeMinutes: 4,
-    content: [
-      "Good partnership storytelling creates confidence before a meeting ever happens.",
-      "It helps potential collaborators understand what the organisation already does well and where support can amplify that work.",
-      "That is why the rebuild makes room for partner-facing proof, clearer calls to action, and better visibility into programme outcomes.",
-    ],
-  },
 ];
 
 export const adminNavigation: AdminNavItem[] = [
