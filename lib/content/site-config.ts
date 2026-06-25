@@ -911,7 +911,7 @@ export const adminNavigation: AdminNavItem[] = [
     description: "Overview, activity, and publishing health.",
   },
   {
-    label: "Content",
+    label: "Homepage",
     href: "/admin/content/homepage",
     description: "Homepage sections, banner, slides, and impact content.",
   },
@@ -919,6 +919,11 @@ export const adminNavigation: AdminNavItem[] = [
     label: "Articles",
     href: "/admin/articles",
     description: "News and blog management scaffolding.",
+  },
+  {
+    label: "Programmes",
+    href: "/admin/programmes/girls-in-tech",
+    description: "Initiative and programme page editing.",
   },
   {
     label: "Team",
@@ -931,9 +936,34 @@ export const adminNavigation: AdminNavItem[] = [
     description: "Logos, links, and organisation metadata.",
   },
   {
+    label: "Testimonials",
+    href: "/admin/testimonials",
+    description: "Global proof stories and reusable quotes.",
+  },
+  {
+    label: "Jobs",
+    href: "/admin/jobs",
+    description: "Careers, volunteering, and job listing CRUD.",
+  },
+  {
     label: "Applications",
     href: "/admin/applications",
     description: "Training application review workflow.",
+  },
+  {
+    label: "Media",
+    href: "/admin/media",
+    description: "Storage folders, files, previews, and URLs.",
+  },
+  {
+    label: "Users",
+    href: "/admin/users",
+    description: "Admin accounts, roles, and access claims.",
+  },
+  {
+    label: "Settings",
+    href: "/admin/settings",
+    description: "SEO, social, contact, and integration settings.",
   },
 ];
 

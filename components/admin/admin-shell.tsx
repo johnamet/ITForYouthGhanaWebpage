@@ -13,6 +13,22 @@ type AdminShellProps = {
 export function AdminShell({ children }: AdminShellProps) {
   const pathname = usePathname();
 
+  const isActiveNavItem = (href: string) => {
+    if (pathname === href || pathname.startsWith(`${href}/`)) {
+      return true;
+    }
+
+    if (href.startsWith("/admin/content") && pathname.startsWith("/admin/content")) {
+      return true;
+    }
+
+    if (href.startsWith("/admin/programmes") && pathname.startsWith("/admin/programmes")) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       <div className="mx-auto grid min-h-screen max-w-7xl gap-0 lg:grid-cols-[280px_1fr]">
@@ -28,7 +44,9 @@ export function AdminShell({ children }: AdminShellProps) {
                 href={item.href}
                 className={cn(
                   "rounded-2xl px-4 py-3 text-sm transition",
-                  pathname === item.href ? "bg-white text-slate-950" : "text-slate-300 hover:bg-white/10",
+                  isActiveNavItem(item.href)
+                    ? "bg-white text-slate-950"
+                    : "text-slate-300 hover:bg-white/10",
                 )}
               >
                 <span className="block font-semibold">{item.label}</span>
