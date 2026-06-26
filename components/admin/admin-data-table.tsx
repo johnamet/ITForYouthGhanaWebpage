@@ -38,7 +38,10 @@ export function AdminDataTable<Row extends object>({
           <tbody className="divide-y divide-slate-100">
             {rows.length ? (
               rows.map((row, rowIndex) => (
-                <tr key={String(row.id ?? rowIndex)} className="align-top">
+                <tr
+                  key={String((row as { id?: unknown }).id ?? rowIndex)}
+                  className="align-top"
+                >
                   {columns.map((column) => (
                     <td
                       key={String(column.key)}

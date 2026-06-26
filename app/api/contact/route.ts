@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { persistContactMessage } from "@/lib/cms/persistence";
 import {
   contactSchema,
   type ContactPayload,
@@ -159,6 +160,14 @@ export async function POST(request: Request) {
     );
   }
 
+  const persistence = await persistContactMessage(parsed.data).catch((error) => {
+    console.error("Contact message persistence failed", error);
+    return {
+      configured: true,
+      written: false,
+      id: undefined,
+    };
+  });
   const notification = await sendBrevoNotification(parsed.data);
 
   if (notification.configured && !notification.delivered) {
@@ -177,6 +186,12 @@ export async function POST(request: Request) {
       ? "Thanks for reaching out. Your message has been sent to the ITFY team."
       : "Thanks for reaching out. Your message is validated locally; Brevo delivery will activate when production email settings are configured.",
     delivery: notification.delivered ? "brevo" : "not-configured",
+    persistence: persistence.written
+      ? "firestore"
+      : persistence.configured
+        ? "failed"
+        : "not-configured",
+    id: persistence.id,
     data: parsed.data,
   });
 }
