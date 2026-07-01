@@ -18,6 +18,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "storage.googleapis.com",
       },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+      },
+      {
+        protocol: "https",
+        hostname: "tse2.mm.bing.net",
+      },
     ],
   },
   async redirects() {

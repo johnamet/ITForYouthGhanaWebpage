@@ -6,9 +6,8 @@ import { impactTestimonialsContent } from "@/lib/content/impact-config";
 import type { ImpactStory } from "@/types/content";
 
 export const metadata: Metadata = {
-  title: "Testimonials | IT For Youth Ghana",
-  description:
-    "Read and watch learner, school, and partner stories that show the human side of IT For Youth Ghana's impact.",
+  title: impactTestimonialsContent.eyebrow,
+  description: impactTestimonialsContent.description,
 };
 
 function buildImpactStories(): Promise<ImpactStory[]> {

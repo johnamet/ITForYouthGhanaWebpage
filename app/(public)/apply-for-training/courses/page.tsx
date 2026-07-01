@@ -4,11 +4,11 @@ import type { Metadata } from "next";
 
 import { TrainingCourseListingPage } from "@/components/training/training-course-listing-page";
 import { getTrainingCatalog } from "@/lib/api/training";
+import { trainingCatalogContent } from "@/lib/content/training-config";
 
 export const metadata: Metadata = {
-  title: "Browse Courses | IT For Youth Ghana",
-  description:
-    "Find your path in tech with filterable IT For Youth Ghana training courses, upcoming cohorts, and a clear application process.",
+  title: trainingCatalogContent.eyebrow,
+  description: trainingCatalogContent.description,
 };
 
 export default async function TrainingCoursesPage() {

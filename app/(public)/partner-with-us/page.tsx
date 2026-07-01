@@ -7,9 +7,8 @@ import {
 } from "@/lib/content/partnership-config";
 
 export const metadata: Metadata = {
-  title: "Partner With Us | IT For Youth Ghana",
-  description:
-    "Explore partnership tracks for educational institutions, government, NGOs and foundations, international development actors, and technology companies.",
+  title: partnershipOverviewContent.eyebrow,
+  description: partnershipOverviewContent.description,
 };
 
 export default function PartnerWithUsPage() {

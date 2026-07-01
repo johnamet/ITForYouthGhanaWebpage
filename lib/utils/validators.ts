@@ -138,6 +138,7 @@ export const partnerSchema = z.object({
   logo: optionalTrimmedString,
   href: optionalUrl,
   active: checkboxBoolean.default(true),
+  order: optionalNumber,
 });
 
 export type PartnerPayload = z.infer<typeof partnerSchema>;
@@ -176,3 +177,108 @@ export const jobSchema = z.object({
 });
 
 export type JobPayload = z.infer<typeof jobSchema>;
+
+// ─── Settings & Homepage validators (Phase 1) ───────────────────────────────
+
+export const socialsSchema = z
+  .array(
+    z.object({
+      label: z.string().trim().min(2),
+      href: z.string().trim().url(),
+      network: z.string().trim().optional(),
+    }),
+  )
+  .default([]);
+
+export const settingsSchema = z.object({
+  siteTitle: optionalTrimmedString,
+  siteDescription: optionalTrimmedString,
+  defaultOgImage: optionalTrimmedString,
+  contact: z
+    .object({
+      email: optionalEmail,
+      phone: optionalTrimmedString,
+      location: optionalTrimmedString,
+    })
+    .partial()
+    .default({}),
+  socials: socialsSchema,
+});
+
+export type SettingsPayload = z.infer<typeof settingsSchema>;
+
+export const homepageSchema = z
+  .object({
+    announcement: z
+      .object({
+        id: optionalTrimmedString,
+        variant: z.enum(["default", "info", "urgent"]).optional(),
+        label: optionalTrimmedString,
+        message: optionalTrimmedString,
+        cta: z
+          .object({
+            label: optionalTrimmedString,
+            href: optionalTrimmedString,
+          })
+          .partial()
+          .optional(),
+        startDate: optionalTrimmedString,
+        endDate: optionalTrimmedString,
+        countdownDate: optionalTrimmedString,
+        dismissible: checkboxBoolean.optional(),
+      })
+      .partial()
+      .optional(),
+    heroSlides: z.array(z.any()).optional(),
+    ticker: z.any().optional(),
+    programmeShowcase: z.array(z.any()).optional(),
+    donationCampaign: z.any().optional(),
+    featuredStory: z.any().optional(),
+    joinCtaCards: z.array(z.any()).optional(),
+    newsletterSignup: z.any().optional(),
+    floatingElements: z.any().optional(),
+  })
+  .partial();
+
+export type HomepagePayload = z.infer<typeof homepageSchema>;
+
+export const contactPageSchema = z
+  .object({
+    eyebrow: optionalTrimmedString,
+    title: optionalTrimmedString,
+    description: optionalTrimmedString,
+    heroImage: optionalTrimmedString,
+    stats: z.array(z.any()).optional(),
+    channels: z
+      .array(
+        z.object({
+          label: z.string(),
+          value: z.string(),
+          description: z.string().optional(),
+          href: optionalTrimmedString,
+        }),
+      )
+      .optional(),
+    enquiryOptions: z.array(z.any()).optional(),
+    responseSteps: z.array(z.any()).optional(),
+    routeCards: z.array(z.any()).optional(),
+    privacyNote: optionalTrimmedString,
+  })
+  .partial();
+
+export type ContactPagePayload = z.infer<typeof contactPageSchema>;
+
+// ─── Impact stats validators ────────────────────────────────────────────────
+
+export const highlightStatSchema = z.object({
+  value: z.string().trim().min(1),
+  label: z.string().trim().min(1),
+  description: optionalTrimmedString,
+  icon: optionalTrimmedString,
+});
+
+export const impactStatsSchema = z.object({
+  stats: z.array(highlightStatSchema).min(1),
+});
+
+export type ImpactStatsPayload = z.infer<typeof impactStatsSchema>;

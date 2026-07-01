@@ -1,10 +1,11 @@
-import { KeyRound, LockKeyhole, Settings } from "lucide-react";
+import { KeyRound, LockKeyhole, Settings, Wrench } from "lucide-react";
 
-import { AdminDataTable } from "@/components/admin/admin-data-table";
 import { AdminMetricCard } from "@/components/admin/admin-metric-card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminStatusPill } from "@/components/admin/admin-status-pill";
 import { adminSettingsGroups } from "@/lib/cms/admin-config";
+import { SettingsForm } from "@/components/admin/settings-form";
+import { getCmsSettings } from "@/lib/cms/settings";
 import type { AdminMetric, AdminSettingsGroup, AdminTableColumn } from "@/types/admin";
 
 const settingsMetrics: AdminMetric[] = [
@@ -78,7 +79,8 @@ const settingsColumns: AdminTableColumn<SettingsRow>[] = [
   },
 ];
 
-export default function AdminSettingsPage() {
+export default async function AdminSettingsPage() {
+  const cmsSettings = await getCmsSettings();
   return (
     <div className="space-y-8">
       <AdminPageHeader
@@ -120,7 +122,17 @@ export default function AdminSettingsPage() {
         ))}
       </div>
 
-      <AdminDataTable columns={settingsColumns} rows={settingsRows} />
+      {/* Editable public settings */}
+      <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mb-6 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-brand-gold"><Wrench className="h-5 w-5" /></div>
+          <div>
+            <h3 className="font-heading text-xl font-semibold text-slate-950">Public settings</h3>
+            <p className="text-sm leading-7 text-slate-600">Edit public contact details and social links used in the footer and contact page.</p>
+          </div>
+        </div>
+        <SettingsForm initial={cmsSettings} />
+      </section>
     </div>
   );
 }

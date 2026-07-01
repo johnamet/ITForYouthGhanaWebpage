@@ -5,9 +5,8 @@ import { getCmsPartners } from "@/lib/cms/partners";
 import { impactOverviewContent } from "@/lib/content/impact-config";
 
 export const metadata: Metadata = {
-  title: "Our Impact | IT For Youth Ghana",
-  description:
-    "Explore the evidence, learner stories, and SDG alignment behind IT For Youth Ghana's work.",
+  title: impactOverviewContent.eyebrow,
+  description: impactOverviewContent.description,
 };
 
 export default async function OurImpactPage() {

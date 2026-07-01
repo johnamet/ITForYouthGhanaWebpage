@@ -20,6 +20,7 @@ type PartnerFormValues = {
   logo: string;
   href: string;
   active: boolean;
+  order?: number;
 };
 
 type ApiResponse = {
@@ -49,6 +50,7 @@ function getInitialValues(partner?: Partner): PartnerFormValues {
     logo: partner?.logo ?? "",
     href: partner?.href ?? "",
     active: partner?.active !== false,
+    order: partner?.order ?? 0,
   };
 }
 
@@ -256,6 +258,19 @@ export function PartnerForm({ mode, partner }: PartnerFormProps) {
               />
               Show on public pages
             </label>
+
+              <div>
+                <label htmlFor="order" className="text-sm font-bold text-brand-ink">
+                  Display order (lower shows first)
+                </label>
+                <input
+                  id="order"
+                  type="number"
+                  value={values.order ?? 0}
+                  onChange={(e) => updateValue("order", Number(e.target.value))}
+                  className="mt-2 w-32 rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
+                />
+              </div>
           </div>
         </section>
 

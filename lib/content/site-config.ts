@@ -43,6 +43,21 @@ export type NavItem = {
   items?: { label: string; href: string }[];
 };
 
+// ─── Site metadata (shared defaults for layout and pages) ─────────────────────
+
+export const siteMeta = {
+  siteName: "IT For Youth Ghana",
+  defaultTitle: "IT For Youth Ghana",
+  titleTemplate: "%s | IT For Youth Ghana",
+  description:
+    "Empowering Ghanaian youth with digital skills and the confidence to shape tomorrow's economy.",
+  openGraph: {
+    siteName: "IT For Youth Ghana",
+    locale: "en_GH" as const,
+    type: "website" as const,
+  },
+};
+
 // ─── Announcement bar ─────────────────────────────────────────────────────────
 
 export const activeAnnouncement: Announcement = {
@@ -1583,6 +1598,36 @@ export const adminNavigation: AdminNavItem[] = [
     description: "Homepage sections, banner, slides, and impact content.",
   },
   {
+    label: "Banner",
+    href: "/admin/content/banner",
+    description: "Top-of-site announcement bar.",
+  },
+  {
+    label: "Hero Slides",
+    href: "/admin/content/hero-slides",
+    description: "Slideshow slides and CTAs.",
+  },
+  {
+    label: "Donation Campaign",
+    href: "/admin/content/donation-campaign",
+    description: "Homepage donation campaign content.",
+  },
+  {
+    label: "Featured Story",
+    href: "/admin/content/featured-story",
+    description: "Homepage story/video proof block.",
+  },
+  {
+    label: "Floating Elements",
+    href: "/admin/content/floating-elements",
+    description: "Donate button, scroll-to-top, exit-intent.",
+  },
+  {
+    label: "Impact Stats",
+    href: "/admin/content/impact-stats",
+    description: "Headline stats used across pages.",
+  },
+  {
     label: "Articles",
     href: "/admin/articles",
     description: "News and blog management scaffolding.",
@@ -1601,6 +1646,11 @@ export const adminNavigation: AdminNavItem[] = [
     label: "Applications",
     href: "/admin/applications",
     description: "Training application review workflow.",
+  },
+  {
+    label: "Settings",
+    href: "/admin/settings",
+    description: "Public contact and integration status.",
   },
 ];
 

@@ -132,8 +132,6 @@ export async function resolveAdminUser(
 export async function createAdminSessionCookie(idToken: string) {
   const auth = await getAdminAuth();
 
-  console.log("Creating admin session cookie for ID token:", idToken);
-
   if (!auth) {
     return {
       configured: false,

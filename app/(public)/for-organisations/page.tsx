@@ -7,9 +7,8 @@ import {
 } from "@/lib/content/organisation-config";
 
 export const metadata: Metadata = {
-  title: "For Organisations | IT For Youth Ghana",
-  description:
-    "Explore corporate training, sponsorships, graduate hiring, and staff-volunteering pathways with IT For Youth Ghana.",
+  title: organisationOverviewContent.title,
+  description: organisationOverviewContent.description,
 };
 
 export default function ForOrganisationsPage() {

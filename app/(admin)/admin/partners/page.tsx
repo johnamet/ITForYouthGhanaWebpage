@@ -8,6 +8,7 @@ import { AdminStatusPill } from "@/components/admin/admin-status-pill";
 import { getCmsPartners } from "@/lib/cms/partners";
 import type { AdminMetric, AdminTableColumn } from "@/types/admin";
 import type { Partner } from "@/components/home/patrners-strip";
+import { PartnerReorderControls } from "@/components/admin/partner-reorder-controls";
 
 const partnerColumns: AdminTableColumn<Partner>[] = [
   {
@@ -19,6 +20,11 @@ const partnerColumns: AdminTableColumn<Partner>[] = [
         <p className="mt-1 text-sm text-slate-500">{partner.href || "No website URL"}</p>
       </div>
     ),
+  },
+  {
+    key: "order",
+    label: "Order",
+    render: (partner) => <span className="text-sm font-semibold text-slate-700">{partner.order ?? 0}</span>,
   },
   {
     key: "active",
@@ -39,6 +45,11 @@ const partnerColumns: AdminTableColumn<Partner>[] = [
         Edit
       </Link>
     ),
+  },
+  {
+    key: "reorder",
+    label: "Reorder",
+    render: (partner) => <PartnerReorderControls id={partner.id} order={partner.order ?? 0} />,
   },
 ];
 

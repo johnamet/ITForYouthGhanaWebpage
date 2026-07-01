@@ -4,23 +4,24 @@ import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { FloatingElements } from "@/components/layout/floating-elements";
 import { SiteHeader }      from "@/components/layout/site-header";
 import { SiteFooter }      from "@/components/layout/site-footer";
-import { activeAnnouncement, floatingElementsContent } from "@/lib/content/site-config";
+import { siteMeta } from "@/lib/content/site-config";
+import { getCmsAnnouncement, getCmsFloatingElements } from "@/lib/cms/homepage";
 
 export const metadata: Metadata = {
   title: {
-    default: "IT For Youth Ghana",
-    template: "%s | IT For Youth Ghana",
+    default: siteMeta.defaultTitle,
+    template: siteMeta.titleTemplate,
   },
-  description:
-    "Empowering Ghanaian youth with digital skills and the confidence to shape tomorrow's economy.",
-  openGraph: {
-    siteName: "IT For Youth Ghana",
-    locale: "en_GH",
-    type: "website",
-  },
+  description: siteMeta.description,
+  openGraph: siteMeta.openGraph,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [announcement, floating] = await Promise.all([
+    getCmsAnnouncement(),
+    getCmsFloatingElements(),
+  ]);
+
   return (
     <>
       {/*
@@ -30,10 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
        *   main            - page content
        *   SiteFooter      - full-width dark footer
        */}
-      <AnnouncementBar announcement={activeAnnouncement} />
+      <AnnouncementBar announcement={announcement} />
       <SiteHeader />
       <main className="antialiased">{children}</main>
-      <FloatingElements content={floatingElementsContent} />
+      <FloatingElements content={floating} />
       <SiteFooter />
     </>
   );

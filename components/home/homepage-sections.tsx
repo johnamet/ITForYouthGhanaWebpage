@@ -1,16 +1,16 @@
 import {
-  heroSlides,
-  heroStats,
-  homepageTicker,
-  programmeShowcase,
-  activeDonationCampaign,
-  featuredStory,
-  joinCtaCards,
-  newsletterSignupContent,
-} from "@/lib/content/site-config";
+  getCmsHeroSlides,
+  getCmsHomepageTicker,
+  getCmsProgrammeShowcase,
+  getCmsDonationCampaign,
+  getCmsFeaturedStory,
+  getCmsJoinCtaCards,
+  getCmsNewsletterSignup,
+} from "@/lib/cms/homepage";
 import { getCmsFeaturedArticles } from "@/lib/cms/articles";
 import { getCmsPartners } from "@/lib/cms/partners";
 import { getCmsTestimonials } from "@/lib/cms/testimonials";
+import { getCmsImpactStats } from "@/lib/cms/impact-stats";
 
 import { HeroSlideshow } from "@/components/home/hero-slideshow";
 import { MarqueeTicker } from "@/components/home/marquee-ticker";
@@ -25,31 +25,51 @@ import { JoinCtaBlock } from "@/components/home/join-cta-block";
 import { NewsletterSignupSection } from "@/components/home/newsletter-signup-section";
 
 export async function HomepageSections() {
-  const [articles, testimonials, partners] = await Promise.all([
+  const [
+    articles,
+    testimonials,
+    partners,
+    impactStats,
+    slides,
+    ticker,
+    showcase,
+    campaign,
+    story,
+    joinCards,
+    newsletter,
+  ] = await Promise.all([
     getCmsFeaturedArticles(3),
     getCmsTestimonials(),
     getCmsPartners(),
+    getCmsImpactStats(),
+    getCmsHeroSlides(),
+    getCmsHomepageTicker(),
+    getCmsProgrammeShowcase(),
+    getCmsDonationCampaign(),
+    getCmsFeaturedStory(),
+    getCmsJoinCtaCards(),
+    getCmsNewsletterSignup(),
   ]);
 
   return (
     <div className="bg-white">
       {/* 1 ── Hero slideshow */}
-      <HeroSlideshow slides={heroSlides} interval={6000} />
+      <HeroSlideshow slides={slides} interval={6000} />
 
       {/* 2 ── Marquee ticker */}
-      <MarqueeTicker ticker={homepageTicker} />
+      <MarqueeTicker ticker={ticker} />
 
       {/* 3 ── Impact counter */}
-      <ImpactCounter stats={heroStats} />
+      <ImpactCounter stats={impactStats} />
 
       {/* 4 ── Programme showcase */}
-      <ProgrammeShowcase items={programmeShowcase} />
+      <ProgrammeShowcase items={showcase} />
 
       {/* 5 ── Donation campaign */}
-      <DonationCampaign campaign={activeDonationCampaign} />
+      <DonationCampaign campaign={campaign} />
 
       {/* 6 ── Featured story / video */}
-      <FeaturedStoryVideo story={featuredStory} />
+      <FeaturedStoryVideo story={story} />
 
       {/* 7 ── Latest news & blog */}
       <LatestNewsGrid articles={articles} />
@@ -61,10 +81,10 @@ export async function HomepageSections() {
       <PartnersStrip partners={partners} />
 
       {/* 10 ── Apply / join CTA block */}
-      <JoinCtaBlock cards={joinCtaCards} />
+      <JoinCtaBlock cards={joinCards} />
 
       {/* 11 ── Newsletter signup */}
-      <NewsletterSignupSection content={newsletterSignupContent} />
+      <NewsletterSignupSection content={newsletter} />
     </div>
   );
 }

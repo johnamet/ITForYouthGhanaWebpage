@@ -4,9 +4,8 @@ import { ImpactReportsPage as ImpactReportsTemplate } from "@/components/impact/
 import { impactReportsContent } from "@/lib/content/impact-config";
 
 export const metadata: Metadata = {
-  title: "Impact Reports | IT For Youth Ghana",
-  description:
-    "Read IT For Youth Ghana impact briefs, evidence themes, and the reporting context behind the work.",
+  title: impactReportsContent.eyebrow,
+  description: impactReportsContent.description,
 };
 
 export default function ImpactReportsPage() {

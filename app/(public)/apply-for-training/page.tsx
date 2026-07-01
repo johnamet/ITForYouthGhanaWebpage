@@ -4,9 +4,8 @@ import { ApplyForTrainingOverviewPage } from "@/components/training/apply-for-tr
 import { trainingLandingContent } from "@/lib/content/training-config";
 
 export const metadata: Metadata = {
-  title: "Apply for Training | IT For Youth Ghana",
-  description:
-    "Explore eligibility, course pathways, cohort timing, and the learner journey for IT For Youth Ghana training programmes.",
+  title: trainingLandingContent.eyebrow,
+  description: trainingLandingContent.description,
 };
 
 export default function ApplyForTrainingPage() {

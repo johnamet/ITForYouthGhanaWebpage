@@ -23,11 +23,16 @@ function normalizePartner(id: string, data: Record<string, unknown>): Partner | 
     logo: typeof data.logo === "string" ? data.logo : undefined,
     href: typeof data.href === "string" ? data.href : undefined,
     active: data.active === false ? false : true,
+    order: typeof data.order === "number" ? data.order : 0,
   };
 }
 
 function sortPartners(partners: Partner[]) {
-  return [...partners].sort((left, right) => left.name.localeCompare(right.name));
+  return [...partners].sort((left, right) => {
+    const ord = (left.order ?? 0) - (right.order ?? 0);
+    if (ord !== 0) return ord;
+    return left.name.localeCompare(right.name);
+  });
 }
 
 export async function getCmsPartners() {
@@ -106,6 +111,7 @@ export async function saveCmsPartner(
       logo: payload.logo,
       href: payload.href,
       active: payload.active ?? true,
+      order: typeof payload.order === "number" ? payload.order : 0,
       ...timestamps,
     },
     { merge: true },

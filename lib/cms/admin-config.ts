@@ -368,7 +368,9 @@ export const adminSettingsGroups: AdminSettingsGroup[] = [
       },
       {
         label: "Admin credentials",
-        value: getAdminSdkStatus().configured ? "Configured" : "FIREBASE_CLIENT_EMAIL / FIREBASE_PRIVATE_KEY missing",
+        value: getAdminSdkStatus().configured
+          ? "Configured"
+          : "FIREBASE_SERVICE_ACCOUNT_BASE64 missing or invalid",
         secret: true,
       },
     ],
