@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 import { ImpactOverviewPage } from "@/components/impact/impact-overview-page";
+import { getCmsPartners } from "@/lib/cms/partners";
 import { impactOverviewContent } from "@/lib/content/impact-config";
-import { partners } from "@/lib/content/site-config";
 
 export const metadata: Metadata = {
   title: "Our Impact | IT For Youth Ghana",
@@ -10,6 +10,8 @@ export const metadata: Metadata = {
     "Explore the evidence, learner stories, and SDG alignment behind IT For Youth Ghana's work.",
 };
 
-export default function OurImpactPage() {
+export default async function OurImpactPage() {
+  const partners = await getCmsPartners();
+
   return <ImpactOverviewPage content={impactOverviewContent} partners={partners} />;
 }

@@ -124,9 +124,15 @@ export function TrainingCourseListingPage({
 
       <div id="cohorts" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <TrainingCohortTimeline
-          eyebrow="Upcoming cohorts"
-          title="If timing matters most, use the next intake dates as your guide"
-          description="These cohorts provide a clearer sense of when new pathways open, how long they run, and when learners need to act."
+          eyebrow={trainingCatalogContent.cohortsSectionEyebrow ?? "Upcoming cohorts"}
+          title={
+            trainingCatalogContent.cohortsSectionTitle ??
+            "If timing matters most, use the next intake dates as your guide"
+          }
+          description={
+            trainingCatalogContent.cohortsSectionDescription ??
+            "These cohorts provide a clearer sense of when new pathways open, how long they run, and when learners need to act."
+          }
           cohorts={trainingCatalogContent.cohorts}
         />
       </div>
@@ -134,9 +140,15 @@ export function TrainingCourseListingPage({
       <div id="process" className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <TrainingProcessStrip
-            eyebrow="Apply process"
-            title="From shortlist to start date, the next steps should feel understandable"
-            description="The strongest applications come from learners who know what they are applying for, what commitment is expected, and how the onboarding sequence works."
+            eyebrow={trainingCatalogContent.processSectionEyebrow ?? "Apply process"}
+            title={
+              trainingCatalogContent.processSectionTitle ??
+              "From shortlist to start date, the next steps should feel understandable"
+            }
+            description={
+              trainingCatalogContent.processSectionDescription ??
+              "The strongest applications come from learners who know what they are applying for, what commitment is expected, and how the onboarding sequence works."
+            }
             steps={trainingCatalogContent.process}
           />
         </div>

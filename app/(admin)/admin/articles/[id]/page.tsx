@@ -1,19 +1,29 @@
-import { AdminPlaceholder } from "@/components/admin/admin-placeholder";
+import { notFound } from "next/navigation";
+
+import { ArticleForm } from "@/components/admin/article-form";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { getCmsArticleById } from "@/lib/cms/articles";
 
 type AdminEditArticlePageProps = {
   params: { id: string };
 };
 
-export default function AdminEditArticlePage({ params }: AdminEditArticlePageProps) {
+export default async function AdminEditArticlePage({ params }: AdminEditArticlePageProps) {
+  const article = await getCmsArticleById(params.id);
+
+  if (!article) {
+    notFound();
+  }
+
   return (
-    <AdminPlaceholder
-      title={`Edit Article: ${params.id}`}
-      description="The edit route is active and ready for article CRUD wiring."
-      nextSteps={[
-        "Load the article document by ID.",
-        "Support draft, published, and archived transitions.",
-        "Trigger article and homepage revalidation after save.",
-      ]}
-    />
+    <div className="space-y-8">
+      <AdminPageHeader
+        eyebrow="Article CRUD"
+        title={`Edit: ${article.title}`}
+        description="Update article metadata, publishing state, body HTML, author details, and SEO fields. Saving revalidates public article routes automatically."
+      />
+
+      <ArticleForm mode="edit" article={article} />
+    </div>
   );
 }

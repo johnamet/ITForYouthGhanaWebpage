@@ -49,6 +49,39 @@ export interface SitePage {
   related: RouteCard[];
 }
 
+export type TeamMemberStatus = "active" | "inactive";
+
+export type JobType = "full-time" | "part-time" | "contract" | "volunteer";
+
+export type JobStatus = "draft" | "published" | "closed";
+
+export interface JobListing {
+  id: string;
+  title: string;
+  summary: string;
+  team: string;
+  location: string;
+  type: JobType;
+  status: JobStatus;
+  applyUrl?: string;
+  closingDate?: string;
+  featured: boolean;
+}
+
+export interface TeamMemberProfile {
+  id: string;
+  name: string;
+  role: string;
+  department: string;
+  bio: string;
+  photo?: string;
+  email?: string;
+  linkedin?: string;
+  featured: boolean;
+  status: TeamMemberStatus;
+  order: number;
+}
+
 export interface HomepageSection {
   id: string;
   title: string;
@@ -234,6 +267,13 @@ export interface TrainingCatalogContent {
   highlights: string[];
   cohorts: TrainingCohort[];
   process: TrainingProcessStep[];
+  // Optional section copy for page headings
+  cohortsSectionEyebrow?: string;
+  cohortsSectionTitle?: string;
+  cohortsSectionDescription?: string;
+  processSectionEyebrow?: string;
+  processSectionTitle?: string;
+  processSectionDescription?: string;
 }
 
 export interface TrainingEligibilityContent {
@@ -244,6 +284,18 @@ export interface TrainingEligibilityContent {
   audienceCards: TrainingAudienceCard[];
   readinessPoints: string[];
   nextSteps: RouteCard[];
+  // Optional section copy to avoid hardcoded strings in pages
+  practiceEyebrow?: string; // e.g. "In practice"
+  practiceNotes?: string[];
+  profilesSectionEyebrow?: string; // e.g. "Learner profiles"
+  profilesSectionTitle?: string;
+  profilesSectionDescription?: string;
+  readinessSectionEyebrow?: string; // e.g. "What helps"
+  readinessSectionTitle?: string;
+  readinessSectionDescription?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
 }
 
 export interface TrainingHowItWorksContent {
@@ -255,6 +307,21 @@ export interface TrainingHowItWorksContent {
   timeline: TrainingTimelineItem[];
   checklist: string[];
   nextSteps: RouteCard[];
+  // Optional section copy to avoid hardcoded strings in pages
+  heroAsideEyebrow?: string; // e.g. "Why this matters"
+  heroAsideText?: string;
+  processSectionEyebrow?: string;
+  processSectionTitle?: string;
+  processSectionDescription?: string;
+  timelineSectionEyebrow?: string;
+  timelineSectionTitle?: string;
+  timelineSectionDescription?: string;
+  prepareSectionEyebrow?: string;
+  prepareSectionTitle?: string;
+  prepareSectionDescription?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
 }
 
 export interface OrganisationOverviewCard {

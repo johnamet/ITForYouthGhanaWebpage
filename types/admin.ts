@@ -39,6 +39,10 @@ export interface AdminMetric {
   value: string;
   description: string;
   status?: AdminRecordStatus;
+  action?: {
+    label: string;
+    href: string;
+  };
 }
 
 export interface AdminCollectionDefinition {

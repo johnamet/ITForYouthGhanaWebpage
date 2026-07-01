@@ -51,14 +51,14 @@ export function TrainingWhoCanApplyPage() {
 
             <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                In practice
+                {trainingEligibilityContent.practiceEyebrow ?? "In practice"}
               </p>
               <div className="mt-5 space-y-3">
-                {[
+                {(trainingEligibilityContent.practiceNotes ?? [
                   "Beginner pathways are designed to welcome serious first-time learners.",
                   "Intermediate routes work best when learners can commit to practice outside class.",
                   "The strongest fit is motivation plus reliability, not perfection before day one.",
-                ].map((item) => (
+                ]).map((item) => (
                   <div
                     key={item}
                     className="rounded-[22px] border border-white/10 bg-white/8 px-4 py-4 text-sm leading-7 text-white/82"
@@ -75,14 +75,14 @@ export function TrainingWhoCanApplyPage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-3xl space-y-3">
           <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-            Learner profiles
+            {trainingEligibilityContent.profilesSectionEyebrow ?? "Learner profiles"}
           </p>
           <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-            Different routes suit different starting points
+            {trainingEligibilityContent.profilesSectionTitle ?? "Different routes suit different starting points"}
           </h2>
           <p className="text-base leading-8 text-slate-600">
-            Eligibility is not only about what a learner already knows. It is also about timing,
-            commitment, and whether the course level matches what they need right now.
+            {trainingEligibilityContent.profilesSectionDescription ??
+              "Eligibility is not only about what a learner already knows. It is also about timing, commitment, and whether the course level matches what they need right now."}
           </p>
         </div>
 
@@ -113,14 +113,14 @@ export function TrainingWhoCanApplyPage() {
         <div className="mx-auto max-w-7xl grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="rounded-[32px] bg-brand-navy p-8 text-white">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-              What helps
+              {trainingEligibilityContent.readinessSectionEyebrow ?? "What helps"}
             </p>
             <h2 className="mt-4 font-heading text-3xl font-bold">
-              Readiness matters more than polish
+              {trainingEligibilityContent.readinessSectionTitle ?? "Readiness matters more than polish"}
             </h2>
             <p className="mt-4 text-base leading-8 text-white/78">
-              Learners do not need to arrive with a perfect story. What matters more is whether
-              they can engage honestly with the process and commit to showing up for the cohort.
+              {trainingEligibilityContent.readinessSectionDescription ??
+                "Learners do not need to arrive with a perfect story. What matters more is whether they can engage honestly with the process and commit to showing up for the cohort."}
             </p>
           </div>
 
@@ -141,14 +141,14 @@ export function TrainingWhoCanApplyPage() {
         <div className="space-y-8">
           <div className="max-w-3xl space-y-3">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-              Next steps
+              {trainingEligibilityContent.nextStepsSectionEyebrow ?? "Next steps"}
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-              Once the fit feels clearer, keep moving
+              {trainingEligibilityContent.nextStepsSectionTitle ?? "Once the fit feels clearer, keep moving"}
             </h2>
             <p className="text-base leading-8 text-slate-600">
-              The next best step is usually to browse the course catalog or understand the
-              application sequence before the next cohort closes.
+              {trainingEligibilityContent.nextStepsSectionDescription ??
+                "The next best step is usually to browse the course catalog or understand the application sequence before the next cohort closes."}
             </p>
           </div>
 

@@ -5,15 +5,74 @@ import { AdminCollectionGrid } from "@/components/admin/admin-collection-grid";
 import { AdminMetricCard } from "@/components/admin/admin-metric-card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminStatusPill } from "@/components/admin/admin-status-pill";
+import { getCmsJobs } from "@/lib/cms/jobs";
+import { getCmsPartners } from "@/lib/cms/partners";
+import { getCmsTeamMembers } from "@/lib/cms/team";
+import { getCmsTestimonials } from "@/lib/cms/testimonials";
 import {
   adminActivityItems,
-  adminDashboardMetrics,
   adminRoleCapabilities,
   cmsCollections,
 } from "@/lib/cms/admin-config";
 import { revalidationMap } from "@/lib/utils/revalidate";
+import type { AdminMetric } from "@/types/admin";
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const [teamMembers, partners, testimonials, jobs] = await Promise.all([
+    getCmsTeamMembers(true),
+    getCmsPartners(),
+    getCmsTestimonials(),
+    getCmsJobs(true),
+  ]);
+
+  const activeTeam = teamMembers.filter((member) => member.status === "active");
+  const activePartners = partners.filter((partner) => partner.active !== false);
+  const activeTestimonials = testimonials.filter((testimonial) => testimonial.active !== false);
+  const publishedJobs = jobs.filter((job) => job.status === "published");
+
+  const cmsHealthMetrics: AdminMetric[] = [
+    {
+      label: "Team profiles",
+      value: String(activeTeam.length),
+      description: `${teamMembers.length} total in CMS, active members shown on the public team page.`,
+      status: activeTeam.length ? "published" : "draft",
+      action: {
+        label: "Manage Team",
+        href: "/admin/team",
+      },
+    },
+    {
+      label: "Partners",
+      value: String(activePartners.length),
+      description: `${partners.length} total partners available for homepage strip and partner directory.`,
+      status: activePartners.length ? "published" : "draft",
+      action: {
+        label: "Manage Partners",
+        href: "/admin/partners",
+      },
+    },
+    {
+      label: "Testimonials",
+      value: String(activeTestimonials.length),
+      description: `${testimonials.length} stories in CMS used across homepage and impact routes.`,
+      status: activeTestimonials.length ? "published" : "draft",
+      action: {
+        label: "Manage Testimonials",
+        href: "/admin/testimonials",
+      },
+    },
+    {
+      label: "Open job listings",
+      value: String(publishedJobs.length),
+      description: `${jobs.length} total roles tracked; published items appear on careers.`,
+      status: publishedJobs.length ? "published" : "draft",
+      action: {
+        label: "Manage Jobs",
+        href: "/admin/jobs",
+      },
+    },
+  ];
+
   return (
     <div className="space-y-8">
       <AdminPageHeader
@@ -24,7 +83,7 @@ export default function AdminDashboardPage() {
       />
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {adminDashboardMetrics.map((metric) => (
+        {cmsHealthMetrics.map((metric) => (
           <AdminMetricCard key={metric.label} metric={metric} />
         ))}
       </div>

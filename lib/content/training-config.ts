@@ -310,6 +310,16 @@ export const trainingCatalogContent: TrainingCatalogContent = {
   description:
     "Search by interest, level, and price to find the route that best matches your next learning step. When the live portal catalog is unavailable, the seeded pathways below keep the public experience useful and complete.",
   heroImage: "/images/randomPictures/studentslistening.jpg",
+  cohortsSectionEyebrow: "Upcoming cohorts",
+  cohortsSectionTitle:
+    "If timing matters most, use the next intake dates as your guide",
+  cohortsSectionDescription:
+    "These cohorts provide a clearer sense of when new pathways open, how long they run, and when learners need to act.",
+  processSectionEyebrow: "Apply process",
+  processSectionTitle:
+    "From shortlist to start date, the next steps should feel understandable",
+  processSectionDescription:
+    "The strongest applications come from learners who know what they are applying for, what commitment is expected, and how the onboarding sequence works.",
   highlights: [
     "Search across coding, design, data, marketing, entrepreneurship, and employability routes.",
     "Compare free and paid options without leaving the page.",
@@ -325,6 +335,20 @@ export const trainingEligibilityContent: TrainingEligibilityContent = {
   description:
     "ITFY training is strongest when the learner is ready to show up, stay engaged, and keep growing. Prior experience can help in some pathways, but commitment and fit matter more than already having everything figured out.",
   heroImage: "/images/randomPictures/studentsblueclothing.jpg",
+  practiceEyebrow: "In practice",
+  practiceNotes: [
+    "Beginner pathways are designed to welcome serious first-time learners.",
+    "Intermediate routes work best when learners can commit to practice outside class.",
+    "The strongest fit is motivation plus reliability, not perfection before day one.",
+  ],
+  profilesSectionEyebrow: "Learner profiles",
+  profilesSectionTitle: "Different routes suit different starting points",
+  profilesSectionDescription:
+    "Eligibility is not only about what a learner already knows. It is also about timing, commitment, and whether the course level matches what they need right now.",
+  readinessSectionEyebrow: "What helps",
+  readinessSectionTitle: "Readiness matters more than polish",
+  readinessSectionDescription:
+    "Learners do not need to arrive with a perfect story. What matters more is whether they can engage honestly with the process and commit to showing up for the cohort.",
   audienceCards: [
     {
       title: "Beginners looking for a real entry point",
@@ -363,6 +387,10 @@ export const trainingEligibilityContent: TrainingEligibilityContent = {
     "Where fees exist, scholarship pathways and support campaigns may sometimes reduce barriers for the right learners.",
     "If one course is not the right fit yet, another route in the ecosystem may still be the right entry point.",
   ],
+  nextStepsSectionEyebrow: "Next steps",
+  nextStepsSectionTitle: "Once the fit feels clearer, keep moving",
+  nextStepsSectionDescription:
+    "The next best step is usually to browse the course catalog or understand the application sequence before the next cohort closes.",
   nextSteps: [
     {
       href: "/apply-for-training/courses",
@@ -391,7 +419,18 @@ export const trainingHowItWorksContent: TrainingHowItWorksContent = {
   description:
     "The process is designed to reduce confusion. Learners should be able to understand what to prepare, when decisions are made, and how onboarding works before the cohort begins.",
   heroImage: "/images/randomPictures/studentslisteningfrontal.JPG",
+  heroAsideEyebrow: "Why this matters",
+  heroAsideText:
+    "When learners know the sequence ahead of time, they can prepare better, reduce anxiety, and make stronger decisions about whether to apply now or wait for a better-fit cohort.",
+  processSectionEyebrow: "Apply process",
+  processSectionTitle: "Four steps, one clearer journey",
+  processSectionDescription:
+    "The process below mirrors the same logic used on the course listing page, but gives learners a fuller explanation of what each stage is meant to do.",
   process: trainingProcessSteps,
+  timelineSectionEyebrow: "Timeline",
+  timelineSectionTitle: "What the process usually looks like in practice",
+  timelineSectionDescription:
+    "Exact dates shift by cohort, but the overall sequence stays consistent enough that learners can plan with confidence.",
   timeline: [
     {
       label: "Application window",
@@ -418,12 +457,20 @@ export const trainingHowItWorksContent: TrainingHowItWorksContent = {
         "Orientation helps learners understand attendance expectations, tools, schedules, and how to get support.",
     },
   ],
+  prepareSectionEyebrow: "Prepare well",
+  prepareSectionTitle: "Small preparation steps make the process smoother",
+  prepareSectionDescription:
+    "Most friction in application flows comes from uncertainty. These simple preparation steps help learners submit with more confidence and fewer surprises.",
   checklist: [
     "Know which pathway you are interested in and why it fits your current goals.",
     "Check that the cohort timing works with school, work, and family obligations.",
     "Prepare to share your motivation honestly, even if you are still early in your journey.",
     "Read the course notes carefully so you understand whether it is free, paid, beginner-friendly, or more advanced.",
   ],
+  nextStepsSectionEyebrow: "Next steps",
+  nextStepsSectionTitle: "Keep moving while the decision is still fresh",
+  nextStepsSectionDescription:
+    "Once the process makes sense, the next useful move is either choosing a pathway or checking whether the fit is right before you apply.",
   nextSteps: [
     {
       href: "/apply-for-training/courses",

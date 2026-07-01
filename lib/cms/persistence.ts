@@ -1,5 +1,3 @@
-import { FieldValue } from "firebase-admin/firestore";
-
 import { getAdminFirestore } from "@/lib/firebase/admin";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
@@ -13,7 +11,7 @@ async function addDocument(
   collectionName: string,
   data: Record<string, unknown>,
 ): Promise<PersistenceResult> {
-  const db = getAdminFirestore();
+  const db = await getAdminFirestore();
 
   if (!db) {
     return {
@@ -22,6 +20,7 @@ async function addDocument(
     };
   }
 
+  const { FieldValue } = await import("firebase-admin/firestore");
   const docRef = await db.collection(collectionName).add({
     ...data,
     createdAt: FieldValue.serverTimestamp(),

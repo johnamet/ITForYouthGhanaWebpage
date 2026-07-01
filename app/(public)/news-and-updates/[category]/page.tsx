@@ -3,11 +3,13 @@ import { notFound } from "next/navigation";
 
 import { NewsListingPage } from "@/components/news/news-listing-page";
 import {
+  getCmsArticleTags,
+  getCmsArticlesByCategory,
+} from "@/lib/cms/articles";
+import {
   articleCategories,
   articleCategoryContent,
   articleCategoryLabels,
-  getAllArticleTags,
-  getArticlesByCategory,
   isArticleCategory,
 } from "@/lib/content/news-config";
 
@@ -36,18 +38,23 @@ export function generateMetadata({
   };
 }
 
-export default function ArticleCategoryPage({
+export default async function ArticleCategoryPage({
   params,
 }: ArticleCategoryPageProps) {
   if (!isArticleCategory(params.category)) {
     notFound();
   }
 
+  const [articles, tags] = await Promise.all([
+    getCmsArticlesByCategory(params.category),
+    getCmsArticleTags(params.category),
+  ]);
+
   return (
     <NewsListingPage
       content={articleCategoryContent[params.category]}
-      articles={getArticlesByCategory(params.category)}
-      tags={getAllArticleTags(params.category)}
+      articles={articles}
+      tags={tags}
     />
   );
 }

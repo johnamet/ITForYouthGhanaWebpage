@@ -10,7 +10,6 @@ import {
   articleCategoryContent,
   articleCategoryLabels,
   articleCategories,
-  getFeaturedArticles,
 } from "@/lib/content/news-config";
 import type { ArticleSeed, NewsHubContent } from "@/types/content";
 
@@ -27,7 +26,7 @@ const anchorLinks = [
 ];
 
 export function NewsHubPage({ content, articles }: NewsHubPageProps) {
-  const featuredArticles = getFeaturedArticles(3);
+  const featuredArticles = articles.filter((article) => article.featured).slice(0, 3);
   const leadArticle = featuredArticles[0] ?? articles[0];
   const secondaryArticles = featuredArticles.slice(1);
   const latestArticles = articles

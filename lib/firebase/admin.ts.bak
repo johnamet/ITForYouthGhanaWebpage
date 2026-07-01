@@ -1,0 +1,126 @@
+import type { App } from "firebase-admin/app";
+import type { Auth } from "firebase-admin/auth";
+import type { Firestore } from "firebase-admin/firestore";
+
+type AdminSdkStatus = {
+  configured: boolean;
+  projectId?: string;
+  clientEmail?: string;
+  hasPrivateKey: boolean;
+  warnings: string[];
+};
+
+let adminAppPromise: Promise<App | null> | null = null;
+
+function getProjectId() {
+  return process.env.FIREBASE_PROJECT_ID ?? process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+}
+
+function getClientEmail() {
+  return process.env.FIREBASE_CLIENT_EMAIL ?? process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL;
+}
+
+function getPrivateKey() {
+  const key =
+    process.env.FIREBASE_PRIVATE_KEY ?? process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY;
+
+  return key?.replace(/\\n/g, "\n");
+}
+
+function getStorageBucket() {
+  return process.env.FIREBASE_STORAGE_BUCKET ?? process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+}
+
+function getAdminWarnings() {
+  const warnings: string[] = [];
+
+  if (process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL) {
+    warnings.push("Use FIREBASE_CLIENT_EMAIL instead of NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL.");
+  }
+
+  if (process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY) {
+    warnings.push("Use FIREBASE_PRIVATE_KEY instead of NEXT_PUBLIC_FIREBASE_PRIVATE_KEY.");
+  }
+
+  if (!process.env.FIREBASE_PRIVATE_KEY && process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY) {
+    warnings.push(
+      "Private key is exposed via a NEXT_PUBLIC_ variable — this will be bundled into client code. Move it to a server-only env var.",
+    );
+  }
+
+  return warnings;
+}
+
+export function getAdminSdkStatus(): AdminSdkStatus {
+  const projectId = getProjectId();
+  const clientEmail = getClientEmail();
+  const privateKey = getPrivateKey();
+
+  return {
+    configured: Boolean(projectId && clientEmail && privateKey),
+    projectId,
+    clientEmail,
+    hasPrivateKey: Boolean(privateKey),
+    warnings: getAdminWarnings(),
+  };
+}
+
+export async function getFirebaseAdminApp(): Promise<App | null> {
+  const status = getAdminSdkStatus();
+  const privateKey = getPrivateKey();
+
+  if (!status.configured || !status.projectId || !status.clientEmail || !privateKey) {
+    return null;
+  }
+
+  const projectId = status.projectId;
+  const clientEmail = status.clientEmail;
+
+  if (adminAppPromise) {
+    return adminAppPromise;
+  }
+
+  adminAppPromise = (async () => {
+    const { cert, getApps, initializeApp } = await import("firebase-admin/app");
+
+    const existingApp = getApps()[0];
+    if (existingApp) {
+      return existingApp;
+    }
+
+    return initializeApp({
+      credential: cert({
+        projectId,
+        clientEmail,
+        privateKey,
+      }),
+      storageBucket: getStorageBucket(),
+    });
+  })();
+
+  return adminAppPromise;
+}
+
+export async function getAdminAuth(): Promise<Auth | null> {
+  const app = await getFirebaseAdminApp();
+
+  if (!app) {
+    return null;
+  }
+
+  const { getAuth } = await import("firebase-admin/auth");
+
+  return getAuth(app);
+}
+
+export async function getAdminFirestore(): Promise<Firestore | null> {
+  const app = await getFirebaseAdminApp();
+
+  if (!app) {
+    return null;
+  }
+
+  const { getFirestore } = await import("firebase-admin/firestore");
+
+  return getFirestore(app);
+}

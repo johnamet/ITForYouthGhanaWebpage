@@ -19,9 +19,7 @@ import type { Partner }         from "@/components/home/patrners-strip";
 import type { EventItem }       from "@/components/home/upcoming-events";
 import type { Announcement }    from "@/components/layout/announcement-bar";
 import type { AdminNavItem }    from "@/types/admin";
-import type { InitiativePage } from "@/types/content";
-
-export { articles } from "@/lib/content/news-config";
+import type { ArticleSeed, InitiativePage, SitePage } from "@/types/content";
 
 // ─── Shared types (keep in sync with @/types/content) ────────────────────────
 
@@ -50,10 +48,10 @@ export type NavItem = {
 export const activeAnnouncement: Announcement = {
   id: "cohort-7-2026",
   variant: "urgent",
-  label: "Now open",
+  label: "Cohort 7 open",
   message:
-    "Applications for Cohort 7 are open until May 31, 2026, with limited places for the next intake.",
-  cta: { label: "Apply now", href: "/apply-for-training/courses" },
+    "Applications for Cohort 7 close 31 May 2026. Limited places for young people ready to build digital skills and careers.",
+  cta: { label: "Apply for Cohort 7", href: "/apply-for-training/courses" },
   startDate: "2026-04-18T00:00:00.000Z",
   endDate: "2026-05-31T23:59:59.000Z",
   countdownDate: "2026-05-31T23:59:59.000Z",
@@ -904,6 +902,675 @@ export const initiatives: InitiativePage[] = [
   }),
 ];
 
+export const organisationPages: SitePage[] = [
+  {
+    slug: "corporate-training",
+    eyebrow: "For organisations",
+    title: "Corporate Training",
+    description: "Practical digital skills training for teams that need to move faster and work smarter.",
+    intro: "We design short, focused programmes for companies that want their people to gain real skills in web development, data, digital tools, or product thinking — delivered in Accra with projects that matter to your context.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "What teams actually learn",
+        body: "Sessions are hands-on. Participants ship small projects, present their work, and leave with skills they can use the next week. We adapt the focus to your industry and team size.",
+      },
+      {
+        title: "Formats that fit real schedules",
+        body: "Choose from multi-week cohorts, intensive bootcamps, or targeted workshops. We handle facilitation, materials, and progress tracking so your internal team can focus on outcomes.",
+      },
+    ],
+    ctas: [
+      { label: "Request a training brief", href: "/contact" },
+      { label: "See sample curricula", href: "/what-we-do" },
+    ],
+    related: [
+      { href: "/for-organisations/sponsorships", eyebrow: "Support", title: "Sponsorships", description: "Fund scholarships or full cohorts for young people while building your brand." },
+      { href: "/for-organisations/hire-graduates", eyebrow: "Talent", title: "Hire Our Graduates", description: "Meet learners who have already built portfolios and worked on real projects." },
+    ],
+  },
+  {
+    slug: "sponsorships",
+    eyebrow: "For organisations",
+    title: "Sponsorships",
+    description: "Fund training access, devices, and pathways for young people who are ready to build.",
+    intro: "Your sponsorship directly removes cost barriers for learners. Every sponsored place covers tuition, learning materials, and wraparound support so more young Ghanaians can complete the programme and move into work or enterprise.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "Where sponsorship goes",
+        body: "Tuition waivers for learners who cannot afford fees. Devices and data support. Mentorship coordination. Career transition support after graduation. You choose the focus or let us match you to the highest-need cohort.",
+      },
+      {
+        title: "Recognition that feels right",
+        body: "We credit sponsors in cohort communications, at graduation, and in impact reporting. We can also create private updates for your team or CSR reporting.",
+      },
+    ],
+    ctas: [
+      { label: "Sponsor Cohort 7", href: "/donate" },
+      { label: "Talk to the team", href: "/contact" },
+    ],
+    related: [
+      { href: "/our-impact/reports", eyebrow: "Proof", title: "See the Impact", description: "Read how past cohorts have translated support into real outcomes." },
+      { href: "/for-organisations/hire-graduates", eyebrow: "Talent", title: "Hire Our Graduates", description: "Connect directly with the young people your sponsorship helped train." },
+    ],
+  },
+  {
+    slug: "hire-graduates",
+    eyebrow: "For organisations",
+    title: "Hire Our Graduates",
+    description: "Meet young people who have built real projects, worked in teams, and proved they can deliver.",
+    intro: "Our graduates leave with portfolios, presentation experience, and a track record of completing a demanding 12-week programme. Many are ready for junior roles, internships, or freelance work from day one.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "What makes them different",
+        body: "They have shipped projects under time pressure. They have presented their thinking to mentors and peers. They have worked in mixed teams. They know how to learn fast because that is what the programme demanded.",
+      },
+      {
+        title: "How to connect",
+        body: "Share a role brief with us. We will introduce you to matched graduates, help you run a small project test, or set up a short internship window. No bloated processes — just direct access to people who are ready to work.",
+      },
+    ],
+    ctas: [
+      { label: "Share a role or brief", href: "/contact" },
+      { label: "See recent graduate work", href: "/our-impact/testimonials" },
+    ],
+    related: [
+      { href: "/for-organisations/corporate-training", eyebrow: "Train", title: "Corporate Training", description: "Build internal capability while you evaluate future hires." },
+      { href: "/partner-with-us/technology", eyebrow: "Partner", title: "Technology Companies", description: "Deeper collaboration routes for companies that want ongoing talent pipelines." },
+    ],
+  },
+  {
+    slug: "staff-volunteering",
+    eyebrow: "For organisations",
+    title: "Staff Volunteering",
+    description: "Give your team structured ways to mentor, review work, and contribute real skills to young learners.",
+    intro: "Many professionals want to give back but do not know where to start. We create clear, time-bounded roles — project reviewers, mentor sessions, career talks, mock interviews — so your staff can contribute without guesswork.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "Roles that actually help",
+        body: "One-off talks. Multi-week mentorship. Portfolio reviews. Mock interviews. Facilitation support during challenge weeks. We match the ask to the time your team can realistically give.",
+      },
+      {
+        title: "What volunteers say",
+        body: "People who volunteer with us often tell us it sharpened their own communication and leadership skills. It is not charity work — it is two-way professional development.",
+      },
+    ],
+    ctas: [
+      { label: "Propose a volunteering window", href: "/contact" },
+      { label: "See current opportunities", href: "/partner-with-us" },
+    ],
+    related: [
+      { href: "/for-organisations/hire-graduates", eyebrow: "Talent", title: "Hire Our Graduates", description: "Turn volunteering relationships into hiring pipelines." },
+      { href: "/partner-with-us/technology", eyebrow: "Partner", title: "Technology Companies", description: "Structure a longer-term skills partnership." },
+    ],
+  },
+];
+
+export const partnershipPages: SitePage[] = [
+  {
+    slug: "educational",
+    eyebrow: "Partnership track",
+    title: "Educational Institutions",
+    description: "Work with schools, universities, and learning communities to bring consistent digital skills access to students.",
+    intro: "Schools and tertiary institutions are some of our strongest partners. We help them run tech clubs, host outreach, refer students into training, and create recurring pathways so young people do not just get one exposure — they get a route.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "How schools and universities work with us",
+        body: "We co-design club programmes, run teacher-facilitator training, bring challenge formats onto campus, and create clear referral routes into the academy and Girls in Tech. Partners choose the depth that fits their calendar and capacity.",
+      },
+      {
+        title: "What partners gain",
+        body: "Students get real, recurring practice. Teachers get support and visibility into industry expectations. Institutions strengthen their digital offering without building everything from scratch. We handle facilitation, materials, and measurement.",
+      },
+    ],
+    ctas: [
+      { label: "Start a school partnership", href: "/contact" },
+      { label: "See Tech Clubs in action", href: "/what-we-do/tech-clubs" },
+    ],
+    related: [
+      { href: "/what-we-do/tech-clubs", eyebrow: "Programme", title: "Tech Clubs", description: "Recurring school-based clubs that turn one-off interest into sustained practice." },
+      { href: "/what-we-do/community-outreach", eyebrow: "Outreach", title: "Community Outreach", description: "First-contact activations that feed into deeper school partnerships." },
+    ],
+  },
+  {
+    slug: "government",
+    eyebrow: "Partnership track",
+    title: "Government",
+    description: "Collaborate on scalable youth digital skills and inclusion programmes across regions and institutions.",
+    intro: "Government agencies and public bodies can work with us to expand proven models — tech clubs in public schools, regional outreach, challenge programmes, and transition support — with the accountability and documentation that public programmes require.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "Where public collaboration adds value",
+        body: "We bring delivery experience, curriculum that has been tested with thousands of learners, and a track record of reaching young women and underserved communities. Partners bring scale, policy alignment, and reach into public systems.",
+      },
+      {
+        title: "What we can deliver together",
+        body: "Pilot programmes that can be evaluated and expanded. Regional rollouts with local partners. Data and stories that show real outcomes. Clear models for teacher support and student progression.",
+      },
+    ],
+    ctas: [
+      { label: "Explore a pilot or collaboration", href: "/contact" },
+      { label: "See our reach and outcomes", href: "/our-impact/reports" },
+    ],
+    related: [
+      { href: "/partner-with-us/international-development", eyebrow: "Funders", title: "International Development", description: "Many government-aligned programmes are co-funded with development partners." },
+      { href: "/what-we-do/rural-tech-connect", eyebrow: "Access", title: "Rural Tech Connect", description: "Geographic inclusion work that often needs public sector coordination." },
+    ],
+  },
+  {
+    slug: "ngo-foundations",
+    eyebrow: "Partnership track",
+    title: "NGOs & Foundations",
+    description: "Mission-aligned partnerships for programme delivery, scholarships, and ecosystem building.",
+    intro: "Local and international NGOs and foundations partner with us because we deliver at the last mile — with young people who are often missed by mainstream programmes — and we can show the numbers and the stories.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "Partnership models that work",
+        body: "Co-funded cohorts. Scholarship programmes for girls or rural learners. Joint challenge or entrepreneurship initiatives. Capacity support where our delivery model complements your existing work. We are comfortable being a strong implementing partner or a visible co-brand.",
+      },
+      {
+        title: "Proof you can stand behind",
+        body: "3,000+ youth trained. 40% female participation. 85% of graduates in work, learning, or building. Clear cohort reporting, participant stories, and financial transparency that meets funder expectations.",
+      },
+    ],
+    ctas: [
+      { label: "Discuss a partnership", href: "/contact" },
+      { label: "Review our impact data", href: "/our-impact/reports" },
+    ],
+    related: [
+      { href: "/partner-with-us/international-development", eyebrow: "Scale", title: "International Development", description: "Many foundation partners work through or alongside development agencies." },
+      { href: "/for-organisations/sponsorships", eyebrow: "Support", title: "Sponsorships", description: "A direct route for foundations that want to fund learner places at scale." },
+    ],
+  },
+  {
+    slug: "international-development",
+    eyebrow: "Partnership track",
+    title: "International Development",
+    description: "Work with agencies and funders who need credible, locally grounded delivery on youth, skills, and digital inclusion.",
+    intro: "We are a Ghanaian organisation with deep community roots and the operational discipline that international partners need. We have worked with Google.org, UNICEF, GIZ, Mastercard Foundation, USAID, and others because we deliver, we measure, and we tell the story honestly.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "What development partners value",
+        body: "Clear theory of change. Strong gender and inclusion practice. Geographic reach beyond Accra. Real participant data and stories. Reliable reporting and financial stewardship. A partner that can represent the work credibly in-country and in donor conversations.",
+      },
+      {
+        title: "How we align with broader goals",
+        body: "Our programmes map directly to skills development, youth employment, gender equity, and digital inclusion priorities. We can speak to SDG alignment and contribute grounded evidence to larger portfolios.",
+      },
+    ],
+    ctas: [
+      { label: "Start a conversation", href: "/contact" },
+      { label: "See SDG alignment", href: "/our-impact/sdgs" },
+    ],
+    related: [
+      { href: "/partner-with-us/ngo-foundations", eyebrow: "Ecosystem", title: "NGOs & Foundations", description: "Many international programmes are delivered through local NGO and foundation partnerships." },
+      { href: "/our-impact/reports", eyebrow: "Evidence", title: "Impact Reports", description: "Review the data and stories that support larger programme reporting." },
+    ],
+  },
+  {
+    slug: "technology",
+    eyebrow: "Partnership track",
+    title: "Technology Companies",
+    description: "Sponsor, mentor, volunteer, and hire through a partner that already produces job-ready young talent.",
+    intro: "Technology companies in Ghana and beyond work with us for three reasons: they want to give back in a way that actually builds the pipeline; they need early talent that has already shipped projects; and they want structured ways for their own teams to engage without creating new programmes from scratch.",
+    stats: heroStats,
+    sections: [
+      {
+        title: "Ways to engage",
+        body: "Sponsor full cohorts or targeted scholarships. Run staff volunteering and mentorship programmes. Host challenge briefs or innovation days. Hire directly from our graduate pool. Co-design corporate training that also creates social impact.",
+      },
+      {
+        title: "Why it works for tech teams",
+        body: "You get visibility into emerging talent before the market does. Your people get meaningful engagement that builds their own leadership and communication skills. The work is structured, time-bounded, and easy to report on internally.",
+      },
+    ],
+    ctas: [
+      { label: "Explore a company partnership", href: "/contact" },
+      { label: "Hire our graduates", href: "/for-organisations/hire-graduates" },
+    ],
+    related: [
+      { href: "/for-organisations/corporate-training", eyebrow: "Train", title: "Corporate Training", description: "Practical skills programmes for your own teams while supporting the mission." },
+      { href: "/for-organisations/staff-volunteering", eyebrow: "Engage", title: "Staff Volunteering", description: "Structured roles for your engineers, designers, and leaders to contribute." },
+    ],
+  },
+];
+
+// ─── Hub pages (rich content replacing buildHubPage scaffolds) ─────────────────
+
+export const whoWeAreHub: SitePage = {
+  slug: "who-we-are",
+  eyebrow: "About ITFY Ghana",
+  title: "Who We Are",
+  description: "A Ghanaian organisation building digital skills, confidence, and pathways for young people — especially young women and those in underserved communities.",
+  intro: "We run cohort-based training, school clubs, outreach, and entrepreneurship support that turns curiosity into careers. 3,000+ youth trained. 85% of graduates in work, further study, or building within six months. We work with schools, companies, and development partners who want measurable outcomes, not just activity.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "What drives us",
+      body: "Young people in Ghana have ambition and talent. What they often lack is consistent access to training, mentorship, devices, and a community that believes they belong in tech. We exist to close that gap with programmes that are practical, recurring, and honest about outcomes.",
+    },
+    {
+      title: "How we work",
+      body: "Everything we run is cohort-based or club-based so learners get repetition, peer support, and real projects. We measure progression, not just attendance. We publish impact data and stories because partners and participants deserve transparency.",
+    },
+  ],
+  ctas: [
+    { label: "Meet the team", href: "/who-we-are/team" },
+    { label: "See our partners", href: "/who-we-are/partners" },
+  ],
+  related: [
+    { href: "/who-we-are/team", eyebrow: "People", title: "Our Team", description: "The facilitators, mentors, and operations team behind the programmes." },
+    { href: "/who-we-are/partners", eyebrow: "Credibility", title: "Our Partners", description: "Google.org, UNICEF, GIZ, Mastercard Foundation and others who trust us with delivery." },
+    { href: "/who-we-are/careers", eyebrow: "Join", title: "Join Our Team", description: "Roles, volunteering, and ways to contribute your skills to the mission." },
+  ],
+};
+
+export const applyForTrainingHub: SitePage = {
+  slug: "apply-for-training",
+  eyebrow: "Learner pathway",
+  title: "Apply for Training",
+  description: "Cohort-based digital skills programmes in Accra. 12 weeks. Real projects. Clear progression into work or enterprise.",
+  intro: "Our training is not a lecture series. You learn by building, presenting, and iterating with mentors who have shipped products. Cohorts run twice a year. Scholarships and device support are available for those who need them. 85% of graduates are in work, learning, or building within six months.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "Who this is for",
+      body: "Young Ghanaians aged 15–30 who are ready to commit 12 weeks of focused learning. No prior coding experience is required for the beginner tracks. We especially encourage young women and learners from communities with limited tech access.",
+    },
+    {
+      title: "What you will leave with",
+      body: "A portfolio of real projects. Presentation and collaboration experience. Career readiness support. Connections to mentors and hiring partners. A community that continues after the cohort ends.",
+    },
+  ],
+  ctas: [
+    { label: "Browse current courses", href: "/apply-for-training/courses" },
+    { label: "Check if you can apply", href: "/apply-for-training/who-can-apply" },
+  ],
+  related: [
+    { href: "/apply-for-training/who-can-apply", eyebrow: "Eligibility", title: "Who Can Apply", description: "Age, commitment, and background guidance for prospective learners." },
+    { href: "/apply-for-training/how-it-works", eyebrow: "Process", title: "How It Works", description: "From application to onboarding and what happens during the 12 weeks." },
+    { href: "/apply-for-training/courses", eyebrow: "Programmes", title: "Browse Courses", description: "Youth Tech Academy, Girls in Tech, and other current offerings." },
+  ],
+};
+
+export const newsAndUpdatesHub: SitePage = {
+  slug: "news-and-updates",
+  eyebrow: "Stories & updates",
+  title: "News & Updates",
+  description: "Programme announcements, graduate stories, and reflections on building digital opportunity in Ghana.",
+  intro: "We share what is actually happening — cohort launches, scholarship campaigns, new school partnerships, graduate wins, and honest reflections on what is working and what we are still learning.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "What you will find here",
+      body: "News items cover time-sensitive updates: application windows, graduation dates, new partnerships, and campaign progress. Blogs are longer-form pieces on programme design, gender inclusion, rural access, and the realities of running skills programmes in Ghana.",
+    },
+  ],
+  ctas: [
+    { label: "Read the latest news", href: "/news-and-updates/news" },
+    { label: "Explore our thinking", href: "/news-and-updates/blogs" },
+  ],
+  related: [
+    { href: "/news-and-updates/news", eyebrow: "Updates", title: "News", description: "Cohort openings, events, partnerships, and operational announcements." },
+    { href: "/news-and-updates/blogs", eyebrow: "Reflections", title: "Blogs", description: "Deeper writing on how we design programmes and why certain choices matter." },
+    { href: "/our-impact/testimonials", eyebrow: "Voices", title: "Graduate Stories", description: "Real outcomes told by the young people who lived them." },
+  ],
+};
+
+export const ourImpactHub: SitePage = {
+  slug: "our-impact",
+  eyebrow: "Proof & transparency",
+  title: "Our Impact",
+  description: "Numbers, stories, and alignment with national and global development goals.",
+  intro: "We track progression, not just participation. 3,000+ youth trained. 40% female. 85% of graduates in work, further study, or enterprise within six months. Here is the data and the human stories behind it.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "How we measure what matters",
+      body: "We follow learners after they leave. We record employment, further education, and business starts at 3 months and 6 months. We also track gender balance, geographic spread, and partner feedback. Reports are published so you can see the real picture.",
+    },
+    {
+      title: "Why transparency matters",
+      body: "Partners, donors, schools, and families deserve to know what actually happens to the young people who train with us. We do not inflate numbers. We report what we can verify and we are honest about where we still need to improve.",
+    },
+  ],
+  ctas: [
+    { label: "Read the latest reports", href: "/our-impact/reports" },
+    { label: "See graduate stories", href: "/our-impact/testimonials" },
+  ],
+  related: [
+    { href: "/our-impact/reports", eyebrow: "Data", title: "Impact Reports", description: "Cohort outcomes, progression stats, and downloadable summaries." },
+    { href: "/our-impact/testimonials", eyebrow: "Voices", title: "Testimonials", description: "Stories from graduates, school partners, and mentors." },
+    { href: "/our-impact/sdgs", eyebrow: "Alignment", title: "UN SDGs", description: "How our work connects to global development priorities." },
+  ],
+};
+
+// ─── Additional rich hubs (replacing remaining buildHubPage scaffolds) ─────────
+
+export const forOrganisationsHub: SitePage = {
+  slug: "for-organisations",
+  eyebrow: "Collaborate",
+  title: "For Organisations",
+  description: "Corporate training, sponsorship, hiring pipelines, and staff volunteering that deliver measurable social impact.",
+  intro: "Work with us to train your teams, sponsor young talent, hire graduates who have already shipped projects, or give your staff structured ways to mentor. 3,000+ youth trained. 85% progression rate. Partners include Google.org, UNICEF, GIZ, Mastercard Foundation, and Microsoft.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "Four clear routes",
+      body: "Corporate training builds internal capability. Sponsorships fund learner places with clear reporting. Hiring gives you direct access to job-ready graduates. Staff volunteering creates meaningful engagement for your people while supporting the mission.",
+    },
+    {
+      title: "Why organisations choose ITFY",
+      body: "You get structured programmes, verified outcomes, and Ghana-grounded delivery. No vague promises — we track progression and we publish the numbers. Your support creates visible impact and a stronger local talent pipeline.",
+    },
+  ],
+  ctas: [
+    { label: "Explore the routes", href: "/for-organisations/corporate-training" },
+    { label: "Talk to the team", href: "/contact" },
+  ],
+  related: [
+    { href: "/for-organisations/corporate-training", eyebrow: "Train", title: "Corporate Training", description: "Practical digital skills programmes for your staff while supporting young learners." },
+    { href: "/for-organisations/sponsorships", eyebrow: "Fund", title: "Sponsorships", description: "Fund full cohorts or targeted scholarships with transparent reporting." },
+    { href: "/for-organisations/hire-graduates", eyebrow: "Hire", title: "Hire Our Graduates", description: "Access young talent who have built portfolios and proved themselves in real projects." },
+    { href: "/for-organisations/staff-volunteering", eyebrow: "Engage", title: "Staff Volunteering", description: "Structured mentoring, review, and career support roles for your team." },
+  ],
+};
+
+export const partnerWithUsHub: SitePage = {
+  slug: "partner-with-us",
+  eyebrow: "Partnership tracks",
+  title: "Partner With Us",
+  description: "Five partnership routes for schools, government, NGOs, development agencies, and technology companies.",
+  intro: "We work with educational institutions, public bodies, foundations, international development partners, and tech companies who want credible, locally grounded delivery on youth skills and digital inclusion. 8,500+ students reached through school and community partnerships.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "Partnerships that scale",
+      body: "Every track is designed for a different kind of partner. Schools get recurring clubs and referral routes. Government gets scalable models with documentation. NGOs and foundations get last-mile delivery with proof. Development agencies get in-country credibility and SDG alignment. Tech companies get talent pipelines and structured engagement.",
+    },
+  ],
+  ctas: [
+    { label: "Find your route", href: "/partner-with-us/educational" },
+    { label: "Start a conversation", href: "/contact" },
+  ],
+  related: [
+    { href: "/partner-with-us/educational", eyebrow: "Schools", title: "Educational Institutions", description: "Tech clubs, outreach, and clear pathways from classroom to training." },
+    { href: "/partner-with-us/government", eyebrow: "Public", title: "Government", description: "Regional and national programmes with accountability and measurable reach." },
+    { href: "/partner-with-us/ngo-foundations", eyebrow: "Mission", title: "NGOs & Foundations", description: "Co-funded cohorts, scholarships, and ecosystem partnerships." },
+    { href: "/partner-with-us/international-development", eyebrow: "Scale", title: "International Development", description: "Locally rooted delivery for youth, skills, and inclusion portfolios." },
+    { href: "/partner-with-us/technology", eyebrow: "Industry", title: "Technology Companies", description: "Sponsor, mentor, volunteer, and hire through a partner that produces ready talent." },
+  ],
+};
+
+export const teamHub: SitePage = {
+  slug: "team",
+  eyebrow: "Our people",
+  title: "Our Team",
+  description: "Facilitators, mentors, and operations staff who run cohort training, school clubs, and partnerships across Ghana.",
+  intro: "We are practitioners first — people who have built products, taught in classrooms, and worked with young people in real Ghanaian contexts. The team combines technical depth, facilitation experience, and operational discipline.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "What the team actually does",
+      body: "We design and deliver 12-week cohorts. We train and support school facilitators. We run outreach that turns first exposure into sustained interest. We manage partnerships, track outcomes, and publish honest reports. Every role exists to make the learner journey work.",
+    },
+    {
+      title: "How we stay grounded",
+      body: "Most of us are Ghanaian or long-term residents. We hire alumni where possible. We spend time in schools and communities, not just offices. We measure what happens to learners after they leave, not just what happens in the room.",
+    },
+  ],
+  ctas: [
+    { label: "See open roles", href: "/who-we-are/careers" },
+    { label: "Partner with the team", href: "/contact" },
+  ],
+  related: [
+    { href: "/who-we-are/partners", eyebrow: "Credibility", title: "Our Partners", description: "The organisations that trust us to deliver at scale." },
+    { href: "/who-we-are/careers", eyebrow: "Join", title: "Join Our Team", description: "Roles, volunteering, and ways to contribute your skills." },
+  ],
+};
+
+export const partnersHub: SitePage = {
+  slug: "partners",
+  eyebrow: "Credibility",
+  title: "Our Partners",
+  description: "Google.org, UNICEF Ghana, GIZ, Mastercard Foundation, Vodafone Ghana, Microsoft, Tony Elumelu Foundation, and USAID — organisations that have chosen ITFY for delivery.",
+  intro: "We do not list logos for decoration. Every partner on this page has worked with us on real programmes — funded cohorts, co-designed clubs, sponsored learners, or hired graduates. They return because we deliver numbers and stories they can stand behind.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "What partners get",
+      body: "Clear proposals. Reliable delivery. Cohort-level reporting. Participant stories with consent. Financial transparency. A Ghanaian organisation that can represent the work credibly in-country and in donor conversations.",
+    },
+    {
+      title: "Partnership principles",
+      body: "We say yes to work we can actually do well. We report honestly, including what did not go to plan. We protect learner dignity in all storytelling. We are comfortable being an implementing partner or a visible co-brand, depending on what serves the mission.",
+    },
+  ],
+  ctas: [
+    { label: "Explore partnership routes", href: "/partner-with-us" },
+    { label: "Talk to the team", href: "/contact" },
+  ],
+  related: [
+    { href: "/partner-with-us", eyebrow: "Routes", title: "Partner With Us", description: "Five tracks for schools, government, NGOs, development, and tech companies." },
+    { href: "/our-impact/reports", eyebrow: "Proof", title: "Impact Reports", description: "The data and stories that support every partnership." },
+  ],
+};
+
+export const careersHub: SitePage = {
+  slug: "careers",
+  eyebrow: "Join the mission",
+  title: "Join Our Team",
+  description: "Roles, volunteering, and contribution pathways for people who want to build digital opportunity in Ghana.",
+  intro: "We hire facilitators, programme coordinators, partnership leads, and operations staff who are serious about outcomes. We also create structured volunteering and internship routes for professionals and students who want to contribute without a full-time role.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "What we look for",
+      body: "People who can teach or mentor at a high standard. People who can run operations without drama. People who treat young Ghanaians with respect and high expectations at the same time. Technical skill matters, but character and consistency matter more.",
+    },
+    {
+      title: "How to engage",
+      body: "Full-time and contract roles are posted when open. Volunteering windows (mentorship, portfolio review, career talks) can be proposed anytime. Alumni often return as facilitators or mentors — that pipeline is real.",
+    },
+  ],
+  ctas: [
+    { label: "See current openings", href: "/contact" },
+    { label: "Propose a volunteering window", href: "/contact" },
+  ],
+  related: [
+    { href: "/who-we-are/team", eyebrow: "People", title: "Our Team", description: "Meet the facilitators and operations staff already on the ground." },
+    { href: "/for-organisations/staff-volunteering", eyebrow: "Companies", title: "Staff Volunteering", description: "Structured ways for company teams to contribute." },
+  ],
+};
+
+export const testimonialsHub: SitePage = {
+  slug: "testimonials",
+  eyebrow: "Real voices",
+  title: "Testimonials",
+  description: "Stories from graduates, school partners, and mentors who have lived the programmes.",
+  intro: "Numbers tell part of the story. The rest comes from the young people who trained, the teachers who hosted clubs, and the professionals who mentored. These are the voices that keep us honest about what works.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "How we collect stories",
+      body: "We interview graduates at 3 and 6 months. We ask school partners for feedback after each term. We capture mentor reflections during and after cohorts. All stories are shared with consent and we are careful not to over-claim.",
+    },
+  ],
+  ctas: [
+    { label: "Read impact reports", href: "/our-impact/reports" },
+    { label: "See the latest news", href: "/news-and-updates/news" },
+  ],
+  related: [
+    { href: "/our-impact/reports", eyebrow: "Data", title: "Impact Reports", description: "Progression stats and cohort outcomes that sit alongside the stories." },
+    { href: "/news-and-updates/blogs", eyebrow: "Reflections", title: "Blogs", description: "Deeper writing on programme design and what we are learning." },
+  ],
+};
+
+export const sdgsHub: SitePage = {
+  slug: "sdgs",
+  eyebrow: "Global alignment",
+  title: "UN SDGs",
+  description: "How ITFY's work on youth skills, gender inclusion, and digital access connects to the Sustainable Development Goals.",
+  intro: "We are a Ghanaian organisation first, but our programmes map directly to global development priorities. Skills development, youth employment, gender equity, and digital inclusion are not abstract goals — they are the daily work.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "Primary alignments",
+      body: "SDG 4 (Quality Education): cohort training, tech clubs, and teacher support that give young people practical digital skills. SDG 5 (Gender Equality): Girls in Tech and deliberate 40% female participation targets. SDG 8 (Decent Work): 85% progression into work, study, or enterprise within six months.",
+    },
+    {
+      title: "Secondary alignments",
+      body: "SDG 9 (Industry & Innovation): entrepreneurship support and challenge-based learning. SDG 10 (Reduced Inequalities): rural outreach and scholarships that reach learners who would otherwise be excluded. SDG 17 (Partnerships): every major programme is delivered with schools, companies, or development partners.",
+    },
+  ],
+  ctas: [
+    { label: "See impact data", href: "/our-impact/reports" },
+    { label: "Partner on SDG-aligned work", href: "/partner-with-us/international-development" },
+  ],
+  related: [
+    { href: "/partner-with-us/international-development", eyebrow: "Funders", title: "International Development", description: "The partnership track most aligned with SDG portfolios." },
+    { href: "/our-impact/reports", eyebrow: "Evidence", title: "Impact Reports", description: "Data and stories that support SDG reporting." },
+  ],
+};
+
+export const whoCanApplyHub: SitePage = {
+  slug: "who-can-apply",
+  eyebrow: "Eligibility",
+  title: "Who Can Apply",
+  description: "Clear guidance on age, commitment, background, and what makes a strong applicant for ITFY training.",
+  intro: "We are looking for young Ghanaians who are ready to commit 12 weeks of focused learning. No prior coding experience is required for beginner tracks. We especially welcome young women and learners from communities with limited tech access.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "Basic requirements",
+      body: "Age 15–30. Ability to attend sessions in Accra for the full cohort duration. Basic literacy and numeracy. A willingness to learn in public, present work, and iterate based on feedback. Device access is helpful but not a blocker — scholarships and device support exist for those who need them.",
+    },
+    {
+      title: "What makes an application strong",
+      body: "Clear motivation. Evidence of persistence (school, work, side projects, community roles). Willingness to work in teams. For Girls in Tech, a genuine interest in closing the gender gap. We do not require a portfolio for entry-level tracks — we build that during the programme.",
+    },
+  ],
+  ctas: [
+    { label: "Browse current courses", href: "/apply-for-training/courses" },
+    { label: "See how it works", href: "/apply-for-training/how-it-works" },
+  ],
+  related: [
+    { href: "/apply-for-training/how-it-works", eyebrow: "Process", title: "How It Works", description: "From application to onboarding and what happens during the 12 weeks." },
+    { href: "/apply-for-training/courses", eyebrow: "Programmes", title: "Browse Courses", description: "Youth Tech Academy, Girls in Tech, and current offerings." },
+  ],
+};
+
+export const howItWorksHub: SitePage = {
+  slug: "how-it-works",
+  eyebrow: "Learner journey",
+  title: "How It Works",
+  description: "From application to graduation: the steps, expectations, and support that define the ITFY training experience.",
+  intro: "Our training is cohort-based and project-driven. You apply, get selected, join a 12-week programme, ship real work, present to mentors, and leave with a portfolio and a next-step plan. Scholarships, devices, and career support are available throughout.",
+  stats: heroStats,
+  sections: [
+    {
+      title: "Application to onboarding",
+      body: "You submit a short application. We review for motivation and fit. Shortlisted applicants may do a simple task or conversation. Accepted learners receive onboarding materials, scholarship decisions (if applicable), and a clear schedule before the first day.",
+    },
+    {
+      title: "During the cohort",
+      body: "Three to four sessions per week. Technical skills + professional skills + project work. Weekly mentor touchpoints. Mid-cohort reviews. Final project presentations. Career readiness sessions in the final weeks. We track attendance and progression because outcomes matter.",
+    },
+    {
+      title: "After graduation",
+      body: "3-month and 6-month check-ins. Alumni community access. Job and internship referrals. Entrepreneurship support for those building. We publish cohort outcomes so everyone can see what actually happens next.",
+    },
+  ],
+  ctas: [
+    { label: "Check if you can apply", href: "/apply-for-training/who-can-apply" },
+    { label: "Apply for the next cohort", href: "/apply-for-training/courses" },
+  ],
+  related: [
+    { href: "/apply-for-training/who-can-apply", eyebrow: "Fit", title: "Who Can Apply", description: "Age, commitment, and background guidance." },
+    { href: "/apply-for-training/courses", eyebrow: "Offerings", title: "Browse Courses", description: "Current programmes and application windows." },
+  ],
+};
+
+export const articles: ArticleSeed[] = [
+  {
+    slug: "cohort-7-scholarship-campaign",
+    category: "news",
+    title: "ITFY launches a scholarship campaign for Cohort 7 applicants",
+    excerpt: "The new campaign focuses on tuition support, devices, and mentoring so more learners can enter the next intake without cost becoming a blocker.",
+    publishedAt: "2026-04-23",
+    coverImage: "/images/randomPictures/UXteacher.png",
+    readTimeMinutes: 4,
+    content: [
+      "The Cohort 7 scholarship campaign is designed to remove the barriers that keep talented young people from starting their digital journey.",
+      "This phase of fundraising supports tuition waivers, learning devices, and wraparound mentorship for participants who are ready to take the next step.",
+      "The campaign also gives partners and donors a clearer way to connect their support directly to learner outcomes.",
+    ],
+  },
+  {
+    slug: "community-tech-clubs-expansion",
+    category: "news",
+    title: "Community tech clubs are expanding into more schools this term",
+    excerpt: "A new rollout plan is helping ITFY strengthen recurring access points for students who need more than one-off exposure to technology.",
+    publishedAt: "2026-04-21",
+    coverImage: "/images/randomPictures/studentsblueclothing.jpg",
+    readTimeMinutes: 3,
+    content: [
+      "The next expansion of school-based tech clubs is focused on consistency, not just reach.",
+      "By working with school leaders and local facilitators, the programme is building spaces where students can keep practicing over time.",
+      "That recurring engagement is a key part of turning interest into confidence and confidence into pathway decisions.",
+    ],
+  },
+  {
+    slug: "cohort-7-now-open",
+    category: "news",
+    title: "Cohort 7 applications are now open across Accra",
+    excerpt: "Young people can apply for the next Youth Tech Academy and Girls in Tech cohorts. Scholarships and device support are available for those who need them.",
+    publishedAt: "2026-04-18",
+    coverImage: "/images/randomPictures/maingraduationpic.jpg",
+    readTimeMinutes: 3,
+    content: [
+      "Cohort 7 is now accepting applications for the Youth Tech Academy and Girls in Tech programmes.",
+      "The 12-week training covers web development, data fundamentals, and professional skills. Every participant ships real projects and presents to mentors.",
+      "Scholarship places, device support, and data stipends are available for learners who would otherwise be unable to join.",
+    ],
+  },
+  {
+    slug: "why-homepage-clarity-matters",
+    category: "blogs",
+    title: "Why homepage clarity matters for growing mission-driven teams",
+    excerpt: "A stronger homepage sequence makes trust, urgency, and discovery easier for learners, funders, and partners.",
+    publishedAt: "2026-04-19",
+    coverImage: "/images/randomPictures/mireiotalking.jpg",
+    readTimeMinutes: 5,
+    content: [
+      "For a growing organisation, the homepage has to do more than look polished. It has to guide multiple audiences quickly and clearly.",
+      "That is why we give special attention to the opening sequence: announcement, hero, impact proof, and clear next steps.",
+      "That stack helps young people, partners, and organisations understand the mission and the pathways available to them in just a few seconds.",
+    ],
+  },
+  {
+    slug: "why-partnership-storytelling-builds-trust",
+    category: "blogs",
+    title: "Why partnership storytelling matters when an organisation is scaling",
+    excerpt: "Partners do not just need a donation page. They need evidence, clarity, and a fast way to see where they fit in the mission.",
+    publishedAt: "2026-04-17",
+    coverImage: "/images/randomPictures/groupworkstudents.jpg",
+    readTimeMinutes: 4,
+    content: [
+      "Good partnership storytelling creates confidence before a meeting ever happens.",
+      "It helps potential collaborators understand what the organisation already does well and where support can amplify that work.",
+      "That is why we make room for partner-facing proof, clearer calls to action, and better visibility into programme outcomes.",
+    ],
+  },
+];
+
 export const adminNavigation: AdminNavItem[] = [
   {
     label: "Dashboard",
@@ -911,7 +1578,7 @@ export const adminNavigation: AdminNavItem[] = [
     description: "Overview, activity, and publishing health.",
   },
   {
-    label: "Homepage",
+    label: "Content",
     href: "/admin/content/homepage",
     description: "Homepage sections, banner, slides, and impact content.",
   },
@@ -919,11 +1586,6 @@ export const adminNavigation: AdminNavItem[] = [
     label: "Articles",
     href: "/admin/articles",
     description: "News and blog management scaffolding.",
-  },
-  {
-    label: "Programmes",
-    href: "/admin/programmes/girls-in-tech",
-    description: "Initiative and programme page editing.",
   },
   {
     label: "Team",
@@ -936,34 +1598,9 @@ export const adminNavigation: AdminNavItem[] = [
     description: "Logos, links, and organisation metadata.",
   },
   {
-    label: "Testimonials",
-    href: "/admin/testimonials",
-    description: "Global proof stories and reusable quotes.",
-  },
-  {
-    label: "Jobs",
-    href: "/admin/jobs",
-    description: "Careers, volunteering, and job listing CRUD.",
-  },
-  {
     label: "Applications",
     href: "/admin/applications",
     description: "Training application review workflow.",
-  },
-  {
-    label: "Media",
-    href: "/admin/media",
-    description: "Storage folders, files, previews, and URLs.",
-  },
-  {
-    label: "Users",
-    href: "/admin/users",
-    description: "Admin accounts, roles, and access claims.",
-  },
-  {
-    label: "Settings",
-    href: "/admin/settings",
-    description: "SEO, social, contact, and integration settings.",
   },
 ];
 
@@ -971,42 +1608,42 @@ export const adminNavigation: AdminNavItem[] = [
 
 export const heroSlides: HeroSlide[] = [
   {
-    id: "slide-stories",
-    eyebrow: "Student Stories",
-    heading: "Turning ambition into opportunity, one graduate at a time.",
-    body: "Every year, hundreds of young Ghanaians cross the stage — not just with a certificate, but with the skills and confidence to shape the digital economy.",
+    id: "slide-students",
+    eyebrow: "For young Ghanaians",
+    heading: "Build the skills. Get the confidence. Shape your future in tech.",
+    body: "Cohort-based training in Accra for young people ready to move from curiosity to real digital careers, entrepreneurship, or further study. 85% of graduates are in work, learning, or building within six months.",
     image: "/images/randomPictures/maingraduationpic.jpg",
-    overlayFrom: "rgba(10,15,40,0.85)",
-    overlayTo: "rgba(10,15,40,0.4)",
+    overlayFrom: "rgba(10,15,40,0.88)",
+    overlayTo: "rgba(10,15,40,0.35)",
     cta: {
-      primary:   { label: "Meet our graduates", href: "/our-impact/testimonials" },
-      secondary: { label: "Who we are",         href: "/who-we-are" },
+      primary:   { label: "Apply for Cohort 7", href: "/apply-for-training/courses" },
+      secondary: { label: "See who can apply",  href: "/apply-for-training/who-can-apply" },
     },
   },
   {
-    id: "slide-programs",
-    eyebrow: "Our Programs",
-    heading: "Hands-on digital skills for the careers of tomorrow.",
-    body: "From coding bootcamps to entrepreneurship labs, our programmes are designed with industry partners to ensure every student is work-ready on day one.",
+    id: "slide-partners",
+    eyebrow: "For partners & supporters",
+    heading: "Back the next generation of Ghana's digital workforce.",
+    body: "3,000+ youth trained. 8,500+ students reached. 40% female participation. Your support funds scholarships, devices, mentorship, and clear pathways into work and enterprise across Ghana.",
     image: "/images/randomPictures/groupworkstudents.jpg",
-    overlayFrom: "rgba(5,25,15,0.85)",
-    overlayTo: "rgba(5,25,15,0.45)",
+    overlayFrom: "rgba(5,25,15,0.88)",
+    overlayTo: "rgba(5,25,15,0.40)",
     cta: {
-      primary:   { label: "Browse courses", href: "/apply-for-training/courses" },
-      secondary: { label: "What we do",      href: "/what-we-do" },
+      primary:   { label: "Donate to Cohort 7", href: "/donate" },
+      secondary: { label: "See our impact",     href: "/our-impact/reports" },
     },
   },
   {
-    id: "slide-impact",
-    eyebrow: "Our Impact",
-    heading: "10 years of closing Ghana's digital divide.",
-    body: "Over 3,000 youth trained, 40+ partner organisations, and a decade of proven results — IT For Youth Ghana is the most trusted name in youth digital empowerment.",
-    image: "/images/randomPictures/happystudentscasual.jpg",
-    overlayFrom: "rgba(30,15,5,0.85)",
-    overlayTo: "rgba(30,15,5,0.45)",
+    id: "slide-organisations",
+    eyebrow: "For organisations",
+    heading: "Train your teams. Sponsor cohorts. Hire ready talent.",
+    body: "Partner with IT For Youth Ghana for corporate training, staff volunteering, scholarship sponsorship, or direct access to graduates who have built portfolios and proved themselves in real projects.",
+    image: "/images/randomPictures/studentsBackcoding.jpg",
+    overlayFrom: "rgba(30,15,5,0.88)",
+    overlayTo: "rgba(30,15,5,0.40)",
     cta: {
-      primary:   { label: "See our impact",  href: "/our-impact/reports" },
-      secondary: { label: "Partner with us", href: "/partner-with-us" },
+      primary:   { label: "Work with us",        href: "/for-organisations" },
+      secondary: { label: "Hire our graduates",  href: "/for-organisations/hire-graduates" },
     },
   },
 ];
@@ -1063,7 +1700,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     id: "initiative-girls-in-tech",
     eyebrow: "Inclusion pathway",
     title: "Girls in Tech",
-    description: "Mentorship, confidence, and technical pathways built for young women entering the digital economy.",
+    description: "Mentorship, confidence-building, and technical training designed so more young women can lead in Ghana's digital economy.",
     href: "/what-we-do/girls-in-tech",
     image: "/images/randomPictures/group_girls.jpg",
     accent: "#F5A623",
@@ -1073,7 +1710,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     id: "initiative-youth-academy",
     eyebrow: "Training pathway",
     title: "Youth Tech Academy",
-    description: "Structured, hands-on training that helps young people become job-ready and portfolio-ready.",
+    description: "Cohort-based digital skills training that moves young people from first steps to job-ready portfolios in 12 focused weeks.",
     href: "/what-we-do/youth-academy",
     image: "/images/randomPictures/studentsBackcoding.jpg",
     accent: "#0C2D5A",
@@ -1083,7 +1720,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     id: "initiative-entrepreneurship-hub",
     eyebrow: "Venture pathway",
     title: "Entrepreneurship Hub",
-    description: "Practical business support for learners turning technical ability into sustainable ventures.",
+    description: "Practical support for young founders turning digital skills into ideas, prototypes, and early ventures that solve local problems.",
     href: "/what-we-do/entrepreneurship-hub",
     image: "/images/randomPictures/studentpresenting.jpg",
     accent: "#157F6B",
@@ -1093,7 +1730,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     id: "initiative-code-impact-challenge",
     eyebrow: "Challenge pathway",
     title: "Code Impact Challenge",
-    description: "Project-led learning where young people solve meaningful local problems with technology.",
+    description: "Time-bound, team-based challenges where learners build real solutions to problems that matter in their communities.",
     href: "/what-we-do/code-impact-challenge",
     image: "/images/randomPictures/redstudentgrouplesson.jpg",
     accent: "#C44900",
@@ -1103,7 +1740,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     id: "initiative-rural-tech-connect",
     eyebrow: "Access pathway",
     title: "Rural Tech Connect",
-    description: "Bringing training, devices, and opportunity to young people beyond major urban centres.",
+    description: "Extending training, devices, and opportunity to young people in communities beyond Accra through local partnerships.",
     href: "/what-we-do/rural-tech-connect",
     image: "/images/randomPictures/children_holding_sign_in_streets.jpg",
     accent: "#2A6F97",
@@ -1113,7 +1750,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     id: "initiative-community-outreach",
     eyebrow: "Community pathway",
     title: "Community Outreach",
-    description: "School and community activations that widen awareness, confidence, and first access to tech.",
+    description: "School visits, activations, and events that turn first exposure into real interest and clear next steps for thousands of students.",
     href: "/what-we-do/community-outreach",
     image: "/images/randomPictures/studentslistening.jpg",
     accent: "#8B5E34",
@@ -1123,7 +1760,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     id: "initiative-advocacy",
     eyebrow: "Influence pathway",
     title: "Advocacy",
-    description: "Ecosystem-building work that pushes for wider digital inclusion and youth opportunity.",
+    description: "Thought leadership and coalition work that makes youth digital opportunity a visible priority for institutions and policymakers.",
     href: "/what-we-do/advocacy",
     image: "/images/randomPictures/graduationspeaking.jpg",
     accent: "#A63D40",
@@ -1133,7 +1770,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     id: "initiative-tech-clubs",
     eyebrow: "School pathway",
     title: "Tech Clubs",
-    description: "Recurring peer-led learning communities that keep students connected to technology year-round.",
+    description: "Recurring, school-based clubs that give students consistent practice, peer learning, and a place to grow their skills over time.",
     href: "/what-we-do/tech-clubs",
     image: "/images/randomPictures/studentgroupguys.jpg",
     accent: "#1F7A8C",
@@ -1181,36 +1818,39 @@ export const featuredStory: FeaturedStoryContent = {
 // ─── Testimonials ─────────────────────────────────────────────────────────────
 
 export const testimonials: Testimonial[] = [
+  // PLACEHOLDER — replace with real graduate voice
   {
     id: "t1",
     quote:
-      "The bootcamp didn't just teach me to code — it taught me to think like a problem solver. Six months later I landed my first role as a junior developer in Accra.",
+      "The academy gave me structure I had never had. I went from not knowing what a portfolio was to presenting real projects to mentors. Six months after graduating I started as a junior developer in Accra.",
     name: "Ama Kofi",
-    role: "Junior Developer at TechHub GH",
-    programme: "Digital Skills Bootcamp",
-    year: "Class of 2025",
+    role: "Junior Developer",
+    programme: "Youth Tech Academy",
+    year: "Cohort 6",
     avatar: "/images/people/Belinda.jpg",
     initials: "AK",
   },
+  // PLACEHOLDER — replace with real graduate voice
   {
     id: "t2",
     quote:
-      "As a young woman from Kumasi, I never thought tech was for me. The Tech Sisters programme proved me wrong. The mentors here are exceptional human beings.",
+      "Before Girls in Tech I was curious but unsure if tech was for someone like me. The mentorship and the cohort made it feel possible. I now work as a UX designer and I mentor the next group of girls coming through.",
     name: "Efua Asante",
     role: "UX Designer",
     programme: "Girls in Tech",
-    year: "Class of 2024",
+    year: "Cohort 5",
     avatar: "/images/people/elisabeth.jpg",
     initials: "EA",
   },
+  // PLACEHOLDER — replace with real graduate voice
   {
     id: "t3",
     quote:
-      "IT For Youth Ghana gave our school the resources we simply couldn't afford. Our students now compete in national coding challenges — and win.",
+      "We partnered with ITFY to run tech clubs in our school. The consistency of the sessions changed how our students see technology. Several have now joined the academy and one is already interning.",
     name: "Mr. Isaac Mensah",
-    role: "Head of ICT, Accra Academy Secondary School",
-    programme: "Community Outreach Partner",
-    year: "2026 partner voice",
+    role: "Head of ICT",
+    programme: "Tech Clubs & Community Outreach",
+    year: "School partner 2025",
     avatar: "/images/people/mensah.jpg",
     initials: "IM",
   },
@@ -1322,59 +1962,59 @@ export const upcomingEvents: EventItem[] = [
 export const publicHubs: RouteCard[] = [
   {
     href: "/who-we-are",
-    eyebrow: "Learn",
+    eyebrow: "About us",
     title: "Who We Are",
     description:
-      "Meet the organisation, the team behind the mission, and the partners helping expand impact.",
+      "A Ghanaian organisation running cohort training, school clubs, and partnerships. 3,000+ youth trained. 85% progression into work, study, or enterprise within six months.",
   },
   {
     href: "/what-we-do",
-    eyebrow: "Explore",
+    eyebrow: "Programmes",
     title: "What We Do",
     description:
-      "See the eight initiatives shaping digital opportunity for young people across Ghana.",
+      "Eight practical initiatives: Youth Tech Academy, Girls in Tech, Tech Clubs, Entrepreneurship Hub, Rural Tech Connect, Community Outreach, Corporate Training, and Advocacy.",
   },
   {
     href: "/apply-for-training",
-    eyebrow: "Apply",
+    eyebrow: "Start here",
     title: "Apply for Training",
     description:
-      "Check eligibility, browse courses, and understand the training journey from first click to enrolment.",
+      "12-week cohort programmes in Accra. No prior experience required for beginner tracks. Scholarships and device support available. 85% of graduates progress within six months.",
   },
   {
     href: "/for-organisations",
     eyebrow: "Collaborate",
     title: "For Organisations",
     description:
-      "Explore corporate training, sponsorship, staff volunteering, and ways to hire our graduates.",
+      "Corporate training, cohort sponsorships, staff volunteering, and direct access to job-ready graduates. Partners include Google.org, UNICEF, GIZ, and Mastercard Foundation.",
   },
   {
     href: "/partner-with-us",
-    eyebrow: "Partner",
+    eyebrow: "Partnerships",
     title: "Partner With Us",
     description:
-      "Find the right route for educational institutions, governments, NGOs, foundations, and tech companies.",
+      "Five tracks for schools, government, NGOs, international development, and technology companies. 8,500+ students reached through school and community partnerships.",
   },
   {
     href: "/our-impact/reports",
-    eyebrow: "Discover",
+    eyebrow: "Proof",
     title: "Our Impact",
     description:
-      "Explore impact reports, testimonials, and SDG alignment across our work.",
+      "Cohort outcomes, progression data, graduate stories, and SDG alignment. We track what happens after training — and we publish the numbers.",
   },
   {
     href: "/news-and-updates",
-    eyebrow: "Updates",
+    eyebrow: "Stories",
     title: "News & Updates",
     description:
-      "Follow programme news, stories, and blog content as the new platform grows.",
+      "Cohort announcements, graduate wins, partnership updates, and honest reflections on building digital opportunity in Ghana.",
   },
   {
     href: "/contact",
-    eyebrow: "Connect",
+    eyebrow: "Talk to us",
     title: "Contact Us",
     description:
-      "Reach our team in Accra for programme enquiries, partnerships, or media opportunities.",
+      "Reach the team in Accra for training enquiries, partnerships, sponsorships, or media. Office hours and clear response times.",
   },
 ];
 

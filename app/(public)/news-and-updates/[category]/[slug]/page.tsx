@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 
 import { NewsArticlePage } from "@/components/news/news-article-page";
 import {
-  getArticleBySlug,
-  getPublishedArticles,
-  getRelatedArticles,
+  getCmsArticleBySlug,
+  getCmsPublishedArticles,
+  getCmsRelatedArticles,
+} from "@/lib/cms/articles";
+import {
   isArticleCategory,
 } from "@/lib/content/news-config";
 
@@ -13,23 +15,23 @@ type ArticleDetailPageProps = {
   params: { category: string; slug: string };
 };
 
-export function generateStaticParams() {
-  return getPublishedArticles().map((article) => ({
+export async function generateStaticParams() {
+  return (await getCmsPublishedArticles()).map((article) => ({
     category: article.category,
     slug: article.slug,
   }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
-}: ArticleDetailPageProps): Metadata {
+}: ArticleDetailPageProps): Promise<Metadata> {
   if (!isArticleCategory(params.category)) {
     return {
       title: "Article | IT For Youth Ghana",
     };
   }
 
-  const article = getArticleBySlug(params.category, params.slug);
+  const article = await getCmsArticleBySlug(params.category, params.slug);
 
   if (!article) {
     return {
@@ -52,14 +54,14 @@ export function generateMetadata({
   };
 }
 
-export default function ArticleDetailPage({
+export default async function ArticleDetailPage({
   params,
 }: ArticleDetailPageProps) {
   if (!isArticleCategory(params.category)) {
     notFound();
   }
 
-  const article = getArticleBySlug(params.category, params.slug);
+  const article = await getCmsArticleBySlug(params.category, params.slug);
 
   if (!article) {
     notFound();
@@ -68,7 +70,7 @@ export default function ArticleDetailPage({
   return (
     <NewsArticlePage
       article={article}
-      relatedArticles={getRelatedArticles(article)}
+      relatedArticles={await getCmsRelatedArticles(article)}
     />
   );
 }

@@ -6,36 +6,16 @@ import { AdminMetricCard } from "@/components/admin/admin-metric-card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminStatusPill } from "@/components/admin/admin-status-pill";
 import {
-  articles,
-  getAllArticleTags,
+  getCmsArticles,
+  getCmsArticleTags,
+} from "@/lib/cms/articles";
+import {
   getArticleLabel,
   getArticleReadTime,
-  getPublishedArticles,
 } from "@/lib/content/news-config";
 import { formatDate } from "@/lib/utils/formatters";
 import type { AdminMetric, AdminTableColumn } from "@/types/admin";
 import type { ArticleSeed } from "@/types/content";
-
-const articleMetrics: AdminMetric[] = [
-  {
-    label: "Total records",
-    value: String(articles.length),
-    description: "Seed articles following the future Firestore article document contract.",
-    status: "active",
-  },
-  {
-    label: "Published",
-    value: String(getPublishedArticles().length),
-    description: "Records currently available to public news and blog routes.",
-    status: "published",
-  },
-  {
-    label: "Topics",
-    value: String(getAllArticleTags().length),
-    description: "Unique tags ready for future filter and type-ahead controls.",
-    status: "active",
-  },
-];
 
 const articleColumns: AdminTableColumn<ArticleSeed>[] = [
   {
@@ -112,7 +92,35 @@ const articleColumns: AdminTableColumn<ArticleSeed>[] = [
   },
 ];
 
-export default function AdminArticlesPage() {
+export default async function AdminArticlesPage() {
+  const [articles, tags] = await Promise.all([
+    getCmsArticles({ includeDrafts: true }),
+    getCmsArticleTags(),
+  ]);
+  const publishedArticles = articles.filter(
+    (article) => article.status !== "draft" && article.status !== "archived",
+  );
+  const articleMetrics: AdminMetric[] = [
+    {
+      label: "Total records",
+      value: String(articles.length),
+      description: "Articles resolved through the CMS integration, with seed fallback when Firestore is unavailable.",
+      status: "active",
+    },
+    {
+      label: "Published",
+      value: String(publishedArticles.length),
+      description: "Records currently available to public news and blog routes.",
+      status: "published",
+    },
+    {
+      label: "Topics",
+      value: String(tags.length),
+      description: "Unique tags ready for future filter and type-ahead controls.",
+      status: "active",
+    },
+  ];
+
   return (
     <div className="space-y-8">
       <AdminPageHeader

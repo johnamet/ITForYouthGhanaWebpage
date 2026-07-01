@@ -1,15 +1,16 @@
-import { AdminPlaceholder } from "@/components/admin/admin-placeholder";
+import { ArticleForm } from "@/components/admin/article-form";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
 
 export default function AdminNewArticlePage() {
   return (
-    <AdminPlaceholder
-      title="Create Article"
-      description="This route will host the TipTap-backed article creation flow."
-      nextSteps={[
-        "Create title, slug, excerpt, body, tags, and SEO fields.",
-        "Connect cover uploads to the media library.",
-        "Support preview and scheduled publishing.",
-      ]}
-    />
+    <div className="space-y-8">
+      <AdminPageHeader
+        eyebrow="Article CRUD"
+        title="Create article"
+        description="Create a news, blog, event, or press article. This first CMS slice saves to Firestore when Firebase Admin is configured and keeps a safe seed fallback for reads."
+      />
+
+      <ArticleForm mode="create" />
+    </div>
   );
 }

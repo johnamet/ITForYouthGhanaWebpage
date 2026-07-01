@@ -1,15 +1,29 @@
-import { AdminPlaceholder } from "@/components/admin/admin-placeholder";
+import { notFound } from "next/navigation";
+
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { TeamForm } from "@/components/admin/team-form";
+import { getCmsTeamMemberById } from "@/lib/cms/team";
 
 type AdminEditTeamMemberPageProps = {
   params: { id: string };
 };
 
-export default function AdminEditTeamMemberPage({ params }: AdminEditTeamMemberPageProps) {
+export default async function AdminEditTeamMemberPage({ params }: AdminEditTeamMemberPageProps) {
+  const member = await getCmsTeamMemberById(params.id);
+
+  if (!member) {
+    notFound();
+  }
+
   return (
-    <AdminPlaceholder
-      title={`Edit Team Member: ${params.id}`}
-      description="The route is ready for document loading and profile editing."
-      nextSteps={["Preserve ordering and featured state while editing."]}
-    />
+    <div className="space-y-8">
+      <AdminPageHeader
+        eyebrow="People & governance"
+        title={`Edit team member: ${member.name}`}
+        description="Update profile fields, department ordering, featured status, and visibility."
+      />
+
+      <TeamForm mode="edit" member={member} />
+    </div>
   );
 }

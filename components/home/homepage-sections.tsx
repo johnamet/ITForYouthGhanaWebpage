@@ -5,12 +5,12 @@ import {
   programmeShowcase,
   activeDonationCampaign,
   featuredStory,
-  articles,
-  testimonials,
-  partners,
   joinCtaCards,
   newsletterSignupContent,
 } from "@/lib/content/site-config";
+import { getCmsFeaturedArticles } from "@/lib/cms/articles";
+import { getCmsPartners } from "@/lib/cms/partners";
+import { getCmsTestimonials } from "@/lib/cms/testimonials";
 
 import { HeroSlideshow } from "@/components/home/hero-slideshow";
 import { MarqueeTicker } from "@/components/home/marquee-ticker";
@@ -24,7 +24,13 @@ import { PartnersStrip } from "@/components/home/patrners-strip";
 import { JoinCtaBlock } from "@/components/home/join-cta-block";
 import { NewsletterSignupSection } from "@/components/home/newsletter-signup-section";
 
-export function HomepageSections() {
+export async function HomepageSections() {
+  const [articles, testimonials, partners] = await Promise.all([
+    getCmsFeaturedArticles(3),
+    getCmsTestimonials(),
+    getCmsPartners(),
+  ]);
+
   return (
     <div className="bg-white">
       {/* 1 ── Hero slideshow */}

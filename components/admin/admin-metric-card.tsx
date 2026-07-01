@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { AdminStatusPill } from "@/components/admin/admin-status-pill";
 import type { AdminMetric } from "@/types/admin";
 
@@ -18,6 +20,16 @@ export function AdminMetricCard({ metric }: AdminMetricCardProps) {
         {metric.status ? <AdminStatusPill status={metric.status} /> : null}
       </div>
       <p className="mt-4 text-sm leading-7 text-slate-600">{metric.description}</p>
+      {metric.action ? (
+        <div className="mt-5">
+          <Link
+            href={metric.action.href}
+            className="inline-flex rounded-full border border-brand-border px-4 py-2 text-xs font-semibold text-brand-ink transition hover:bg-brand-mist"
+          >
+            {metric.action.label}
+          </Link>
+        </div>
+      ) : null}
     </div>
   );
 }

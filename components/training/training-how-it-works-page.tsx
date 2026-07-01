@@ -52,12 +52,11 @@ export function TrainingHowItWorksPage() {
 
             <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                Why this matters
+                {trainingHowItWorksContent.heroAsideEyebrow ?? "Why this matters"}
               </p>
               <p className="mt-5 text-base leading-8 text-white/78">
-                When learners know the sequence ahead of time, they can prepare better, reduce
-                anxiety, and make stronger decisions about whether to apply now or wait for a
-                better-fit cohort.
+                {trainingHowItWorksContent.heroAsideText ??
+                  "When learners know the sequence ahead of time, they can prepare better, reduce anxiety, and make stronger decisions about whether to apply now or wait for a better-fit cohort."}
               </p>
             </div>
           </div>
@@ -66,9 +65,12 @@ export function TrainingHowItWorksPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <TrainingProcessStrip
-          eyebrow="Apply process"
-          title="Four steps, one clearer journey"
-          description="The process below mirrors the same logic used on the course listing page, but gives learners a fuller explanation of what each stage is meant to do."
+          eyebrow={trainingHowItWorksContent.processSectionEyebrow ?? "Apply process"}
+          title={trainingHowItWorksContent.processSectionTitle ?? "Four steps, one clearer journey"}
+          description={
+            trainingHowItWorksContent.processSectionDescription ??
+            "The process below mirrors the same logic used on the course listing page, but gives learners a fuller explanation of what each stage is meant to do."
+          }
           steps={trainingHowItWorksContent.process}
         />
       </section>
@@ -77,14 +79,15 @@ export function TrainingHowItWorksPage() {
         <div className="mx-auto max-w-7xl space-y-8">
           <div className="max-w-3xl space-y-3">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-              Timeline
+              {trainingHowItWorksContent.timelineSectionEyebrow ?? "Timeline"}
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-              What the process usually looks like in practice
+              {trainingHowItWorksContent.timelineSectionTitle ??
+                "What the process usually looks like in practice"}
             </h2>
             <p className="text-base leading-8 text-slate-600">
-              Exact dates shift by cohort, but the overall sequence stays consistent enough that
-              learners can plan with confidence.
+              {trainingHowItWorksContent.timelineSectionDescription ??
+                "Exact dates shift by cohort, but the overall sequence stays consistent enough that learners can plan with confidence."}
             </p>
           </div>
 
@@ -111,14 +114,14 @@ export function TrainingHowItWorksPage() {
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="rounded-[32px] bg-brand-navy p-8 text-white">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-              Prepare well
+              {trainingHowItWorksContent.prepareSectionEyebrow ?? "Prepare well"}
             </p>
             <h2 className="mt-4 font-heading text-3xl font-bold">
-              Small preparation steps make the process smoother
+              {trainingHowItWorksContent.prepareSectionTitle ?? "Small preparation steps make the process smoother"}
             </h2>
             <p className="mt-4 text-base leading-8 text-white/78">
-              Most friction in application flows comes from uncertainty. These simple preparation
-              steps help learners submit with more confidence and fewer surprises.
+              {trainingHowItWorksContent.prepareSectionDescription ??
+                "Most friction in application flows comes from uncertainty. These simple preparation steps help learners submit with more confidence and fewer surprises."}
             </p>
           </div>
 
@@ -139,14 +142,14 @@ export function TrainingHowItWorksPage() {
         <div className="mx-auto max-w-7xl space-y-8">
           <div className="max-w-3xl space-y-3">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-              Next steps
+              {trainingHowItWorksContent.nextStepsSectionEyebrow ?? "Next steps"}
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-              Keep moving while the decision is still fresh
+              {trainingHowItWorksContent.nextStepsSectionTitle ?? "Keep moving while the decision is still fresh"}
             </h2>
             <p className="text-base leading-8 text-slate-600">
-              Once the process makes sense, the next useful move is either choosing a pathway or
-              checking whether the fit is right before you apply.
+              {trainingHowItWorksContent.nextStepsSectionDescription ??
+                "Once the process makes sense, the next useful move is either choosing a pathway or checking whether the fit is right before you apply."}
             </p>
           </div>
 

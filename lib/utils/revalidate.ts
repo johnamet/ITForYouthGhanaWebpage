@@ -3,7 +3,7 @@ export const revalidationMap: Record<string, string[]> = {
   initiative: ["/what-we-do"],
   organisation: ["/for-organisations"],
   partnership: ["/partner-with-us"],
-  article: ["/news-and-updates/news", "/news-and-updates/blogs"],
+  article: ["/news-and-updates", "/news-and-updates/news", "/news-and-updates/blogs", "/sitemap.xml"],
   team: ["/who-we-are/team"],
   partners: ["/who-we-are/partners"],
   testimonials: ["/our-impact/testimonials"],
