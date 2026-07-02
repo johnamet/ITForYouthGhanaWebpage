@@ -33,3 +33,5 @@ coverage
 *.tsbuildinfo
 # Force deploy
 .codex
+.azure
+credentials/

@@ -1,35 +1,76 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { articles } from "@/lib/content/site-config";
-import { formatDate } from "@/lib/utils/formatters";
+import { NewsArticlePage } from "@/components/news/news-article-page";
+import {
+  getCmsArticleBySlug,
+  getCmsPublishedArticles,
+  getCmsRelatedArticles,
+} from "@/lib/cms/articles";
+import {
+  isArticleCategory,
+} from "@/lib/content/news-config";
 
 type ArticleDetailPageProps = {
   params: { category: string; slug: string };
 };
 
-export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
-  const article = articles.find(
-    (entry) => entry.category === params.category && entry.slug === params.slug,
-  );
+export async function generateStaticParams() {
+  return (await getCmsPublishedArticles()).map((article) => ({
+    category: article.category,
+    slug: article.slug,
+  }));
+}
+
+export async function generateMetadata({
+  params,
+}: ArticleDetailPageProps): Promise<Metadata> {
+  if (!isArticleCategory(params.category)) {
+    return {
+      title: "Article | IT For Youth Ghana",
+    };
+  }
+
+  const article = await getCmsArticleBySlug(params.category, params.slug);
+
+  if (!article) {
+    return {
+      title: "Article | IT For Youth Ghana",
+    };
+  }
+
+  return {
+    title: article.seo?.title ?? `${article.title} | IT For Youth Ghana`,
+    description: article.seo?.description ?? article.excerpt,
+    openGraph: {
+      title: article.seo?.title ?? article.title,
+      description: article.seo?.description ?? article.excerpt,
+      images: article.seo?.ogImage ?? article.coverImage,
+      type: "article",
+      publishedTime: article.publishedAt,
+      modifiedTime: article.updatedAt,
+      authors: article.author ? [article.author.name] : undefined,
+    },
+  };
+}
+
+export default async function ArticleDetailPage({
+  params,
+}: ArticleDetailPageProps) {
+  if (!isArticleCategory(params.category)) {
+    notFound();
+  }
+
+  const article = await getCmsArticleBySlug(params.category, params.slug);
 
   if (!article) {
     notFound();
   }
 
   return (
-    <article className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="rounded-[32px] bg-white p-10 shadow-panel">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-          {article.category.slice(0, 1).toUpperCase() + article.category.slice(1)} · {formatDate(article.publishedAt)}
-        </p>
-        <h1 className="mt-4 font-heading text-4xl font-semibold text-brand-ink">{article.title}</h1>
-        <p className="mt-4 text-lg leading-8 text-slate-600">{article.excerpt}</p>
-        <div className="mt-10 grid gap-6 text-base leading-8 text-slate-700">
-          {article.content.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
-      </div>
-    </article>
+    <NewsArticlePage
+      article={article}
+      relatedArticles={await getCmsRelatedArticles(article)}
+    />
   );
 }

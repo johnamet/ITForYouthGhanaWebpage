@@ -1,26 +1,16 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "impact-reports",
-  "Impact Reports",
-  "A reporting-focused route for charts, downloads, narrative proof, and future annual report assets.",
-  [
-    {
-      title: "Testimonials",
-      description: "Pair hard numbers with participant and partner stories.",
-      href: "/our-impact/testimonials",
-      eyebrow: "Impact path",
-    },
-    {
-      title: "UN SDGs",
-      description: "Show how programmes align with broader development outcomes.",
-      href: "/our-impact/sdgs",
-      eyebrow: "Impact path",
-    },
-  ],
-);
+import { ImpactReportsPage as ImpactReportsTemplate } from "@/components/impact/impact-reports-page";
+import { getCmsImpactPage } from "@/lib/cms/impact-pages";
+import { impactReportsContent } from "@/lib/content/impact-config";
 
-export default function ImpactReportsPage() {
-  return <ContentPage page={page} />;
+export const metadata: Metadata = {
+  title: impactReportsContent.eyebrow,
+  description: impactReportsContent.description,
+};
+
+export default async function ImpactReportsPage() {
+  const content = await getCmsImpactPage("reports");
+
+  return <ImpactReportsTemplate content={content} />;
 }

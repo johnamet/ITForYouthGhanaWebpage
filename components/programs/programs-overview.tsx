@@ -34,7 +34,10 @@ export function ProgramsOverview({ courses }: ProgramsOverviewProps) {
                 <span className="rounded-full bg-brand-mist px-3 py-1">{course.deliveryMode}</span>
               </div>
               <div className="mt-6 flex gap-3">
-                <Link href={`/programs/course/${course.slug}`} className="text-sm font-semibold text-brand-navy">
+                <Link
+                  href={`/apply-for-training/courses/${course.slug}`}
+                  className="text-sm font-semibold text-brand-navy"
+                >
                   View details
                 </Link>
                 <a

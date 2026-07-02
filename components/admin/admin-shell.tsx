@@ -1,17 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { adminNavigation } from "@/lib/content/site-config";
 import { cn } from "@/lib/utils/cn";
+import type { AdminSessionUser } from "@/lib/firebase/auth";
 
 type AdminShellProps = {
   children: React.ReactNode;
+  adminUser: AdminSessionUser;
 };
 
-export function AdminShell({ children }: AdminShellProps) {
+export function AdminShell({ children, adminUser }: AdminShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const isActiveNavItem = (href: string) => {
+    if (pathname === href || pathname.startsWith(`${href}/`)) {
+      return true;
+    }
+
+    if (href.startsWith("/admin/content") && pathname.startsWith("/admin/content")) {
+      return true;
+    }
+
+    if (href.startsWith("/admin/programmes") && pathname.startsWith("/admin/programmes")) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+
+    await fetch("/api/admin/session", {
+      method: "DELETE",
+    }).catch(() => null);
+
+    router.replace("/admin-login");
+    router.refresh();
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -20,7 +52,26 @@ export function AdminShell({ children }: AdminShellProps) {
           <Link href="/admin/dashboard" className="block font-heading text-2xl font-semibold">
             ITFY Admin
           </Link>
-          <p className="mt-2 text-sm text-slate-400">Scaffolded shell for Firebase-authenticated CMS work.</p>
+          <p className="mt-2 text-sm text-slate-400">Firebase-authenticated CMS workspace.</p>
+          <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">
+              Signed in
+            </p>
+            <p className="mt-2 truncate text-sm font-semibold text-white">
+              {adminUser.email}
+            </p>
+            <p className="mt-1 text-xs text-slate-400">
+              {adminUser.role} via {adminUser.source}
+            </p>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              disabled={isSigningOut}
+              className="mt-4 w-full rounded-full border border-white/15 px-4 py-2 text-xs font-bold text-slate-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSigningOut ? "Signing out..." : "Sign out"}
+            </button>
+          </div>
           <nav className="mt-10 grid gap-2">
             {adminNavigation.map((item) => (
               <Link
@@ -28,7 +79,9 @@ export function AdminShell({ children }: AdminShellProps) {
                 href={item.href}
                 className={cn(
                   "rounded-2xl px-4 py-3 text-sm transition",
-                  pathname === item.href ? "bg-white text-slate-950" : "text-slate-300 hover:bg-white/10",
+                  isActiveNavItem(item.href)
+                    ? "bg-white text-slate-950"
+                    : "text-slate-300 hover:bg-white/10",
                 )}
               >
                 <span className="block font-semibold">{item.label}</span>

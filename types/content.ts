@@ -1,3 +1,5 @@
+import type { Course } from "@/types/course";
+
 export interface ActionLink {
   label: string;
   href: string;
@@ -43,10 +45,59 @@ export interface SitePage {
   title: string;
   description: string;
   intro: string;
+  heroImage?: string;
   stats: HighlightStat[];
   sections: ContentBlock[];
   ctas: ActionLink[];
   related: RouteCard[];
+  courses?: Course[];
+  // Optional UI copy for section headings and blurbs
+  overviewTitle?: string;
+  overviewDescription?: string;
+  operatingEyebrow?: string;
+  operatingTitle?: string;
+  operatingDescription?: string;
+  principlesEyebrow?: string;
+  principlesTitle?: string;
+  principlesDescription?: string;
+  principlesHeroEyebrow?: string;
+  principlesHeroTitle?: string;
+  exploreEyebrow?: string;
+  exploreTitle?: string;
+  exploreDescription?: string;
+}
+
+export type TeamMemberStatus = "active" | "inactive";
+
+export type JobType = "full-time" | "part-time" | "contract" | "volunteer";
+
+export type JobStatus = "draft" | "published" | "closed";
+
+export interface JobListing {
+  id: string;
+  title: string;
+  summary: string;
+  team: string;
+  location: string;
+  type: JobType;
+  status: JobStatus;
+  applyUrl?: string;
+  closingDate?: string;
+  featured: boolean;
+}
+
+export interface TeamMemberProfile {
+  id: string;
+  name: string;
+  role: string;
+  department: string;
+  bio: string;
+  photo?: string;
+  email?: string;
+  linkedin?: string;
+  featured: boolean;
+  status: TeamMemberStatus;
+  order: number;
 }
 
 export interface HomepageSection {
@@ -119,13 +170,616 @@ export interface InitiativePage extends SitePage {
   applyCta: InitiativeApplyCta;
 }
 
+export type ArticleCategory = "news" | "blogs";
+
+export type ArticleStatus = "draft" | "published" | "archived";
+
+export type ArticleDisplayType = "News" | "Blog" | "Event" | "Press";
+
+export interface ArticleAuthor {
+  name: string;
+  role: string;
+  avatar?: string;
+}
+
+export interface ArticleSeo {
+  title: string;
+  description: string;
+  ogImage?: string;
+}
+
 export interface ArticleSeed {
+  id?: string;
   slug: string;
-  category: "news" | "blogs";
+  category: ArticleCategory;
+  status?: ArticleStatus;
+  type?: ArticleDisplayType;
   title: string;
   excerpt: string;
   publishedAt: string;
+  updatedAt?: string;
   coverImage?: string;
+  coverAlt?: string;
+  tags?: string[];
+  author?: ArticleAuthor;
+  featured?: boolean;
+  seo?: ArticleSeo;
   readTimeMinutes?: number;
   content: string[];
+  contentHtml?: string;
+}
+
+export interface NewsHubContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  editorialPillars: ContentBlock[];
+  routeCards: RouteCard[];
+}
+
+export interface ArticleCategoryContent {
+  category: ArticleCategory;
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  emptyState: string;
+}
+
+export interface TrainingFocusCard {
+  title: string;
+  description: string;
+}
+
+export interface TrainingCohort {
+  id: string;
+  name: string;
+  startDate: string;
+  applicationDeadline?: string;
+  summary: string;
+  format: string;
+  duration: string;
+  location: string;
+  status: "open" | "upcoming" | "waitlist";
+}
+
+export interface TrainingProcessStep {
+  number: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface TrainingAudienceCard {
+  title: string;
+  description: string;
+  bullets: string[];
+}
+
+export interface TrainingTimelineItem {
+  label: string;
+  title: string;
+  description: string;
+}
+
+export interface TrainingLandingContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  routeCards: RouteCard[];
+  focusAreas: TrainingFocusCard[];
+  supportPoints: string[];
+  cohorts: TrainingCohort[];
+  process: TrainingProcessStep[];
+}
+
+export interface TrainingCatalogContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  highlights: string[];
+  cohorts: TrainingCohort[];
+  process: TrainingProcessStep[];
+  // Optional section copy for page headings
+  cohortsSectionEyebrow?: string;
+  cohortsSectionTitle?: string;
+  cohortsSectionDescription?: string;
+  processSectionEyebrow?: string;
+  processSectionTitle?: string;
+  processSectionDescription?: string;
+}
+
+export interface TrainingEligibilityContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  audienceCards: TrainingAudienceCard[];
+  readinessPoints: string[];
+  nextSteps: RouteCard[];
+  // Optional section copy to avoid hardcoded strings in pages
+  practiceEyebrow?: string; // e.g. "In practice"
+  practiceNotes?: string[];
+  profilesSectionEyebrow?: string; // e.g. "Learner profiles"
+  profilesSectionTitle?: string;
+  profilesSectionDescription?: string;
+  readinessSectionEyebrow?: string; // e.g. "What helps"
+  readinessSectionTitle?: string;
+  readinessSectionDescription?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
+}
+
+export interface TrainingHowItWorksContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  process: TrainingProcessStep[];
+  timeline: TrainingTimelineItem[];
+  checklist: string[];
+  nextSteps: RouteCard[];
+  // Optional section copy to avoid hardcoded strings in pages
+  heroAsideEyebrow?: string; // e.g. "Why this matters"
+  heroAsideText?: string;
+  processSectionEyebrow?: string;
+  processSectionTitle?: string;
+  processSectionDescription?: string;
+  timelineSectionEyebrow?: string;
+  timelineSectionTitle?: string;
+  timelineSectionDescription?: string;
+  prepareSectionEyebrow?: string;
+  prepareSectionTitle?: string;
+  prepareSectionDescription?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
+}
+
+export interface OrganisationOverviewCard {
+  title: string;
+  description: string;
+}
+
+export interface OrganisationServiceCard {
+  title: string;
+  description: string;
+  icon: string;
+  bullets: string[];
+}
+
+export interface OrganisationProcessStep {
+  number: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface OrganisationCaseStudy {
+  title: string;
+  organisationType: string;
+  summary: string;
+  outcome: string;
+  highlight: string;
+}
+
+export interface OrganisationPackage {
+  name: string;
+  price: string;
+  description: string;
+  features: string[];
+  note?: string;
+}
+
+export interface OrganisationFaq {
+  question: string;
+  answer: string;
+}
+
+export interface OrganisationContactCta {
+  heading: string;
+  description: string;
+  email: string;
+  primary: ActionLink;
+  secondary: ActionLink;
+}
+
+export interface OrganisationServicePage {
+  slug: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  tagline: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  overviewCards: OrganisationServiceCard[];
+  howItWorks: OrganisationProcessStep[];
+  caseStudies: OrganisationCaseStudy[];
+  pricingHeadline?: string;
+  pricingDescription?: string;
+  packages?: OrganisationPackage[];
+  faqs: OrganisationFaq[];
+  contactCta: OrganisationContactCta;
+  related: RouteCard[];
+  // Optional section labels to avoid hardcoded UI copy
+  snapshotEyebrow?: string; // e.g. "Service snapshot"
+  overviewSectionEyebrow?: string;
+  overviewSectionTitle?: string;
+  overviewSectionDescription?: string;
+  overviewCardBadgeLabel?: string; // e.g. "Service area"
+  howItWorksSectionEyebrow?: string;
+  howItWorksSectionTitle?: string;
+  howItWorksSectionDescription?: string;
+  caseStudiesSectionEyebrow?: string;
+  caseStudiesSectionTitle?: string;
+  caseStudiesSectionDescription?: string;
+  packagesSectionEyebrow?: string;
+  faqsSectionEyebrow?: string;
+  faqsSectionTitle?: string;
+  faqsSectionDescription?: string;
+  contactSectionEyebrow?: string;
+  relatedSectionEyebrow?: string;
+  relatedSectionTitle?: string;
+  relatedSectionDescription?: string;
+}
+
+export interface OrganisationOverviewContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  valueCards: OrganisationOverviewCard[];
+  engagementCards: OrganisationOverviewCard[];
+  nextSteps: RouteCard[];
+  // Optional section copy to avoid hardcoded text in the overview page
+  overviewSectionEyebrow?: string;
+  overviewSectionTitle?: string;
+  overviewSectionDescription?: string;
+  servicesSectionEyebrow?: string;
+  servicesSectionTitle?: string;
+  servicesSectionDescription?: string;
+  engagementSectionEyebrow?: string;
+  engagementSectionTitle?: string;
+  engagementSectionDescription?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
+}
+
+export interface PartnershipOverviewCard {
+  title: string;
+  description: string;
+}
+
+export interface PartnershipFocusCard {
+  title: string;
+  description: string;
+  icon: string;
+  bullets: string[];
+}
+
+export interface PartnershipProcessStep {
+  number: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface PartnershipScenario {
+  title: string;
+  partnerType: string;
+  summary: string;
+  outcome: string;
+  highlight: string;
+}
+
+export interface PartnershipFaq {
+  question: string;
+  answer: string;
+}
+
+export interface PartnershipContactCta {
+  heading: string;
+  description: string;
+  email: string;
+  primary: ActionLink;
+  secondary: ActionLink;
+}
+
+export interface PartnershipTrackPage {
+  slug: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  tagline: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  focusCards: PartnershipFocusCard[];
+  howItWorks: PartnershipProcessStep[];
+  scenarios: PartnershipScenario[];
+  faqs: PartnershipFaq[];
+  contactCta: PartnershipContactCta;
+  related: RouteCard[];
+  // Optional section copy to avoid hardcoded UI strings
+  snapshotEyebrow?: string; // e.g. "Partnership snapshot"
+  overviewSectionEyebrow?: string;
+  overviewSectionTitle?: string;
+  overviewSectionDescription?: string;
+  overviewCardBadgeLabel?: string; // e.g. "Focus area"
+  howItWorksSectionEyebrow?: string;
+  howItWorksSectionTitle?: string;
+  howItWorksSectionDescription?: string;
+  scenariosSectionEyebrow?: string;
+  scenariosSectionTitle?: string;
+  scenariosSectionDescription?: string;
+  faqsSectionEyebrow?: string;
+  faqsSectionTitle?: string;
+  faqsSectionDescription?: string;
+  contactSectionEyebrow?: string;
+  relatedSectionEyebrow?: string;
+  relatedSectionTitle?: string;
+  relatedSectionDescription?: string;
+}
+
+export interface PartnershipOverviewContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  valueCards: PartnershipOverviewCard[];
+  partnerTypeCards: PartnershipOverviewCard[];
+  nextSteps: RouteCard[];
+  // Optional section copy to avoid hardcoded UI strings
+  overviewSectionEyebrow?: string;
+  overviewSectionTitle?: string;
+  overviewSectionDescription?: string;
+  tracksSectionEyebrow?: string;
+  tracksSectionTitle?: string;
+  tracksSectionDescription?: string;
+  partnerTypesSectionEyebrow?: string;
+  partnerTypesSectionTitle?: string;
+  partnerTypesSectionDescription?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
+}
+
+export interface WhatWeDoHeroStatLabel {
+  label: string;
+  description: string;
+}
+
+export interface EcosystemCardContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+}
+
+export interface PathwayCardContent {
+  title: string;
+  description: string;
+}
+
+export interface WhatWeDoOverviewContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  heroStats: WhatWeDoHeroStatLabel[]; // order aligns with computed values
+  // Sections
+  overviewSectionEyebrow?: string;
+  overviewSectionTitle?: string;
+  overviewSectionDescription?: string;
+  ecosystemCards: EcosystemCardContent[];
+  initiativesSectionEyebrow?: string;
+  initiativesSectionTitle?: string;
+  initiativesSectionDescription?: string;
+  pathwaysSectionEyebrow?: string;
+  pathwaysSectionTitle?: string;
+  pathwaysSectionDescription?: string;
+  pathwayCards: PathwayCardContent[];
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
+  nextSteps: RouteCard[];
+}
+
+export interface ImpactEvidenceCard {
+  title: string;
+  description: string;
+  icon: string;
+  bullets: string[];
+}
+
+export interface ImpactReportResource {
+  id: string;
+  year: string;
+  title: string;
+  summary: string;
+  href: string;
+  fileLabel: string;
+  highlights: string[];
+}
+
+export interface ImpactFeaturedStory {
+  label: string;
+  headline: string;
+  quote: string;
+  name: string;
+  role: string;
+  programme: string;
+  backgroundImage: string;
+  videoUrl?: string;
+  primaryCtaLabel: string;
+  secondaryCta: ActionLink;
+}
+
+export interface ImpactStory {
+  id: string;
+  title: string;
+  quote: string;
+  name: string;
+  role: string;
+  programme: string;
+  year: string;
+  theme: string;
+  image?: string;
+  format: "written" | "video" | "partner";
+}
+
+export interface ImpactSdgGoal {
+  goal: string;
+  title: string;
+  summary: string;
+  icon: string;
+  contributions: string[];
+  linkedRoutes: RouteCard[];
+}
+
+export interface ImpactOverviewContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  measurementCards: ImpactEvidenceCard[];
+  proofPoints: string[];
+  routeCards: RouteCard[];
+  // Optional section copy to avoid hardcoded UI strings
+  heroAsideEyebrow?: string;
+  snapshotSectionEyebrow?: string;
+  snapshotSectionTitle?: string;
+  snapshotSectionDescription?: string;
+  measurementSectionEyebrow?: string;
+  measurementSectionTitle?: string;
+  measurementSectionDescription?: string;
+  measurementCardBadgeLabel?: string;
+  routesSectionEyebrow?: string;
+  routesSectionTitle?: string;
+  routesSectionDescription?: string;
+  partnersHeading?: string;
+}
+
+export interface ImpactReportsContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  reportResources: ImpactReportResource[];
+  evidenceCards: ImpactEvidenceCard[];
+  methodologyPoints: string[];
+  related: RouteCard[];
+  // Optional section copy to avoid hardcoded UI strings
+  heroAsideEyebrow?: string;
+  snapshotSectionEyebrow?: string;
+  snapshotSectionTitle?: string;
+  snapshotSectionDescription?: string;
+  reportsSectionEyebrow?: string;
+  reportsSectionTitle?: string;
+  reportsSectionDescription?: string;
+  reportBadgeLabel?: string;
+  methodSectionEyebrow?: string;
+  methodSectionTitle?: string;
+  methodSectionDescription?: string;
+  methodBadgeEyebrow?: string;
+  methodCardBadgeLabel?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
+}
+
+export interface ImpactTestimonialsContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  featuredStory: ImpactFeaturedStory;
+  stories: ImpactStory[];
+  themes: string[];
+  related: RouteCard[];
+  // Optional section copy to avoid hardcoded UI strings
+  heroAsideEyebrow?: string;
+  listSectionEyebrow?: string;
+  listSectionTitle?: string;
+  listSectionDescription?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
+}
+
+export interface ImpactSdgsContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  goals: ImpactSdgGoal[];
+  alignmentPrinciples: string[];
+  related: RouteCard[];
+  // Optional section copy to avoid hardcoded UI strings
+  heroAsideEyebrow?: string;
+  snapshotSectionEyebrow?: string;
+  snapshotSectionTitle?: string;
+  snapshotSectionDescription?: string;
+  goalsSectionEyebrow?: string;
+  goalsSectionTitle?: string;
+  goalsSectionDescription?: string;
+  principlesSectionEyebrow?: string;
+  principlesSectionTitle?: string;
+  principlesSectionDescription?: string;
+  nextStepsSectionEyebrow?: string;
+  nextStepsSectionTitle?: string;
+  nextStepsSectionDescription?: string;
+}
+
+export type ContactEnquiryType =
+  | "training"
+  | "organisation"
+  | "partnership"
+  | "donation"
+  | "media"
+  | "volunteering"
+  | "general";
+
+export type PreferredContactMethod = "email" | "phone" | "either";
+
+export interface ContactChannel {
+  label: string;
+  value: string;
+  description: string;
+  href: string;
+}
+
+export interface ContactEnquiryOption {
+  value: ContactEnquiryType;
+  label: string;
+  description: string;
+}
+
+export interface ContactResponseStep {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface ContactPageContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  stats: HighlightStat[];
+  channels: ContactChannel[];
+  enquiryOptions: ContactEnquiryOption[];
+  responseSteps: ContactResponseStep[];
+  routeCards: RouteCard[];
+  privacyNote: string;
 }

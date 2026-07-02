@@ -1,26 +1,25 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "news-and-updates",
-  "News & Updates",
-  "The article system now has stable list and detail routes for both news and blog content.",
-  [
-    {
-      title: "News",
-      description: "Operational updates, announcements, and time-sensitive stories.",
-      href: "/news-and-updates/news",
-      eyebrow: "Article type",
-    },
-    {
-      title: "Blogs",
-      description: "Thought leadership, reflections, and longer-form writing.",
-      href: "/news-and-updates/blogs",
-      eyebrow: "Article type",
-    },
-  ],
-);
+import { NewsHubPage } from "@/components/news/news-hub-page";
+import { getCmsPublishedArticles } from "@/lib/cms/articles";
+import { getCmsNewsPage } from "@/lib/cms/news-pages";
+import { newsHubContent } from "@/lib/content/news-config";
 
-export default function NewsAndUpdatesPage() {
-  return <ContentPage page={page} />;
+export const metadata: Metadata = {
+  title: newsHubContent.eyebrow,
+  description: newsHubContent.description,
+};
+
+export default async function NewsAndUpdatesPage() {
+  const [content, articles] = await Promise.all([
+    getCmsNewsPage("hub"),
+    getCmsPublishedArticles(),
+  ]);
+
+  return (
+    <NewsHubPage
+      content={content}
+      articles={articles}
+    />
+  );
 }

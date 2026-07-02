@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    serverComponentsExternalPackages: ["firebase-admin"],
+  },
   images: {
     remotePatterns: [
       {
@@ -14,6 +17,26 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "storage.googleapis.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+      },
+      {
+        protocol: "https",
+        hostname: "tse2.mm.bing.net",
+      },
+      {
+        protocol: "https",
+        hostname: "imarticus.org",
+      },
+      {
+        protocol: "https",
+        hostname: "img.freepik.com",
+      },
+      {
+        protocol: "https",
+        hostname: "photos.fife.usercontent.google.com",
       },
     ],
   },

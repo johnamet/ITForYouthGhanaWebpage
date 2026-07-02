@@ -1,20 +1,19 @@
 import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import { TeamDirectory } from "@/components/shared/team-directory";
+import { getCmsTeamMembers } from "@/lib/cms/team";
+import { getCmsSitePage } from "@/lib/cms/site-pages";
+import { teamHub } from "@/lib/content/site-config";
 
-const page = buildHubPage(
-  "team",
-  "Our Team",
-  "Department-grouped profiles, featured leaders, and future modal bios all start from this route.",
-  [
-    {
-      title: "Leadership-ready",
-      description: "Scaffolded to support grouped team cards and longer biographies later.",
-      href: "/admin/team",
-      eyebrow: "Admin link",
-    },
-  ],
-);
+export default async function TeamPage() {
+  const [page, members] = await Promise.all([
+    getCmsSitePage("team"),
+    getCmsTeamMembers(false),
+  ]);
 
-export default function TeamPage() {
-  return <ContentPage page={page} />;
+  return (
+    <>
+      <ContentPage page={page ?? teamHub} />
+      <TeamDirectory members={members} />
+    </>
+  );
 }

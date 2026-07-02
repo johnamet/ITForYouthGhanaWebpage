@@ -1,20 +1,16 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "sdgs",
-  "UN SDGs",
-  "This route is ready for impact-to-SDG mapping and donor-facing credibility storytelling.",
-  [
-    {
-      title: "International Development",
-      description: "Tie SDG alignment directly into the dedicated partner track.",
-      href: "/partner-with-us/international-development",
-      eyebrow: "Partner path",
-    },
-  ],
-);
+import { ImpactSdgsPage } from "@/components/impact/impact-sdgs-page";
+import { getCmsImpactPage } from "@/lib/cms/impact-pages";
+import { impactSdgsContent } from "@/lib/content/impact-config";
 
-export default function SdgsPage() {
-  return <ContentPage page={page} />;
+export const metadata: Metadata = {
+  title: impactSdgsContent.eyebrow,
+  description: impactSdgsContent.description,
+};
+
+export default async function SdgsPage() {
+  const content = await getCmsImpactPage("sdgs");
+
+  return <ImpactSdgsPage content={content} />;
 }

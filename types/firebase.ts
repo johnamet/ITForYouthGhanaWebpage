@@ -2,12 +2,15 @@ export const FIREBASE_COLLECTIONS = {
   homepage: "homepage",
   initiatives: "initiatives",
   forOrganisations: "forOrganisations",
+  partnerships: "partnerships",
   articles: "articles",
+  newsPages: "newsPages",
   team: "team",
   partners: "partners",
   testimonials: "testimonials",
   jobListings: "jobListings",
   impactStats: "impactStats",
+  impactPages: "impactPages",
   siteContent: "siteContent",
   applications: "applications",
   contactMessages: "contactMessages",
@@ -15,6 +18,7 @@ export const FIREBASE_COLLECTIONS = {
   users: "users",
   auditLog: "auditLog",
   settings: "settings",
+  trainingCohorts: "trainingCohorts",
 } as const;
 
 export type FirebaseCollection = keyof typeof FIREBASE_COLLECTIONS;

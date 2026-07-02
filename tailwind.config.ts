@@ -15,16 +15,23 @@ const config: Config = {
         heading: ["var(--font-playfair)", "Georgia", "serif"],
         sans:    ["var(--font-dm-sans)", "system-ui", "sans-serif"],
       },
-      
+
 
       colors: {
         brand: {
-          gold:   "#F5C518",
-          navy:   "#1a1a2e",
-          ink:    "#1a1a2e",
-          mist:   "#f4f5f8",
-          warm:   "#FFF8DC",
-          border: "#e8eaf0",
+          primary: "#2563EB",   // blue-600
+          secondary: "#10B981", // emerald-500
+          accent: "#F59E0B",    // amber-500
+          background: "#F9FAFB",
+          card: "#FFFFFF",
+          text: "#1F2937",
+          // legacy alias names for existing classes (kept for compatibility)
+          gold: "#F59E0B",
+          navy: "#2563EB",
+          ink: "#1F2937",
+          mist: "#F9FAFB",
+          border: "#E5E7EB",
+          warm: "#F59E0B",
         },
       },
 
@@ -54,7 +61,7 @@ const config: Config = {
       },
 
       backgroundImage: {
-        "hero-grid": "radial-gradient(ellipse at 60% 50%, #1e2d5a 0%, #0d1a2e 100%)",
+        "hero-grid": "radial-gradient(ellipse at 60% 50%, rgba(0,82,204,0.15) 0%, rgba(23,43,77,0.95) 100%)",
       },
     },
   },

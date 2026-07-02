@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 export type MarqueeTickerMode = "stats" | "partners" | "news" | "announcement";
@@ -5,6 +7,8 @@ export type MarqueeTickerMode = "stats" | "partners" | "news" | "announcement";
 export type MarqueeTickerItem = {
   label: string;
   href?: string;
+  /** Optional filter: when set, item only shows if it matches the current ticker.mode */
+  type?: MarqueeTickerMode;
 };
 
 export type MarqueeTickerContent = {
@@ -71,10 +75,10 @@ function Separator() {
 
 // ── Main component ─────────────────────────────────────────────────────────────
 export function MarqueeTicker({ ticker }: MarqueeTickerProps) {
-  const baseItems =
-    ticker.items.length === 1
-      ? Array.from({ length: 8 }, () => ticker.items[0])
-      : ticker.items;
+  // Filter by item.type when provided; fall back to the full list if filtering would yield nothing
+  const filtered = ticker.items.filter((item) => !item.type || item.type === ticker.mode);
+  const effective = filtered.length ? filtered : ticker.items;
+  const baseItems = effective.length === 1 ? Array.from({ length: 8 }, () => effective[0]) : effective;
   const loopItems = [...baseItems, ...baseItems];
 
   return (

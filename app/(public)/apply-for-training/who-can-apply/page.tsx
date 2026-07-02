@@ -1,20 +1,23 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "who-can-apply",
-  "Who Can Apply",
-  "Eligibility guidance now sits inside the new learner pathway instead of living as a disconnected legacy route.",
-  [
-    {
-      eyebrow: "Next step",
-      title: "Browse Courses",
-      description: "See the portal-backed catalog inside the new route structure.",
-      href: "/apply-for-training/courses",
+import { TrainingWhoCanApplyPage } from "@/components/training/training-who-can-apply-page";
+import { getCmsTrainingWhoCanApplyPage } from "@/lib/cms/site-pages";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getCmsTrainingWhoCanApplyPage();
+
+  return {
+    title: page.title,
+    description: page.description,
+    openGraph: {
+      title: page.title,
+      description: page.description,
     },
-  ],
-);
+  };
+}
 
-export default function WhoCanApplyPage() {
-  return <ContentPage page={page} />;
+export default async function WhoCanApplyPage() {
+  const page = await getCmsTrainingWhoCanApplyPage();
+
+  return <TrainingWhoCanApplyPage page={page} />;
 }

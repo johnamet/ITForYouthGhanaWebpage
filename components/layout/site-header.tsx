@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronDown, X } from "lucide-react";
 
 import { cn } from "@/lib/utils/cn";
-import { publicNavigation } from "@/lib/content/site-config";
+import { publicNavigation, headerCtas } from "@/lib/content/site-config";
 
 // ─── Dropdown panel ───────────────────────────────────────────────────────────
 // Items ≥ 5 → 2-column glass panel. Below that → single column.
@@ -115,16 +115,16 @@ export function SiteHeader() {
         <div className="hidden items-center gap-2 xl:flex">
           <div className="mx-1 h-5 w-px bg-white/10" />
           <Link
-            href="/apply-for-training/courses"
+            href={headerCtas.primary.href}
             className="rounded-lg border border-white/15 px-4 py-2 text-[0.7rem] font-semibold text-white/80 transition hover:border-white/30 hover:bg-white/[0.07] hover:text-white"
           >
-            Apply now
+            {headerCtas.primary.label}
           </Link>
           <Link
-            href="/donate"
+            href={headerCtas.secondary.href}
             className="rounded-lg bg-brand-gold px-5 py-2 text-[0.7rem] font-bold text-[#0c2d6e] shadow-[0_2px_12px_rgba(245,197,24,0.35)] transition hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(245,197,24,0.5)]"
           >
-            Donate
+            {headerCtas.secondary.label}
           </Link>
         </div>
 
@@ -197,18 +197,18 @@ export function SiteHeader() {
             {/* Mobile CTAs */}
             <div className="flex gap-2 border-t border-white/[0.08] pt-4">
               <Link
-                href="/apply-for-training/courses"
+                href={headerCtas.primary.href}
                 onClick={() => setMobileOpen(false)}
                 className="flex-1 rounded-full border border-white/20 py-2.5 text-center text-[0.82rem] font-semibold text-white/80"
               >
-                Apply now
+                {headerCtas.primary.label}
               </Link>
               <Link
-                href="/donate"
+                href={headerCtas.secondary.href}
                 onClick={() => setMobileOpen(false)}
                 className="flex-1 rounded-full bg-brand-gold py-2.5 text-center text-[0.82rem] font-bold text-[#0c2d6e]"
               >
-                Donate
+                {headerCtas.secondary.label}
               </Link>
             </div>
           </div>

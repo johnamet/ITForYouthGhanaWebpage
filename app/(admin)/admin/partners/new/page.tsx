@@ -1,11 +1,16 @@
-import { AdminPlaceholder } from "@/components/admin/admin-placeholder";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { PartnerForm } from "@/components/admin/partner-form";
 
 export default function AdminNewPartnerPage() {
   return (
-    <AdminPlaceholder
-      title="Create Partner"
-      description="The partner creation route is ready for form implementation."
-      nextSteps={["Capture name, logo, URL, summary, and visibility state."]}
-    />
+    <div className="space-y-8">
+      <AdminPageHeader
+        eyebrow="Collaborations"
+        title="Create partner"
+        description="Add a new partner profile for homepage strip and public partnership visibility."
+      />
+
+      <PartnerForm mode="create" />
+    </div>
   );
 }

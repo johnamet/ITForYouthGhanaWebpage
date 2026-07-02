@@ -1,13 +1,27 @@
 export const dynamic = "force-dynamic";
 
-import { ProgramsOverview } from "@/components/programs/programs-overview";
-import { getCourseCatalog } from "@/lib/api/courses";
+import type { Metadata } from "next";
+
+import { TrainingCourseListingPage } from "@/components/training/training-course-listing-page";
+import { getTrainingCatalogMixed } from "@/lib/api/training";
+import { getCmsTrainingCoursesPage } from "@/lib/cms/site-pages";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getCmsTrainingCoursesPage();
+
+  return {
+    title: page.title,
+    description: page.description,
+    openGraph: {
+      title: page.title,
+      description: page.description,
+    },
+  };
+}
 
 export default async function TrainingCoursesPage() {
-  const courses = await getCourseCatalog();
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <ProgramsOverview courses={courses} />
-    </div>
-  );
+  const page = await getCmsTrainingCoursesPage();
+  const courses = await getTrainingCatalogMixed((page as any).courses);
+
+  return <TrainingCourseListingPage page={page} courses={courses} />;
 }

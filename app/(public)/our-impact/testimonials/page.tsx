@@ -1,20 +1,16 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "testimonials",
-  "Testimonials",
-  "Prepared for a mix of written stories, video clips, and homepage-selected social proof.",
-  [
-    {
-      title: "News & Updates",
-      description: "Keep stories fresh with supporting news and blog content.",
-      href: "/news-and-updates",
-      eyebrow: "Story path",
-    },
-  ],
-);
+import { ImpactTestimonialsPage } from "@/components/impact/impact-testimonials-page";
+import { getCmsImpactPage } from "@/lib/cms/impact-pages";
+import { impactTestimonialsContent } from "@/lib/content/impact-config";
 
-export default function TestimonialsPage() {
-  return <ContentPage page={page} />;
+export const metadata: Metadata = {
+  title: impactTestimonialsContent.eyebrow,
+  description: impactTestimonialsContent.description,
+};
+
+export default async function TestimonialsPage() {
+  const content = await getCmsImpactPage("testimonials");
+
+  return <ImpactTestimonialsPage content={content} />;
 }

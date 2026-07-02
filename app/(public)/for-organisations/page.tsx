@@ -1,19 +1,21 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
-import { organisationPages } from "@/lib/content/site-config";
+import type { Metadata } from "next";
 
-const page = buildHubPage(
-  "for-organisations",
-  "For Organisations",
-  "A consolidated set of routes for training, sponsorship, hiring, and staff volunteering.",
-  organisationPages.map((service) => ({
-    title: service.title,
-    description: service.description,
-    href: `/for-organisations/${service.slug}`,
-    eyebrow: service.eyebrow,
-  })),
-);
+import { ForOrganisationsOverviewPage } from "@/components/organisations/for-organisations-overview-page";
+import {
+  organisationOverviewContent,
+  organisationServices,
+} from "@/lib/content/organisation-config";
+
+export const metadata: Metadata = {
+  title: organisationOverviewContent.title,
+  description: organisationOverviewContent.description,
+};
 
 export default function ForOrganisationsPage() {
-  return <ContentPage page={page} />;
+  return (
+    <ForOrganisationsOverviewPage
+      content={organisationOverviewContent}
+      services={organisationServices}
+    />
+  );
 }

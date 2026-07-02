@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
-import type { InitiativePage, RouteCard } from "@/types/content";
+import type { InitiativePage, WhatWeDoOverviewContent } from "@/types/content";
 
 type WhatWeDoOverviewPageProps = {
+  content: WhatWeDoOverviewContent;
   initiatives: InitiativePage[];
 };
 
@@ -16,75 +18,7 @@ const anchorLinks = [
   { id: "next-steps", label: "Next Steps" },
 ];
 
-const ecosystemCards = [
-  {
-    eyebrow: "Access",
-    title: "We widen the front door into digital opportunity",
-    description:
-      "Community outreach, school clubs, and regional activation work help more young people encounter technology in ways that feel relevant and reachable.",
-  },
-  {
-    eyebrow: "Training",
-    title: "We turn curiosity into practical capability",
-    description:
-      "Structured learning pathways, challenge formats, and focused inclusion initiatives help participants move from first contact to real competence.",
-  },
-  {
-    eyebrow: "Transition",
-    title: "We connect learning to longer-term outcomes",
-    description:
-      "Entrepreneurship, employability, partner routes, and advocacy work help carry the impact of training into communities, institutions, and careers.",
-  },
-];
-
-const pathwayCards = [
-  {
-    title: "Discover",
-    description:
-      "Community Outreach, Rural Tech Connect, and Tech Clubs bring more learners into the ecosystem early and repeatedly.",
-  },
-  {
-    title: "Develop",
-    description:
-      "Girls in Tech and Youth Tech Academy create the confidence, discipline, and practical skill needed for deeper progress.",
-  },
-  {
-    title: "Apply",
-    description:
-      "Code Impact Challenge and Entrepreneurship Hub help learners test their skills in public, collaborative, and venture-facing formats.",
-  },
-  {
-    title: "Amplify",
-    description:
-      "Advocacy and partner-facing work help ensure the wider ecosystem keeps making youth digital opportunity more possible.",
-  },
-];
-
-const nextStepCards: RouteCard[] = [
-  {
-    href: "/apply-for-training",
-    eyebrow: "Apply",
-    title: "Apply for Training",
-    description:
-      "Move from exploration into the right learning route for your stage, interests, and goals.",
-  },
-  {
-    href: "/partner-with-us",
-    eyebrow: "Partner",
-    title: "Partner With Us",
-    description:
-      "Support delivery, mentoring, sponsorship, and expansion across the initiative ecosystem.",
-  },
-  {
-    href: "/our-impact/reports",
-    eyebrow: "Impact",
-    title: "See Our Impact",
-    description:
-      "Explore how the initiative portfolio connects to measurable outcomes and wider mission credibility.",
-  },
-];
-
-export function WhatWeDoOverviewPage({ initiatives }: WhatWeDoOverviewPageProps) {
+export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewPageProps) {
   const liveRoutes = initiatives.length;
   const totalGalleryImages = initiatives.reduce(
     (count, initiative) => count + initiative.gallery.length,
@@ -104,7 +38,7 @@ export function WhatWeDoOverviewPage({ initiatives }: WhatWeDoOverviewPageProps)
       <section className="relative overflow-hidden bg-brand-navy text-white">
         <div className="absolute inset-0">
           <Image
-            src="/images/randomPictures/groupworkstudents.jpg"
+            src={content.heroImage}
             alt="IT For Youth Ghana initiative overview"
             fill
             priority
@@ -120,29 +54,25 @@ export function WhatWeDoOverviewPage({ initiatives }: WhatWeDoOverviewPageProps)
             className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
           >
             <Link href="/" className="transition hover:text-white">
-              Home
+              {breadcrumbs.home}
             </Link>
             <span>/</span>
-            <span className="text-white">What We Do</span>
+            <span className="text-white">{breadcrumbs.whatWeDo.root}</span>
           </nav>
 
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div className="space-y-6">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                What we do
+                {content.eyebrow}
               </p>
               <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                Eight initiatives, one connected mission to expand youth digital opportunity
+                {content.title}
               </h1>
               <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                Our work is designed as an ecosystem, not a set of isolated projects. Each
-                initiative supports a different stage of the journey from first exposure to
-                long-term opportunity.
+                {content.description}
               </p>
               <p className="max-w-3xl text-base leading-8 text-white/80">
-                This page is the public overview of that ecosystem. It helps learners,
-                funders, schools, employers, and partners understand how the initiatives fit
-                together and where they can enter the work.
+                {content.overviewSectionDescription}
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -163,26 +93,10 @@ export function WhatWeDoOverviewPage({ initiatives }: WhatWeDoOverviewPageProps)
 
             <div className="grid gap-4 sm:grid-cols-2">
               {[
-                {
-                  value: String(liveRoutes),
-                  label: "Live initiative routes",
-                  description: "Dedicated public pages now structured for deeper storytelling.",
-                },
-                {
-                  value: String(totalGalleryImages),
-                  label: "Seeded gallery images",
-                  description: "Local visuals already mapped into the initiative experience.",
-                },
-                {
-                  value: String(totalTestimonials),
-                  label: "Initiative testimonials",
-                  description: "Learner, facilitator, and partner voices across the portfolio.",
-                },
-                {
-                  value: String(totalPartners),
-                  label: "Partner references",
-                  description: "Examples of the organisations and routes that support this work.",
-                },
+                { value: String(liveRoutes), ...content.heroStats[0] },
+                { value: String(totalGalleryImages), ...content.heroStats[1] },
+                { value: String(totalTestimonials), ...content.heroStats[2] },
+                { value: String(totalPartners), ...content.heroStats[3] },
               ].map((stat) => (
                 <div
                   key={stat.label}
@@ -215,13 +129,18 @@ export function WhatWeDoOverviewPage({ initiatives }: WhatWeDoOverviewPageProps)
       <section id="overview" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-8">
           <SectionHeading
-            eyebrow="Overview"
-            title="The work is designed as a connected system"
-            description="We do not treat access, training, entrepreneurship, and advocacy as separate silos. The strongest outcomes happen when these pieces reinforce each other."
+            eyebrow={content.overviewSectionEyebrow ?? "Overview"}
+            title={
+              content.overviewSectionTitle ?? "The work is designed as a connected system"
+            }
+            description={
+              content.overviewSectionDescription ??
+              "We do not treat access, training, entrepreneurship, and advocacy as separate silos. The strongest outcomes happen when these pieces reinforce each other."
+            }
           />
 
           <div className="grid gap-5 lg:grid-cols-3">
-            {ecosystemCards.map((card) => (
+            {content.ecosystemCards.map((card) => (
               <div
                 key={card.title}
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
@@ -245,9 +164,15 @@ export function WhatWeDoOverviewPage({ initiatives }: WhatWeDoOverviewPageProps)
       >
         <div className="mx-auto max-w-7xl space-y-10">
           <SectionHeading
-            eyebrow="Initiatives"
-            title="Explore each initiative in more depth"
-            description="Every initiative page now has a dedicated structure with galleries, FAQs, testimonials, partner references, and a stronger narrative arc."
+            eyebrow={content.initiativesSectionEyebrow ?? "Initiatives"}
+            title={
+              content.initiativesSectionTitle ??
+              "Explore each initiative in more depth"
+            }
+            description={
+              content.initiativesSectionDescription ??
+              "Every initiative page now has a dedicated structure with galleries, FAQs, testimonials, partner references, and a stronger narrative arc."
+            }
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
@@ -320,13 +245,19 @@ export function WhatWeDoOverviewPage({ initiatives }: WhatWeDoOverviewPageProps)
       <section id="pathways" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-10">
           <SectionHeading
-            eyebrow="Pathways"
-            title="From first exposure to longer-term opportunity"
-            description="The strongest version of this work helps a learner move forward over time, not just attend one moment. These pathways show how the portfolio supports that progression."
+            eyebrow={content.pathwaysSectionEyebrow ?? "Pathways"}
+            title={
+              content.pathwaysSectionTitle ??
+              "From first exposure to longer-term opportunity"
+            }
+            description={
+              content.pathwaysSectionDescription ??
+              "The strongest version of this work helps a learner move forward over time, not just attend one moment. These pathways show how the portfolio supports that progression."
+            }
           />
 
           <div className="grid gap-5 lg:grid-cols-4">
-            {pathwayCards.map((card, index) => (
+            {content.pathwayCards.map((card, index) => (
               <div
                 key={card.title}
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
@@ -348,17 +279,17 @@ export function WhatWeDoOverviewPage({ initiatives }: WhatWeDoOverviewPageProps)
         <div className="mx-auto max-w-7xl space-y-10">
           <div className="space-y-3">
             <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-              Next steps
+              {content.nextStepsSectionEyebrow ?? "Next steps"}
             </p>
             <h2 className="max-w-3xl font-heading text-3xl font-bold leading-snug text-white sm:text-4xl">
-              Choose the right entry point into the work
+              {content.nextStepsSectionTitle ?? "Choose the right entry point into the work"}
             </h2>
             <p className="max-w-3xl text-[0.95rem] leading-[1.8] text-white/70">
-              Whether you are a learner, partner, or supporter, the next move should
-              feel clear from here.
+              {content.nextStepsSectionDescription ??
+                "Whether you are a learner, partner, or supporter, the next move should feel clear from here."}
             </p>
           </div>
-          <RouteCardGrid cards={nextStepCards} />
+          <RouteCardGrid cards={content.nextSteps} />
         </div>
       </section>
     </div>

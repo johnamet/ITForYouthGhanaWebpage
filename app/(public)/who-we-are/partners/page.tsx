@@ -1,20 +1,19 @@
 import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import { PartnerDirectory } from "@/components/shared/partner-directory";
+import { getCmsPartners } from "@/lib/cms/partners";
+import { getCmsSitePage } from "@/lib/cms/site-pages";
+import { partnersHub } from "@/lib/content/site-config";
 
-const page = buildHubPage(
-  "partners",
-  "Our Partners",
-  "This route becomes the public-facing proof layer for collaborators, logos, and relationship stories.",
-  [
-    {
-      title: "Partner with us",
-      description: "Move directly into the new partnership pathways.",
-      href: "/partner-with-us",
-      eyebrow: "Next path",
-    },
-  ],
-);
+export default async function PartnersPage() {
+  const [page, partners] = await Promise.all([
+    getCmsSitePage("partners"),
+    getCmsPartners(),
+  ]);
 
-export default function PartnersPage() {
-  return <ContentPage page={page} />;
+  return (
+    <>
+      <ContentPage page={page ?? partnersHub} />
+      <PartnerDirectory partners={partners} />
+    </>
+  );
 }

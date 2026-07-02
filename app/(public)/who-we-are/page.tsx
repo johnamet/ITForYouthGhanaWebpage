@@ -1,27 +1,22 @@
-import { ContentPage } from "@/components/shared/content-page";
-import { buildHubPage } from "@/lib/content/page-builders";
+import type { Metadata } from "next";
 
-const page = buildHubPage("who-we-are", "Who We Are", "A clearer home for mission, team, partners, and careers.", [
-  {
-    eyebrow: "About",
-    title: "Our Team",
-    description: "Meet the people behind the mission and the future CMS structure for their profiles.",
-    href: "/who-we-are/team",
-  },
-  {
-    eyebrow: "About",
-    title: "Our Partners",
-    description: "A dedicated route for current collaborators and future credibility signals.",
-    href: "/who-we-are/partners",
-  },
-  {
-    eyebrow: "About",
-    title: "Join Our Team",
-    description: "The careers route now has a stable home for roles, volunteer opportunities, and process content.",
-    href: "/who-we-are/careers",
-  },
-]);
+import { WhoWeArePage as WhoWeAreLandingPage } from "@/components/who-we-are/who-we-are-page";
+import { getCmsWhoWeArePage } from "@/lib/cms/site-pages";
 
-export default function WhoWeArePage() {
-  return <ContentPage page={page} />;
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getCmsWhoWeArePage();
+
+  return {
+    title: page.title,
+    description: page.description,
+    openGraph: {
+      title: page.title,
+      description: page.description,
+    },
+  };
+}
+
+export default async function WhoWeArePage() {
+  const page = await getCmsWhoWeArePage();
+  return <WhoWeAreLandingPage page={page} />;
 }

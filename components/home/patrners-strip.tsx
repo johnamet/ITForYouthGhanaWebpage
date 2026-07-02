@@ -6,6 +6,7 @@ export type Partner = {
   logo?: string;
   href?: string;
   active?: boolean;
+  order?: number;
 };
 
 type PartnersStripProps = {

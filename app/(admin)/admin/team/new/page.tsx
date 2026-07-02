@@ -1,11 +1,16 @@
-import { AdminPlaceholder } from "@/components/admin/admin-placeholder";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { TeamForm } from "@/components/admin/team-form";
 
 export default function AdminNewTeamMemberPage() {
   return (
-    <AdminPlaceholder
-      title="Create Team Member"
-      description="The create route is ready for profile onboarding."
-      nextSteps={["Capture role, department, bio, social links, and media."]}
-    />
+    <div className="space-y-8">
+      <AdminPageHeader
+        eyebrow="People & governance"
+        title="Create team member"
+        description="Add a new team profile with department grouping, ordering, and optional public contact links."
+      />
+
+      <TeamForm mode="create" />
+    </div>
   );
 }
