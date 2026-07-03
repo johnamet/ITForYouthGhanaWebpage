@@ -44,7 +44,7 @@ const panelClass = "rounded-[30px] border border-brand-border bg-white p-6 shado
 const addButtonClass =
   "inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink";
 
-const emptyStat: HighlightStat = { value: "", label: "", description: "", icon: "" };
+const emptyStat: HighlightStat = { value: "", label: "", description: "", icon: "", iconImage: "" };
 const emptyChannel: ContactChannel = { label: "", value: "", description: "", href: "" };
 const emptyEnquiryOption: ContactEnquiryOption = {
   value: "general",
@@ -221,6 +221,7 @@ export function ContactPageForm({ initial }: ContactPageFormProps) {
               <Field label="Value" value={stat.value} onChange={(value) => updateStat(index, "value", value)} />
               <Field label="Label" value={stat.label} onChange={(value) => updateStat(index, "label", value)} />
               <Field label="Icon" value={stat.icon ?? ""} onChange={(value) => updateStat(index, "icon", value)} />
+              <Field label="Icon image URL" value={stat.iconImage ?? ""} onChange={(value) => updateStat(index, "iconImage", value)} />
               <Field label="Description" value={stat.description ?? ""} onChange={(value) => updateStat(index, "description", value)} />
               <RemoveButton label="Remove stat" onClick={() => update("stats", values.stats.filter((_, itemIndex) => itemIndex !== index))} />
             </div>

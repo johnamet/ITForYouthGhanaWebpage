@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
+import { emojiToIconImage } from "@/lib/utils/icon-map";
 
 import { ArticleCard } from "@/components/news/article-card";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
@@ -106,7 +107,11 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
                           {stat.label}
                         </p>
                       </div>
-                      {stat.icon ? (
+                      {(() => stat.iconImage ?? emojiToIconImage(stat.icon))() ? (
+                        <span className="rounded-full bg-brand-gold px-2 py-1 text-xs font-bold text-brand-ink">
+                          <Image src={(stat.iconImage ?? emojiToIconImage(stat.icon)) as string} alt={stat.label} width={18} height={18} className="h-[18px] w-[18px] object-contain" />
+                        </span>
+                      ) : stat.icon ? (
                         <span className="rounded-full bg-brand-gold px-3 py-1 text-xs font-bold text-brand-ink">
                           {stat.icon}
                         </span>

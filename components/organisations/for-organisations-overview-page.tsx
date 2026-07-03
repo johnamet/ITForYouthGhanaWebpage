@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { emojiToIconImage } from "@/lib/utils/icon-map";
 import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
@@ -86,7 +87,11 @@ export function ForOrganisationsOverviewPage({
                   key={stat.label}
                   className="rounded-[28px] border border-white/12 bg-white/10 p-5 backdrop-blur-sm"
                 >
-                  {stat.icon ? (
+                  {(() => stat.iconImage ?? emojiToIconImage(stat.icon))() ? (
+                    <span className="inline-flex items-center justify-center" aria-hidden="true">
+                      <Image src={(stat.iconImage ?? emojiToIconImage(stat.icon)) as string} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
+                    </span>
+                  ) : stat.icon ? (
                     <span className="text-2xl" aria-hidden="true">
                       {stat.icon}
                     </span>

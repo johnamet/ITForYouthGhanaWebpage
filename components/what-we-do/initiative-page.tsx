@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { InitiativeGallery } from "@/components/what-we-do/initiative-gallery";
+import { emojiToIconImage } from "@/lib/utils/icon-map";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import type { InitiativePage } from "@/types/content";
@@ -188,9 +189,15 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-3xl" aria-hidden="true">
-                      {step.icon}
-                    </span>
+                    {(() => step.iconImage ?? emojiToIconImage(step.icon))() ? (
+                      <span className="inline-flex items-center justify-center" aria-hidden="true">
+                        <Image src={(step.iconImage ?? emojiToIconImage(step.icon)) as string} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
+                      </span>
+                    ) : (
+                      <span className="text-3xl" aria-hidden="true">
+                        {step.icon}
+                      </span>
+                    )}
                     <span className="font-heading text-3xl font-bold text-brand-gold/70">
                       {step.number}
                     </span>
@@ -218,7 +225,11 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   key={stat.label}
                   className="rounded-[30px] border border-brand-border bg-brand-mist/45 p-6"
                 >
-                  {stat.icon ? (
+                  {(() => stat.iconImage ?? emojiToIconImage(stat.icon))() ? (
+                    <span className="inline-flex items-center justify-center" aria-hidden="true">
+                      <Image src={(stat.iconImage ?? emojiToIconImage(stat.icon)) as string} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
+                    </span>
+                  ) : stat.icon ? (
                     <span className="text-2xl" aria-hidden="true">
                       {stat.icon}
                     </span>

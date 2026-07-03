@@ -17,6 +17,8 @@ export type HighlightStat = {
   label: string;
   description?: string;
   icon?: string;
+  // New: optional image URL for replacing emoji icons
+  iconImage?: string;
 };
 
 export type RouteCard = {
@@ -141,6 +143,8 @@ export interface DepartmentProfile {
   mission: string;
   heroImage?: string;
   icon?: string;
+  // New: optional image URL for department icon
+  iconImage?: string;
   color?: string;
   responsibilities: string[];
   services: ContentBlock[];
@@ -171,6 +175,8 @@ export interface InitiativeProcessStep {
   title: string;
   description: string;
   icon: string;
+  // Optional image URL alternative to icon
+  iconImage?: string;
 }
 
 export interface InitiativeAudience {
@@ -306,6 +312,8 @@ export interface TrainingProcessStep {
   title: string;
   description: string;
   icon: string;
+  // Optional image URL alternative to icon
+  iconImage?: string;
 }
 
 export interface TrainingAudienceCard {
@@ -407,6 +415,8 @@ export interface OrganisationServiceCard {
   title: string;
   description: string;
   icon: string;
+  // Optional image URL alternative to icon
+  iconImage?: string;
   bullets: string[];
 }
 
@@ -415,6 +425,8 @@ export interface OrganisationProcessStep {
   title: string;
   description: string;
   icon: string;
+  // Optional image URL alternative to icon
+  iconImage?: string;
 }
 
 export interface OrganisationCaseStudy {
@@ -518,6 +530,8 @@ export interface PartnershipFocusCard {
   title: string;
   description: string;
   icon: string;
+  // Optional image URL alternative to icon
+  iconImage?: string;
   bullets: string[];
 }
 
@@ -526,6 +540,8 @@ export interface PartnershipProcessStep {
   title: string;
   description: string;
   icon: string;
+  // Optional image URL alternative to icon
+  iconImage?: string;
 }
 
 export interface PartnershipScenario {
@@ -652,6 +668,8 @@ export interface ImpactEvidenceCard {
   title: string;
   description: string;
   icon: string;
+  // Optional image URL alternative to icon
+  iconImage?: string;
   bullets: string[];
 }
 
@@ -696,6 +714,8 @@ export interface ImpactSdgGoal {
   title: string;
   summary: string;
   icon: string;
+  // Optional image URL alternative to icon
+  iconImage?: string;
   contributions: string[];
   linkedRoutes: RouteCard[];
 }

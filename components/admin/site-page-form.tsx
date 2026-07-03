@@ -539,7 +539,7 @@ export function SitePageForm({
           {values.stats.map((stat, index) => (
             <div
               key={`${stat.label}-${index}`}
-              className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[0.6fr_1fr_1.4fr_0.6fr_auto]"
+              className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[0.6fr_1fr_1.4fr_0.6fr_1fr_auto]"
             >
               <div>
                 <label className="text-sm font-bold text-brand-ink">Value</label>
@@ -570,6 +570,14 @@ export function SitePageForm({
                 <input
                   value={stat.icon ?? ""}
                   onChange={(event) => updateStat(index, "icon", event.target.value)}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-bold text-brand-ink">Icon image URL</label>
+                <input
+                  value={stat.iconImage ?? ""}
+                  onChange={(event) => updateStat(index, "iconImage", event.target.value)}
                   className={inputClass}
                 />
               </div>

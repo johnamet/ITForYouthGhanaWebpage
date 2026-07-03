@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { emojiToIconImage } from "@/lib/utils/icon-map";
 import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
@@ -132,9 +133,15 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-3xl" aria-hidden="true">
-                    {card.icon}
-                  </span>
+                  {(() => card.iconImage ?? emojiToIconImage(card.icon))() ? (
+                    <span className="inline-flex items-center justify-center" aria-hidden="true">
+                      <Image src={(card.iconImage ?? emojiToIconImage(card.icon)) as string} alt={card.title} width={28} height={28} className="h-7 w-7 object-contain" />
+                    </span>
+                  ) : (
+                    <span className="text-3xl" aria-hidden="true">
+                      {card.icon}
+                    </span>
+                  )}
                   <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
                     {page.overviewCardBadgeLabel ?? "Focus area"}
                   </span>
@@ -183,9 +190,15 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                 className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-3xl" aria-hidden="true">
-                    {step.icon}
-                  </span>
+                  {(() => step.iconImage ?? emojiToIconImage(step.icon))() ? (
+                    <span className="inline-flex items-center justify-center" aria-hidden="true">
+                      <Image src={(step.iconImage ?? emojiToIconImage(step.icon)) as string} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
+                    </span>
+                  ) : (
+                    <span className="text-3xl" aria-hidden="true">
+                      {step.icon}
+                    </span>
+                  )}
                   <span className="font-heading text-3xl font-bold text-brand-gold/70">
                     {step.number}
                   </span>

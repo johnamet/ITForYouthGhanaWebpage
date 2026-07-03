@@ -22,6 +22,7 @@ function normalizeHighlightStat(value: unknown): HighlightStat | null {
     label,
     description: typeof record.description === "string" ? record.description : undefined,
     icon: typeof record.icon === "string" ? record.icon : undefined,
+    iconImage: typeof record.iconImage === "string" ? record.iconImage : undefined,
   };
 }
 

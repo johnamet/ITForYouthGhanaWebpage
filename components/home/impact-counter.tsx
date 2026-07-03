@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import { emojiToIconImage } from "@/lib/utils/icon-map";
 
 import { useCountUp } from "@/hooks/useCountUp";
 import type { HighlightStat } from "@/types/content";
@@ -28,7 +30,11 @@ function ImpactCounterItem({ stat, start }: { stat: HighlightStat; start: boolea
 
   return (
     <div className="px-6 py-8 text-center sm:px-8">
-      {stat.icon ? (
+      {(() => stat.iconImage ?? emojiToIconImage(stat.icon))() ? (
+        <span className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-mist">
+          <Image src={(stat.iconImage ?? emojiToIconImage(stat.icon)) as string} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
+        </span>
+      ) : stat.icon ? (
         <span className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-mist text-2xl">
           {stat.icon}
         </span>

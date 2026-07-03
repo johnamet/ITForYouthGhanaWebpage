@@ -46,7 +46,7 @@ const inputClassName =
 const textareaClassName =
   "mt-2 min-h-28 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
 
-const emptyStat = (): HighlightStat => ({ value: "", label: "", description: "", icon: "" });
+const emptyStat = (): HighlightStat => ({ value: "", label: "", description: "", icon: "", iconImage: "" });
 const emptyService = (): ContentBlock => ({ title: "", body: "", bullets: [] });
 const emptyWorkflow = (): DepartmentProcessStep => ({ title: "", description: "" });
 const emptyResource = (): DepartmentResource => ({ label: "", href: "", description: "" });
@@ -74,6 +74,7 @@ function getInitialValues(department?: DepartmentProfile): DepartmentFormValues 
     mission: department?.mission ?? "",
     heroImage: department?.heroImage ?? "",
     icon: department?.icon ?? "",
+    iconImage: department?.iconImage ?? "",
     color: department?.color ?? "#1E72BA",
     responsibilities: department?.responsibilities ?? [""],
     services: department?.services?.length ? department.services : [emptyService()],
@@ -292,6 +293,10 @@ export function DepartmentForm({ mode, department }: DepartmentFormProps) {
                 <input id="icon" value={values.icon ?? ""} onChange={(event) => updateValue("icon", event.target.value)} className={inputClassName} placeholder="🎓" />
               </div>
               <div>
+                <label htmlFor="iconImage" className="text-sm font-bold text-brand-ink">Icon image URL</label>
+                <input id="iconImage" value={values.iconImage ?? ""} onChange={(event) => updateValue("iconImage", event.target.value)} className={inputClassName} placeholder="https://.../icon.png" />
+              </div>
+              <div>
                 <label htmlFor="color" className="text-sm font-bold text-brand-ink">Accent color</label>
                 <input id="color" value={values.color ?? ""} onChange={(event) => updateValue("color", event.target.value)} className={inputClassName} placeholder="#1E72BA" />
               </div>
@@ -400,11 +405,12 @@ export function DepartmentForm({ mode, department }: DepartmentFormProps) {
 
       <RepeatableSection title="Stats" onAdd={() => updateValue("stats", [...values.stats, emptyStat()])}>
         {values.stats.map((stat, index) => (
-          <div key={index} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-4">
+          <div key={index} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-5">
             <input value={stat.value} onChange={(event) => updateStat(index, "value", event.target.value)} className={inputClassName} placeholder="Value" />
             <input value={stat.label} onChange={(event) => updateStat(index, "label", event.target.value)} className={inputClassName} placeholder="Label" />
             <input value={stat.description ?? ""} onChange={(event) => updateStat(index, "description", event.target.value)} className={inputClassName} placeholder="Description" />
             <input value={stat.icon ?? ""} onChange={(event) => updateStat(index, "icon", event.target.value)} className={inputClassName} placeholder="Icon" />
+            <input value={stat.iconImage ?? ""} onChange={(event) => updateStat(index, "iconImage", event.target.value)} className={inputClassName} placeholder="Icon image URL" />
             <RemoveButton onClick={() => updateValue("stats", values.stats.filter((_, itemIndex) => itemIndex !== index))} />
           </div>
         ))}

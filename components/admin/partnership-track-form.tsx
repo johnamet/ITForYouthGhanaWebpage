@@ -135,10 +135,11 @@ export function PartnershipTrackForm({ mode, initial }: Props) {
         <h3 className="font-heading text-xl font-semibold text-brand-ink">Stats</h3>
         <div className="mt-4 space-y-4">
           {stats.map((s, i) => (
-            <div key={i} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_1fr_1fr_auto_auto]">
+            <div key={i} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_1fr_1fr_1fr_auto_auto]">
               <div><label className="text-sm font-bold text-brand-ink">Value</label><input className={input} value={s.value ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, value: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Label</label><input className={input} value={s.label ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, label: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Icon</label><input className={input} value={s.icon ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, icon: e.target.value } : it))} /></div>
+              <div><label className="text-sm font-bold text-brand-ink">Icon image URL</label><input className={input} value={s.iconImage ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, iconImage: e.target.value } : it))} /></div>
               <button type="button" onClick={() => setStats((arr) => (i <= 0 ? arr : ((n) => ([n[i-1], n[i]] = [n[i], n[i-1]], n))([...arr])))} className="rounded-full border border-brand-border p-2 text-brand-ink"><ArrowUp className="h-4 w-4" /></button>
               <div className="flex items-center gap-2">
                 <button type="button" onClick={() => setStats((arr) => (i >= arr.length-1 ? arr : ((n) => ([n[i], n[i+1]] = [n[i+1], n[i]], n))([...arr])))} className="rounded-full border border-brand-border p-2 text-brand-ink"><ArrowDown className="h-4 w-4" /></button>
@@ -147,7 +148,7 @@ export function PartnershipTrackForm({ mode, initial }: Props) {
               <div className="md:col-span-3"><label className="text-sm font-bold text-brand-ink">Description</label><input className={input} value={s.description ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, description: e.target.value } : it))} /></div>
             </div>
           ))}
-          <button type="button" onClick={() => setStats((arr) => [...arr, { value: "", label: "", description: "", icon: "" }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add stat</button>
+          <button type="button" onClick={() => setStats((arr) => [...arr, { value: "", label: "", description: "", icon: "", iconImage: "" }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add stat</button>
         </div>
       </section>
 
@@ -159,11 +160,11 @@ export function PartnershipTrackForm({ mode, initial }: Props) {
               <div><label className="text-sm font-bold text-brand-ink">Title</label><input className={input} value={c.title ?? ""} onChange={(e) => setFocusCards((arr) => arr.map((it, idx) => idx === i ? { ...it, title: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Description</label><input className={input} value={c.description ?? ""} onChange={(e) => setFocusCards((arr) => arr.map((it, idx) => idx === i ? { ...it, description: e.target.value } : it))} /></div>
               <div className="flex items-center gap-2"><button type="button" onClick={() => setFocusCards((arr) => arr.filter((_it, idx) => idx !== i))} className="rounded-full border border-rose-200 p-2 text-rose-700"><Trash2 className="h-4 w-4" /></button></div>
-              <div className="md:col-span-3"><label className="text-sm font-bold text-brand-ink">Icon</label><input className={input} value={c.icon ?? ""} onChange={(e) => setFocusCards((arr) => arr.map((it, idx) => idx === i ? { ...it, icon: e.target.value } : it))} /></div>
+              <div className="md:col-span-3 grid gap-4 md:grid-cols-2"><div><label className="text-sm font-bold text-brand-ink">Icon</label><input className={input} value={c.icon ?? ""} onChange={(e) => setFocusCards((arr) => arr.map((it, idx) => idx === i ? { ...it, icon: e.target.value } : it))} /></div><div><label className="text-sm font-bold text-brand-ink">Icon image URL</label><input className={input} value={c.iconImage ?? ""} onChange={(e) => setFocusCards((arr) => arr.map((it, idx) => idx === i ? { ...it, iconImage: e.target.value } : it))} /></div></div>
               <div className="md:col-span-3"><label className="text-sm font-bold text-brand-ink">Bullets (one per line)</label><textarea className={input + " h-28"} value={(c.bullets ?? []).join("\n")} onChange={(e) => setFocusCards((arr) => arr.map((it, idx) => idx === i ? { ...it, bullets: e.target.value.split("\n").filter(Boolean) } : it))} /></div>
             </div>
           ))}
-          <button type="button" onClick={() => setFocusCards((arr) => [...arr, { title: "", description: "", icon: "", bullets: [] }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add card</button>
+          <button type="button" onClick={() => setFocusCards((arr) => [...arr, { title: "", description: "", icon: "", iconImage: "", bullets: [] }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add card</button>
         </div>
       </section>
 
@@ -175,11 +176,11 @@ export function PartnershipTrackForm({ mode, initial }: Props) {
               <div><label className="text-sm font-bold text-brand-ink">Step #</label><input className={input} value={h.number ?? ""} onChange={(e) => setHowItWorks((arr) => arr.map((it, idx) => idx === i ? { ...it, number: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Title</label><input className={input} value={h.title ?? ""} onChange={(e) => setHowItWorks((arr) => arr.map((it, idx) => idx === i ? { ...it, title: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Description</label><input className={input} value={h.description ?? ""} onChange={(e) => setHowItWorks((arr) => arr.map((it, idx) => idx === i ? { ...it, description: e.target.value } : it))} /></div>
-              <div><label className="text-sm font-bold text-brand-ink">Icon</label><input className={input} value={h.icon ?? ""} onChange={(e) => setHowItWorks((arr) => arr.map((it, idx) => idx === i ? { ...it, icon: e.target.value } : it))} /></div>
+              <div className="grid gap-4 md:grid-cols-2"><div><label className="text-sm font-bold text-brand-ink">Icon</label><input className={input} value={h.icon ?? ""} onChange={(e) => setHowItWorks((arr) => arr.map((it, idx) => idx === i ? { ...it, icon: e.target.value } : it))} /></div><div><label className="text-sm font-bold text-brand-ink">Icon image URL</label><input className={input} value={h.iconImage ?? ""} onChange={(e) => setHowItWorks((arr) => arr.map((it, idx) => idx === i ? { ...it, iconImage: e.target.value } : it))} /></div></div>
               <div className="flex items-center gap-2"><button type="button" onClick={() => setHowItWorks((arr) => arr.filter((_it, idx) => idx !== i))} className="rounded-full border border-rose-200 p-2 text-rose-700"><Trash2 className="h-4 w-4" /></button></div>
             </div>
           ))}
-          <button type="button" onClick={() => setHowItWorks((arr) => [...arr, { number: "", title: "", description: "", icon: "" }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add step</button>
+          <button type="button" onClick={() => setHowItWorks((arr) => [...arr, { number: "", title: "", description: "", icon: "", iconImage: "" }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add step</button>
         </div>
       </section>
 

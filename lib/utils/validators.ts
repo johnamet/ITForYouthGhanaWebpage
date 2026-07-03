@@ -163,6 +163,8 @@ const departmentHighlightStatSchema = z.object({
   label: z.string().trim().min(2, "Please add a stat label."),
   description: optionalTrimmedString,
   icon: optionalTrimmedString,
+  // New optional image URL for icon
+  iconImage: optionalTrimmedString,
 });
 
 const departmentActionLinkSchema = z.object({
@@ -193,6 +195,8 @@ export const departmentSchema = z.object({
   mission: z.string().trim().min(12, "Please add a mission statement."),
   heroImage: optionalTrimmedString,
   icon: optionalTrimmedString,
+  // New optional image URL for icon
+  iconImage: optionalTrimmedString,
   color: optionalTrimmedString,
   responsibilities: z.array(z.string().trim().min(1)).min(1, "Please add at least one responsibility."),
   services: z.array(departmentServiceSchema).default([]),
@@ -290,6 +294,8 @@ const sitePageHighlightStatSchema = z.object({
   label: z.string().trim().min(2, "Please add a stat label."),
   description: optionalTrimmedString,
   icon: optionalTrimmedString,
+  // New optional image URL for icon
+  iconImage: optionalTrimmedString,
 });
 
 const sitePageSectionSchema = z.object({
@@ -422,6 +428,8 @@ export const highlightStatSchema = z.object({
   label: z.string().trim().min(1),
   description: optionalTrimmedString,
   icon: optionalTrimmedString,
+  // New optional image URL for icon
+  iconImage: optionalTrimmedString,
 });
 
 const contactPageChannelSchema = z.object({
@@ -498,6 +506,8 @@ const partnershipFocusCardSchema = z.object({
   title: z.string().trim().min(1, "Please add a card title."),
   description: z.string().trim().min(1, "Please add a card description."),
   icon: z.string().trim().min(1).default(""),
+  // Optional image URL alternative to icon
+  iconImage: optionalTrimmedString,
   bullets: z.array(z.string().trim().min(1)).default([]),
 });
 
@@ -506,6 +516,8 @@ const partnershipProcessStepSchema = z.object({
   title: z.string().trim().min(1, "Please add a step title."),
   description: z.string().trim().min(1, "Please add a step description."),
   icon: z.string().trim().min(1).default(""),
+  // Optional image URL alternative to icon
+  iconImage: optionalTrimmedString,
 });
 
 const partnershipScenarioSchema = z.object({

@@ -76,7 +76,7 @@ const panelClass = "rounded-[30px] border border-brand-border bg-white p-6 shado
 const compactButtonClass =
   "inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink";
 
-const emptyStat: HighlightStat = { value: "", label: "", description: "", icon: "" };
+const emptyStat: HighlightStat = { value: "", label: "", description: "", icon: "", iconImage: "" };
 const emptyEvidenceCard: ImpactEvidenceCard = { title: "", description: "", icon: "", bullets: [] };
 const emptyRouteCard: RouteCard = { href: "/", eyebrow: "", title: "", description: "" };
 const emptyReport: ImpactReportResource = {
@@ -211,6 +211,7 @@ function StatsEditor({ values, onChange }: { values: HighlightStat[]; onChange: 
             <Field label="Value" value={stat.value} onChange={(value) => onChange(values.map((item, itemIndex) => (itemIndex === index ? { ...item, value } : item)))} />
             <Field label="Label" value={stat.label} onChange={(value) => onChange(values.map((item, itemIndex) => (itemIndex === index ? { ...item, label: value } : item)))} />
             <Field label="Icon" value={stat.icon ?? ""} onChange={(value) => onChange(values.map((item, itemIndex) => (itemIndex === index ? { ...item, icon: value } : item)))} />
+            <Field label="Icon image URL" value={stat.iconImage ?? ""} onChange={(value) => onChange(values.map((item, itemIndex) => (itemIndex === index ? { ...item, iconImage: value } : item)))} />
             <Field label="Description" value={stat.description ?? ""} onChange={(value) => onChange(values.map((item, itemIndex) => (itemIndex === index ? { ...item, description: value } : item)))} />
             <button type="button" onClick={() => onChange(values.filter((_, itemIndex) => itemIndex !== index))} className="justify-self-start rounded-full border border-rose-200 p-3 text-rose-700">
               <Trash2 className="h-4 w-4" />

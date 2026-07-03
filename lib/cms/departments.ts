@@ -55,6 +55,7 @@ function toStats(value: unknown): HighlightStat[] {
       label,
       ...(typeof record.description === "string" ? { description: record.description } : {}),
       ...(typeof record.icon === "string" ? { icon: record.icon } : {}),
+      ...(typeof record.iconImage === "string" ? { iconImage: record.iconImage } : {}),
     });
     return items;
   }, []);
@@ -132,6 +133,7 @@ function normalizeDepartment(id: string, data: Record<string, unknown>): Departm
     mission: typeof data.mission === "string" ? data.mission : "",
     heroImage: typeof data.heroImage === "string" ? data.heroImage : undefined,
     icon: typeof data.icon === "string" ? data.icon : undefined,
+    iconImage: typeof data.iconImage === "string" ? data.iconImage : undefined,
     color: typeof data.color === "string" ? data.color : undefined,
     responsibilities: toStringArray(data.responsibilities),
     services: toContentBlocks(data.services),

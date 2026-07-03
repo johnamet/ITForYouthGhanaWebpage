@@ -85,6 +85,7 @@ export function PartnershipOverviewForm({ initial }: Props) {
               <div><label className="text-sm font-bold text-brand-ink">Value</label><input className={input} value={s.value ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, value: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Label</label><input className={input} value={s.label ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, label: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Icon</label><input className={input} value={s.icon ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, icon: e.target.value } : it))} /></div>
+              <div><label className="text-sm font-bold text-brand-ink">Icon image URL</label><input className={input} value={s.iconImage ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, iconImage: e.target.value } : it))} /></div>
               <button type="button" onClick={() => setStats((arr) => (i <= 0 ? arr : ((n) => ([n[i-1], n[i]] = [n[i], n[i-1]], n))([...arr])))} className="rounded-full border border-brand-border p-2 text-brand-ink"><ArrowUp className="h-4 w-4" /></button>
               <div className="flex items-center gap-2">
                 <button type="button" onClick={() => setStats((arr) => (i >= arr.length-1 ? arr : ((n) => ([n[i], n[i+1]] = [n[i+1], n[i]], n))([...arr])))} className="rounded-full border border-brand-border p-2 text-brand-ink"><ArrowDown className="h-4 w-4" /></button>
@@ -93,7 +94,7 @@ export function PartnershipOverviewForm({ initial }: Props) {
               <div className="md:col-span-3"><label className="text-sm font-bold text-brand-ink">Description</label><input className={input} value={s.description ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, description: e.target.value } : it))} /></div>
             </div>
           ))}
-          <button type="button" onClick={() => setStats((arr) => [...arr, { value: "", label: "", description: "", icon: "" }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add stat</button>
+          <button type="button" onClick={() => setStats((arr) => [...arr, { value: "", label: "", description: "", icon: "", iconImage: "" }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add stat</button>
         </div>
       </section>
 

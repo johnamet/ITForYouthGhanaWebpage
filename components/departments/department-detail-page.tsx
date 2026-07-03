@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { emojiToIconImage } from "@/lib/utils/icon-map";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight, Mail } from "lucide-react";
@@ -71,7 +72,11 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
               style={{ backgroundColor: department.color ?? "#D70B52" }}
               aria-hidden="true"
             >
-              {department.icon ?? "•"}
+              {(() => department.iconImage ?? emojiToIconImage(department.icon))() ? (
+                <Image src={(department.iconImage ?? emojiToIconImage(department.icon)) as string} alt={department.title} width={28} height={28} className="h-7 w-7 object-contain" />
+              ) : (
+                department.icon ?? "•"
+              )}
             </div>
             <p className="mt-5 text-sm leading-7 text-white/82">{department.summary}</p>
             {department.contact?.email ? (

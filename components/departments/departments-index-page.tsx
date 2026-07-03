@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { emojiToIconImage } from "@/lib/utils/icon-map";
 import { ArrowRight } from "lucide-react";
 
 import type { DepartmentProfile } from "@/types/content";
@@ -55,7 +56,11 @@ export function DepartmentsIndexPage({ departments }: DepartmentsIndexPageProps)
                   style={{ backgroundColor: department.color ?? "#1E72BA" }}
                   aria-hidden="true"
                 >
-                  {department.icon ?? "•"}
+                  {(() => department.iconImage ?? emojiToIconImage(department.icon))() ? (
+                    <Image src={(department.iconImage ?? emojiToIconImage(department.icon)) as string} alt={department.title} width={24} height={24} className="h-6 w-6 object-contain" />
+                  ) : (
+                    department.icon ?? "•"
+                  )}
                 </div>
               </div>
 
