@@ -45,7 +45,7 @@ const sectionColumns: AdminTableColumn<AdminHomepageSectionConfig>[] = [
   {
     key: "status",
     label: "Status",
-    render: (section) => <AdminStatusPill status={section.status} />,
+    render: (section) => <AdminStatusPill status={section.status} />, 
   },
   {
     key: "collection",
@@ -80,9 +80,7 @@ const sectionColumns: AdminTableColumn<AdminHomepageSectionConfig>[] = [
   },
 ];
 
-export default function AdminContentSectionPage({
-  params,
-}: AdminContentSectionPageProps) {
+export default function AdminContentSectionPage({ params }: AdminContentSectionPageProps) {
   const page = adminContentSections[params.section as keyof typeof adminContentSections];
 
   if (!page) {

@@ -1,9 +1,21 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { BookOpen, CheckCircle2, ExternalLink, FileText, RefreshCw } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  CheckCircle2,
+  ExternalLink,
+  FileText,
+  Globe2,
+  LayoutList,
+  MapPinned,
+  RefreshCw,
+  ShieldCheck,
+} from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminStatusPill } from "@/components/admin/admin-status-pill";
+import { adminHubs, getNodesForHub } from "@/lib/content/admin-registry";
 import { revalidationMap } from "@/lib/utils/revalidate";
 
 type DocSection = {
@@ -148,23 +160,28 @@ const documentationSections: DocSection[] = [
   {
     id: "programmes",
     title: "Programmes And Initiatives",
-    summary: "Programme pages for what ITFY does across training, outreach, advocacy, and clubs.",
-    adminRoute: "/admin/programmes/girls-in-tech",
+    summary: "What We Do overview, initiative detail pages, and custom pages below the What We Do hub.",
+    adminRoute: "/admin/programmes",
     publicRoutes: ["/what-we-do", "/what-we-do/[slug]"],
     purpose:
-      "Use programme pages to explain each initiative, who it serves, what it offers, and what outcome it creates.",
+      "Use this area to explain the initiative ecosystem, edit each core initiative, and create extra What We Do pages for methods, resources, or special explainers.",
     useWhen: [
+      "The What We Do hub needs updated hero copy, ecosystem cards, pathway cards, or next-step cards.",
       "A programme description, gallery, FAQ, CTA, or impact proof needs to change.",
       "A new initiative is being prepared or an existing one needs sharper positioning.",
+      "A supporting What We Do page is needed but it is not one of the eight core initiative routes.",
       "Partners or learners need clearer information about a specific route.",
     ],
     howToUpdate: [
-      "Open the relevant programme editor from the programmes area.",
-      "Review hero copy, audience, outcomes, gallery assets, FAQs, and CTAs.",
+      "Use What We Do for the overview page and the core initiative repeaters.",
+      "Open an initiative from the table to edit hero copy, audience, outcomes, gallery assets, testimonials, partners, FAQs, CTAs, and related routes.",
+      "Use What We Do Pages to create custom pages below `/what-we-do` that are separate from the reserved initiative slugs.",
       "Keep each programme distinct. Do not reuse vague descriptions across initiatives.",
       "Check the public What We Do overview after changing a programme that appears in route cards.",
     ],
     publishingNotes: [
+      "Core initiative slugs are reserved. Custom pages cannot use routes such as girls-in-tech or youth-academy.",
+      "The overview and initiative editors use repeaters, so admins should add or remove items through the UI rather than editing JSON.",
       "Programme content should stay grounded in the eight ITFY initiative areas.",
       "Use approved statistics only. Programme claims should be specific and verifiable.",
     ],
@@ -278,6 +295,43 @@ const workflowRules = [
   "After publishing high-visibility edits, check desktop and mobile layouts.",
 ];
 
+const quickStartSteps = [
+  {
+    title: "Find the public page",
+    body: "Start with the visitor-facing page, then use the page map below to find the CMS editor that controls it.",
+  },
+  {
+    title: "Edit the smallest area",
+    body: "Use a focused editor when one exists: banner, donation, impact stats, team, department, initiative, article, or page section.",
+  },
+  {
+    title: "Save and review",
+    body: "After saving, open the affected public route and check content, CTA links, image fit, and mobile layout.",
+  },
+  {
+    title: "Record sensitive changes",
+    body: "For people, applications, partners, users, and contact details, keep notes professional and only store what is needed.",
+  },
+];
+
+const researchNotes = [
+  {
+    title: "Task first, reference second",
+    body: "Admins should see the next action before the full explanation. The page now opens with start steps and a page map, then keeps the full manual below.",
+    source: "https://documentation.divio.com/",
+  },
+  {
+    title: "Scannable headings",
+    body: "Each section now has short labels, compact routes, and repeated patterns so admins can scan instead of reading every paragraph.",
+    source: "https://www.nngroup.com/articles/scannable-content/",
+  },
+  {
+    title: "Plain language",
+    body: "Instructions are written as actions: open, edit, save, review. This keeps the guide useful for non-technical admins.",
+    source: "https://www.gov.uk/guidance/content-design/writing-for-gov-uk",
+  },
+];
+
 const statusGuidance = [
   {
     label: "Published / Active",
@@ -298,142 +352,121 @@ const statusGuidance = [
 ];
 
 export default function AdminDocumentationPage() {
+  const visibleHubs = adminHubs.filter((hub) => !["system"].includes(hub.key));
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <AdminPageHeader
         eyebrow="Usage & documentation"
         title="CMS guide for ITFY admins"
-        description="A practical guide to what each admin area controls, which public pages it updates, and how to publish changes without losing your way."
+        description="A practical guide to finding the right editor, understanding what each CMS area updates, and publishing changes with confidence."
         icon={<BookOpen className="h-6 w-6" />}
         primaryAction={{ label: "Open dashboard", href: "/admin/dashboard" }}
       />
 
       <section className="grid gap-5 md:grid-cols-3">
         <SummaryCard
-          icon={<FileText className="h-5 w-5" />}
-          label="Admin sections"
+          icon={<LayoutList className="h-5 w-5" />}
+          label="Documented areas"
           value={String(documentationSections.length)}
-          description="Main CMS areas documented with purpose, update steps, and publishing notes."
+          description="Every major CMS workflow has purpose, update steps, and publishing notes."
         />
         <SummaryCard
-          icon={<RefreshCw className="h-5 w-5" />}
-          label="Revalidation types"
-          value={String(Object.keys(revalidationMap).length)}
-          description="Content types that trigger public page refreshes after a CMS save."
+          icon={<MapPinned className="h-5 w-5" />}
+          label="Content hubs"
+          value={String(visibleHubs.length)}
+          description="Public site areas are grouped by the same hubs admins see in the sidebar."
         />
         <SummaryCard
           icon={<CheckCircle2 className="h-5 w-5" />}
-          label="Publishing rule"
-          value="Review"
-          description="Every save should be followed by checking the affected public page."
+          label="Core habit"
+          value="Save + review"
+          description="Every public edit should be checked on the affected route after saving."
         />
       </section>
 
-      <section className="grid gap-8 xl:grid-cols-[280px_1fr]">
-        <aside className="xl:sticky xl:top-8 xl:self-start">
-          <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
-              Table of contents
-            </p>
-            <nav className="mt-5 grid gap-2">
-              {documentationSections.map((section) => (
-                <a
-                  key={section.id}
-                  href={`#${section.id}`}
-                  className="rounded-2xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-mist hover:text-brand-ink"
-                >
-                  {section.title}
-                </a>
-              ))}
-              <a
-                href="#publishing-workflow"
-                className="rounded-2xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-mist hover:text-brand-ink"
-              >
-                Publishing workflow
-              </a>
-              <a
-                href="#revalidation-map"
-                className="rounded-2xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-mist hover:text-brand-ink"
-              >
-                What updates what
-              </a>
-            </nav>
+      <section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-primary text-white">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+                Start here
+              </p>
+              <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
+                Four-step publishing routine
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                Use this when you are not sure where to begin. It works for homepage,
+                initiatives, training, team, departments, partnerships, impact, and contact updates.
+              </p>
+            </div>
           </div>
+          <div className="mt-6 grid gap-3">
+            {quickStartSteps.map((step, index) => (
+              <div key={step.title} className="grid grid-cols-[2.25rem_1fr] gap-3 rounded-2xl bg-brand-mist/55 p-4">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary text-sm font-bold text-white">
+                  {index + 1}
+                </span>
+                <div>
+                  <p className="font-bold text-brand-ink">{step.title}</p>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">{step.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+            Page map
+          </p>
+          <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
+            Find the editor by site area
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+            These hubs match the CMS sidebar and Content Explorer. Open a hub when you know the
+            public area, then choose the exact editor.
+          </p>
+          <div className="mt-6 grid gap-3 md:grid-cols-2">
+            {visibleHubs.map((hub) => (
+              <HubCard key={hub.key} hubKey={hub.key} label={hub.label} description={hub.description} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-8 xl:grid-cols-[300px_1fr]">
+        <aside className="xl:sticky xl:top-8 xl:self-start">
+          <TableOfContents />
         </aside>
 
         <div className="space-y-8">
-          {documentationSections.map((section) => (
-            <DocumentationSection key={section.id} section={section} />
-          ))}
-
           <section
-            id="publishing-workflow"
-            className="scroll-mt-8 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm"
-          >
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
-                  Publishing workflow
-                </p>
-                <h2 className="mt-2 font-heading text-3xl font-bold text-slate-950">
-                  A safe way to edit the site
-                </h2>
-                <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-                  Use this checklist for any public-facing update, especially homepage, training,
-                  departments, partnerships, impact, and contact changes.
-                </p>
-              </div>
-              <AdminStatusPill status="cms-ready" label="Recommended" />
-            </div>
-
-            <ol className="mt-6 grid gap-3">
-              {workflowRules.map((rule, index) => (
-                <li key={rule} className="flex gap-3 rounded-2xl bg-slate-50 p-4 text-sm leading-7 text-slate-700">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-950 text-xs font-bold text-white">
-                    {index + 1}
-                  </span>
-                  <span>{rule}</span>
-                </li>
-              ))}
-            </ol>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {statusGuidance.map((item) => (
-                <div key={item.label} className="rounded-2xl border border-slate-100 p-4">
-                  <p className="font-bold text-slate-950">{item.label}</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section
-            id="revalidation-map"
-            className="scroll-mt-8 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm"
+            id="manual"
+            className="scroll-mt-8 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
           >
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
-              What updates what
+              Deep reference
             </p>
-            <h2 className="mt-2 font-heading text-3xl font-bold text-slate-950">
-              Revalidation map
+            <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
+              What each CMS area controls
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-              These are the base public paths refreshed by each content type. Some routes also
-              add a detail path when a slug is saved, such as a department, article, initiative,
-              organisation service, partnership track, or dynamic Who We Are page.
+              Expand the area you need. Each panel tells you when to use it, how to update it,
+              which public routes it affects, and what to check before publishing.
             </p>
-
-            <div className="mt-6 grid gap-3 md:grid-cols-2">
-              {Object.entries(revalidationMap).map(([type, paths]) => (
-                <div key={type} className="rounded-2xl bg-slate-50 p-4">
-                  <p className="font-bold text-slate-950">{type}</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {paths.join(", ")}
-                  </p>
-                </div>
-              ))}
-            </div>
           </section>
+
+          {documentationSections.map((section, index) => (
+            <DocumentationSection key={section.id} section={section} open={index < 2} />
+          ))}
+
+          <PublishingWorkflow />
+          <RevalidationMap />
+          <ResearchNotes />
         </div>
       </section>
     </div>
@@ -452,13 +485,13 @@ function SummaryCard({
   description: string;
 }) {
   return (
-    <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-slate-500">{label}</p>
-          <p className="mt-3 font-heading text-4xl font-bold text-slate-950">{value}</p>
+          <p className="mt-3 font-heading text-4xl font-bold text-brand-ink">{value}</p>
         </div>
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-brand-gold">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-primary text-white">
           {icon}
         </div>
       </div>
@@ -467,37 +500,111 @@ function SummaryCard({
   );
 }
 
-function DocumentationSection({ section }: { section: DocSection }) {
+function TableOfContents() {
   return (
-    <article
-      id={section.id}
-      className="scroll-mt-8 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm"
+    <div className="rounded-[28px] border border-brand-border bg-white p-5 shadow-sm">
+      <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+        Table of contents
+      </p>
+      <nav className="mt-5 grid gap-2">
+        <a href="#manual" className="rounded-2xl px-3 py-2 text-sm font-semibold text-brand-ink transition hover:bg-brand-mist">
+          Deep reference
+        </a>
+        {documentationSections.map((section) => (
+          <a
+            key={section.id}
+            href={`#${section.id}`}
+            className="rounded-2xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-mist hover:text-brand-ink"
+          >
+            {section.title}
+          </a>
+        ))}
+        <a href="#publishing-workflow" className="rounded-2xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-mist hover:text-brand-ink">
+          Publishing workflow
+        </a>
+        <a href="#revalidation-map" className="rounded-2xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-mist hover:text-brand-ink">
+          What updates what
+        </a>
+        <a href="#documentation-research" className="rounded-2xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-mist hover:text-brand-ink">
+          Research notes
+        </a>
+      </nav>
+    </div>
+  );
+}
+
+function HubCard({
+  hubKey,
+  label,
+  description,
+}: {
+  hubKey: string;
+  label: string;
+  description?: string;
+}) {
+  const nodes = getNodesForHub(hubKey);
+  const previewCount = nodes.filter((node) => node.previewHref).length;
+
+  return (
+    <Link
+      href={`/admin/content/hubs/${hubKey}`}
+      className="group rounded-2xl border border-brand-border bg-white p-4 transition hover:-translate-y-0.5 hover:border-brand-gold hover:shadow-panel"
     >
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="font-bold text-brand-ink">{label}</p>
+          {description ? <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p> : null}
+        </div>
+        <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-brand-navy transition group-hover:text-brand-gold" />
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <span className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-navy">
+          {nodes.length} {nodes.length === 1 ? "editor" : "editors"}
+        </span>
+        <span className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-navy">
+          {previewCount} preview {previewCount === 1 ? "route" : "routes"}
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function DocumentationSection({ section, open = false }: { section: DocSection; open?: boolean }) {
+  return (
+    <details
+      id={section.id}
+      open={open}
+      className="group scroll-mt-8 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
+    >
+      <summary className="flex cursor-pointer list-none flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
             CMS area
           </p>
-          <h2 className="mt-2 font-heading text-3xl font-bold text-slate-950">
+          <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
             {section.title}
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
             {section.summary}
           </p>
         </div>
-        <Link
-          href={section.adminRoute}
-          className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
-        >
-          Open area
-          <ExternalLink className="h-3.5 w-3.5" />
-        </Link>
-      </div>
+        <span className="itfy-button-outline-blue px-4 py-2 text-xs">
+          <span className="group-open:hidden">Expand</span>
+          <span className="hidden group-open:inline">Collapse</span>
+        </span>
+      </summary>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-[0.35fr_0.65fr]">
+      <div className="mt-6 grid gap-4 lg:grid-cols-[0.34fr_0.66fr]">
         <div className="space-y-4">
-          <InfoBlock title="Admin route" items={[section.adminRoute]} />
-          <InfoBlock title="Public pages affected" items={section.publicRoutes} />
+          <RouteBlock title="Admin route" routes={[section.adminRoute]} icon={<FileText className="h-4 w-4" />} />
+          <RouteBlock title="Public pages affected" routes={section.publicRoutes} icon={<Globe2 className="h-4 w-4" />} />
+          <Link
+            href={section.adminRoute}
+            className="itfy-button-blue w-full px-4 py-3 text-sm"
+          >
+            Open this editor
+            <ExternalLink className="h-3.5 w-3.5" />
+          </Link>
         </div>
 
         <div className="space-y-4">
@@ -513,14 +620,14 @@ function DocumentationSection({ section }: { section: DocSection }) {
           </div>
         </div>
       </div>
-    </article>
+    </details>
   );
 }
 
 function InfoBlock({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white p-4">
-      <p className="font-bold text-slate-950">{title}</p>
+    <div className="rounded-2xl border border-brand-border bg-white p-4">
+      <p className="font-bold text-brand-ink">{title}</p>
       <ul className="mt-3 grid gap-2 text-sm leading-6 text-slate-600">
         {items.map((item) => (
           <li key={item} className="flex gap-2">
@@ -530,5 +637,143 @@ function InfoBlock({ title, items }: { title: string; items: string[] }) {
         ))}
       </ul>
     </div>
+  );
+}
+
+function RouteBlock({ title, routes, icon }: { title: string; routes: string[]; icon: ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-brand-border bg-white p-4">
+      <div className="flex items-center gap-2">
+        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-mist text-brand-navy">
+          {icon}
+        </span>
+        <p className="font-bold text-brand-ink">{title}</p>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {routes.map((route) => (
+          <span key={route} className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-navy">
+            {route}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PublishingWorkflow() {
+  return (
+    <section
+      id="publishing-workflow"
+      className="scroll-mt-8 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+            Publishing workflow
+          </p>
+          <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
+            A safe way to edit the site
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+            Use this checklist for any public-facing update, especially homepage, training,
+            departments, partnerships, impact, and contact changes.
+          </p>
+        </div>
+        <AdminStatusPill status="cms-ready" label="Recommended" />
+      </div>
+
+      <ol className="mt-6 grid gap-3">
+        {workflowRules.map((rule, index) => (
+          <li key={rule} className="flex gap-3 rounded-2xl bg-brand-mist/55 p-4 text-sm leading-7 text-slate-700">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
+              {index + 1}
+            </span>
+            <span>{rule}</span>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        {statusGuidance.map((item) => (
+          <div key={item.label} className="rounded-2xl border border-brand-border p-4">
+            <p className="font-bold text-brand-ink">{item.label}</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RevalidationMap() {
+  return (
+    <section
+      id="revalidation-map"
+      className="scroll-mt-8 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
+    >
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-primary text-white">
+          <RefreshCw className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+            What updates what
+          </p>
+          <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
+            Revalidation map
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+            These are the base public paths refreshed by each content type. Some routes also
+            add a detail path when a slug is saved, such as a department, article, initiative,
+            organisation service, partnership track, or dynamic Who We Are page.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-3 md:grid-cols-2">
+        {Object.entries(revalidationMap).map(([type, paths]) => (
+          <div key={type} className="rounded-2xl bg-brand-mist/55 p-4">
+            <p className="font-bold text-brand-ink">{type}</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {paths.join(", ")}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ResearchNotes() {
+  return (
+    <section
+      id="documentation-research"
+      className="scroll-mt-8 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
+    >
+      <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+        Research notes
+      </p>
+      <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
+        Why the guide is structured this way
+      </h2>
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+        {researchNotes.map((note) => (
+          <a
+            key={note.title}
+            href={note.source}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-2xl border border-brand-border p-4 transition hover:-translate-y-0.5 hover:border-brand-gold hover:shadow-panel"
+          >
+            <p className="font-bold text-brand-ink">{note.title}</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">{note.body}</p>
+            <span className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-brand-navy">
+              Source
+              <ExternalLink className="h-3.5 w-3.5" />
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
   );
 }

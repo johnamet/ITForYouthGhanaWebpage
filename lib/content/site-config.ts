@@ -1861,8 +1861,18 @@ export const adminNavigation: AdminNavItem[] = [
   },
   {
     label: "Content",
-    href: "/admin/content/homepage",
-    description: "Homepage sections, banner, slides, and impact content.",
+    href: "/admin/content",
+    description: "Content Explorer: hubs and page editors.",
+  },
+  {
+    label: "What We Do",
+    href: "/admin/programmes",
+    description: "What We Do overview and initiative subpage CMS.",
+  },
+  {
+    label: "What We Do Pages",
+    href: "/admin/what-we-do-pages",
+    description: "Custom pages below the What We Do hub.",
   },
   {
     label: "Who We Are",

@@ -22,27 +22,27 @@ type AnnouncementBarProps = {
 
 const variantStyles = {
   info: {
-    wrap: "bg-sky-600 text-white",
+    wrap: "bg-brand-primary text-white",
     badge: "bg-white/15 text-white",
-    cta: "bg-white text-sky-700 hover:bg-white/90",
+    cta: "itfy-button-outline-blue px-3.5 py-1 text-[0.72rem]",
     close: "text-white/40 hover:text-white",
   },
   success: {
-    wrap: "bg-emerald-600 text-white",
+    wrap: "bg-brand-primary-dark text-white",
     badge: "bg-white/15 text-white",
-    cta: "bg-white text-emerald-700 hover:bg-white/90",
+    cta: "itfy-button-outline-blue px-3.5 py-1 text-[0.72rem]",
     close: "text-white/45 hover:text-white",
   },
   urgent: {
-    wrap: "bg-brand-gold text-brand-ink",
-    badge: "bg-brand-ink/10 text-brand-ink",
-    cta: "bg-brand-ink text-brand-gold hover:bg-brand-ink/90",
-    close: "text-brand-ink/55 hover:text-brand-ink",
+    wrap: "bg-brand-gold text-white",
+    badge: "bg-white/15 text-white",
+    cta: "itfy-button-outline-pink px-3.5 py-1 text-[0.72rem]",
+    close: "text-white/55 hover:text-white",
   },
   alert: {
-    wrap: "bg-rose-700 text-white",
+    wrap: "bg-brand-gold text-white",
     badge: "bg-white/15 text-white",
-    cta: "bg-white text-rose-700 hover:bg-white/90",
+    cta: "itfy-button-outline-pink px-3.5 py-1 text-[0.72rem]",
     close: "text-white/45 hover:text-white",
   },
 };
@@ -160,7 +160,7 @@ export function AnnouncementBar({ announcement }: AnnouncementBarProps) {
         {announcement.cta ? (
           <Link
             href={announcement.cta.href}
-            className={`shrink-0 rounded-full px-3.5 py-1 text-[0.72rem] font-bold transition ${v.cta}`}
+            className={`shrink-0 font-bold ${v.cta}`}
           >
             {announcement.cta.label} →
           </Link>

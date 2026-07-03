@@ -1,19 +1,34 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { ContentPage } from "@/components/shared/content-page";
 import { InitiativePageTemplate } from "@/components/what-we-do/initiative-page";
-import { initiatives } from "@/lib/content/site-config";
+import { getCmsInitiativeBySlug, getCmsInitiatives } from "@/lib/cms/initiatives";
+import {
+  getCmsWhatWeDoDynamicPageBySlug,
+  getCmsWhatWeDoDynamicPages,
+} from "@/lib/cms/site-pages";
 
 type InitiativePageProps = {
   params: { slug: string };
 };
 
-export function generateStaticParams() {
-  return initiatives.map((initiative) => ({ slug: initiative.slug }));
+export async function generateStaticParams() {
+  const [initiatives, pages] = await Promise.all([
+    getCmsInitiatives(),
+    getCmsWhatWeDoDynamicPages(),
+  ]);
+
+  return [
+    ...initiatives.map((initiative) => ({ slug: initiative.slug })),
+    ...pages.map((page) => ({ slug: page.slug })),
+  ];
 }
 
-export function generateMetadata({ params }: InitiativePageProps): Metadata {
-  const page = initiatives.find((initiative) => initiative.slug === params.slug);
+export async function generateMetadata({ params }: InitiativePageProps): Promise<Metadata> {
+  const page =
+    (await getCmsInitiativeBySlug(params.slug)) ??
+    (await getCmsWhatWeDoDynamicPageBySlug(params.slug));
 
   if (!page) {
     return {
@@ -27,15 +42,23 @@ export function generateMetadata({ params }: InitiativePageProps): Metadata {
     openGraph: {
       title: `${page.title} | IT For Youth Ghana`,
       description: page.description,
-      images: [page.heroImage],
+      images: page.heroImage ? [page.heroImage] : undefined,
     },
   };
 }
 
-export default function InitiativePage({ params }: InitiativePageProps) {
-  const page = initiatives.find((initiative) => initiative.slug === params.slug);
+export default async function InitiativePage({ params }: InitiativePageProps) {
+  const initiative = await getCmsInitiativeBySlug(params.slug);
+
+  if (initiative) {
+    return <InitiativePageTemplate page={initiative} />;
+  }
+
+  const page = await getCmsWhatWeDoDynamicPageBySlug(params.slug);
+
   if (!page) {
     notFound();
   }
-  return <InitiativePageTemplate page={page} />;
+
+  return <ContentPage page={page} />;
 }

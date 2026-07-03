@@ -1,68 +1,24 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Eye, Pencil } from "lucide-react";
+import { ArrowLeft, Eye } from "lucide-react";
 
-import { AdminDataTable } from "@/components/admin/admin-data-table";
 import { AdminMetricCard } from "@/components/admin/admin-metric-card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminStatusPill } from "@/components/admin/admin-status-pill";
-import { initiatives } from "@/lib/content/site-config";
-import type { AdminMetric, AdminTableColumn } from "@/types/admin";
+import { InitiativeForm } from "@/components/admin/what-we-do-forms";
+import { getCmsInitiativeBySlug, getCmsInitiatives } from "@/lib/cms/initiatives";
+import type { AdminMetric } from "@/types/admin";
 
 type AdminInitiativePageProps = {
   params: { initiative: string };
 };
 
-type InitiativeSectionRow = {
-  id: string;
-  label: string;
-  description: string;
-  status: "live" | "planned";
-  items: string;
-};
-
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const initiatives = await getCmsInitiatives();
   return initiatives.map((initiative) => ({ initiative: initiative.slug }));
 }
 
-const sectionColumns: AdminTableColumn<InitiativeSectionRow>[] = [
-  {
-    key: "label",
-    label: "Editable section",
-    render: (row) => (
-      <div>
-        <p className="font-bold text-slate-950">{row.label}</p>
-        <p className="mt-1 max-w-xl text-sm leading-6 text-slate-500">{row.description}</p>
-      </div>
-    ),
-  },
-  {
-    key: "items",
-    label: "Seeded items",
-    render: (row) => <p className="font-semibold text-slate-800">{row.items}</p>,
-  },
-  {
-    key: "status",
-    label: "Status",
-    render: (row) => <AdminStatusPill status={row.status} />,
-  },
-  {
-    key: "actions",
-    label: "Actions",
-    render: () => (
-      <button
-        type="button"
-        className="inline-flex items-center gap-1 rounded-full bg-slate-950 px-3 py-2 text-xs font-bold text-white"
-      >
-        <Pencil className="h-3.5 w-3.5" />
-        Edit scaffold
-      </button>
-    ),
-  },
-];
-
-export default function AdminInitiativePage({ params }: AdminInitiativePageProps) {
-  const initiative = initiatives.find((entry) => entry.slug === params.initiative);
+export default async function AdminInitiativePage({ params }: AdminInitiativePageProps) {
+  const initiative = await getCmsInitiativeBySlug(params.initiative);
 
   if (!initiative) {
     notFound();
@@ -72,84 +28,39 @@ export default function AdminInitiativePage({ params }: AdminInitiativePageProps
     {
       label: "Impact stats",
       value: String(initiative.impactStats.length),
-      description: "Stats ready for editable counter cards and report proof.",
+      description: "Stats shown in the public impact section for this initiative.",
       status: "published",
     },
     {
       label: "Gallery assets",
       value: String(initiative.gallery.length),
-      description: "Images that will move to Firebase Storage references.",
+      description: "Images shown in the initiative gallery section.",
       status: "active",
     },
     {
       label: "FAQs",
       value: String(initiative.faqs.length),
-      description: "Question and answer blocks ready for rich editing.",
+      description: "Questions shown near the bottom of the public page.",
       status: "active",
-    },
-  ];
-
-  const rows: InitiativeSectionRow[] = [
-    {
-      id: "hero",
-      label: "Hero",
-      description: "Eyebrow, title, tagline, media, CTAs, and stat strip.",
-      status: "live",
-      items: initiative.heroImage ? "Image + copy" : "Copy only",
-    },
-    {
-      id: "overview",
-      label: "Overview",
-      description: "Mission narrative, body copy, overview image, and objectives.",
-      status: "live",
-      items: `${initiative.objectives.length} objectives`,
-    },
-    {
-      id: "process",
-      label: "How it works",
-      description: "Ordered process cards with icons, titles, and descriptions.",
-      status: "live",
-      items: `${initiative.howItWorks.length} steps`,
-    },
-    {
-      id: "audience",
-      label: "Audience and eligibility",
-      description: "Target groups, eligibility notes, and learner fit content.",
-      status: "live",
-      items: `${initiative.audience.groups.length} groups`,
-    },
-    {
-      id: "proof",
-      label: "Proof layers",
-      description: "Gallery, testimonials, partners, FAQs, and related route cards.",
-      status: "live",
-      items: `${initiative.gallery.length + initiative.testimonials.length + initiative.partners.length} records`,
-    },
-    {
-      id: "seo",
-      label: "SEO and publishing",
-      description: "Metadata, OG image, publish state, and revalidation targets.",
-      status: "planned",
-      items: "CMS fields pending",
     },
   ];
 
   return (
     <div className="space-y-8">
       <AdminPageHeader
-        eyebrow="Programme CMS"
-        title={`Initiative editor: ${initiative.title}`}
-        description={initiative.description}
+        eyebrow="Initiative CMS"
+        title={`Edit ${initiative.title}`}
+        description="Update the public initiative page: hero, overview, mission, objectives, process cards, impact stats, audience, gallery, testimonials, partners, FAQs, CTA, and related routes."
         primaryAction={{ label: "Preview public page", href: `/what-we-do/${initiative.slug}` }}
       />
 
       <div className="flex flex-wrap gap-3">
         <Link
-          href="/admin/content/homepage"
+          href="/admin/programmes"
           className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700"
         >
-          <Pencil className="h-4 w-4" />
-          Homepage placement
+          <ArrowLeft className="h-4 w-4" />
+          Back to What We Do
         </Link>
         <Link
           href={`/what-we-do/${initiative.slug}`}
@@ -166,7 +77,10 @@ export default function AdminInitiativePage({ params }: AdminInitiativePageProps
         ))}
       </div>
 
-      <AdminDataTable columns={sectionColumns} rows={rows} />
+      <InitiativeForm
+        endpoint={`/api/admin/initiatives/${params.initiative}`}
+        initial={initiative}
+      />
     </div>
   );
 }

@@ -91,14 +91,14 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
           {/* Brand column */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gold text-[0.65rem] font-bold tracking-wide text-brand-ink">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[0.65rem] font-bold tracking-wide text-brand-navy">
                 ITFY
               </span>
               <span className="font-heading text-[1rem] font-bold leading-tight text-white">
                 IT For Youth<br />Ghana
               </span>
             </Link>
-            <p className="mt-4 text-[0.8rem] leading-[1.75] text-white/45">
+            <p className="mt-4 text-[0.8rem] leading-[1.75] text-white/85">
               Empowering Ghanaian youth with the digital skills, confidence, and pathways needed to shape tomorrow&apos;s economy.
             </p>
 
@@ -111,7 +111,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/8 text-white/50 transition hover:bg-white/15 hover:text-white"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white/85 transition hover:bg-white/15 hover:text-white"
                 >
                   <SocialIcon label={s.label} />
                 </a>
@@ -119,10 +119,10 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
             </div>
 
             {/* Contact snippet */}
-            <div className="mt-6 space-y-1.5 text-[0.75rem] text-white/35">
-              {settings.contact.location && <p>📍 {settings.contact.location}</p>}
-              {settings.contact.email && <p>✉️ {settings.contact.email}</p>}
-              {settings.contact.phone && <p>📞 {settings.contact.phone}</p>}
+            <div className="mt-6 space-y-1.5 text-[0.75rem] text-white/85">
+              {settings.contact.location && <p>{settings.contact.location}</p>}
+              {settings.contact.email && <p>{settings.contact.email}</p>}
+              {settings.contact.phone && <p>{settings.contact.phone}</p>}
             </div>
           </div>
 
@@ -130,7 +130,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
           <div className="grid grid-cols-2 gap-8 lg:col-span-4 lg:grid-cols-4">
             {footerNav.map((col) => (
               <div key={col.heading}>
-                <h3 className="mb-4 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-brand-gold">
+                <h3 className="mb-4 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-white">
                   {col.heading}
                 </h3>
                 <ul className="space-y-2.5">
@@ -138,7 +138,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-[0.8rem] text-white/45 transition hover:text-white"
+                        className="text-[0.8rem] text-white/85 transition hover:text-white hover:underline"
                       >
                         {link.label}
                       </Link>
@@ -156,7 +156,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6 lg:px-10">
           <div>
             <p className="text-[0.82rem] font-semibold text-white">{newsletterSignupContent.heading}</p>
-            <p className="text-[0.75rem] text-white/35">{newsletterSignupContent.description}</p>
+            <p className="text-[0.75rem] text-white/85">{newsletterSignupContent.description}</p>
           </div>
           <NewsletterSignupForm
             variant="compact"
@@ -169,7 +169,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
       {/* Legal strip */}
       <div className="border-t border-white/8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-4 lg:px-10">
-          <p className="text-[0.72rem] text-white/25">
+          <p className="text-[0.72rem] text-white/80">
             © {new Date().getFullYear()} IT For Youth Ghana. Registered NGO. All rights reserved.
           </p>
           <div className="flex gap-4">
@@ -178,7 +178,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
               { label: "Admin Login", href: "/admin-login" },
               { label: "Contact", href: "/contact" },
             ].map((l) => (
-              <Link key={l.href} href={l.href} className="text-[0.72rem] text-white/25 hover:text-white/60">
+              <Link key={l.href} href={l.href} className="text-[0.72rem] text-white/80 hover:text-white hover:underline">
                 {l.label}
               </Link>
             ))}

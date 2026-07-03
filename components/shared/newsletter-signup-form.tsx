@@ -105,7 +105,7 @@ export function NewsletterSignupForm({
           className={clsx(
             "w-full rounded-full border outline-none transition focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20",
             isCompact
-              ? "border-white/15 bg-white/8 px-4 py-2.5 text-[0.8rem] text-white placeholder:text-white/30"
+              ? "border-white/35 bg-white/10 px-4 py-2.5 text-[0.8rem] text-white placeholder:text-white/65"
               : "border-white/12 bg-white px-5 py-4 text-sm text-brand-ink placeholder:text-slate-400",
           )}
           aria-label="Email address"
@@ -114,10 +114,10 @@ export function NewsletterSignupForm({
           type="submit"
           disabled={isSubmitting}
           className={clsx(
-            "shrink-0 rounded-full font-bold transition disabled:cursor-not-allowed disabled:opacity-60",
+            "shrink-0 font-bold disabled:cursor-not-allowed disabled:opacity-60",
             isCompact
-              ? "bg-brand-gold px-5 py-2.5 text-[0.75rem] text-brand-ink hover:bg-brand-gold/90"
-              : "bg-brand-gold px-7 py-4 text-sm text-brand-ink hover:-translate-y-0.5 hover:shadow-lg",
+              ? "itfy-button-outline-pink px-5 py-2.5 text-[0.75rem]"
+              : "itfy-button-primary px-7 py-4 text-sm",
           )}
         >
           {isSubmitting ? "Submitting..." : buttonLabel}

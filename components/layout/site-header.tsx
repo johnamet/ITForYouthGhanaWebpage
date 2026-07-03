@@ -24,8 +24,8 @@ function DropdownPanel({ items }: { items: { label: string; href: string }[] }) 
         // Positioning
         "absolute left-1/2 top-[calc(100%+12px)] z-50 -translate-x-1/2",
         // Glass dark panel
-        "rounded-2xl border border-white/10 bg-[rgba(8,18,55,0.98)] backdrop-blur-2xl",
-        "shadow-[0_24px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(99,151,255,0.06)]",
+        "rounded-2xl border border-white/10 bg-brand-navy/95 backdrop-blur-2xl",
+        "shadow-[0_24px_60px_rgba(0,0,0,0.42),0_0_0_1px_rgba(255,255,255,0.06)]",
         "p-2",
         // Show/hide — pure CSS group-hover
         "pointer-events-none -translate-y-1 opacity-0 transition-all duration-150",
@@ -68,7 +68,7 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
   const [mobileSection, setMobileSection] = useState<string | null>(null);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[rgba(8,20,60,0.97)] backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-brand-navy/95 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 py-0 sm:px-6 lg:px-8">
 
         {/* ── Logo ─────────────────────────────────────────────────── */}
@@ -126,13 +126,13 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
           <div className="mx-1 h-5 w-px bg-white/10" />
           <Link
             href={headerCtas.primary.href}
-            className="rounded-lg border border-white/15 px-4 py-2 text-[0.7rem] font-semibold text-white/80 transition hover:border-white/30 hover:bg-white/[0.07] hover:text-white"
+            className="itfy-button-ghost-light rounded-lg px-4 py-2 text-[0.7rem]"
           >
             {headerCtas.primary.label}
           </Link>
           <Link
             href={headerCtas.secondary.href}
-            className="rounded-lg bg-brand-gold px-5 py-2 text-[0.7rem] font-bold text-brand-navy shadow-[0_2px_12px_rgba(245,197,24,0.35)] transition hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(245,197,24,0.5)]"
+            className="itfy-button-primary rounded-lg px-5 py-2 text-[0.7rem]"
           >
             {headerCtas.secondary.label}
           </Link>
@@ -158,7 +158,7 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
 
       {/* ── Mobile drawer ─────────────────────────────────────────────── */}
       {mobileOpen && (
-        <div className="border-t border-white/[0.08] bg-[rgba(8,20,60,0.99)] xl:hidden">
+        <div className="border-t border-white/[0.08] bg-brand-navy xl:hidden">
           <div className="mx-auto max-w-[1400px] space-y-0.5 px-4 py-4 sm:px-6">
             {publicNavigation.map((item) =>
               item.items ? (
@@ -209,14 +209,14 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
               <Link
                 href={headerCtas.primary.href}
                 onClick={() => setMobileOpen(false)}
-                className="flex-1 rounded-full border border-white/20 py-2.5 text-center text-[0.82rem] font-semibold text-white/80"
+                className="itfy-button-ghost-light flex-1 py-2.5 text-center text-[0.82rem]"
               >
                 {headerCtas.primary.label}
               </Link>
               <Link
                 href={headerCtas.secondary.href}
                 onClick={() => setMobileOpen(false)}
-                className="flex-1 rounded-full bg-brand-gold py-2.5 text-center text-[0.82rem] font-bold text-brand-navy"
+                className="itfy-button-primary flex-1 py-2.5 text-center text-[0.82rem]"
               >
                 {headerCtas.secondary.label}
               </Link>

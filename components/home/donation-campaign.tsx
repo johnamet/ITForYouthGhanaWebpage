@@ -64,7 +64,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
   );
 
   return (
-    <section className="overflow-hidden bg-[linear-gradient(135deg,var(--color-primary-light)_0%,var(--color-bg)_48%,#fff1f6_100%)] px-6 py-20 lg:px-10">
+    <section className="overflow-hidden bg-[linear-gradient(135deg,var(--color-primary-light)_0%,var(--color-bg)_52%,#ffffff_100%)] px-6 py-20 lg:px-10">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-[linear-gradient(135deg,var(--color-primary-dark)_0%,var(--color-primary)_58%,var(--color-accent)_130%)] p-8 text-white shadow-[0_20px_50px_rgba(1,82,190,0.18)] sm:p-10">
           {campaign.image ? (
@@ -109,7 +109,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
             <div className="flex flex-wrap gap-3">
               <Link
                 href={campaign.primaryCta.href}
-                className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-brand-warm hover:shadow-lg"
+                className="itfy-button-primary px-6 py-3.5 text-sm"
               >
                 <HeartHandshake className="h-4 w-4" />
                 {campaign.primaryCta.label}
@@ -117,7 +117,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
               {campaign.secondaryCta ? (
                 <Link
                   href={campaign.secondaryCta.href}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/50 hover:bg-white/15"
+                  className="itfy-button-ghost-light px-6 py-3.5 text-sm"
                 >
                   {campaign.secondaryCta.label}
                   <ArrowRight className="h-4 w-4" />
@@ -160,7 +160,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-brand-mist">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-brand-navy to-brand-gold transition-[width] duration-700"
+                  className="h-full rounded-full bg-brand-gold transition-[width] duration-700"
                   style={{ width: `${progress}%` }}
                   aria-hidden="true"
                 />

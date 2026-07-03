@@ -388,6 +388,151 @@ export const dynamicSitePageSchema = sitePageSchema.extend({
 
 export type DynamicSitePagePayload = z.infer<typeof dynamicSitePageSchema>;
 
+// ─── What We Do / Initiative validators ─────────────────────────────────────
+
+const initiativeActionLinkSchema = z.object({
+  label: z.string().trim().min(1, "Please add a link label."),
+  href: z.string().trim().min(1, "Please add a link destination."),
+});
+
+const initiativeRouteCardSchema = z.object({
+  href: z.string().trim().min(1, "Please add a card destination."),
+  eyebrow: optionalTrimmedString,
+  title: z.string().trim().min(1, "Please add a card title."),
+  description: z.string().trim().min(1, "Please add a card description."),
+});
+
+const initiativeHighlightStatSchema = z.object({
+  value: z.string().trim().min(1, "Please add a stat value."),
+  label: z.string().trim().min(1, "Please add a stat label."),
+  description: optionalTrimmedString,
+  icon: optionalTrimmedString,
+  iconImage: optionalTrimmedString,
+});
+
+const initiativeContentBlockSchema = z.object({
+  title: z.string().trim().min(1, "Please add a section title."),
+  body: z.string().trim().min(1, "Please add section copy."),
+  bullets: z.array(z.string().trim().min(1)).optional().default([]),
+});
+
+const initiativeProcessStepSchema = z.object({
+  number: z.string().trim().min(1, "Please add a step number."),
+  title: z.string().trim().min(1, "Please add a step title."),
+  description: z.string().trim().min(1, "Please add step copy."),
+  icon: z.string().trim().default(""),
+  iconImage: optionalTrimmedString,
+});
+
+const initiativeAudienceSchema = z.object({
+  summary: z.string().trim().min(1, "Please add audience summary copy."),
+  groups: z.array(z.string().trim().min(1)).default([]),
+  eligibility: z.array(z.string().trim().min(1)).default([]),
+});
+
+const initiativeGalleryImageSchema = z.object({
+  src: z.string().trim().min(1, "Please add an image URL."),
+  alt: z.string().trim().min(1, "Please add image alt text."),
+});
+
+const initiativeTestimonialSchema = z.object({
+  quote: z.string().trim().min(1, "Please add the quote."),
+  name: z.string().trim().min(1, "Please add a name."),
+  role: z.string().trim().min(1, "Please add a role."),
+  avatar: optionalTrimmedString,
+});
+
+const initiativePartnerSchema = z.object({
+  name: z.string().trim().min(1, "Please add a partner name."),
+  description: z.string().trim().min(1, "Please add partner context."),
+  href: optionalTrimmedString,
+  logo: optionalTrimmedString,
+});
+
+const initiativeFaqSchema = z.object({
+  question: z.string().trim().min(1, "Please add a question."),
+  answer: z.string().trim().min(1, "Please add an answer."),
+});
+
+const initiativeApplyCtaSchema = z.object({
+  heading: z.string().trim().min(1, "Please add a CTA heading."),
+  description: z.string().trim().min(1, "Please add CTA copy."),
+  primary: initiativeActionLinkSchema,
+  secondary: initiativeActionLinkSchema,
+});
+
+export const initiativeSchema = z.object({
+  slug: z
+    .string()
+    .trim()
+    .min(3, "Please add a URL slug.")
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only."),
+  eyebrow: z.string().trim().min(1, "Please add an eyebrow label."),
+  title: z.string().trim().min(1, "Please add a page title."),
+  description: z.string().trim().min(1, "Please add a page description."),
+  intro: z.string().trim().min(1, "Please add intro copy."),
+  stats: z.array(initiativeHighlightStatSchema).default([]),
+  sections: z.array(initiativeContentBlockSchema).default([]),
+  ctas: z.array(initiativeActionLinkSchema).default([]),
+  related: z.array(initiativeRouteCardSchema).default([]),
+  tagline: z.string().trim().min(1, "Please add a tagline."),
+  heroImage: z.string().trim().min(1, "Please add a hero image."),
+  overviewImage: z.string().trim().min(1, "Please add an overview image."),
+  mission: z.string().trim().min(1, "Please add mission copy."),
+  objectives: z.array(z.string().trim().min(1)).default([]),
+  howItWorks: z.array(initiativeProcessStepSchema).default([]),
+  impactStats: z.array(initiativeHighlightStatSchema).default([]),
+  audience: initiativeAudienceSchema,
+  gallery: z.array(initiativeGalleryImageSchema).default([]),
+  testimonials: z.array(initiativeTestimonialSchema).default([]),
+  partners: z.array(initiativePartnerSchema).default([]),
+  faqs: z.array(initiativeFaqSchema).default([]),
+  applyCta: initiativeApplyCtaSchema,
+});
+
+export type InitiativePayload = z.infer<typeof initiativeSchema>;
+
+const whatWeDoHeroStatSchema = z.object({
+  label: z.string().trim().min(1, "Please add a stat label."),
+  description: z.string().trim().min(1, "Please add stat context."),
+});
+
+const whatWeDoEcosystemCardSchema = z.object({
+  eyebrow: z.string().trim().min(1, "Please add an eyebrow label."),
+  title: z.string().trim().min(1, "Please add a card title."),
+  description: z.string().trim().min(1, "Please add card copy."),
+});
+
+const whatWeDoPathwayCardSchema = z.object({
+  title: z.string().trim().min(1, "Please add a card title."),
+  description: z.string().trim().min(1, "Please add card copy."),
+});
+
+export const whatWeDoOverviewSchema = z.object({
+  eyebrow: z.string().trim().min(1, "Please add an eyebrow label."),
+  title: z.string().trim().min(1, "Please add a page title."),
+  description: z.string().trim().min(1, "Please add page description."),
+  heroImage: z.string().trim().min(1, "Please add a hero image."),
+  heroStats: z.array(whatWeDoHeroStatSchema).min(4, "Please keep four hero stat labels."),
+  overviewSectionEyebrow: optionalTrimmedString,
+  overviewSectionTitle: optionalTrimmedString,
+  overviewSectionDescription: optionalTrimmedString,
+  ecosystemCards: z.array(whatWeDoEcosystemCardSchema).default([]),
+  initiativesSectionEyebrow: optionalTrimmedString,
+  initiativesSectionTitle: optionalTrimmedString,
+  initiativesSectionDescription: optionalTrimmedString,
+  pathwaysSectionEyebrow: optionalTrimmedString,
+  pathwaysSectionTitle: optionalTrimmedString,
+  pathwaysSectionDescription: optionalTrimmedString,
+  pathwayCards: z.array(whatWeDoPathwayCardSchema).default([]),
+  nextStepsSectionEyebrow: optionalTrimmedString,
+  nextStepsSectionTitle: optionalTrimmedString,
+  nextStepsSectionDescription: optionalTrimmedString,
+  nextSteps: z.array(initiativeRouteCardSchema).default([]),
+});
+
+export type WhatWeDoOverviewPayload = z.infer<typeof whatWeDoOverviewSchema>;
+
 export const homepageSchema = z
   .object({
     announcement: z

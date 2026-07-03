@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { ArticleForm } from "@/components/admin/article-form";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPublishBar } from "@/components/admin/admin-publish-bar";
 import { getCmsArticleById } from "@/lib/cms/articles";
 
 type AdminEditArticlePageProps = {
@@ -24,6 +25,8 @@ export default async function AdminEditArticlePage({ params }: AdminEditArticleP
       />
 
       <ArticleForm mode="edit" article={article} />
+
+      <AdminPublishBar contentType="article" slugOrId={article.slug ?? article.id} previewHref={`/news-and-updates/${article.category}/${article.slug ?? ""}`} />
     </div>
   );
 }

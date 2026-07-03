@@ -13,7 +13,7 @@
   --color-text-muted: #5C6672;
   --color-bg: #FFFFFF;
   --color-bg-alt: #F7F9FC;
-  --color-border: #E2E8F0;
+  --color-border: #D8E5F2;
   --color-card: #FFFFFF;
   --color-on-dark-muted: rgba(255, 255, 255, 0.82);
   --font-heading: var(--font-poppins), sans-serif;
@@ -80,6 +80,97 @@ main :where([class*="text-white"]) :where(p):not([class*="text-"]) {
 main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-brand-navy"], [class*="via-brand-navy"])
   :where(p, li, small):is([class*="text-slate-"], [class*="text-gray-"], [class*="text-zinc-"], [class*="text-neutral-"]):not([class*="bg-white"] *) {
   color: var(--color-on-dark-muted);
+}
+
+main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-brand-navy"], [class*="via-brand-navy"])
+  :where(.text-brand-gold, .text-brand-navy, .text-brand-primary, .text-brand-primary-light):not([class*="bg-white"] *) {
+  color: #ffffff;
+}
+
+main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-brand-navy"], [class*="via-brand-navy"])
+  :where(.bg-brand-gold):not([class*="bg-white"] *) {
+  color: #ffffff;
+}
+
+@layer components {
+  .itfy-button-primary,
+  .itfy-button-blue,
+  .itfy-button-outline-pink,
+  .itfy-button-outline-blue,
+  .itfy-button-ghost-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1.5px solid transparent;
+    font-weight: 700;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .itfy-button-primary:hover,
+  .itfy-button-blue:hover,
+  .itfy-button-outline-pink:hover,
+  .itfy-button-outline-blue:hover,
+  .itfy-button-ghost-light:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .itfy-button-primary {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+
+  .itfy-button-primary:hover {
+    background: #ffffff;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .itfy-button-blue {
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+
+  .itfy-button-blue:hover {
+    background: #ffffff;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .itfy-button-outline-pink {
+    background: #ffffff;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .itfy-button-outline-pink:hover {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+
+  .itfy-button-outline-blue {
+    background: #ffffff;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .itfy-button-outline-blue:hover {
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+
+  .itfy-button-ghost-light {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.68);
+    color: #ffffff;
+  }
+
+  .itfy-button-ghost-light:hover {
+    border-color: #ffffff;
+    color: #ffffff;
+  }
 }
 
 .article-prose {

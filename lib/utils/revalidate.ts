@@ -15,6 +15,7 @@ export const revalidationMap: Record<string, string[]> = {
   settings: ["/", "/contact", "/sitemap.xml"],
   sitePage: ["/sitemap.xml"],
   whoWeAreDynamicPage: ["/who-we-are", "/sitemap.xml"],
+  whatWeDoDynamicPage: ["/what-we-do", "/sitemap.xml"],
 };
 
 export function getRevalidationPaths(contentType: string, slug?: string) {
@@ -74,6 +75,11 @@ export function getRevalidationPaths(contentType: string, slug?: string) {
     if (contentType === "whoWeAreDynamicPage") {
       paths.add(`/who-we-are/${slug}`);
       paths.add("/who-we-are");
+    }
+
+    if (contentType === "whatWeDoDynamicPage") {
+      paths.add(`/what-we-do/${slug}`);
+      paths.add("/what-we-do");
     }
 
     if (contentType === "impactPage") {

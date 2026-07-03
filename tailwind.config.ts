@@ -19,27 +19,27 @@ const config: Config = {
 
       colors: {
         brand: {
-          primary: "#3B82F6",        // blue-500 — primary buttons, links
-          "primary-dark": "#1D4ED8", // blue-700 — hover/active states
-          "primary-light": "#DBEAFE",// blue-100 — light tints, badges
-          secondary: "#1E40AF",      // blue-800
-          accent: "#2563EB",         // blue-600 — secondary CTAs
-          "accent-dark": "#1E3A8A",  // blue-900
+          primary: "#1E72BA",
+          "primary-dark": "#0152BE",
+          "primary-light": "#E8F1FA",
+          secondary: "#0152BE",
+          accent: "#D70B52",
+          "accent-dark": "#B00944",
           background: "#FFFFFF",
           muted: "#5C6672",
           card: "#FFFFFF",
-          text: "#0F172A",           // slate-900, matches ink
-          gold: "#3B82F6",           // was #D70B52 (pink) — now blue-500, used 414x
-          navy: "#1E3A8A",           // blue-900 — deep navy anchor, used 188x
-          ink: "#0F172A",            // slate-900 body text, used 671x
-          mist: "#EEF4FC",           // near-white blue wash, used 133x
-          border: "#DDE7F2",         // soft blue-gray hairline, used 407x
-          warm: "#1E40AF",           // blue-800, was pink, used 9x
+          text: "#1A1A1A",
+          gold: "#D70B52",
+          navy: "#142850",
+          ink: "#1A1A1A",
+          mist: "#E8F1FA",
+          border: "#D8E5F2",
+          warm: "#FBE7EF",
         },
       },
 
       boxShadow: {
-        panel: "0 8px 32px rgba(0,0,0,0.10)",
+        panel: "0 8px 32px rgba(20,40,80,0.10)",
       },
 
       animation: {
@@ -64,7 +64,7 @@ const config: Config = {
       },
 
       backgroundImage: {
-        "hero-grid": "radial-gradient(ellipse at 60% 50%, rgba(0,82,204,0.15) 0%, rgba(23,43,77,0.95) 100%)",
+        "hero-grid": "radial-gradient(ellipse at 60% 50%, rgba(30,114,186,0.15) 0%, rgba(20,40,80,0.95) 100%)",
       },
     },
   },

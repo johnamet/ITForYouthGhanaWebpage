@@ -42,6 +42,7 @@ type SitePageFormProps = {
   method?: "POST" | "PUT";
   showSlugField?: boolean;
   showPublishingFields?: boolean;
+  slugBasePath?: string;
   successRedirectHref?: string;
 };
 
@@ -94,6 +95,7 @@ export function SitePageForm({
   method = "PUT",
   showSlugField = false,
   showPublishingFields = false,
+  slugBasePath = "/who-we-are",
   successRedirectHref,
 }: SitePageFormProps) {
   const router = useRouter();
@@ -258,7 +260,7 @@ export function SitePageForm({
                 placeholder="board-of-directors"
               />
               <p className="mt-2 text-xs font-medium text-slate-500">
-                This becomes /who-we-are/{values.slug || "your-slug"}.
+                This becomes {slugBasePath}/{values.slug || "your-slug"}.
               </p>
             </div>
           ) : null}

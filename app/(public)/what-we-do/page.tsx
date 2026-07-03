@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 
 import { WhatWeDoOverviewPage } from "@/components/what-we-do/what-we-do-overview-page";
-import { initiatives, whatWeDoOverviewContent } from "@/lib/content/site-config";
+import { getCmsInitiatives, getCmsWhatWeDoOverview } from "@/lib/cms/initiatives";
+import { whatWeDoOverviewContent } from "@/lib/content/site-config";
 
 export const metadata: Metadata = {
   title: whatWeDoOverviewContent.eyebrow,
   description: whatWeDoOverviewContent.description,
 };
 
-export default function WhatWeDoPage() {
-  return <WhatWeDoOverviewPage content={whatWeDoOverviewContent} initiatives={initiatives} />;
+export default async function WhatWeDoPage() {
+  const [content, initiatives] = await Promise.all([
+    getCmsWhatWeDoOverview(),
+    getCmsInitiatives(),
+  ]);
+
+  return <WhatWeDoOverviewPage content={content} initiatives={initiatives} />;
 }
