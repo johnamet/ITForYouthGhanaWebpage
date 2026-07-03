@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Mail, Linkedin } from "lucide-react";
 
 import type { TeamMemberProfile } from "@/types/content";
@@ -8,19 +9,32 @@ type TeamDirectoryProps = {
 };
 
 function groupedByDepartment(members: TeamMemberProfile[]) {
-  const groups = new Map<string, TeamMemberProfile[]>();
+  const groups = new Map<
+    string,
+    {
+      department: string;
+      departmentSlug?: string;
+      members: TeamMemberProfile[];
+    }
+  >();
 
   for (const member of members) {
     const key = member.department || "General";
-    const current = groups.get(key) ?? [];
-    current.push(member);
+    const current = groups.get(key) ?? {
+      department: key,
+      departmentSlug: member.departmentSlug,
+      members: [],
+    };
+
+    current.departmentSlug = current.departmentSlug ?? member.departmentSlug;
+    current.members.push(member);
     groups.set(key, current);
   }
 
-  return Array.from(groups.entries())
-    .map(([department, team]) => ({
-      department,
-      members: [...team].sort((a, b) => a.order - b.order),
+  return Array.from(groups.values())
+    .map((group) => ({
+      ...group,
+      members: [...group.members].sort((a, b) => a.order - b.order),
     }))
     .sort((a, b) => a.department.localeCompare(b.department));
 }
@@ -45,7 +59,18 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
     <section className="mx-auto max-w-7xl space-y-10 px-4 py-16 sm:px-6 lg:px-8">
       {grouped.map((group) => (
         <div key={group.department} className="space-y-5">
-          <h2 className="font-heading text-2xl font-semibold text-brand-ink">{group.department}</h2>
+          <h2 className="font-heading text-2xl font-semibold text-brand-ink">
+            {group.departmentSlug ? (
+              <Link
+                href={`/departments/${group.departmentSlug}`}
+                className="inline-flex transition hover:text-brand-primary"
+              >
+                {group.department}
+              </Link>
+            ) : (
+              group.department
+            )}
+          </h2>
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {group.members.map((member) => (

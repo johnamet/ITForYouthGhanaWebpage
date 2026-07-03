@@ -11,7 +11,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import type { TeamMemberProfile, TeamMemberStatus } from "@/types/content";
+import type { DepartmentProfile, TeamMemberProfile, TeamMemberStatus } from "@/types/content";
 
 type TeamFormMode = "create" | "edit";
 
@@ -19,6 +19,8 @@ type TeamFormValues = {
   name: string;
   role: string;
   department: string;
+  departmentId: string;
+  departmentSlug: string;
   bio: string;
   photo: string;
   email: string;
@@ -44,6 +46,7 @@ type SubmitState = {
 type TeamFormProps = {
   mode: TeamFormMode;
   member?: TeamMemberProfile;
+  departments?: DepartmentProfile[];
 };
 
 const inputClassName =
@@ -57,6 +60,8 @@ function getInitialValues(member?: TeamMemberProfile): TeamFormValues {
     name: member?.name ?? "",
     role: member?.role ?? "",
     department: member?.department ?? "",
+    departmentId: member?.departmentId ?? "",
+    departmentSlug: member?.departmentSlug ?? "",
     bio: member?.bio ?? "",
     photo: member?.photo ?? "",
     email: member?.email ?? "",
@@ -80,7 +85,7 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 
-export function TeamForm({ mode, member }: TeamFormProps) {
+export function TeamForm({ mode, member, departments = [] }: TeamFormProps) {
   const router = useRouter();
   const [values, setValues] = useState<TeamFormValues>(() => getInitialValues(member));
   const [fieldErrors, setFieldErrors] = useState<ApiResponse["errors"]>({});
@@ -102,6 +107,16 @@ export function TeamForm({ mode, member }: TeamFormProps) {
         [field]: undefined,
       },
     }));
+  };
+
+  const handleDepartmentSelect = (departmentId: string) => {
+    const department = departments.find((item) => item.id === departmentId);
+
+    updateValue("departmentId", departmentId);
+    updateValue("departmentSlug", department?.slug ?? "");
+    if (department) {
+      updateValue("department", department.title.replace(/ department$/i, ""));
+    }
   };
 
   const payload = useMemo(
@@ -245,7 +260,27 @@ export function TeamForm({ mode, member }: TeamFormProps) {
               </div>
 
               <div>
-                <label htmlFor="department" className="text-sm font-bold text-brand-ink">Department</label>
+                <label htmlFor="departmentId" className="text-sm font-bold text-brand-ink">CMS department</label>
+                <select
+                  id="departmentId"
+                  value={values.departmentId}
+                  onChange={(event) => handleDepartmentSelect(event.target.value)}
+                  className={inputClassName}
+                >
+                  <option value="">Select a department</option>
+                  {departments.map((department) => (
+                    <option key={department.id} value={department.id}>
+                      {department.title}
+                    </option>
+                  ))}
+                </select>
+                <FieldError message={getFieldError("departmentId")} />
+              </div>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              <div>
+                <label htmlFor="department" className="text-sm font-bold text-brand-ink">Display department</label>
                 <input
                   id="department"
                   required
@@ -256,6 +291,19 @@ export function TeamForm({ mode, member }: TeamFormProps) {
                   placeholder="Programmes"
                 />
                 <FieldError message={getFieldError("department")} />
+              </div>
+
+              <div>
+                <label htmlFor="departmentSlug" className="text-sm font-bold text-brand-ink">Department slug</label>
+                <input
+                  id="departmentSlug"
+                  value={values.departmentSlug}
+                  onChange={(event) => updateValue("departmentSlug", event.target.value)}
+                  aria-invalid={Boolean(getFieldError("departmentSlug"))}
+                  className={inputClassName}
+                  placeholder="programmes"
+                />
+                <FieldError message={getFieldError("departmentSlug")} />
               </div>
             </div>
 

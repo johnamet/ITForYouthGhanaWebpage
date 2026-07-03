@@ -11,8 +11,18 @@ type TeamRouteProps = {
   params: { id: string };
 };
 
-function revalidateTeamRoutes() {
-  for (const path of getRevalidationPaths("team")) {
+function revalidateTeamRoutes(...departmentSlugs: Array<string | undefined>) {
+  const paths = new Set(getRevalidationPaths("team"));
+
+  for (const slug of departmentSlugs) {
+    if (!slug) continue;
+
+    for (const path of getRevalidationPaths("department", slug)) {
+      paths.add(path);
+    }
+  }
+
+  for (const path of paths) {
     revalidatePath(path);
   }
 }
@@ -53,7 +63,7 @@ export async function PUT(request: Request, { params }: TeamRouteProps) {
     );
   }
 
-  revalidateTeamRoutes();
+  revalidateTeamRoutes(existing?.departmentSlug, parsed.data.departmentSlug);
   const current = await getCurrentAdminUser();
   await writeAuditLog({
     action: "update",
@@ -88,7 +98,7 @@ export async function DELETE(_request: Request, { params }: TeamRouteProps) {
     );
   }
 
-  revalidateTeamRoutes();
+  revalidateTeamRoutes(existing?.departmentSlug);
   const current = await getCurrentAdminUser();
   await writeAuditLog({
     action: "delete",

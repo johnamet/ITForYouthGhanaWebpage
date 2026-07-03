@@ -5,6 +5,7 @@ export const FIREBASE_COLLECTIONS = {
   partnerships: "partnerships",
   articles: "articles",
   newsPages: "newsPages",
+  departments: "departments",
   team: "team",
   partners: "partners",
   testimonials: "testimonials",

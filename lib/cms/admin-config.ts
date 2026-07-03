@@ -3,6 +3,7 @@ import { firebaseScaffoldConfig } from "@/lib/firebase/config";
 import { storageFolders } from "@/lib/firebase/storage";
 import {
   activeAnnouncement,
+  departments,
   heroSlides,
   initiatives,
   partners,
@@ -112,6 +113,17 @@ export const cmsCollections: AdminCollectionDefinition[] = [
     writeRole: "editor",
     status: "cms-ready",
     documentCount: 0,
+  },
+  {
+    key: "departments",
+    label: "Departments",
+    collection: FIREBASE_COLLECTIONS.departments,
+    route: "/admin/departments",
+    description: "Department pages with responsibilities, services, workflows, priorities, team links, and resources.",
+    readModel: "public-read",
+    writeRole: "editor",
+    status: "cms-ready",
+    documentCount: departments.length,
   },
   {
     key: "partners",

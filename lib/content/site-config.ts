@@ -21,6 +21,7 @@ import type { Announcement }    from "@/components/layout/announcement-bar";
 import type { AdminNavItem }    from "@/types/admin";
 import type {
   ArticleSeed,
+  DepartmentProfile,
   InitiativePage,
   SitePage,
   WhatWeDoOverviewContent,
@@ -111,6 +112,7 @@ export const publicNavigation: NavItem[] = [
     items: [
       { label: "About Us", href: "/who-we-are" },
       { label: "Our Team", href: "/who-we-are/team" },
+      { label: "Departments", href: "/departments" },
       { label: "Our Partners", href: "/who-we-are/partners" },
       { label: "Join Our Team", href: "/who-we-are/careers" },
     ],
@@ -1863,6 +1865,11 @@ export const adminNavigation: AdminNavItem[] = [
     description: "About page copy, stats, CTAs, and related routes.",
   },
   {
+    label: "Who We Are Pages",
+    href: "/admin/who-we-are-pages",
+    description: "Custom pages below the Who We Are hub, such as board, governance, or advisors.",
+  },
+  {
     label: "Apply Training",
     href: "/admin/content/apply-for-training",
     description: "Training hub copy, stats, CTAs, and route cards.",
@@ -1936,6 +1943,11 @@ export const adminNavigation: AdminNavItem[] = [
     label: "Team",
     href: "/admin/team",
     description: "Profiles, departments, and featured people.",
+  },
+  {
+    label: "Departments",
+    href: "/admin/departments",
+    description: "Department pages, responsibilities, priorities, teams, and resources.",
   },
   {
     label: "Partners",
@@ -2058,7 +2070,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     description: "Mentorship, confidence-building, and technical training designed to increase the participation and leadership of young women in Ghana's digital economy.",
     href: "/what-we-do/girls-in-tech",
     image: "/images/randomPictures/group_girls.jpg",
-    accent: "#F5A623",
+    accent: "#D70B52",
     icon: "👩‍💻",
   },
   {
@@ -2068,7 +2080,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     description: "Cohort-based digital skills training that takes young people from foundational skills to job-ready portfolios in 12 focused weeks.",
     href: "/what-we-do/youth-academy",
     image: "/images/randomPictures/studentsBackcoding.jpg",
-    accent: "#0C2D5A",
+    accent: "#1E72BA",
     icon: "💡",
   },
   {
@@ -2078,7 +2090,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     description: "Practical support for young founders turning digital skills into ideas, prototypes, and early-stage ventures that address local challenges.",
     href: "/what-we-do/entrepreneurship-hub",
     image: "/images/randomPictures/studentpresenting.jpg",
-    accent: "#157F6B",
+    accent: "#0152BE",
     icon: "🚀",
   },
   {
@@ -2154,6 +2166,469 @@ export const activeDonationCampaign: DonationCampaignContent = {
   secondaryCta: { label: "See how donations create impact", href: "/our-impact/reports" },
   active: true,
 };
+
+export const departments: DepartmentProfile[] = [
+  {
+    id: "programmes",
+    slug: "programmes",
+    eyebrow: "Delivery",
+    title: "Programmes Department",
+    summary: "Owns learner pathways, cohort delivery, mentoring rhythms, and programme quality.",
+    description:
+      "The Programmes Department turns IT For Youth Ghana's mission into structured learner experiences. It coordinates cohorts, mentors, facilitators, learner support, and the progression pathway from enrolment to portfolio, work, further study, or enterprise.",
+    intro:
+      "This department is the operating heart of the training experience, making sure young people move through clear, supportive, and measurable learning journeys.",
+    mission:
+      "Design and deliver reliable, inclusive programmes that help young Ghanaians build practical digital skills and confidence.",
+    heroImage: "/images/randomPictures/groupworkstudents.jpg",
+    icon: "🎓",
+    color: "#1E72BA",
+    responsibilities: [
+      "Plan and coordinate cohort calendars, facilitator schedules, and learner support.",
+      "Track attendance, learner progress, mentoring touchpoints, and completion readiness.",
+      "Coordinate safeguarding, learner wellbeing, and escalation where extra support is needed.",
+      "Connect programme outcomes to alumni, career, enterprise, and partner opportunities.",
+    ],
+    services: [
+      {
+        title: "Cohort delivery",
+        body: "End-to-end delivery of training cohorts, from onboarding and weekly operations to graduation readiness.",
+        bullets: ["Timetables", "Facilitator coordination", "Learner support"],
+      },
+      {
+        title: "Mentorship coordination",
+        body: "Matching learners with mentors, tracking check-ins, and keeping support relationships useful.",
+        bullets: ["Mentor matching", "Progress check-ins", "Portfolio guidance"],
+      },
+    ],
+    workflows: [
+      { title: "Plan", description: "Confirm cohort goals, curriculum needs, facilitators, and learner support capacity." },
+      { title: "Deliver", description: "Run sessions, monitor attendance, and respond to learner risks early." },
+      { title: "Progress", description: "Move graduates into alumni, internship, job, or venture-building pathways." },
+    ],
+    priorities: [
+      "Improve learner retention and completion.",
+      "Strengthen mentorship and graduate transition support.",
+      "Increase girls' participation in all programme pathways.",
+    ],
+    stats: [
+      { value: "3,000+", label: "Youth trained", description: "Across digital skills and employability pathways." },
+      { value: "85%", label: "Progression rate", description: "Graduates moving into work, further learning, or enterprise." },
+    ],
+    teamMemberIds: [],
+    resources: [
+      { label: "Apply for Training", href: "/apply-for-training", description: "Learner-facing training hub." },
+      { label: "Courses", href: "/apply-for-training/courses", description: "Current course catalogue and cohort entry points." },
+    ],
+    contact: { name: "Programmes Lead", role: "Department contact", email: "programmes@itforyouthghana.org" },
+    ctas: [
+      { label: "Explore training", href: "/apply-for-training" },
+      { label: "Partner on delivery", href: "/partner-with-us" },
+    ],
+    featured: true,
+    status: "published",
+    order: 1,
+  },
+  {
+    id: "training-curriculum",
+    slug: "training-curriculum",
+    eyebrow: "Learning design",
+    title: "Training & Curriculum Department",
+    summary: "Builds curriculum, facilitator guides, learning projects, and assessment standards.",
+    description:
+      "Training & Curriculum keeps learning practical, current, and accessible. It shapes course outcomes, lesson plans, project briefs, facilitator resources, assessments, and learner feedback loops.",
+    intro:
+      "The department makes sure each course is not just inspiring, but teachable, measurable, and connected to real digital work.",
+    mission: "Create practical curriculum that helps learners build usable skills, credible portfolios, and workplace confidence.",
+    heroImage: "/images/randomPictures/UXteacher_opt.jpg",
+    icon: "📘",
+    color: "#0152BE",
+    responsibilities: [
+      "Design and maintain course outcomes, modules, assessments, and capstone projects.",
+      "Support facilitators with teaching guides, rubrics, and learner feedback tools.",
+      "Review curriculum against employer, partner, and learner needs.",
+      "Document learning standards so programmes can scale without losing quality.",
+    ],
+    services: [
+      {
+        title: "Curriculum design",
+        body: "Course maps, module outcomes, lesson flows, and practical project briefs.",
+        bullets: ["Learning outcomes", "Project briefs", "Assessment rubrics"],
+      },
+      {
+        title: "Facilitator enablement",
+        body: "Guides and resources that help trainers deliver consistently across cohorts.",
+        bullets: ["Trainer notes", "Feedback tools", "Session templates"],
+      },
+    ],
+    workflows: [
+      { title: "Research", description: "Collect input from learners, employers, facilitators, and programme data." },
+      { title: "Design", description: "Turn skills into modules, practice tasks, assessments, and portfolio work." },
+      { title: "Improve", description: "Use learner outcomes and feedback to update the curriculum after each cohort." },
+    ],
+    priorities: [
+      "Keep curriculum aligned with Ghana's digital employment and entrepreneurship needs.",
+      "Make learning materials more accessible for different starting skill levels.",
+      "Standardise portfolio assessment across cohorts.",
+    ],
+    stats: [
+      { value: "12", label: "Week cohort model", description: "Structured learning journey from foundations to portfolio." },
+      { value: "8", label: "Initiative pathways", description: "Curriculum support across public programme routes." },
+    ],
+    teamMemberIds: [],
+    resources: [
+      { label: "Course catalogue", href: "/apply-for-training/courses" },
+      { label: "How training works", href: "/apply-for-training/how-it-works" },
+    ],
+    contact: { name: "Curriculum Lead", role: "Learning design contact", email: "training@itforyouthghana.org" },
+    ctas: [{ label: "View courses", href: "/apply-for-training/courses" }],
+    featured: true,
+    status: "published",
+    order: 2,
+  },
+  {
+    id: "partnerships",
+    slug: "partnerships",
+    eyebrow: "External relations",
+    title: "Partnerships Department",
+    summary: "Builds relationships with schools, funders, employers, NGOs, government, and technology partners.",
+    description:
+      "Partnerships turns shared interest into practical collaboration. The department manages sponsorships, institutional relationships, graduate hiring routes, corporate training, and ecosystem coalitions.",
+    intro:
+      "Its work helps IT For Youth Ghana scale opportunity through organisations that can fund, host, hire, mentor, or amplify young talent.",
+    mission: "Build high-trust partnerships that create resources, access, and real next steps for learners.",
+    heroImage: "/images/randomPictures/studentpresenting.jpg",
+    icon: "🤝",
+    color: "#D70B52",
+    responsibilities: [
+      "Manage partner pipelines, proposals, relationship notes, and follow-up actions.",
+      "Coordinate sponsorships, corporate training, graduate hiring, and staff volunteering.",
+      "Translate organisational needs into partnership tracks with clear value and accountability.",
+      "Work with impact and communications teams to report partnership outcomes.",
+    ],
+    services: [
+      {
+        title: "Sponsorship development",
+        body: "Scholarship, device, and programme sponsorship packages for supporters and institutions.",
+        bullets: ["Campaign briefs", "Partner reporting", "Recognition assets"],
+      },
+      {
+        title: "Employer and graduate pathways",
+        body: "Routes for companies to engage, mentor, interview, and hire prepared graduates.",
+        bullets: ["Talent showcases", "Internships", "Hiring introductions"],
+      },
+    ],
+    workflows: [
+      { title: "Qualify", description: "Understand partner goals, audience, budget, timing, and expected outcomes." },
+      { title: "Design", description: "Shape a collaboration model with roles, deliverables, and reporting needs." },
+      { title: "Steward", description: "Maintain relationship health, evidence, renewal opportunities, and next steps." },
+    ],
+    priorities: [
+      "Grow scholarship and device support for Cohort 8.",
+      "Build stronger employer pathways for graduates.",
+      "Package partnership offers with clearer outcomes and reporting.",
+    ],
+    stats: [
+      { value: "5", label: "Partner tracks", description: "Education, government, NGOs, development, and technology partners." },
+      { value: "8,500+", label: "Students reached", description: "School and community reach supported by partnerships." },
+    ],
+    teamMemberIds: [],
+    resources: [
+      { label: "Partner With Us", href: "/partner-with-us" },
+      { label: "For Organisations", href: "/for-organisations" },
+    ],
+    contact: { name: "Partnerships Lead", role: "Partnership contact", email: "partnerships@itforyouthghana.org" },
+    ctas: [
+      { label: "Partner with us", href: "/partner-with-us" },
+      { label: "Hire graduates", href: "/for-organisations/hire-graduates" },
+    ],
+    featured: true,
+    status: "published",
+    order: 3,
+  },
+  {
+    id: "community-outreach",
+    slug: "community-outreach",
+    eyebrow: "Access",
+    title: "Community Outreach Department",
+    summary: "Connects schools and communities to digital skills opportunities, events, clubs, and learner recruitment.",
+    description:
+      "Community Outreach creates the first touchpoints that help young people see themselves in technology. It manages school visits, tech clubs, events, community activations, and rural access relationships.",
+    intro:
+      "The department helps turn awareness into applications, participation, and long-term community trust.",
+    mission: "Bring digital opportunity closer to young people, especially girls and underserved communities.",
+    heroImage: "/images/randomPictures/studentslistening.jpg",
+    icon: "📣",
+    color: "#1E72BA",
+    responsibilities: [
+      "Plan school and community activations.",
+      "Coordinate tech clubs, outreach calendars, and local partner communication.",
+      "Support recruitment for cohorts and targeted initiatives.",
+      "Feed community insights back into programme design and partnerships.",
+    ],
+    services: [
+      {
+        title: "School outreach",
+        body: "Talks, demos, clubs, and application guidance for schools and youth groups.",
+        bullets: ["School visits", "Tech clubs", "Application support"],
+      },
+      {
+        title: "Community activation",
+        body: "Events and local engagement that reduce barriers to awareness and participation.",
+        bullets: ["Community sessions", "Parent engagement", "Local partner coordination"],
+      },
+    ],
+    workflows: [
+      { title: "Map", description: "Identify schools, communities, and groups that can benefit from access." },
+      { title: "Engage", description: "Run talks, sessions, clubs, and follow-up guidance." },
+      { title: "Refer", description: "Connect interested learners to programmes, clubs, or partner opportunities." },
+    ],
+    priorities: [
+      "Increase outreach outside central Accra.",
+      "Improve follow-up from outreach event to application.",
+      "Strengthen girls' participation through targeted engagement.",
+    ],
+    stats: [
+      { value: "8,500+", label: "Students reached", description: "Through school outreach, clubs, and activations." },
+      { value: "40%", label: "Female participation", description: "A key inclusion target across outreach and cohorts." },
+    ],
+    teamMemberIds: [],
+    resources: [
+      { label: "Community Outreach", href: "/what-we-do/community-outreach" },
+      { label: "Tech Clubs", href: "/what-we-do/tech-clubs" },
+    ],
+    contact: { name: "Outreach Lead", role: "Community contact", email: "outreach@itforyouthghana.org" },
+    ctas: [{ label: "Invite outreach team", href: "/contact" }],
+    featured: false,
+    status: "published",
+    order: 4,
+  },
+  {
+    id: "monitoring-evaluation-learning",
+    slug: "monitoring-evaluation-learning",
+    eyebrow: "Evidence",
+    title: "Monitoring, Evaluation & Learning Department",
+    summary: "Tracks outcomes, learner progression, reporting evidence, and learning loops for improvement.",
+    description:
+      "Monitoring, Evaluation & Learning keeps the organisation accountable to outcomes. It gathers evidence, analyses programme data, supports impact reporting, and helps teams improve decisions with real learning.",
+    intro:
+      "The department makes sure impact is measured carefully and translated into better programming, stronger reporting, and clearer partner trust.",
+    mission: "Use evidence to improve learner outcomes, programme quality, and stakeholder accountability.",
+    heroImage: "/images/randomPictures/studentsBackcoding.jpg",
+    icon: "📊",
+    color: "#0152BE",
+    responsibilities: [
+      "Define indicators, data collection rhythms, and reporting templates.",
+      "Track learner progression, completion, placement, and alumni outcomes.",
+      "Support impact reports, donor updates, and SDG-aligned evidence.",
+      "Help teams use data for improvement, not only reporting.",
+    ],
+    services: [
+      {
+        title: "Impact measurement",
+        body: "Indicators, dashboards, outcome tracking, and reporting evidence.",
+        bullets: ["Learner outcomes", "Partner reports", "Impact briefs"],
+      },
+      {
+        title: "Learning reviews",
+        body: "Post-cohort reviews and practical recommendations for programme improvement.",
+        bullets: ["Data quality", "Feedback loops", "Improvement actions"],
+      },
+    ],
+    workflows: [
+      { title: "Define", description: "Agree what success means for each initiative, cohort, or partnership." },
+      { title: "Collect", description: "Capture data ethically and consistently across programme touchpoints." },
+      { title: "Learn", description: "Turn findings into decisions, reports, and improvements." },
+    ],
+    priorities: [
+      "Improve graduate outcome tracking.",
+      "Standardise dashboards for programme and partnership reporting.",
+      "Publish clearer impact evidence for supporters.",
+    ],
+    stats: [
+      { value: "85%", label: "Progression tracked", description: "Core measure for work, learning, and enterprise outcomes." },
+      { value: "4", label: "Evidence streams", description: "Training, outreach, partnerships, and alumni outcomes." },
+    ],
+    teamMemberIds: [],
+    resources: [
+      { label: "Impact Reports", href: "/our-impact/reports" },
+      { label: "SDG Alignment", href: "/our-impact/sdgs" },
+    ],
+    contact: { name: "Impact Lead", role: "MEL contact", email: "impact@itforyouthghana.org" },
+    ctas: [{ label: "View impact", href: "/our-impact/reports" }],
+    featured: false,
+    status: "published",
+    order: 5,
+  },
+  {
+    id: "operations",
+    slug: "operations",
+    eyebrow: "Systems",
+    title: "Operations Department",
+    summary: "Keeps finance, logistics, procurement, facilities, compliance, and delivery support running.",
+    description:
+      "Operations provides the systems that make delivery possible. The department manages logistics, finance coordination, procurement, facilities, vendor support, documentation, and compliance routines.",
+    intro:
+      "It helps programme teams focus on learners by making sure the practical details are planned, resourced, and documented.",
+    mission: "Build reliable operating systems that support accountable, scalable programme delivery.",
+    heroImage: "/images/randomPictures/groupstudents.jpg",
+    icon: "⚙️",
+    color: "#1A1A1A",
+    responsibilities: [
+      "Coordinate budgets, procurement, logistics, venues, equipment, and vendor relationships.",
+      "Maintain operational documentation, policies, and internal routines.",
+      "Support compliance, safeguarding processes, and risk tracking.",
+      "Help teams plan resource needs before delivery bottlenecks appear.",
+    ],
+    services: [
+      {
+        title: "Delivery logistics",
+        body: "Venue, materials, devices, connectivity, procurement, and supplier coordination.",
+        bullets: ["Venues", "Devices", "Procurement"],
+      },
+      {
+        title: "Operational controls",
+        body: "Routine documentation, budgets, approvals, and internal accountability.",
+        bullets: ["Budget support", "Documentation", "Compliance routines"],
+      },
+    ],
+    workflows: [
+      { title: "Prepare", description: "Confirm resources, budgets, spaces, vendors, and risk items." },
+      { title: "Support", description: "Resolve delivery needs and document operational decisions." },
+      { title: "Close", description: "Reconcile, archive, and share lessons for the next cycle." },
+    ],
+    priorities: [
+      "Improve procurement and device tracking.",
+      "Document repeatable operations for programme scale.",
+      "Strengthen budget visibility across departments.",
+    ],
+    stats: [
+      { value: "100%", label: "Delivery support", description: "Every cohort needs logistics, finance, and operational controls." },
+      { value: "5", label: "Core systems", description: "Finance, procurement, facilities, compliance, and documentation." },
+    ],
+    teamMemberIds: [],
+    resources: [{ label: "Contact operations", href: "/contact" }],
+    contact: { name: "Operations Lead", role: "Operations contact", email: "operations@itforyouthghana.org" },
+    ctas: [{ label: "Contact us", href: "/contact" }],
+    featured: false,
+    status: "published",
+    order: 6,
+  },
+  {
+    id: "communications",
+    slug: "communications",
+    eyebrow: "Storytelling",
+    title: "Communications Department",
+    summary: "Manages storytelling, campaigns, media, content, brand, newsletters, and public updates.",
+    description:
+      "Communications helps the public understand the work and why it matters. The department manages campaigns, stories, newsletters, media requests, brand consistency, and public-facing content.",
+    intro:
+      "It turns programme proof, learner journeys, and partner activity into clear stories that build trust and action.",
+    mission: "Tell truthful, useful stories that help learners, partners, supporters, and communities engage with the mission.",
+    heroImage: "/images/randomPictures/graduationspeaking.jpg",
+    icon: "✍️",
+    color: "#D70B52",
+    responsibilities: [
+      "Plan content calendars, campaigns, newsletters, and public updates.",
+      "Support photography, consent, brand consistency, and story collection.",
+      "Coordinate media, press, and public information requests.",
+      "Work with programmes and impact teams to communicate evidence responsibly.",
+    ],
+    services: [
+      {
+        title: "Content and campaigns",
+        body: "News, blogs, campaign pages, newsletters, and social storytelling.",
+        bullets: ["News", "Newsletter", "Campaign copy"],
+      },
+      {
+        title: "Brand and media",
+        body: "Brand guidance, media assets, consent-aware storytelling, and public enquiries.",
+        bullets: ["Brand assets", "Media requests", "Story collection"],
+      },
+    ],
+    workflows: [
+      { title: "Collect", description: "Gather stories, proof, photos, consent, and stakeholder context." },
+      { title: "Shape", description: "Turn raw updates into clear audience-specific messages." },
+      { title: "Publish", description: "Distribute content and watch for engagement, corrections, and follow-up." },
+    ],
+    priorities: [
+      "Improve alumni and learner storytelling.",
+      "Keep campaign pages current and conversion-ready.",
+      "Build a stronger newsletter and media rhythm.",
+    ],
+    stats: [
+      { value: "3", label: "Core audiences", description: "Learners, partners, and supporters." },
+      { value: "Always", label: "Brand consistency", description: "Every public touchpoint should feel like ITFY." },
+    ],
+    teamMemberIds: [],
+    resources: [
+      { label: "News & Updates", href: "/news-and-updates" },
+      { label: "Contact media", href: "/contact" },
+    ],
+    contact: { name: "Communications Lead", role: "Media contact", email: "media@itforyouthghana.org" },
+    ctas: [{ label: "Read updates", href: "/news-and-updates" }],
+    featured: false,
+    status: "published",
+    order: 7,
+  },
+  {
+    id: "people-governance",
+    slug: "people-governance",
+    eyebrow: "Stewardship",
+    title: "People & Governance Department",
+    summary: "Supports staff, mentors, volunteers, governance routines, policies, and organisational culture.",
+    description:
+      "People & Governance focuses on the humans and stewardship behind the mission. It supports staff, mentors, volunteers, board routines, policy hygiene, role clarity, and organisational culture.",
+    intro:
+      "The department helps the organisation grow with clarity, accountability, care, and strong governance habits.",
+    mission: "Support people, culture, and governance systems that make the organisation trustworthy and sustainable.",
+    heroImage: "/images/randomPictures/maingraduationpic.jpg",
+    icon: "🧭",
+    color: "#1E72BA",
+    responsibilities: [
+      "Support recruitment, onboarding, volunteer coordination, and role clarity.",
+      "Maintain governance calendars, policy updates, and board/staff documentation.",
+      "Coordinate people development, performance rhythms, and culture rituals.",
+      "Keep safeguarding and accountability practices visible across the organisation.",
+    ],
+    services: [
+      {
+        title: "People systems",
+        body: "Recruitment, onboarding, volunteer coordination, and staff support.",
+        bullets: ["Recruitment", "Onboarding", "Volunteer coordination"],
+      },
+      {
+        title: "Governance support",
+        body: "Board routines, policy updates, documentation, and accountability practices.",
+        bullets: ["Policies", "Board routines", "Safeguarding"],
+      },
+    ],
+    workflows: [
+      { title: "Clarify", description: "Define roles, expectations, policies, and decision rights." },
+      { title: "Support", description: "Help people do good work with the right tools and feedback." },
+      { title: "Review", description: "Keep governance, safeguarding, and organisational routines current." },
+    ],
+    priorities: [
+      "Improve volunteer and mentor onboarding.",
+      "Strengthen role documentation and governance calendars.",
+      "Support a healthy, accountable staff and mentor culture.",
+    ],
+    stats: [
+      { value: "1", label: "Shared mission", description: "Every team aligned around youth digital opportunity." },
+      { value: "Many", label: "Contributors", description: "Staff, mentors, board, volunteers, and partners." },
+    ],
+    teamMemberIds: [],
+    resources: [
+      { label: "Team", href: "/who-we-are/team" },
+      { label: "Careers", href: "/who-we-are/careers" },
+    ],
+    contact: { name: "People Lead", role: "People and governance contact", email: "people@itforyouthghana.org" },
+    ctas: [{ label: "Join our team", href: "/who-we-are/careers" }],
+    featured: false,
+    status: "published",
+    order: 8,
+  },
+];
 
 export const featuredStory: FeaturedStoryContent = {
   id: "story-belinda",

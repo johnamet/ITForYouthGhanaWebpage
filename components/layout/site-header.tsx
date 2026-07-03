@@ -132,7 +132,7 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
           </Link>
           <Link
             href={headerCtas.secondary.href}
-            className="rounded-lg bg-brand-gold px-5 py-2 text-[0.7rem] font-bold text-[#0c2d6e] shadow-[0_2px_12px_rgba(245,197,24,0.35)] transition hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(245,197,24,0.5)]"
+            className="rounded-lg bg-brand-gold px-5 py-2 text-[0.7rem] font-bold text-brand-navy shadow-[0_2px_12px_rgba(245,197,24,0.35)] transition hover:-translate-y-px hover:shadow-[0_4px_20px_rgba(245,197,24,0.5)]"
           >
             {headerCtas.secondary.label}
           </Link>
@@ -216,7 +216,7 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
               <Link
                 href={headerCtas.secondary.href}
                 onClick={() => setMobileOpen(false)}
-                className="flex-1 rounded-full bg-brand-gold py-2.5 text-center text-[0.82rem] font-bold text-[#0c2d6e]"
+                className="flex-1 rounded-full bg-brand-gold py-2.5 text-center text-[0.82rem] font-bold text-brand-navy"
               >
                 {headerCtas.secondary.label}
               </Link>

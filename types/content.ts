@@ -67,6 +67,15 @@ export interface SitePage {
   exploreDescription?: string;
 }
 
+export type DynamicSitePageStatus = "draft" | "published" | "archived";
+
+export interface DynamicSitePage extends SitePage {
+  id: string;
+  parentSlug: string;
+  status: DynamicSitePageStatus;
+  order: number;
+}
+
 export type TeamMemberStatus = "active" | "inactive";
 
 export type JobType = "full-time" | "part-time" | "contract" | "volunteer";
@@ -91,12 +100,59 @@ export interface TeamMemberProfile {
   name: string;
   role: string;
   department: string;
+  departmentId?: string;
+  departmentSlug?: string;
   bio: string;
   photo?: string;
   email?: string;
   linkedin?: string;
   featured: boolean;
   status: TeamMemberStatus;
+  order: number;
+}
+
+export type DepartmentStatus = "draft" | "published" | "archived";
+
+export interface DepartmentProcessStep {
+  title: string;
+  description: string;
+}
+
+export interface DepartmentResource {
+  label: string;
+  href: string;
+  description?: string;
+}
+
+export interface DepartmentContact {
+  name?: string;
+  role?: string;
+  email?: string;
+}
+
+export interface DepartmentProfile {
+  id: string;
+  slug: string;
+  eyebrow: string;
+  title: string;
+  summary: string;
+  description: string;
+  intro: string;
+  mission: string;
+  heroImage?: string;
+  icon?: string;
+  color?: string;
+  responsibilities: string[];
+  services: ContentBlock[];
+  workflows: DepartmentProcessStep[];
+  priorities: string[];
+  stats: HighlightStat[];
+  teamMemberIds: string[];
+  resources: DepartmentResource[];
+  contact?: DepartmentContact;
+  ctas: ActionLink[];
+  featured: boolean;
+  status: DepartmentStatus;
   order: number;
 }
 

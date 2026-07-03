@@ -10,8 +10,8 @@ import {
   whoWeAreHub,
 } from "@/lib/content/site-config";
 import { getAdminFirestore } from "@/lib/firebase/admin";
-import type { SitePagePayload } from "@/lib/utils/validators";
-import type { SitePage } from "@/types/content";
+import type { DynamicSitePagePayload, SitePagePayload } from "@/lib/utils/validators";
+import type { DynamicSitePage, DynamicSitePageStatus, SitePage } from "@/types/content";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 type CmsWriteResult = {
@@ -43,6 +43,10 @@ const pageLabels: Record<string, string> = {
   careers: "Careers",
   testimonials: "Testimonials",
 };
+
+const WHO_WE_ARE_DYNAMIC_PARENT = "who-we-are";
+const WHO_WE_ARE_DYNAMIC_TYPE = "whoWeAreDynamicPage";
+const RESERVED_WHO_WE_ARE_SLUGS = new Set(["team", "partners", "careers"]);
 
 const optionalStringFields = [
   "heroImage",
@@ -90,6 +94,65 @@ function mergeSitePage(fallback: SitePage, data: Record<string, unknown>): SiteP
   };
 }
 
+function emptyDynamicWhoWeArePage(slug = ""): DynamicSitePage {
+  return {
+    id: slug,
+    parentSlug: WHO_WE_ARE_DYNAMIC_PARENT,
+    slug,
+    eyebrow: "Who We Are",
+    title: "",
+    description: "",
+    intro: "",
+    heroImage: "",
+    stats: [
+      {
+        value: "",
+        label: "",
+        description: "",
+      },
+    ],
+    sections: [
+      {
+        title: "",
+        body: "",
+        bullets: [],
+      },
+    ],
+    ctas: [],
+    related: [],
+    status: "draft",
+    order: 0,
+  };
+}
+
+function normalizeStatus(value: unknown): DynamicSitePageStatus {
+  return value === "published" || value === "archived" || value === "draft" ? value : "draft";
+}
+
+function normalizeDynamicSitePage(id: string, data: Record<string, unknown>): DynamicSitePage {
+  const fallback = emptyDynamicWhoWeArePage(asString(data.slug) ?? id);
+  const page = mergeSitePage(fallback, data);
+
+  return {
+    ...page,
+    id,
+    parentSlug: asString(data.parentSlug) ?? WHO_WE_ARE_DYNAMIC_PARENT,
+    status: normalizeStatus(data.status),
+    order: typeof data.order === "number" ? data.order : 0,
+  };
+}
+
+function sortDynamicPages(pages: DynamicSitePage[]) {
+  return [...pages].sort((left, right) => {
+    const order = left.order - right.order;
+    if (order !== 0) {
+      return order;
+    }
+
+    return left.title.localeCompare(right.title);
+  });
+}
+
 export async function getCmsSitePage(slug: string): Promise<SitePage | null> {
   const fallback = pageFallbacks[slug];
 
@@ -125,6 +188,134 @@ export async function getCmsSitePage(slug: string): Promise<SitePage | null> {
     console.error("Firestore site-content read failed. Falling back to seed content.", error);
     return fallback;
   }
+}
+
+export function getEmptyWhoWeAreDynamicPage(slug = ""): DynamicSitePage {
+  return emptyDynamicWhoWeArePage(slug);
+}
+
+export function isReservedWhoWeAreSlug(slug: string) {
+  return RESERVED_WHO_WE_ARE_SLUGS.has(slug);
+}
+
+export async function getCmsWhoWeAreDynamicPages(
+  includeUnpublished = false,
+): Promise<DynamicSitePage[]> {
+  const db = await getAdminFirestore();
+
+  if (!db) {
+    return [];
+  }
+
+  try {
+    const snapshot = await db
+      .collection(FIREBASE_COLLECTIONS.siteContent)
+      .where("parentSlug", "==", WHO_WE_ARE_DYNAMIC_PARENT)
+      .get();
+
+    let pages = snapshot.docs
+      .map((doc) => normalizeDynamicSitePage(doc.id, doc.data() ?? {}))
+      .filter((page) => page.parentSlug === WHO_WE_ARE_DYNAMIC_PARENT);
+
+    pages = pages.filter((page) => !RESERVED_WHO_WE_ARE_SLUGS.has(page.slug));
+
+    if (!includeUnpublished) {
+      pages = pages.filter((page) => page.status === "published");
+    }
+
+    return sortDynamicPages(pages);
+  } catch (error) {
+    console.error("Firestore Who We Are dynamic-page read failed.", error);
+    return [];
+  }
+}
+
+export async function getCmsWhoWeAreDynamicPageBySlug(
+  slug: string,
+  includeUnpublished = false,
+): Promise<DynamicSitePage | null> {
+  if (RESERVED_WHO_WE_ARE_SLUGS.has(slug)) {
+    return null;
+  }
+
+  const db = await getAdminFirestore();
+
+  if (!db) {
+    return null;
+  }
+
+  try {
+    const doc = await db
+      .collection(FIREBASE_COLLECTIONS.siteContent)
+      .doc(`who-we-are-${slug}`)
+      .get();
+
+    if (!doc.exists) {
+      return null;
+    }
+
+    const page = normalizeDynamicSitePage(doc.id, doc.data() ?? {});
+
+    if (!includeUnpublished && page.status !== "published") {
+      return null;
+    }
+
+    return page;
+  } catch (error) {
+    console.error("Firestore Who We Are dynamic-page lookup failed.", error);
+    return null;
+  }
+}
+
+export async function saveCmsWhoWeAreDynamicPage(
+  payload: DynamicSitePagePayload,
+): Promise<CmsWriteResult> {
+  const db = await getAdminFirestore();
+
+  if (!db) {
+    return {
+      configured: false,
+      written: false,
+    };
+  }
+
+  const { FieldValue } = await import("firebase-admin/firestore");
+  const id = `who-we-are-${payload.slug}`;
+
+  await db.collection(FIREBASE_COLLECTIONS.siteContent).doc(id).set(
+    {
+      ...payload,
+      parentSlug: WHO_WE_ARE_DYNAMIC_PARENT,
+      type: WHO_WE_ARE_DYNAMIC_TYPE,
+      updatedAt: FieldValue.serverTimestamp(),
+    },
+    { merge: true },
+  );
+
+  return {
+    configured: true,
+    written: true,
+    id,
+  };
+}
+
+export async function deleteCmsWhoWeAreDynamicPage(slug: string): Promise<CmsWriteResult> {
+  const db = await getAdminFirestore();
+
+  if (!db) {
+    return {
+      configured: false,
+      written: false,
+    };
+  }
+
+  await db.collection(FIREBASE_COLLECTIONS.siteContent).doc(`who-we-are-${slug}`).delete();
+
+  return {
+    configured: true,
+    written: true,
+    id: `who-we-are-${slug}`,
+  };
 }
 
 export async function getCmsWhoWeArePage(): Promise<SitePage> {

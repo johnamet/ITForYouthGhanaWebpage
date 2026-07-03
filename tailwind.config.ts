@@ -12,26 +12,29 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        heading: ["var(--font-playfair)", "Georgia", "serif"],
-        sans:    ["var(--font-dm-sans)", "system-ui", "sans-serif"],
+        heading: ["var(--font-heading)", "sans-serif"],
+        sans: ["var(--font-body)", "system-ui", "sans-serif"],
       },
 
 
       colors: {
         brand: {
-          primary: "#2563EB",   // blue-600
-          secondary: "#10B981", // emerald-500
-          accent: "#F59E0B",    // amber-500
-          background: "#F9FAFB",
+          primary: "#1E72BA",
+          "primary-dark": "#0152BE",
+          "primary-light": "#E8F1FA",
+          secondary: "#D70B52",
+          accent: "#D70B52",
+          "accent-dark": "#B00944",
+          background: "#FFFFFF",
+          muted: "#5C6672",
           card: "#FFFFFF",
-          text: "#1F2937",
-          // legacy alias names for existing classes (kept for compatibility)
-          gold: "#F59E0B",
-          navy: "#2563EB",
-          ink: "#1F2937",
-          mist: "#F9FAFB",
-          border: "#E5E7EB",
-          warm: "#F59E0B",
+          text: "#1A1A1A",
+          gold: "#D70B52",
+          navy: "#0152BE",
+          ink: "#1A1A1A",
+          mist: "#F7F9FC",
+          border: "#E2E8F0",
+          warm: "#B00944",
         },
       },
 

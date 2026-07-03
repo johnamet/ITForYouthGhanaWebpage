@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { SectionHeading } from "@/components/shared/section-heading";
 
@@ -24,76 +24,219 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
   const visibleItems = items.filter((item) => item.active !== false);
 
   return (
-    <section className="bg-white px-6 py-20 lg:px-10">
-      <div className="mx-auto max-w-6xl space-y-10">
-        <div className="flex flex-wrap items-end justify-between gap-6">
+    <section className="overflow-hidden bg-white px-6 py-20 lg:px-10 lg:py-28">
+      <div className="mx-auto max-w-6xl">
+        {/* Section heading */}
+        <div className="mb-12 flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
             eyebrow="What we do"
             title="Eight initiatives opening real pathways into tech"
             description="From girls' participation and school clubs to entrepreneurship and rural access, each initiative is designed to move young people from interest to opportunity."
           />
+
           <Link
             href="/what-we-do"
-            className="inline-flex items-center gap-2 rounded-full border border-brand-border px-5 py-3 text-sm font-semibold text-brand-ink transition hover:border-brand-gold hover:text-brand-gold"
+            className="
+              group/button inline-flex w-fit shrink-0 items-center gap-2
+              rounded-full border border-brand-border bg-white
+              px-5 py-3 text-sm font-semibold text-brand-ink
+              transition-all duration-300
+              hover:border-brand-gold hover:bg-brand-gold
+              hover:text-brand-navy
+            "
           >
             Explore all initiatives
-            <ArrowRight className="h-4 w-4" />
+
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" />
           </Link>
         </div>
 
-        <div className="grid auto-cols-[18rem] grid-flow-col gap-4 overflow-x-auto pb-2 [scrollbar-width:none] snap-x snap-mandatory md:grid-flow-row md:grid-cols-2 md:overflow-visible xl:grid-cols-4">
-          {visibleItems.map((item) => (
+        {/* Programme cards */}
+        <div
+          className="
+            grid auto-cols-[18.5rem] grid-flow-col gap-5
+            overflow-x-auto pb-4
+            [scrollbar-width:none]
+            [&::-webkit-scrollbar]:hidden
+            snap-x snap-mandatory
+
+            md:grid-flow-row
+            md:grid-cols-2
+            md:overflow-visible
+            md:pb-0
+
+            xl:grid-cols-4
+          "
+        >
+          {visibleItems.map((item, index) => (
             <Link
               key={item.id}
               href={item.href}
-              className="group relative min-h-[22rem] snap-start overflow-hidden rounded-[28px] bg-brand-navy shadow-[0_16px_40px_rgba(12,45,90,0.14)]"
+              aria-label={`Learn more about ${item.title}`}
+              className="
+                group relative min-h-[29rem] snap-start
+                overflow-hidden rounded-[2rem]
+                border border-brand-border bg-white
+                shadow-[0_18px_45px_rgba(1,82,190,0.10)]
+                transition-all duration-500 ease-out
+                hover:-translate-y-2
+                hover:border-brand-navy/20
+                hover:shadow-[0_28px_60px_rgba(1,82,190,0.17)]
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-brand-gold
+                focus-visible:ring-offset-4
+              "
             >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                sizes="(max-width: 767px) 18rem, (max-width: 1279px) 50vw, 25vw"
-                className="object-cover transition duration-700 group-hover:scale-105"
-              />
+              {/* Image area */}
+              <div className="absolute inset-x-0 top-0 h-[57%] overflow-hidden bg-brand-mist">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  priority={index < 4}
+                  sizes="(max-width: 767px) 18.5rem, (max-width: 1279px) 50vw, 25vw"
+                  className="
+                    object-cover
+                    transition-[transform,filter]
+                    duration-700 ease-out
+                    group-hover:scale-[1.06]
+                    group-hover:saturate-[1.08]
+                  "
+                />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/55 to-brand-navy/10" />
-              <div
-                className="absolute inset-0 opacity-70 transition duration-500 group-hover:opacity-90"
-                style={{
-                  background: `linear-gradient(180deg, rgba(12,45,90,0.08) 0%, ${item.accent}D9 100%)`,
-                }}
-              />
+                {/* Image tint */}
+                <div className="absolute inset-0 bg-brand-navy/10 transition-colors duration-500 group-hover:bg-brand-navy/5" />
 
-              <div className="relative flex h-full flex-col justify-between p-5 text-white">
-                <div className="flex items-start justify-between gap-3">
+                {/* Accent colour wash */}
+                <div
+                  className="
+                    absolute inset-0 opacity-30
+                    mix-blend-multiply
+                    transition-opacity duration-500
+                    group-hover:opacity-45
+                  "
+                  style={{
+                    background: `linear-gradient(
+                      135deg,
+                      ${item.accent}90 0%,
+                      ${item.accent}20 42%,
+                      transparent 75%
+                    )`,
+                  }}
+                />
+
+                {/* Edge vignette */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,transparent_25%,rgba(5,25,52,0.32)_100%)]" />
+
+                {/* Fade image into card content */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white" />
+
+                {/* Programme category */}
+                <div className="absolute left-5 top-5">
                   <span
-                    className="flex h-12 w-12 items-center justify-center rounded-2xl text-xl shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+                    className="
+                      inline-flex rounded-full border border-white/35
+                      bg-white/90 px-3 py-1.5
+                      text-[0.62rem] font-bold uppercase
+                      tracking-[0.17em] text-brand-navy
+                      shadow-sm backdrop-blur-md
+                    "
+                  >
+                    {item.eyebrow ?? "Initiative"}
+                  </span>
+                </div>
+
+                {/* Card number */}
+                <span
+                  aria-hidden="true"
+                  className="
+                    absolute right-5 top-5
+                    font-heading text-sm font-bold
+                    tracking-[0.12em] text-white
+                    drop-shadow-md
+                  "
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              </div>
+
+              {/* Card content */}
+              <div className="relative flex min-h-[29rem] flex-col p-5">
+                {/* Floating icon */}
+                <div className="mt-[12.7rem]">
+                  <span
+                    className="
+                      relative z-10 flex h-14 w-14
+                      items-center justify-center
+                      rounded-[1.15rem] border-4 border-white
+                      text-2xl text-brand-navy
+                      shadow-[0_12px_30px_rgba(5,25,52,0.20)]
+                      transition-all duration-500
+                      group-hover:-translate-y-1
+                      group-hover:rotate-3
+                      group-hover:scale-105
+                    "
                     style={{ backgroundColor: item.accent }}
                     aria-hidden="true"
                   >
                     {item.icon ?? "•"}
                   </span>
-                  <span className="rounded-full bg-white/14 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
-                    {item.eyebrow ?? "Initiative"}
-                  </span>
                 </div>
 
-                <div className="space-y-3">
-                  <h3 className="font-heading text-2xl font-bold leading-tight">
+                <div className="mt-5 flex flex-1 flex-col">
+                  <h3
+                    className="
+                      font-heading text-[1.55rem] font-bold
+                      leading-[1.15] text-brand-ink
+                      transition-colors duration-300
+                      group-hover:text-brand-navy
+                    "
+                  >
                     {item.title}
                   </h3>
-                  <p className="text-sm leading-7 text-white/82">{item.description}</p>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-white">
-                    Learn more
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </span>
+
+                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-brand-ink/70">
+                    {item.description}
+                  </p>
+
+                  <div className="mt-auto flex items-end justify-between gap-4 pt-6">
+                    <span className="text-sm font-bold text-brand-navy">
+                      Learn more
+                    </span>
+
+                    <span
+                      className="
+                        flex h-11 w-11 shrink-0 items-center
+                        justify-center rounded-full
+                        border border-brand-border bg-brand-mist
+                        text-brand-navy
+                        transition-all duration-300
+                        group-hover:rotate-6
+                        group-hover:border-brand-gold
+                        group-hover:bg-brand-gold
+                      "
+                    >
+                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
                 </div>
               </div>
 
+              {/* Bottom accent line */}
               <div
-                className="absolute inset-x-5 bottom-0 h-1 rounded-full opacity-80 transition duration-300 group-hover:opacity-100"
+                className="
+                  absolute inset-x-8 bottom-0 h-1
+                  origin-left scale-x-75 rounded-t-full
+                  opacity-75 transition-all duration-500
+                  group-hover:scale-x-100
+                  group-hover:opacity-100
+                "
                 style={{ backgroundColor: item.accent }}
               />
+
+              {/* Hover border highlight */}
+              <div className="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/30" />
             </Link>
           ))}
         </div>

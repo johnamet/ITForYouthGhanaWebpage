@@ -4,13 +4,20 @@
 
 :root {
   color-scheme: light;
-  --color-primary: #2563EB;
-  --color-secondary: #10B981;
-  --color-accent: #F59E0B;
-  --color-background: #F9FAFB;
+  --color-primary: #1E72BA;
+  --color-primary-dark: #0152BE;
+  --color-primary-light: #E8F1FA;
+  --color-accent: #D70B52;
+  --color-accent-dark: #B00944;
+  --color-text: #1A1A1A;
+  --color-text-muted: #5C6672;
+  --color-bg: #FFFFFF;
+  --color-bg-alt: #F7F9FC;
+  --color-border: #E2E8F0;
   --color-card: #FFFFFF;
-  --color-text: #1F2937;
-  --color-border: #E5E7EB;
+  --color-on-dark-muted: rgba(255, 255, 255, 0.82);
+  --font-heading: var(--font-poppins), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
 }
 
 * {
@@ -24,9 +31,10 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--color-background);
+  background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-family: var(--font-body);
+  line-height: 1.6;
 }
 
 a {
@@ -47,8 +55,35 @@ main {
   display: block;
 }
 
+h1,
+h2,
+h3,
+h4,
+.heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+p {
+  color: inherit;
+}
+
+main :where(p):not([class*="text-"]) {
+  color: var(--color-text-muted);
+}
+
+main :where([class*="text-white"]) :where(p):not([class*="text-"]) {
+  color: var(--color-on-dark-muted);
+}
+
+main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-brand-navy"], [class*="via-brand-navy"])
+  :where(p, li, small):is([class*="text-slate-"], [class*="text-gray-"], [class*="text-zinc-"], [class*="text-neutral-"]):not([class*="bg-white"] *) {
+  color: var(--color-on-dark-muted);
+}
+
 .article-prose {
-  color: var(--color-secondary);
+  color: var(--color-text-muted);
   font-size: 1.05rem;
   line-height: 1.9;
 }
@@ -59,7 +94,7 @@ main {
 
 .article-prose h2 {
   color: var(--color-text);
-  font-family: var(--font-playfair), Georgia, serif;
+  font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 2.65rem);
   font-weight: 700;
   line-height: 1.18;
@@ -85,7 +120,7 @@ main {
 .article-prose blockquote {
   border-left: 4px solid var(--color-accent);
   color: var(--color-text);
-  font-family: var(--font-playfair), Georgia, serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 700;
   line-height: 1.35;
@@ -117,7 +152,7 @@ main {
 .course-prose h3,
 .course-prose h4 {
   color: var(--color-text);
-  font-family: var(--font-playfair), Georgia, serif;
+  font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.2;
   margin-top: 2rem;

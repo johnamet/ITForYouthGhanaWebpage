@@ -5,6 +5,7 @@ export const revalidationMap: Record<string, string[]> = {
   partnership: ["/partner-with-us"],
   newsPage: ["/news-and-updates", "/news-and-updates/news", "/news-and-updates/blogs", "/sitemap.xml"],
   article: ["/news-and-updates", "/news-and-updates/news", "/news-and-updates/blogs", "/sitemap.xml"],
+  department: ["/departments", "/sitemap.xml"],
   team: ["/who-we-are/team"],
   partners: ["/who-we-are/partners"],
   testimonials: ["/our-impact/testimonials"],
@@ -13,6 +14,7 @@ export const revalidationMap: Record<string, string[]> = {
   impactPage: ["/our-impact", "/our-impact/reports", "/our-impact/testimonials", "/our-impact/sdgs", "/sitemap.xml"],
   settings: ["/", "/contact", "/sitemap.xml"],
   sitePage: ["/sitemap.xml"],
+  whoWeAreDynamicPage: ["/who-we-are", "/sitemap.xml"],
 };
 
 export function getRevalidationPaths(contentType: string, slug?: string) {
@@ -36,6 +38,11 @@ export function getRevalidationPaths(contentType: string, slug?: string) {
       paths.add(`/news-and-updates/blogs/${slug}`);
       paths.add("/news-and-updates");
       paths.add("/");
+    }
+
+    if (contentType === "department") {
+      paths.add(`/departments/${slug}`);
+      paths.add("/departments");
     }
 
     if (contentType === "newsPage") {
@@ -62,6 +69,11 @@ export function getRevalidationPaths(contentType: string, slug?: string) {
       };
 
       paths.add(sitePagePaths[slug] ?? `/${slug}`);
+    }
+
+    if (contentType === "whoWeAreDynamicPage") {
+      paths.add(`/who-we-are/${slug}`);
+      paths.add("/who-we-are");
     }
 
     if (contentType === "impactPage") {

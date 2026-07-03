@@ -107,30 +107,30 @@ function buildWelcomeHtml({ user, temporaryPassword }: AdminWelcomeEmailPayload)
 
   return `
     <html>
-      <body style="margin:0; padding:0; background:#f5f7fb; color:#172033; font-family:Arial, sans-serif;">
+      <body style="margin:0; padding:0; background:#F7F9FC; color:#1A1A1A; font-family:Inter, Arial, sans-serif;">
         <div style="max-width:640px; margin:0 auto; padding:32px 20px;">
-          <div style="background:#ffffff; border:1px solid #e6eaf2; border-radius:18px; padding:28px;">
-            <p style="margin:0 0 12px; color:#a67c00; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;">IT For Youth Ghana</p>
-            <h1 style="margin:0 0 16px; color:#172033; font-size:26px; line-height:1.25;">Your account is ready</h1>
+          <div style="background:#ffffff; border:1px solid #E2E8F0; border-radius:8px; padding:28px;">
+            <p style="margin:0 0 12px; color:#D70B52; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;">IT For Youth Ghana</p>
+            <h1 style="margin:0 0 16px; color:#1A1A1A; font-family:Poppins, Arial, sans-serif; font-size:26px; line-height:1.25;">Your account is ready</h1>
             <p style="margin:0 0 20px; line-height:1.6;">Hello ${escapeHtml(user.name)}, an account has been created for you on the IT For Youth Ghana ${escapeHtml(accessLabel)}.</p>
             <table style="border-collapse:collapse; width:100%; margin:0 0 22px;">
               <tbody>
                 <tr>
-                  <th style="border:1px solid #e6eaf2; padding:10px; text-align:left; background:#f5f7fb; width:180px;">Email</th>
-                  <td style="border:1px solid #e6eaf2; padding:10px;">${escapeHtml(user.email.toLowerCase())}</td>
+                  <th style="border:1px solid #E2E8F0; padding:10px; text-align:left; background:#F7F9FC; width:180px;">Email</th>
+                  <td style="border:1px solid #E2E8F0; padding:10px;">${escapeHtml(user.email.toLowerCase())}</td>
                 </tr>
                 <tr>
-                  <th style="border:1px solid #e6eaf2; padding:10px; text-align:left; background:#f5f7fb;">Temporary password</th>
-                  <td style="border:1px solid #e6eaf2; padding:10px; font-family:Consolas, Monaco, monospace; font-weight:700;">${escapeHtml(temporaryPassword)}</td>
+                  <th style="border:1px solid #E2E8F0; padding:10px; text-align:left; background:#F7F9FC;">Temporary password</th>
+                  <td style="border:1px solid #E2E8F0; padding:10px; font-family:Consolas, Monaco, monospace; font-weight:700;">${escapeHtml(temporaryPassword)}</td>
                 </tr>
                 <tr>
-                  <th style="border:1px solid #e6eaf2; padding:10px; text-align:left; background:#f5f7fb;">Role</th>
-                  <td style="border:1px solid #e6eaf2; padding:10px;">${escapeHtml(getRoleLabel(user.role))}</td>
+                  <th style="border:1px solid #E2E8F0; padding:10px; text-align:left; background:#F7F9FC;">Role</th>
+                  <td style="border:1px solid #E2E8F0; padding:10px;">${escapeHtml(getRoleLabel(user.role))}</td>
                 </tr>
               </tbody>
             </table>
             <p style="margin:0 0 22px; line-height:1.6;">Please sign in with this temporary password and change it after your first login.</p>
-            <a href="${escapeHtml(loginUrl)}" style="display:inline-block; background:#172033; color:#ffffff; padding:12px 18px; border-radius:999px; text-decoration:none; font-weight:700;">Sign in</a>
+            <a href="${escapeHtml(loginUrl)}" style="display:inline-block; background:#D70B52; color:#ffffff; padding:12px 18px; border-radius:6px; text-decoration:none; font-weight:700;">Sign in</a>
           </div>
         </div>
       </body>

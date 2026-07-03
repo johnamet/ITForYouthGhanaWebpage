@@ -64,9 +64,9 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
   );
 
   return (
-    <section className="overflow-hidden bg-[linear-gradient(135deg,#fff8dc_0%,#f5c518_40%,#f0b90f_100%)] px-6 py-20 lg:px-10">
+    <section className="overflow-hidden bg-[linear-gradient(135deg,var(--color-primary-light)_0%,var(--color-bg)_48%,#fff1f6_100%)] px-6 py-20 lg:px-10">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="relative overflow-hidden rounded-[32px] border border-white/35 bg-white/20 p-8 shadow-[0_20px_50px_rgba(12,45,90,0.12)] backdrop-blur-sm sm:p-10">
+        <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-[linear-gradient(135deg,var(--color-primary-dark)_0%,var(--color-primary)_58%,var(--color-accent)_130%)] p-8 text-white shadow-[0_20px_50px_rgba(1,82,190,0.18)] sm:p-10">
           {campaign.image ? (
             <div className="absolute inset-y-0 right-0 hidden w-[42%] overflow-hidden lg:block">
               <Image
@@ -76,19 +76,19 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                 sizes="40vw"
                 className="object-cover opacity-25"
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-brand-navy/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-l from-brand-navy/15 via-brand-navy/35 to-brand-navy/70" />
             </div>
           ) : null}
 
           <div className="relative max-w-2xl space-y-6">
             <div className="space-y-3">
-              <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-navy/70">
+              <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-white/80">
                 {campaign.eyebrow}
               </p>
-              <h2 className="font-heading text-3xl font-bold leading-tight text-brand-ink sm:text-4xl">
+              <h2 className="font-heading text-3xl font-bold leading-tight text-white sm:text-4xl">
                 {campaign.headline}
               </h2>
-              <p className="max-w-xl text-[0.98rem] leading-8 text-brand-ink/80">
+              <p className="max-w-xl text-[0.98rem] leading-8 text-white/85">
                 {campaign.description}
               </p>
             </div>
@@ -98,7 +98,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                 {campaign.supportPoints.map((point) => (
                   <div
                     key={point}
-                    className="rounded-[22px] border border-brand-navy/10 bg-white/45 px-4 py-4 text-sm leading-7 text-brand-ink/80 backdrop-blur-sm"
+                    className="rounded-[22px] border border-white/15 bg-white/10 px-4 py-4 text-sm leading-7 text-white/85 backdrop-blur-sm"
                   >
                     {point}
                   </div>
@@ -109,7 +109,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
             <div className="flex flex-wrap gap-3">
               <Link
                 href={campaign.primaryCta.href}
-                className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-brand-warm hover:shadow-lg"
               >
                 <HeartHandshake className="h-4 w-4" />
                 {campaign.primaryCta.label}
@@ -117,7 +117,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
               {campaign.secondaryCta ? (
                 <Link
                   href={campaign.secondaryCta.href}
-                  className="inline-flex items-center gap-2 rounded-full border border-brand-navy/15 bg-white/70 px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:border-brand-navy/30 hover:bg-white"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/50 hover:bg-white/15"
                 >
                   {campaign.secondaryCta.label}
                   <ArrowRight className="h-4 w-4" />
@@ -127,7 +127,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
           </div>
         </div>
 
-        <div className="rounded-[32px] bg-white p-8 shadow-[0_22px_55px_rgba(12,45,90,0.18)] sm:p-10">
+        <div className="rounded-[32px] border border-brand-border bg-white p-8 shadow-[0_22px_55px_rgba(1,82,190,0.14)] sm:p-10">
           <div className="space-y-8">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -138,7 +138,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                   {progress}%
                 </p>
               </div>
-              <div className="rounded-full bg-brand-mist px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">
+              <div className="rounded-full bg-brand-primary-light px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">
                 Active now
               </div>
             </div>
@@ -160,7 +160,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-brand-mist">
                 <div
-                  className="h-full rounded-full bg-[linear-gradient(90deg,#0c2d5a_0%,#f5c518_100%)] transition-[width] duration-700"
+                  className="h-full rounded-full bg-gradient-to-r from-brand-navy to-brand-gold transition-[width] duration-700"
                   style={{ width: `${progress}%` }}
                   aria-hidden="true"
                 />

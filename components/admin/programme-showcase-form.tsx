@@ -36,7 +36,7 @@ export function ProgrammeShowcaseForm({ initial }: Props) {
         description: "",
         href: "/",
         image: "",
-        accent: "#0C2D5A",
+        accent: "#1E72BA",
         icon: "•",
         eyebrow: "",
         active: true,

@@ -16,6 +16,7 @@ import {
 import type {
   ActionLink,
   ContentBlock,
+  DynamicSitePage,
   HighlightStat,
   RouteCard,
   SitePage,
@@ -31,11 +32,17 @@ type SubmitState = {
   message: string;
 };
 
+type EditableSitePage = SitePage & Partial<Pick<DynamicSitePage, "id" | "parentSlug" | "status" | "order">>;
+
 type SitePageFormProps = {
-  initial: SitePage;
+  initial: EditableSitePage;
   endpoint: string;
   previewHref: string;
   submitLabel?: string;
+  method?: "POST" | "PUT";
+  showSlugField?: boolean;
+  showPublishingFields?: boolean;
+  successRedirectHref?: string;
 };
 
 const inputClass =
@@ -84,16 +91,23 @@ export function SitePageForm({
   endpoint,
   previewHref,
   submitLabel = "Save page",
+  method = "PUT",
+  showSlugField = false,
+  showPublishingFields = false,
+  successRedirectHref,
 }: SitePageFormProps) {
   const router = useRouter();
-  const [values, setValues] = useState<SitePage>(() => initial);
+  const [values, setValues] = useState<EditableSitePage>(() => initial);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitState, setSubmitState] = useState<SubmitState>({
     type: "idle",
     message: "",
   });
 
-  const update = <Key extends keyof SitePage>(key: Key, value: SitePage[Key]) => {
+  const update = <Key extends keyof EditableSitePage>(
+    key: Key,
+    value: EditableSitePage[Key],
+  ) => {
     setValues((current) => ({ ...current, [key]: value }));
   };
 
@@ -171,7 +185,7 @@ export function SitePageForm({
 
     try {
       const response = await fetch(endpoint, {
-        method: "PUT",
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
@@ -185,7 +199,11 @@ export function SitePageForm({
         type: "success",
         message: payload.message || "Page saved.",
       });
-      router.refresh();
+      if (successRedirectHref) {
+        router.push(successRedirectHref);
+      } else {
+        router.refresh();
+      }
     } catch (error) {
       setSubmitState({
         type: "error",
@@ -226,6 +244,57 @@ export function SitePageForm({
         </div>
 
         <div className="grid gap-5 md:grid-cols-2">
+          {showSlugField ? (
+            <div>
+              <label htmlFor="slug" className="text-sm font-bold text-brand-ink">
+                URL slug
+              </label>
+              <input
+                id="slug"
+                required
+                value={values.slug}
+                onChange={(event) => update("slug", event.target.value)}
+                className={inputClass}
+                placeholder="board-of-directors"
+              />
+              <p className="mt-2 text-xs font-medium text-slate-500">
+                This becomes /who-we-are/{values.slug || "your-slug"}.
+              </p>
+            </div>
+          ) : null}
+          {showPublishingFields ? (
+            <>
+              <div>
+                <label htmlFor="status" className="text-sm font-bold text-brand-ink">
+                  Status
+                </label>
+                <select
+                  id="status"
+                  value={"status" in values ? values.status : "draft"}
+                  onChange={(event) =>
+                    update("status", event.target.value as DynamicSitePage["status"])
+                  }
+                  className={inputClass}
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="order" className="text-sm font-bold text-brand-ink">
+                  Order
+                </label>
+                <input
+                  id="order"
+                  type="number"
+                  value={"order" in values ? values.order : 0}
+                  onChange={(event) => update("order", Number(event.target.value))}
+                  className={inputClass}
+                />
+              </div>
+            </>
+          ) : null}
           <div>
             <label htmlFor="eyebrow" className="text-sm font-bold text-brand-ink">
               Eyebrow

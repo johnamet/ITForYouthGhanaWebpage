@@ -126,6 +126,8 @@ export const teamSchema = z.object({
   name: z.string().trim().min(2, "Please enter a name."),
   role: z.string().trim().min(2, "Please enter a role."),
   department: z.string().trim().min(2, "Please enter a department."),
+  departmentId: optionalTrimmedString,
+  departmentSlug: optionalTrimmedString,
   bio: z.string().trim().min(10, "Please enter a short biography."),
   photo: optionalTrimmedString,
   email: optionalEmail,
@@ -136,6 +138,77 @@ export const teamSchema = z.object({
 });
 
 export type TeamPayload = z.infer<typeof teamSchema>;
+
+// ─── Department validators ──────────────────────────────────────────────────
+
+const departmentServiceSchema = z.object({
+  title: z.string().trim().min(2, "Please add a service title."),
+  body: z.string().trim().min(10, "Please add service copy."),
+  bullets: z.array(z.string().trim().min(1)).default([]),
+});
+
+const departmentWorkflowSchema = z.object({
+  title: z.string().trim().min(2, "Please add a workflow step title."),
+  description: z.string().trim().min(10, "Please add workflow step copy."),
+});
+
+const departmentResourceSchema = z.object({
+  label: z.string().trim().min(2, "Please add a resource label."),
+  href: z.string().trim().min(1, "Please add a resource link."),
+  description: optionalTrimmedString,
+});
+
+const departmentHighlightStatSchema = z.object({
+  value: z.string().trim().min(1, "Please add a stat value."),
+  label: z.string().trim().min(2, "Please add a stat label."),
+  description: optionalTrimmedString,
+  icon: optionalTrimmedString,
+});
+
+const departmentActionLinkSchema = z.object({
+  label: z.string().trim().min(2, "Please add a link label."),
+  href: z.string().trim().min(1, "Please add a link destination."),
+});
+
+const departmentContactSchema = z
+  .object({
+    name: optionalTrimmedString,
+    role: optionalTrimmedString,
+    email: optionalEmail,
+  })
+  .partial()
+  .default({});
+
+export const departmentSchema = z.object({
+  slug: z
+    .string()
+    .trim()
+    .min(3, "Please add a URL slug.")
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only."),
+  eyebrow: z.string().trim().min(2, "Please add an eyebrow label."),
+  title: z.string().trim().min(2, "Please add a department title."),
+  summary: z.string().trim().min(12, "Please add a short summary."),
+  description: z.string().trim().min(24, "Please add a public description."),
+  intro: z.string().trim().min(12, "Please add intro copy."),
+  mission: z.string().trim().min(12, "Please add a mission statement."),
+  heroImage: optionalTrimmedString,
+  icon: optionalTrimmedString,
+  color: optionalTrimmedString,
+  responsibilities: z.array(z.string().trim().min(1)).min(1, "Please add at least one responsibility."),
+  services: z.array(departmentServiceSchema).default([]),
+  workflows: z.array(departmentWorkflowSchema).default([]),
+  priorities: z.array(z.string().trim().min(1)).default([]),
+  stats: z.array(departmentHighlightStatSchema).default([]),
+  teamMemberIds: z.array(z.string().trim().min(1)).default([]),
+  resources: z.array(departmentResourceSchema).default([]),
+  contact: departmentContactSchema,
+  ctas: z.array(departmentActionLinkSchema).default([]),
+  featured: checkboxBoolean.default(false),
+  status: z.enum(["draft", "published", "archived"]).default("draft"),
+  order: optionalNumber,
+});
+
+export type DepartmentPayload = z.infer<typeof departmentSchema>;
 
 export const partnerSchema = z.object({
   name: z.string().trim().min(2, "Please enter a partner name."),
@@ -296,6 +369,18 @@ export const sitePageSchema = z.object({
 });
 
 export type SitePagePayload = z.infer<typeof sitePageSchema>;
+
+export const dynamicSitePageSchema = sitePageSchema.extend({
+  slug: z
+    .string()
+    .trim()
+    .min(3, "Please add a URL slug.")
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only."),
+  status: z.enum(["draft", "published", "archived"]).default("draft"),
+  order: optionalNumber,
+});
+
+export type DynamicSitePagePayload = z.infer<typeof dynamicSitePageSchema>;
 
 export const homepageSchema = z
   .object({

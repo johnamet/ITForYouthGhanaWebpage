@@ -37,11 +37,13 @@ export function ContentPage({ page }: ContentPageProps) {
           </div>
 
           <div className="rounded-[32px] border border-white/15 bg-white/10 p-8 backdrop-blur">
-            <p className="text-sm uppercase tracking-[0.24em] text-brand-gold">Foundation deliverables</p>
+            <p className="text-sm uppercase tracking-[0.24em] text-brand-gold">Page highlights</p>
             <ul className="mt-6 grid gap-4 text-sm leading-7 text-slate-100">
-              <li>Stable Next.js route and shared layout</li>
-              <li>Seed content that can be replaced without changing URLs</li>
-              <li>Future-ready model for CMS, SEO, and richer sections</li>
+              {page.stats.slice(0, 3).map((stat) => (
+                <li key={`${stat.value}-${stat.label}`}>
+                  <span className="font-semibold text-white">{stat.value}</span> {stat.label}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

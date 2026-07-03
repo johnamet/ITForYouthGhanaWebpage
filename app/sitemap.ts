@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 
 import { getCmsPublishedArticles } from "@/lib/cms/articles";
+import { getCmsDepartments } from "@/lib/cms/departments";
+import { getCmsWhoWeAreDynamicPages } from "@/lib/cms/site-pages";
 import { organisationServices } from "@/lib/content/organisation-config";
 import { partnershipTracks } from "@/lib/content/partnership-config";
 import {
@@ -9,7 +11,11 @@ import {
 } from "@/lib/content/site-config";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const articles = await getCmsPublishedArticles();
+  const [articles, departments, whoWeArePages] = await Promise.all([
+    getCmsPublishedArticles(),
+    getCmsDepartments(),
+    getCmsWhoWeAreDynamicPages(),
+  ]);
   const routes = [
     "/",
     "/who-we-are",
@@ -32,10 +38,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/news-and-updates/blogs",
     "/contact",
     "/donate",
+    "/departments",
     ...publicNavigation.map((item) => item.href),
     ...initiatives.map((page) => `/what-we-do/${page.slug}`),
     ...organisationServices.map((page) => `/for-organisations/${page.slug}`),
     ...partnershipTracks.map((page) => `/partner-with-us/${page.slug}`),
+    ...departments.map((department) => `/departments/${department.slug}`),
+    ...whoWeArePages.map((page) => `/who-we-are/${page.slug}`),
     ...articles.map((article) => `/news-and-updates/${article.category}/${article.slug}`),
   ];
 
