@@ -1855,6 +1855,11 @@ export const adminNavigation: AdminNavItem[] = [
     description: "Overview, activity, and publishing health.",
   },
   {
+    label: "Usage & Documentation",
+    href: "/admin/documentation",
+    description: "CMS guide, page map, publishing rules, and update targets.",
+  },
+  {
     label: "Content",
     href: "/admin/content/homepage",
     description: "Homepage sections, banner, slides, and impact content.",
