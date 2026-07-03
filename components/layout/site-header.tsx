@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronDown, X } from "lucide-react";
 
 import { cn } from "@/lib/utils/cn";
@@ -68,10 +69,14 @@ export function SiteHeader() {
 
         {/* ── Logo ─────────────────────────────────────────────────── */}
         <Link href="/" className="flex shrink-0 items-center gap-3 py-3.5">
-          {/* Badge */}
-          <span className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-gradient-to-br from-blue-600 to-blue-800 text-[0.6rem] font-bold tracking-[0.08em] text-brand-gold ring-1 ring-white/10">
-            ITFY
-          </span>
+          <Image
+            src="/Asset-1.png"
+            alt="IT For Youth Ghana"
+            width={36}
+            height={36}
+            className="h-9 w-9 rounded-[10px] object-contain"
+            priority
+          />
           {/* Wordmark */}
           <span className="hidden sm:flex sm:flex-col sm:gap-0.5">
             <span className="font-heading text-[0.96rem] font-bold leading-none text-white">
