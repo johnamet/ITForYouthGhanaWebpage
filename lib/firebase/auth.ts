@@ -16,8 +16,8 @@ export type FileServerSessionUser = {
   uid: string;
   email: string;
   name?: string;
-  role: "file-server-only";
-  source: "firestore";
+  role: AdminRole | "file-server-only";
+  source: "firestore" | "custom-claim" | "env";
 };
 
 export function getAdminSessionCookieName() {
@@ -163,7 +163,7 @@ export async function resolveFileServerUser(
 
   const role = await getUserAccessRoleFromFirestore(decodedToken);
 
-  if (role !== "file-server-only") {
+  if (role !== "file-server-only" && !isAdminRole(role)) {
     return null;
   }
 
