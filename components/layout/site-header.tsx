@@ -59,7 +59,11 @@ function DropdownPanel({ items }: { items: { label: string; href: string }[] }) 
 
 // ─── SiteHeader ───────────────────────────────────────────────────────────────
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  logoUrl?: string;
+};
+
+export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
   const [mobileOpen, setMobileOpen]       = useState(false);
   const [mobileSection, setMobileSection] = useState<string | null>(null);
 
@@ -70,11 +74,12 @@ export function SiteHeader() {
         {/* ── Logo ─────────────────────────────────────────────────── */}
         <Link href="/" className="flex shrink-0 items-center gap-3 py-3.5">
           <Image
-            src="/Asset-1.png"
+            src={logoUrl}
             alt="IT For Youth Ghana"
             width={36}
             height={36}
             className="h-9 w-9 rounded-[10px] object-contain"
+            unoptimized={logoUrl.startsWith("http")}
             priority
           />
           {/* Wordmark */}

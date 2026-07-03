@@ -50,6 +50,7 @@ export async function PUT(request: Request) {
   for (const path of getRevalidationPaths("settings")) {
     revalidatePath(path);
   }
+  revalidatePath("/", "layout");
 
   return NextResponse.json({ success: true, message: "Settings updated." });
 }

@@ -12,6 +12,7 @@ export type CmsPublicSettings = {
   siteTitle?: string;
   siteDescription?: string;
   defaultOgImage?: string;
+  logoUrl?: string;
   contact: {
     email?: string;
     phone?: string;
@@ -24,6 +25,7 @@ const FALLBACK_SETTINGS: CmsPublicSettings = {
   siteTitle: "IT For Youth Ghana",
   siteDescription:
     "Empowering Ghanaian youth with digital skills and the confidence to shape tomorrow's economy.",
+  logoUrl: "/Asset-1.png",
   contact: {
     email: contactPageContent.channels.find((c) => c.label === "Email")?.value || "info@itforyouthghana.org",
     phone: contactPageContent.channels.find((c) => c.label === "Phone")?.value || "+233 596 244 834",
@@ -54,6 +56,7 @@ export async function getCmsSettings(): Promise<CmsPublicSettings> {
       siteTitle: (data.siteTitle as string) || FALLBACK_SETTINGS.siteTitle,
       siteDescription: (data.siteDescription as string) || FALLBACK_SETTINGS.siteDescription,
       defaultOgImage: (data.defaultOgImage as string) || FALLBACK_SETTINGS.defaultOgImage,
+      logoUrl: (data.logoUrl as string) || FALLBACK_SETTINGS.logoUrl,
       contact: {
         email: (contact.email as string) || FALLBACK_SETTINGS.contact.email,
         phone: (contact.phone as string) || FALLBACK_SETTINGS.contact.phone,

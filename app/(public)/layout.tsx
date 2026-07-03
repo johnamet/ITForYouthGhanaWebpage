@@ -6,6 +6,7 @@ import { SiteHeader }      from "@/components/layout/site-header";
 import { SiteFooter }      from "@/components/layout/site-footer";
 import { siteMeta } from "@/lib/content/site-config";
 import { getCmsAnnouncement, getCmsFloatingElements } from "@/lib/cms/homepage";
+import { getCmsSettings } from "@/lib/cms/settings";
 
 export const metadata: Metadata = {
   title: {
@@ -17,9 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [announcement, floating] = await Promise.all([
+  const [announcement, floating, settings] = await Promise.all([
     getCmsAnnouncement(),
     getCmsFloatingElements(),
+    getCmsSettings(),
   ]);
 
   return (
@@ -30,12 +32,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
        *   SiteHeader      - z-40, sticky top-0
        *   main            - page content
        *   SiteFooter      - full-width dark footer
-       */}
+      */}
       <AnnouncementBar announcement={announcement} />
-      <SiteHeader />
+      <SiteHeader logoUrl={settings.logoUrl} />
       <main className="antialiased">{children}</main>
       <FloatingElements content={floating} />
-      <SiteFooter />
+      <SiteFooter settings={settings} />
     </>
   );
 }

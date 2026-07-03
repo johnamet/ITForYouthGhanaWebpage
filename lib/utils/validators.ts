@@ -198,6 +198,7 @@ export const settingsSchema = z.object({
   siteTitle: optionalTrimmedString,
   siteDescription: optionalTrimmedString,
   defaultOgImage: optionalTrimmedString,
+  logoUrl: optionalTrimmedString,
   contact: z
     .object({
       email: optionalEmail,

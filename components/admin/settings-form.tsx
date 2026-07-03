@@ -66,6 +66,10 @@ export function SettingsForm({ initial }: Props) {
             <label className="text-sm font-bold text-brand-ink">Default OG image</label>
             <input className={input} value={values.defaultOgImage ?? ""} onChange={(e) => update("defaultOgImage", e.target.value)} />
           </div>
+          <div>
+            <label className="text-sm font-bold text-brand-ink">Header logo URL</label>
+            <input className={input} value={values.logoUrl ?? ""} onChange={(e) => update("logoUrl", e.target.value)} placeholder="/Asset-1.png" />
+          </div>
         </div>
       </section>
 

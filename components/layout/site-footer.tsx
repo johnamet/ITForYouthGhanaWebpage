@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { NewsletterSignupForm } from "@/components/shared/newsletter-signup-form";
 import { newsletterSignupContent } from "@/lib/content/site-config";
-import { getCmsSettings } from "@/lib/cms/settings";
+import { getCmsSettings, type CmsPublicSettings } from "@/lib/cms/settings";
 
 const footerNav = [
   {
@@ -77,8 +77,12 @@ function SocialIcon({ label }: { label: string }) {
     <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current"><circle cx="12" cy="12" r="10" /></svg>
   );
 }
-export async function SiteFooter() {
-  const settings = await getCmsSettings();
+type SiteFooterProps = {
+  settings?: CmsPublicSettings;
+};
+
+export async function SiteFooter({ settings: providedSettings }: SiteFooterProps = {}) {
+  const settings = providedSettings ?? (await getCmsSettings());
   return (
     <footer className="bg-brand-navy text-white">
       {/* Main footer grid */}
