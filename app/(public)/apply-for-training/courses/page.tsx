@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function TrainingCoursesPage() {
   const page = await getCmsTrainingCoursesPage();
-  const courses = await getTrainingCatalogMixed((page as any).courses);
+  const courses = await getTrainingCatalogMixed(page.courses);
 
   return <TrainingCourseListingPage page={page} courses={courses} />;
 }

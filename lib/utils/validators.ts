@@ -507,3 +507,31 @@ export const partnershipTrackSchema = z
   .partial();
 
 export type PartnershipTrackPayload = z.infer<typeof partnershipTrackSchema>;
+
+// ─── User validators ───────────────────────────────────────────────────────────
+
+export const userSchema = z.object({
+  name: z.string().trim().min(2, "Please enter a name."),
+  email: z.string().trim().email("Please enter a valid email address."),
+  role: z.enum(["super-admin", "editor", "viewer"]).default("viewer"),
+  status: z.enum(["active", "inactive"]).default("active"),
+  notes: optionalTrimmedString,
+});
+
+export type UserPayload = z.infer<typeof userSchema>;
+
+// ─── Admin update schemas for operational records ───────────────────────────
+
+export const applicationAdminUpdateSchema = z.object({
+  status: z.enum(["new", "reviewed", "shortlisted", "rejected", "enrolled"]),
+  notes: optionalTrimmedString,
+});
+
+export type ApplicationAdminUpdatePayload = z.infer<typeof applicationAdminUpdateSchema>;
+
+export const contactMessageAdminUpdateSchema = z.object({
+  status: z.enum(["new", "reviewed", "archived"]),
+  notes: optionalTrimmedString,
+});
+
+export type ContactMessageAdminUpdatePayload = z.infer<typeof contactMessageAdminUpdateSchema>;

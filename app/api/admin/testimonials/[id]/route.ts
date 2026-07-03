@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { requireAdminApiSession } from "@/lib/cms/admin-auth";
+import { getCurrentAdminUser, requireAdminApiSession } from "@/lib/cms/admin-auth";
 import {
   deleteCmsTestimonial,
   getCmsTestimonialById,
@@ -9,6 +9,7 @@ import {
 } from "@/lib/cms/testimonials";
 import { testimonialSchema } from "@/lib/utils/validators";
 import { getRevalidationPaths } from "@/lib/utils/revalidate";
+import { writeAuditLog } from "@/lib/cms/audit";
 
 type TestimonialRouteProps = {
   params: {
@@ -58,7 +59,14 @@ export async function PUT(request: Request, { params }: TestimonialRouteProps) {
   }
 
   revalidateTestimonialRoutes();
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "update",
+    resourceType: "testimonials",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Updated testimonial ${parsed.data.name}`,
+  });
   return NextResponse.json({
     success: true,
     message: "Testimonial updated.",
@@ -88,7 +96,14 @@ export async function DELETE(_request: Request, { params }: TestimonialRouteProp
   }
 
   revalidateTestimonialRoutes();
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "delete",
+    resourceType: "testimonials",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Deleted testimonial ${existing?.name ?? params.id}`,
+  });
   return NextResponse.json({
     success: true,
     message: "Testimonial deleted.",

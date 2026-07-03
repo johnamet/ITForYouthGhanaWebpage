@@ -1,10 +1,11 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { requireAdminApiSession } from "@/lib/cms/admin-auth";
+import { getCurrentAdminUser, requireAdminApiSession } from "@/lib/cms/admin-auth";
 import { deleteCmsTeamMember, getCmsTeamMemberById, saveCmsTeamMember } from "@/lib/cms/team";
 import { teamSchema } from "@/lib/utils/validators";
 import { getRevalidationPaths } from "@/lib/utils/revalidate";
+import { writeAuditLog } from "@/lib/cms/audit";
 
 type TeamRouteProps = {
   params: { id: string };
@@ -53,7 +54,15 @@ export async function PUT(request: Request, { params }: TeamRouteProps) {
   }
 
   revalidateTeamRoutes();
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "update",
+    resourceType: "team",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Updated team member ${parsed.data.name}`,
+    changes: { status: parsed.data.status, department: parsed.data.department },
+  });
   return NextResponse.json({ success: true, message: "Team member updated.", id: result.id });
 }
 
@@ -80,6 +89,13 @@ export async function DELETE(_request: Request, { params }: TeamRouteProps) {
   }
 
   revalidateTeamRoutes();
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "delete",
+    resourceType: "team",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Deleted team member ${existing?.name ?? params.id}`,
+  });
   return NextResponse.json({ success: true, message: "Team member deleted.", id: result.id });
 }

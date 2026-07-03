@@ -1,10 +1,11 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { requireAdminApiSession } from "@/lib/cms/admin-auth";
+import { getCurrentAdminUser, requireAdminApiSession } from "@/lib/cms/admin-auth";
 import { saveCmsTeamMember } from "@/lib/cms/team";
 import { teamSchema } from "@/lib/utils/validators";
 import { getRevalidationPaths } from "@/lib/utils/revalidate";
+import { writeAuditLog } from "@/lib/cms/audit";
 
 function revalidateTeamRoutes() {
   for (const path of getRevalidationPaths("team")) {
@@ -47,6 +48,14 @@ export async function POST(request: Request) {
   }
 
   revalidateTeamRoutes();
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "create",
+    resourceType: "team",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Created team member ${parsed.data.name}`,
+    changes: { status: parsed.data.status, department: parsed.data.department },
+  });
   return NextResponse.json({ success: true, message: "Team member saved.", id: result.id });
 }

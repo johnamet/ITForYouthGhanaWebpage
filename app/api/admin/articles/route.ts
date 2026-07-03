@@ -1,10 +1,11 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { requireAdminApiSession } from "@/lib/cms/admin-auth";
+import { getCurrentAdminUser, requireAdminApiSession } from "@/lib/cms/admin-auth";
 import { saveCmsArticle } from "@/lib/cms/articles";
 import { articleSchema } from "@/lib/utils/validators";
 import { getRevalidationPaths } from "@/lib/utils/revalidate";
+import { writeAuditLog } from "@/lib/cms/audit";
 
 function revalidateArticleRoutes(slug: string) {
   for (const path of getRevalidationPaths("article", slug)) {
@@ -46,7 +47,15 @@ export async function POST(request: Request) {
   }
 
   revalidateArticleRoutes(parsed.data.slug);
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "create",
+    resourceType: "articles",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Created article ${parsed.data.slug}`,
+    changes: { category: parsed.data.category, status: parsed.data.status },
+  });
   return NextResponse.json({
     success: true,
     message: "Article saved.",

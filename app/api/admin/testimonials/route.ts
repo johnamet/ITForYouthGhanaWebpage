@@ -1,10 +1,11 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { requireAdminApiSession } from "@/lib/cms/admin-auth";
+import { getCurrentAdminUser, requireAdminApiSession } from "@/lib/cms/admin-auth";
 import { saveCmsTestimonial } from "@/lib/cms/testimonials";
 import { testimonialSchema } from "@/lib/utils/validators";
 import { getRevalidationPaths } from "@/lib/utils/revalidate";
+import { writeAuditLog } from "@/lib/cms/audit";
 
 function revalidateTestimonialRoutes() {
   for (const path of getRevalidationPaths("testimonials")) {
@@ -46,6 +47,13 @@ export async function POST(request: Request) {
   }
 
   revalidateTestimonialRoutes();
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "create",
+    resourceType: "testimonials",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Created testimonial ${parsed.data.name}`,
+  });
   return NextResponse.json({ success: true, message: "Testimonial saved.", id: result.id });
 }

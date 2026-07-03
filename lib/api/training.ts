@@ -28,22 +28,10 @@ export async function getTrainingCatalog(): Promise<Course[]> {
   return sortCourses(seedTrainingCourses);
 }
 
-function uniqueBySlug(courses: Course[]): Course[] {
-  const map = new Map<string, Course>();
-  for (const c of courses) {
-    const key = c.slug || c.id;
-    if (!map.has(key)) {
-      map.set(key, c);
-    }
-  }
-  return Array.from(map.values());
-}
-
 export async function getTrainingCatalogMixed(cmsCourses?: unknown[]): Promise<Course[]> {
   const external = await getCourseCatalog();
   const base = external.length ? external : seedTrainingCourses;
 
-  console.log("getTrainingCatalogMixed: base courses", base.length, "cmsCourses", cmsCourses?.length, "external", external?.length ?? 0);
   const cms: Course[] = Array.isArray(cmsCourses)
     ? cmsCourses
         .map((raw) => {

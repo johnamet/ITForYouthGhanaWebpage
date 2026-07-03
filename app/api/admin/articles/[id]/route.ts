@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { requireAdminApiSession } from "@/lib/cms/admin-auth";
+import { getCurrentAdminUser, requireAdminApiSession } from "@/lib/cms/admin-auth";
 import {
   deleteCmsArticle,
   getCmsArticleById,
@@ -9,6 +9,7 @@ import {
 } from "@/lib/cms/articles";
 import { articleSchema } from "@/lib/utils/validators";
 import { getRevalidationPaths } from "@/lib/utils/revalidate";
+import { writeAuditLog } from "@/lib/cms/audit";
 
 type ArticleRouteProps = {
   params: {
@@ -59,7 +60,15 @@ export async function PUT(request: Request, { params }: ArticleRouteProps) {
 
   revalidateArticleRoutes(existingArticle?.slug);
   revalidateArticleRoutes(parsed.data.slug);
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "update",
+    resourceType: "articles",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Updated article ${parsed.data.slug}`,
+    changes: { category: parsed.data.category, status: parsed.data.status },
+  });
   return NextResponse.json({
     success: true,
     message: "Article updated.",
@@ -89,7 +98,14 @@ export async function DELETE(_request: Request, { params }: ArticleRouteProps) {
   }
 
   revalidateArticleRoutes(existingArticle?.slug);
-
+  const current = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "delete",
+    resourceType: "articles",
+    resourceId: String(result.id),
+    actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
+    summary: `Deleted article ${existingArticle?.slug ?? params.id}`,
+  });
   return NextResponse.json({
     success: true,
     message: "Article deleted.",

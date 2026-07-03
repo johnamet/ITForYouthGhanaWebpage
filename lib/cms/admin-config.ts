@@ -145,7 +145,7 @@ export const cmsCollections: AdminCollectionDefinition[] = [
     key: "contactMessages",
     label: "Contact messages",
     collection: FIREBASE_COLLECTIONS.contactMessages,
-    route: "/admin/settings",
+    route: "/admin/messages",
     description: "Validated public contact submissions routed into admin review and email alerts.",
     readModel: "write-only-public",
     writeRole: "editor",

@@ -38,7 +38,7 @@ export async function generateMetadata({
 export default async function TrainingCourseDetailPage({ params }: TrainingCourseDetailPageProps) {
   const course = await getCourseBySlugMixed(params.slug);
   const page = await getCmsTrainingCoursesPage();
-  const mixedCourse = (await getCourseBySlugMixed(params.slug, (page as any).courses)) ?? course;
+  const mixedCourse = (await getCourseBySlugMixed(params.slug, page.courses)) ?? course;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">

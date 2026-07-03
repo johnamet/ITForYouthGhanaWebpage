@@ -5,7 +5,7 @@ import { AdminDataTable } from "@/components/admin/admin-data-table";
 import { AdminMetricCard } from "@/components/admin/admin-metric-card";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminStatusPill } from "@/components/admin/admin-status-pill";
-import { adminApplicationRecords } from "@/lib/cms/admin-config";
+import { getCmsApplications } from "@/lib/cms/applications";
 import { formatDate } from "@/lib/utils/formatters";
 import type {
   AdminApplicationRecord,
@@ -13,32 +13,34 @@ import type {
   AdminTableColumn,
 } from "@/types/admin";
 
-const applicationMetrics: AdminMetric[] = [
-  {
-    label: "Total applications",
-    value: String(adminApplicationRecords.length),
-    description: "Seeded records showing the future Firestore review workflow.",
-    status: "active",
-  },
-  {
-    label: "Needs review",
-    value: String(adminApplicationRecords.filter((record) => record.status === "new").length),
-    description: "Applications that should be reviewed first in the real queue.",
-    status: "new",
-  },
-  {
-    label: "Shortlisted",
-    value: String(adminApplicationRecords.filter((record) => record.status === "shortlisted").length),
-    description: "Learners ready for follow-up, interview, or cohort confirmation.",
-    status: "shortlisted",
-  },
-  {
-    label: "Enrolled",
-    value: String(adminApplicationRecords.filter((record) => record.status === "enrolled").length),
-    description: "Applicants converted into confirmed learners.",
-    status: "enrolled",
-  },
-];
+function getApplicationMetrics(applications: AdminApplicationRecord[]): AdminMetric[] {
+  return [
+    {
+      label: "Total applications",
+      value: String(applications.length),
+      description: "Records available in the current application review queue.",
+      status: "active",
+    },
+    {
+      label: "Needs review",
+      value: String(applications.filter((record) => record.status === "new").length),
+      description: "Applications that should be reviewed first.",
+      status: "new",
+    },
+    {
+      label: "Shortlisted",
+      value: String(applications.filter((record) => record.status === "shortlisted").length),
+      description: "Learners ready for follow-up, interview, or cohort confirmation.",
+      status: "shortlisted",
+    },
+    {
+      label: "Enrolled",
+      value: String(applications.filter((record) => record.status === "enrolled").length),
+      description: "Applicants converted into confirmed learners.",
+      status: "enrolled",
+    },
+  ];
+}
 
 const applicationColumns: AdminTableColumn<AdminApplicationRecord>[] = [
   {
@@ -88,19 +90,22 @@ const applicationColumns: AdminTableColumn<AdminApplicationRecord>[] = [
           <Mail className="h-3.5 w-3.5" />
           Email
         </a>
-        <button
-          type="button"
+        <Link
+          href={`/admin/applications/${record.id}`}
           className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700"
         >
           <SlidersHorizontal className="h-3.5 w-3.5" />
-          Status
-        </button>
+          Review
+        </Link>
       </div>
     ),
   },
 ];
 
-export default function AdminApplicationsPage() {
+export default async function AdminApplicationsPage() {
+  const applications = await getCmsApplications();
+  const applicationMetrics = getApplicationMetrics(applications);
+
   return (
     <div className="space-y-8">
       <AdminPageHeader
@@ -133,7 +138,7 @@ export default function AdminApplicationsPage() {
         </Link>
       </div>
 
-      <AdminDataTable columns={applicationColumns} rows={adminApplicationRecords} />
+      <AdminDataTable columns={applicationColumns} rows={applications} />
     </div>
   );
 }

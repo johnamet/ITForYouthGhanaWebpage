@@ -75,9 +75,6 @@ export async function getCourseCatalog(): Promise<Course[]> {
       next: { revalidate: 300 },
     });
 
-    console.log("api response", response.body)
-    
-
     if (!response.ok) {
       return [];
     }
