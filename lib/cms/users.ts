@@ -6,13 +6,14 @@ import {
 } from "@/lib/email/admin-user-welcome";
 import { getAdminAuth, getAdminFirestore } from "@/lib/firebase/admin";
 import type { UserPayload } from "@/lib/utils/validators";
+import type { UserAccessRole } from "@/types/admin";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 export type CmsUser = {
   id: string;
   name: string;
   email: string;
-  role: "super-admin" | "editor" | "viewer";
+  role: UserAccessRole;
   status: "active" | "inactive";
   notes?: string;
   createdAt?: string;
@@ -52,7 +53,10 @@ function normalizeUser(id: string, data: Record<string, unknown>): CmsUser {
     name: typeof data.name === "string" ? data.name : "",
     email: typeof data.email === "string" ? data.email : "",
     role:
-      data.role === "super-admin" || data.role === "editor" || data.role === "viewer"
+      data.role === "super-admin" ||
+      data.role === "editor" ||
+      data.role === "viewer" ||
+      data.role === "file-server-only"
         ? (data.role as CmsUser["role"]) 
         : "viewer",
     status: data.status === "inactive" ? "inactive" : "active",

@@ -26,6 +26,22 @@ function getLoginUrl() {
   return `${getAppUrl()}/admin-login`;
 }
 
+function getFileServerUrl() {
+  return (
+    process.env.FILE_SERVER_URL ??
+    process.env.NEXT_PUBLIC_FILE_SERVER_URL ??
+    getLoginUrl()
+  ).replace(/\/$/, "");
+}
+
+function getAccessLabel(role: UserPayload["role"]) {
+  return role === "file-server-only" ? "file server" : "website CMS";
+}
+
+function getAccessUrl(role: UserPayload["role"]) {
+  return role === "file-server-only" ? getFileServerUrl() : getLoginUrl();
+}
+
 function getSmtpConfig() {
   const provider = (process.env.EMAIL_PROVIDER ?? "smtp").toLowerCase();
   const host = process.env.EMAIL_HOST ?? providerHosts[provider];
@@ -62,16 +78,19 @@ function escapeHtml(value: string) {
 
 function getRoleLabel(role: UserPayload["role"]) {
   if (role === "super-admin") return "Super admin";
+  if (role === "file-server-only") return "File server only";
   return role.charAt(0).toUpperCase() + role.slice(1);
 }
 
 function buildWelcomeText({ user, temporaryPassword }: AdminWelcomeEmailPayload) {
+  const accessLabel = getAccessLabel(user.role);
+
   return [
     `Hello ${user.name},`,
     "",
-    "An admin account has been created for you on the IT For Youth Ghana website CMS.",
+    `An account has been created for you on the IT For Youth Ghana ${accessLabel}.`,
     "",
-    `Login URL: ${getLoginUrl()}`,
+    `Login URL: ${getAccessUrl(user.role)}`,
     `Email: ${user.email.toLowerCase()}`,
     `Temporary password: ${temporaryPassword}`,
     `Role: ${getRoleLabel(user.role)}`,
@@ -83,16 +102,17 @@ function buildWelcomeText({ user, temporaryPassword }: AdminWelcomeEmailPayload)
 }
 
 function buildWelcomeHtml({ user, temporaryPassword }: AdminWelcomeEmailPayload) {
-  const loginUrl = getLoginUrl();
+  const loginUrl = getAccessUrl(user.role);
+  const accessLabel = getAccessLabel(user.role);
 
   return `
     <html>
       <body style="margin:0; padding:0; background:#f5f7fb; color:#172033; font-family:Arial, sans-serif;">
         <div style="max-width:640px; margin:0 auto; padding:32px 20px;">
           <div style="background:#ffffff; border:1px solid #e6eaf2; border-radius:18px; padding:28px;">
-            <p style="margin:0 0 12px; color:#a67c00; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;">IT For Youth Ghana CMS</p>
-            <h1 style="margin:0 0 16px; color:#172033; font-size:26px; line-height:1.25;">Your admin account is ready</h1>
-            <p style="margin:0 0 20px; line-height:1.6;">Hello ${escapeHtml(user.name)}, an admin account has been created for you on the IT For Youth Ghana website CMS.</p>
+            <p style="margin:0 0 12px; color:#a67c00; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;">IT For Youth Ghana</p>
+            <h1 style="margin:0 0 16px; color:#172033; font-size:26px; line-height:1.25;">Your account is ready</h1>
+            <p style="margin:0 0 20px; line-height:1.6;">Hello ${escapeHtml(user.name)}, an account has been created for you on the IT For Youth Ghana ${escapeHtml(accessLabel)}.</p>
             <table style="border-collapse:collapse; width:100%; margin:0 0 22px;">
               <tbody>
                 <tr>
@@ -110,7 +130,7 @@ function buildWelcomeHtml({ user, temporaryPassword }: AdminWelcomeEmailPayload)
               </tbody>
             </table>
             <p style="margin:0 0 22px; line-height:1.6;">Please sign in with this temporary password and change it after your first login.</p>
-            <a href="${escapeHtml(loginUrl)}" style="display:inline-block; background:#172033; color:#ffffff; padding:12px 18px; border-radius:999px; text-decoration:none; font-weight:700;">Sign in to CMS</a>
+            <a href="${escapeHtml(loginUrl)}" style="display:inline-block; background:#172033; color:#ffffff; padding:12px 18px; border-radius:999px; text-decoration:none; font-weight:700;">Sign in</a>
           </div>
         </div>
       </body>
@@ -141,7 +161,10 @@ export async function sendAdminUserWelcomeEmail(
         name: payload.user.name,
         address: payload.user.email.toLowerCase(),
       },
-      subject: "Your IT For Youth Ghana CMS account",
+      subject:
+        payload.user.role === "file-server-only"
+          ? "Your IT For Youth Ghana file server account"
+          : "Your IT For Youth Ghana CMS account",
       text: buildWelcomeText(payload),
       html: buildWelcomeHtml(payload),
     });

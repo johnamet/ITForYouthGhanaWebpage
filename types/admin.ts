@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 export type AdminRole = "super-admin" | "editor" | "viewer";
+export type UserAccessRole = AdminRole | "file-server-only";
 
 export type AdminCmsStatus =
   | "live-seed"

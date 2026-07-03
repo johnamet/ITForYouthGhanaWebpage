@@ -39,6 +39,11 @@ export const adminRoleCapabilities = [
     label: "Viewer",
     description: "Read-only access for reporting, application review, and operational visibility.",
   },
+  {
+    role: "file-server-only",
+    label: "File server only",
+    description: "Can authenticate to the file server with Firebase credentials, but cannot enter the Webpage CMS.",
+  },
 ] as const;
 
 export const cmsCollections: AdminCollectionDefinition[] = [

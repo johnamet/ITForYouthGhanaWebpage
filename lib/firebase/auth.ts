@@ -1,7 +1,7 @@
 import type { DecodedIdToken } from "firebase-admin/auth";
 
 import { getAdminAuth, getAdminFirestore } from "@/lib/firebase/admin";
-import type { AdminRole } from "@/types/admin";
+import type { AdminRole, UserAccessRole } from "@/types/admin";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 export type AdminSessionUser = {
@@ -10,6 +10,14 @@ export type AdminSessionUser = {
   name?: string;
   role: AdminRole;
   source: "custom-claim" | "env" | "firestore";
+};
+
+export type FileServerSessionUser = {
+  uid: string;
+  email: string;
+  name?: string;
+  role: "file-server-only";
+  source: "firestore";
 };
 
 export function getAdminSessionCookieName() {
@@ -32,6 +40,15 @@ function isAdminRole(value: unknown): value is AdminRole {
   return value === "super-admin" || value === "editor" || value === "viewer";
 }
 
+function isUserAccessRole(value: unknown): value is UserAccessRole {
+  return (
+    value === "super-admin" ||
+    value === "editor" ||
+    value === "viewer" ||
+    value === "file-server-only"
+  );
+}
+
 function getRoleFromClaims(decodedToken: DecodedIdToken): AdminRole | null {
   if (decodedToken.admin === true) {
     return "super-admin";
@@ -44,7 +61,9 @@ function getRoleFromClaims(decodedToken: DecodedIdToken): AdminRole | null {
   return null;
 }
 
-async function getRoleFromFirestore(decodedToken: DecodedIdToken): Promise<AdminRole | null> {
+async function getUserAccessRoleFromFirestore(
+  decodedToken: DecodedIdToken,
+): Promise<UserAccessRole | null> {
   const db = await getAdminFirestore();
 
   if (!db) {
@@ -59,7 +78,7 @@ async function getRoleFromFirestore(decodedToken: DecodedIdToken): Promise<Admin
     const isActive = data.status === undefined || data.status === "active";
     const role = data.role ?? data.adminRole;
 
-    if (isActive && isAdminRole(role)) {
+    if (isActive && isUserAccessRole(role)) {
       return role;
     }
   }
@@ -81,7 +100,13 @@ async function getRoleFromFirestore(decodedToken: DecodedIdToken): Promise<Admin
   const isActive = data.status === undefined || data.status === "active";
   const role = data.role ?? data.adminRole;
 
-  return isActive && isAdminRole(role) ? role : null;
+  return isActive && isUserAccessRole(role) ? role : null;
+}
+
+async function getRoleFromFirestore(decodedToken: DecodedIdToken): Promise<AdminRole | null> {
+  const role = await getUserAccessRoleFromFirestore(decodedToken);
+
+  return isAdminRole(role) ? role : null;
 }
 
 export async function resolveAdminUser(
@@ -127,6 +152,39 @@ export async function resolveAdminUser(
     role: firestoreRole,
     source: "firestore",
   };
+}
+
+export async function resolveFileServerUser(
+  decodedToken: DecodedIdToken,
+): Promise<FileServerSessionUser | null> {
+  if (!decodedToken.email) {
+    return null;
+  }
+
+  const role = await getUserAccessRoleFromFirestore(decodedToken);
+
+  if (role !== "file-server-only") {
+    return null;
+  }
+
+  return {
+    uid: decodedToken.uid,
+    email: decodedToken.email.toLowerCase(),
+    name: decodedToken.name,
+    role,
+    source: "firestore",
+  };
+}
+
+export async function verifyFileServerIdToken(idToken?: string) {
+  const auth = await getAdminAuth();
+
+  if (!auth || !idToken) {
+    return null;
+  }
+
+  const decodedToken = await auth.verifyIdToken(idToken, true);
+  return resolveFileServerUser(decodedToken);
 }
 
 export async function createAdminSessionCookie(idToken: string) {

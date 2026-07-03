@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { AlertCircle, CheckCircle2, Loader2, Save, Trash2 } from "lucide-react";
 
-import type { AdminRole } from "@/types/admin";
+import type { UserAccessRole } from "@/types/admin";
 
 type UserFormMode = "create" | "edit";
 
@@ -12,7 +12,7 @@ export type AdminUser = {
   id?: string;
   name: string;
   email: string;
-  role: AdminRole;
+  role: UserAccessRole;
   status: "active" | "inactive";
   notes?: string;
 };
@@ -34,10 +34,11 @@ const inputClassName =
 const textareaClassName =
   "mt-2 min-h-32 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
 
-const roleOptions: Array<{ value: AdminRole; label: string }> = [
+const roleOptions: Array<{ value: UserAccessRole; label: string }> = [
   { value: "super-admin", label: "Super admin" },
   { value: "editor", label: "Editor" },
   { value: "viewer", label: "Viewer" },
+  { value: "file-server-only", label: "File server only" },
 ];
 
 const statusOptions: Array<{ value: "active" | "inactive"; label: string }> = [

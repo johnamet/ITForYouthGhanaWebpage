@@ -514,7 +514,7 @@ export type PartnershipTrackPayload = z.infer<typeof partnershipTrackSchema>;
 export const userSchema = z.object({
   name: z.string().trim().min(2, "Please enter a name."),
   email: z.string().trim().email("Please enter a valid email address."),
-  role: z.enum(["super-admin", "editor", "viewer"]).default("viewer"),
+  role: z.enum(["super-admin", "editor", "viewer", "file-server-only"]).default("viewer"),
   status: z.enum(["active", "inactive"]).default("active"),
   notes: optionalTrimmedString,
 });
