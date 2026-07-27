@@ -15,7 +15,7 @@ import { getCmsImpactStats } from "@/lib/cms/impact-stats";
 import { HeroSlideshow } from "@/components/home/hero-slideshow";
 import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { ImpactCounter } from "@/components/home/impact-counter";
-import { ChallengeAndMission } from "@/components/home/challenge-and-mission";
+import { LegacyHomepageSections } from "@/components/home/legacy-homepage-sections";
 import { ProgrammeShowcase } from "@/components/home/programme-showcase";
 import { DonationCampaign } from "@/components/home/donation-campaign";
 import { FeaturedStoryVideo } from "@/components/home/featured-story-video";
@@ -60,11 +60,11 @@ export async function HomepageSections() {
       {/* 2 ── Marquee ticker */}
       <MarqueeTicker ticker={ticker} />
 
-      {/* 3 ── Impact counter */}
-      <ImpactCounter stats={impactStats} />
+      {/* 3 ── Legacy overview, challenge, and vision sections */}
+      <LegacyHomepageSections />
 
-      {/* 4 ── Challenge and mission */}
-      <ChallengeAndMission />
+      {/* 4 ── Impact counter */}
+      <ImpactCounter stats={impactStats} />
 
       {/* 5 ── Programme showcase */}
       <ProgrammeShowcase items={showcase} />
