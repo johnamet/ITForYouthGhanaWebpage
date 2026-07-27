@@ -9,6 +9,7 @@ import type { HeroSlide }       from "@/components/home/hero-slideshow";
 import type { MarqueeTickerContent } from "@/components/home/marquee-ticker";
 import type { FeaturedProgram } from "@/components/home/featured-programs";
 import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
+import type { ChallengeSectionContent, MissionSectionContent } from "@/components/home/legacy-homepage-sections";
 import type { DonationCampaignContent } from "@/components/home/donation-campaign";
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";
 import type { JoinCtaCard } from "@/components/home/join-cta-block";
@@ -2077,6 +2078,53 @@ export const featuredPrograms: FeaturedProgram[] = [
   },
 ];
 
+export const challengeSectionContent: ChallengeSectionContent = {
+  title: "The challenge",
+  headline: "Talent is everywhere. Access is not.",
+  description: "Ghana’s digital divide keeps capable young people from the learning, connections, and opportunities they need to participate in the digital economy.",
+  stats: [
+    { label: "Offline Population", value: "30.1%", description: "10.5M people without internet access" },
+    { label: "Rural Digital Gap", value: "77.3%", description: "Rural residents without internet" },
+    { label: "Limited Access", value: "25%", description: "Rural areas lack mobile coverage" },
+    { label: "Skills Gap", value: "70%", description: "Youth lack digital skills" },
+  ],
+  comparisonTitle: "What the digital divide changes",
+  problemTitle: "Without digital access",
+  problemItems: [
+    "Limited job opportunities",
+    "Reduced access to education",
+    "Isolation from digital economy",
+    "Decreased social mobility",
+  ],
+  solutionTitle: "With IT For Youth Ghana",
+  solutionItems: [
+    "Practical digital skills training",
+    "Mentorship and career guidance",
+    "Real projects and portfolio building",
+    "Pathways into work, study, and enterprise",
+  ],
+  ctaText: "Help more young people turn digital access into lasting opportunity.",
+  ctaLabel: "Support digital skills training",
+  ctaHref: "https://www.globalgiving.org/projects/coding-and-digital-skills-for-1000-girls-in-ghana/",
+  active: true,
+};
+
+export const missionSectionContent: MissionSectionContent = {
+  title: "Our direction",
+  headline: "A digital future shaped by every young Ghanaian",
+  description: "We see a Ghana where geography, gender, or income does not decide who gets to learn, create, and lead with technology.",
+  image: "/images/randomPictures/studentsblueclothing.jpg",
+  imageAlt: "Students learning technology",
+  imageLabel: "Building Ghana’s tech future",
+  imageCaption: "Through inclusive technology education",
+  missionTitle: "Our mission",
+  missionHeadline: "Turn digital learning into real opportunity.",
+  missionDescription: "We equip young Ghanaians—particularly women and underserved communities—with practical skills, mentorship, and pathways into employment, further study, and business-building.",
+  ctaLabel: "Discover who we are",
+  ctaHref: "/who-we-are",
+  active: true,
+};
+
 export const programmeShowcase: ProgrammeShowcaseItem[] = [
   {
     id: "initiative-girls-in-tech",
@@ -2914,6 +2962,24 @@ export const whatWeDoOverviewContent: WhatWeDoOverviewContent = {
   initiativesSectionTitle: "Explore each initiative in more depth",
   initiativesSectionDescription:
     "Every initiative page has a dedicated structure: mission, objectives, how it works, impact stats, galleries, testimonials, FAQs, and partner references.",
+  gallerySectionEyebrow: "In action",
+  gallerySectionTitle: "See what learning looks like on the ground",
+  gallerySectionDescription:
+    "From practical sessions to community outreach, these moments show young people learning together, building confidence, and putting digital skills to work.",
+  galleryItems: [
+    {
+      type: "image",
+      url: "/images/randomPictures/groupworkstudents.jpg",
+      title: "Learning through collaboration",
+      description: "Participants work through practical challenges together during a training session.",
+    },
+    {
+      type: "image",
+      url: "/images/randomPictures/redstudentgrouplesson.jpg",
+      title: "Skills built by doing",
+      description: "Hands-on lessons create space to practise, ask questions, and learn from peers.",
+    },
+  ],
   pathwaysSectionEyebrow: "Pathways",
   pathwaysSectionTitle: "From first exposure to longer-term opportunity",
   pathwaysSectionDescription:

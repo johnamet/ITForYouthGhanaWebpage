@@ -5,6 +5,8 @@ import {
   heroSlides as seedHeroSlides,
   homepageTicker as seedHomepageTicker,
   programmeShowcase as seedProgrammeShowcase,
+  challengeSectionContent as seedChallengeSection,
+  missionSectionContent as seedMissionSection,
   activeDonationCampaign as seedDonationCampaign,
   featuredStory as seedFeaturedStory,
   joinCtaCards as seedJoinCtaCards,
@@ -23,6 +25,7 @@ import type { DonationCampaignContent } from "@/components/home/donation-campaig
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";
 import type { JoinCtaCard } from "@/components/home/join-cta-block";
 import type { NewsletterSignupContent } from "@/components/home/newsletter-signup-section";
+import type { ChallengeSectionContent, MissionSectionContent } from "@/components/home/legacy-homepage-sections";
 
 const DOC_ID = "main";
 
@@ -113,6 +116,32 @@ export async function getCmsProgrammeShowcase(): Promise<ProgrammeShowcaseItem[]
   } catch (e) {
     console.error("Homepage programmeShowcase read failed.", e);
     return seedProgrammeShowcase;
+  }
+}
+
+export async function getCmsChallengeSection(): Promise<ChallengeSectionContent> {
+  const db = await getAdminFirestore();
+  if (!db) return seedChallengeSection;
+  try {
+    const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
+    const content = getDocField<ChallengeSectionContent>(getHomepageDocData(doc.data()), "challengeSection");
+    return content ?? seedChallengeSection;
+  } catch (e) {
+    console.error("Homepage challengeSection read failed.", e);
+    return seedChallengeSection;
+  }
+}
+
+export async function getCmsMissionSection(): Promise<MissionSectionContent> {
+  const db = await getAdminFirestore();
+  if (!db) return seedMissionSection;
+  try {
+    const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
+    const content = getDocField<MissionSectionContent>(getHomepageDocData(doc.data()), "missionSection");
+    return content ?? seedMissionSection;
+  } catch (e) {
+    console.error("Homepage missionSection read failed.", e);
+    return seedMissionSection;
   }
 }
 

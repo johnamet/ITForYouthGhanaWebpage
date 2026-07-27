@@ -458,6 +458,22 @@ export const homepageSectionConfigs: AdminHomepageSectionConfig[] = [
     description: "Homepage count-up proof metrics and impact snapshot.",
   },
   {
+    id: "challenge-section",
+    label: "Challenge section",
+    route: "/admin/content/homepage",
+    status: "live",
+    collection: FIREBASE_COLLECTIONS.homepage,
+    description: "Digital-divide narrative, statistics, comparison lists, and support CTA.",
+  },
+  {
+    id: "mission-section",
+    label: "Mission section",
+    route: "/admin/content/homepage",
+    status: "live",
+    collection: FIREBASE_COLLECTIONS.homepage,
+    description: "Vision and mission narrative, supporting image, CTA, and visibility.",
+  },
+  {
     id: "programme-showcase",
     label: "Programme showcase",
     route: "/admin/content/homepage",

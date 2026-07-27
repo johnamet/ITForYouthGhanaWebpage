@@ -508,6 +508,14 @@ const whatWeDoPathwayCardSchema = z.object({
   description: z.string().trim().min(1, "Please add card copy."),
 });
 
+const whatWeDoGalleryItemSchema = z.object({
+  type: z.enum(["image", "video"]),
+  url: z.string().trim().min(1, "Please add a resource URL."),
+  title: z.string().trim().min(1, "Please add a media title."),
+  description: optionalTrimmedString,
+  thumbnailUrl: optionalTrimmedString,
+});
+
 export const whatWeDoOverviewSchema = z.object({
   eyebrow: z.string().trim().min(1, "Please add an eyebrow label."),
   title: z.string().trim().min(1, "Please add a page title."),
@@ -521,6 +529,10 @@ export const whatWeDoOverviewSchema = z.object({
   initiativesSectionEyebrow: optionalTrimmedString,
   initiativesSectionTitle: optionalTrimmedString,
   initiativesSectionDescription: optionalTrimmedString,
+  gallerySectionEyebrow: optionalTrimmedString,
+  gallerySectionTitle: optionalTrimmedString,
+  gallerySectionDescription: optionalTrimmedString,
+  galleryItems: z.array(whatWeDoGalleryItemSchema).default([]),
   pathwaysSectionEyebrow: optionalTrimmedString,
   pathwaysSectionTitle: optionalTrimmedString,
   pathwaysSectionDescription: optionalTrimmedString,
@@ -558,6 +570,8 @@ export const homepageSchema = z
     heroSlides: z.array(z.unknown()).optional(),
     ticker: z.unknown().optional(),
     programmeShowcase: z.array(z.unknown()).optional(),
+    challengeSection: z.unknown().optional(),
+    missionSection: z.unknown().optional(),
     donationCampaign: z.unknown().optional(),
     featuredStory: z.unknown().optional(),
     joinCtaCards: z.array(z.unknown()).optional(),

@@ -640,6 +640,14 @@ export interface PathwayCardContent {
   description: string;
 }
 
+export interface WhatWeDoGalleryItem {
+  type: "image" | "video";
+  url: string;
+  title: string;
+  description?: string;
+  thumbnailUrl?: string;
+}
+
 export interface WhatWeDoOverviewContent {
   eyebrow: string;
   title: string;
@@ -654,6 +662,10 @@ export interface WhatWeDoOverviewContent {
   initiativesSectionEyebrow?: string;
   initiativesSectionTitle?: string;
   initiativesSectionDescription?: string;
+  gallerySectionEyebrow?: string;
+  gallerySectionTitle?: string;
+  gallerySectionDescription?: string;
+  galleryItems: WhatWeDoGalleryItem[];
   pathwaysSectionEyebrow?: string;
   pathwaysSectionTitle?: string;
   pathwaysSectionDescription?: string;

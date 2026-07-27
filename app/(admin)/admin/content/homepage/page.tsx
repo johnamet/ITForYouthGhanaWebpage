@@ -5,19 +5,24 @@ import { TickerForm } from "@/components/admin/ticker-form";
 import { NewsletterForm } from "@/components/admin/newsletter-form";
 import { ProgrammeShowcaseForm } from "@/components/admin/programme-showcase-form";
 import { JoinCtaCardsForm } from "@/components/admin/join-cta-cards-form";
+import { ChallengeSectionForm, MissionSectionForm } from "@/components/admin/homepage-narrative-forms";
 import {
   getCmsHomepageTicker,
   getCmsProgrammeShowcase,
   getCmsJoinCtaCards,
   getCmsNewsletterSignup,
+  getCmsChallengeSection,
+  getCmsMissionSection,
 } from "@/lib/cms/homepage";
 
 export default async function AdminHomepageCombinedPage() {
-  const [ticker, showcase, cards, newsletter] = await Promise.all([
+  const [ticker, showcase, cards, newsletter, challenge, mission] = await Promise.all([
     getCmsHomepageTicker(),
     getCmsProgrammeShowcase(),
     getCmsJoinCtaCards(),
     getCmsNewsletterSignup(),
+    getCmsChallengeSection(),
+    getCmsMissionSection(),
   ]);
 
   return (
@@ -25,9 +30,20 @@ export default async function AdminHomepageCombinedPage() {
       <AdminPageHeader
         eyebrow="Homepage CMS"
         title="Homepage sections"
-        description="Edit the ticker, programme showcase, join CTA cards, and newsletter signup from structured controls."
+        description="Edit homepage narrative, ticker, programme, CTA, and newsletter sections from structured controls."
         icon={<LayoutList className="h-5 w-5" />}
       />
+      <div className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
+        <h3 className="font-heading text-xl font-semibold text-brand-ink">Challenge section</h3>
+        <p className="mt-2 text-sm leading-7 text-slate-600">Edit the challenge narrative, statistics, comparison lists, CTA, and visibility.</p>
+        <div className="mt-6"><ChallengeSectionForm initial={challenge} /></div>
+      </div>
+
+      <div className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
+        <h3 className="font-heading text-xl font-semibold text-brand-ink">Mission section</h3>
+        <p className="mt-2 text-sm leading-7 text-slate-600">Edit the direction and mission copy, image, CTA, and visibility.</p>
+        <div className="mt-6"><MissionSectionForm initial={mission} /></div>
+      </div>
       {/* Ticker editor */}
       <div className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
         <h3 className="font-heading text-xl font-semibold text-brand-ink">Marquee ticker</h3>

@@ -17,6 +17,7 @@ import type {
   PathwayCardContent,
   RouteCard,
   WhatWeDoHeroStatLabel,
+  WhatWeDoGalleryItem,
   WhatWeDoOverviewContent,
 } from "@/types/content";
 
@@ -44,6 +45,7 @@ const removeButtonClass =
 const emptyHeroStat: WhatWeDoHeroStatLabel = { label: "", description: "" };
 const emptyEcosystemCard: EcosystemCardContent = { eyebrow: "", title: "", description: "" };
 const emptyPathwayCard: PathwayCardContent = { title: "", description: "" };
+const emptyGalleryItem: WhatWeDoGalleryItem = { type: "image", url: "", title: "", description: "", thumbnailUrl: "" };
 const emptyRouteCard: RouteCard = { href: "/", eyebrow: "", title: "", description: "" };
 const emptyStat: HighlightStat = { value: "", label: "", description: "", icon: "", iconImage: "" };
 const emptyProcessStep: InitiativeProcessStep = { number: "", title: "", description: "", icon: "" };
@@ -381,6 +383,38 @@ export function WhatWeDoOverviewForm({ initial, endpoint }: WhatWeDoOverviewForm
           <div className="md:col-span-2">
             <Field label="Section description" value={values.initiativesSectionDescription ?? ""} multiline onChange={(value) => update("initiativesSectionDescription", value)} />
           </div>
+        </div>
+      </Panel>
+
+      <Panel title="Gallery section" description="Add externally hosted images or videos by URL. No file upload is used.">
+        <div className="grid gap-5 md:grid-cols-2">
+          <Field label="Section eyebrow" value={values.gallerySectionEyebrow ?? ""} onChange={(value) => update("gallerySectionEyebrow", value)} />
+          <Field label="Section title" value={values.gallerySectionTitle ?? ""} onChange={(value) => update("gallerySectionTitle", value)} />
+          <div className="md:col-span-2">
+            <Field label="Section description" value={values.gallerySectionDescription ?? ""} multiline onChange={(value) => update("gallerySectionDescription", value)} />
+          </div>
+        </div>
+        <div className="mt-8">
+          <Repeater title="Gallery media" addLabel="Add media" onAdd={() => update("galleryItems", [...values.galleryItems, emptyGalleryItem])}>
+            {values.galleryItems.map((item, index) => (
+              <div key={`overview-gallery-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+                <div>
+                  <label className="text-sm font-bold text-brand-ink">Media type</label>
+                  <select className={inputClass} value={item.type} onChange={(event) => update("galleryItems", values.galleryItems.map((entry, itemIndex) => itemIndex === index ? { ...entry, type: event.target.value as WhatWeDoGalleryItem["type"] } : entry))}>
+                    <option value="image">Image</option>
+                    <option value="video">Video</option>
+                  </select>
+                </div>
+                <Field label="Resource URL" value={item.url} onChange={(value) => update("galleryItems", values.galleryItems.map((entry, itemIndex) => itemIndex === index ? { ...entry, url: value } : entry))} />
+                <Field label="Title / alt text" value={item.title} onChange={(value) => update("galleryItems", values.galleryItems.map((entry, itemIndex) => itemIndex === index ? { ...entry, title: value } : entry))} />
+                <Field label="Video thumbnail URL (optional)" value={item.thumbnailUrl ?? ""} onChange={(value) => update("galleryItems", values.galleryItems.map((entry, itemIndex) => itemIndex === index ? { ...entry, thumbnailUrl: value } : entry))} />
+                <div className="md:col-span-2">
+                  <Field label="Description (optional)" value={item.description ?? ""} multiline onChange={(value) => update("galleryItems", values.galleryItems.map((entry, itemIndex) => itemIndex === index ? { ...entry, description: value } : entry))} />
+                </div>
+                <RemoveButton onClick={() => update("galleryItems", values.galleryItems.filter((_, itemIndex) => itemIndex !== index))} />
+              </div>
+            ))}
+          </Repeater>
         </div>
       </Panel>
 

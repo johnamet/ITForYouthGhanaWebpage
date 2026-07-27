@@ -2,42 +2,37 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Heart } from "lucide-react";
 
-const challengeData = [
-  {
-    label: "Offline Population",
-    value: "30.1%",
-    description: "10.5M people without internet access",
-  },
-  {
-    label: "Rural Digital Gap",
-    value: "77.3%",
-    description: "Rural residents without internet",
-  },
-  {
-    label: "Limited Access",
-    value: "25%",
-    description: "Rural areas lack mobile coverage",
-  },
-  {
-    label: "Skills Gap",
-    value: "70%",
-    description: "Youth lack digital skills",
-  },
-];
+export type ChallengeSectionContent = {
+  title: string;
+  headline: string;
+  description: string;
+  stats: Array<{ label: string; value: string; description: string }>;
+  comparisonTitle: string;
+  problemTitle: string;
+  problemItems: string[];
+  solutionTitle: string;
+  solutionItems: string[];
+  ctaText: string;
+  ctaLabel: string;
+  ctaHref: string;
+  active?: boolean;
+};
 
-const withoutDigitalAccess = [
-  "Limited job opportunities",
-  "Reduced access to education",
-  "Isolation from digital economy",
-  "Decreased social mobility",
-];
-
-const withItfy = [
-  "Practical digital skills training",
-  "Mentorship and career guidance",
-  "Real projects and portfolio building",
-  "Pathways into work, study, and enterprise",
-];
+export type MissionSectionContent = {
+  title: string;
+  headline: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  imageLabel: string;
+  imageCaption: string;
+  missionTitle: string;
+  missionHeadline: string;
+  missionDescription: string;
+  ctaLabel: string;
+  ctaHref: string;
+  active?: boolean;
+};
 
 function QuickOverview() {
   return (
@@ -110,25 +105,26 @@ function QuickOverview() {
   );
 }
 
-function Challenge() {
+function Challenge({ content }: { content: ChallengeSectionContent }) {
+  if (content.active === false) return null;
+
   return (
     <section className="bg-brand-navy px-6 py-20 text-white lg:px-10 lg:py-24">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
           <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl lg:text-7xl">
-            The challenge
+            {content.title}
           </h2>
           <p className="mx-auto mt-5 max-w-5xl font-heading text-3xl font-bold leading-tight text-white/90 sm:text-4xl">
-            Talent is everywhere. Access is not.
+            {content.headline}
           </p>
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-white/90">
-            Ghana’s digital divide keeps capable young people from the learning,
-            connections, and opportunities they need to participate in the digital economy.
+            {content.description}
           </p>
         </div>
 
         <div className="mb-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {challengeData.map((item) => (
+          {content.stats.map((item) => (
             <article
               key={item.label}
               className="rounded-xl border border-white/20 bg-white/10 p-6 text-center backdrop-blur-sm transition-colors hover:bg-white/15"
@@ -144,15 +140,15 @@ function Challenge() {
 
         <div className="mx-auto max-w-4xl rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-sm">
           <h3 className="text-center font-heading text-2xl font-bold text-white sm:text-3xl">
-            What the digital divide changes
+            {content.comparisonTitle}
           </h3>
           <div className="mt-8 grid gap-8 lg:grid-cols-2">
             <div>
               <h4 className="mb-4 text-xl font-semibold text-white">
-                Without digital access
+                {content.problemTitle}
               </h4>
               <ul className="space-y-3">
-                {withoutDigitalAccess.map((item) => (
+                {content.problemItems.map((item) => (
                   <li key={item} className="flex items-center gap-3 text-white/90">
                     <span className="h-2 w-2 shrink-0 rounded-full bg-white" />
                     {item}
@@ -162,10 +158,10 @@ function Challenge() {
             </div>
             <div>
               <h4 className="mb-4 text-xl font-semibold text-white">
-                With IT For Youth Ghana
+                {content.solutionTitle}
               </h4>
               <ul className="space-y-3">
-                {withItfy.map((item) => (
+                {content.solutionItems.map((item) => (
                   <li key={item} className="flex items-center gap-3 text-white/90">
                     <span className="h-2 w-2 shrink-0 rounded-full bg-white" />
                     {item}
@@ -178,16 +174,16 @@ function Challenge() {
 
         <div className="mt-12 text-center">
           <p className="mb-6 text-lg text-white/90">
-            Help more young people turn digital access into lasting opportunity.
+            {content.ctaText}
           </p>
           <Link
-            href="https://www.globalgiving.org/projects/coding-and-digital-skills-for-1000-girls-in-ghana/"
+            href={content.ctaHref}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 rounded-full border-2 border-white bg-white px-8 py-4 font-semibold text-brand-navy shadow-lg transition-transform hover:-translate-y-0.5 hover:scale-[1.02]"
           >
             <Heart className="h-5 w-5" aria-hidden="true" />
-            Support digital skills training
+            {content.ctaLabel}
           </Link>
         </div>
       </div>
@@ -195,58 +191,57 @@ function Challenge() {
   );
 }
 
-function Vision() {
+function Vision({ content }: { content: MissionSectionContent }) {
+  if (content.active === false) return null;
+
   return (
     <section className="bg-white px-6 py-20 lg:px-10 lg:py-24">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto mb-16 max-w-4xl text-center">
           <h2 className="font-heading text-5xl font-bold leading-none text-brand-navy sm:text-6xl lg:text-7xl">
-            Our direction
+            {content.title}
           </h2>
           <p className="mt-5 font-heading text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
-            A digital future shaped by every young Ghanaian
+            {content.headline}
           </p>
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-            We see a Ghana where geography, gender, or income does not decide who gets to
-            learn, create, and lead with technology.
+            {content.description}
           </p>
         </div>
 
         <div className="grid items-center gap-12 md:grid-cols-2 lg:gap-16">
           <div className="relative h-80 overflow-hidden rounded-2xl shadow-lg">
             <Image
-              src="/images/randomPictures/studentsblueclothing.jpg"
-              alt="Students learning technology"
+              src={content.image}
+              alt={content.imageAlt}
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-brand-navy/20" />
             <div className="absolute bottom-4 left-4 rounded-lg bg-brand-navy/95 p-4 text-white">
-              <p className="text-sm font-semibold text-white">Building Ghana’s tech future</p>
+              <p className="text-sm font-semibold text-white">{content.imageLabel}</p>
               <p className="mt-1 text-xs text-white/90">
-                Through inclusive technology education
+                {content.imageCaption}
               </p>
             </div>
           </div>
 
           <div>
             <h3 className="font-heading text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
-              Our mission
+              {content.missionTitle}
             </h3>
             <p className="mt-4 font-heading text-2xl font-bold leading-tight text-brand-navy sm:text-3xl">
-              Turn digital learning into real opportunity.
+              {content.missionHeadline}
             </p>
             <p className="mt-6 leading-8 text-slate-600">
-              We equip young Ghanaians—particularly women and underserved communities—with
-              practical skills, mentorship, and pathways into employment, further study,
-              and business-building.
+              {content.missionDescription}
             </p>
             <Link
-              href="/who-we-are"
+              href={content.ctaHref}
               className="itfy-button-outline-blue mt-7 px-6 py-3.5 text-sm"
             >
-              Discover who we are
+              {content.ctaLabel}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
@@ -256,12 +251,18 @@ function Vision() {
   );
 }
 
-export function LegacyHomepageSections() {
+export function LegacyHomepageSections({
+  challenge,
+  mission,
+}: {
+  challenge: ChallengeSectionContent;
+  mission: MissionSectionContent;
+}) {
   return (
     <>
       <QuickOverview />
-      <Challenge />
-      <Vision />
+      <Challenge content={challenge} />
+      <Vision content={mission} />
     </>
   );
 }

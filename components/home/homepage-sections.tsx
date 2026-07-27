@@ -2,6 +2,8 @@ import {
   getCmsHeroSlides,
   getCmsHomepageTicker,
   getCmsProgrammeShowcase,
+  getCmsChallengeSection,
+  getCmsMissionSection,
   getCmsDonationCampaign,
   getCmsFeaturedStory,
   getCmsJoinCtaCards,
@@ -38,6 +40,8 @@ export async function HomepageSections() {
     story,
     joinCards,
     newsletter,
+    challenge,
+    mission,
   ] = await Promise.all([
     getCmsFeaturedArticles(3),
     getCmsTestimonials(),
@@ -50,6 +54,8 @@ export async function HomepageSections() {
     getCmsFeaturedStory(),
     getCmsJoinCtaCards(),
     getCmsNewsletterSignup(),
+    getCmsChallengeSection(),
+    getCmsMissionSection(),
   ]);
 
   return (
@@ -61,7 +67,7 @@ export async function HomepageSections() {
       <MarqueeTicker ticker={ticker} />
 
       {/* 3 ── Legacy overview, challenge, and vision sections */}
-      <LegacyHomepageSections />
+      <LegacyHomepageSections challenge={challenge} mission={mission} />
 
       {/* 4 ── Impact counter */}
       <ImpactCounter stats={impactStats} />

@@ -4,6 +4,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { WhatWeDoGallery } from "@/components/what-we-do/what-we-do-gallery";
 import type { InitiativePage, WhatWeDoOverviewContent } from "@/types/content";
 
 type WhatWeDoOverviewPageProps = {
@@ -14,6 +15,7 @@ type WhatWeDoOverviewPageProps = {
 const anchorLinks = [
   { id: "overview", label: "Overview" },
   { id: "initiatives", label: "Initiatives" },
+  { id: "gallery", label: "Gallery" },
   { id: "pathways", label: "Pathways" },
   { id: "next-steps", label: "Next Steps" },
 ];
@@ -241,6 +243,19 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
           </div>
         </div>
       </section>
+
+      {content.galleryItems.length > 0 ? (
+        <section id="gallery" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="space-y-10">
+            <SectionHeading
+              eyebrow={content.gallerySectionEyebrow ?? "In action"}
+              title={content.gallerySectionTitle ?? "See the work in action"}
+              description={content.gallerySectionDescription ?? "A closer look at the learning, collaboration, and community moments behind our initiatives."}
+            />
+            <WhatWeDoGallery items={content.galleryItems} />
+          </div>
+        </section>
+      ) : null}
 
       <section id="pathways" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-10">

@@ -686,6 +686,8 @@ export function HeroSlideshow({
               "
             />
 
+            {slide.eyebrow}
+
           </div>
         </div>
 
