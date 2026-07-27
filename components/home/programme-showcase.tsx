@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-import { SectionHeading } from "@/components/shared/section-heading";
-
 export type ProgrammeShowcaseItem = {
   id: string;
   title: string;
@@ -28,11 +26,19 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
       <div className="mx-auto max-w-6xl">
         {/* Section heading */}
         <div className="mb-12 flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-          <SectionHeading
-            eyebrow="What we do"
-            title="Eight initiatives opening real pathways into tech"
-            description="From girls' participation and school clubs to entrepreneurship and rural access, each initiative is designed to move young people from interest to opportunity."
-          />
+          <div>
+            <h2 className="font-heading text-5xl font-bold leading-none text-brand-ink sm:text-6xl lg:text-7xl">
+              What we do
+            </h2>
+            <p className="mt-5 max-w-2xl font-heading text-2xl font-bold leading-tight text-brand-ink sm:text-3xl">
+              Eight initiatives opening real pathways into tech
+            </p>
+            <p className="mt-4 max-w-2xl text-[0.95rem] leading-[1.8] text-slate-500">
+              From girls&apos; participation and school clubs to entrepreneurship and rural
+              access, each initiative is designed to move young people from interest to
+              opportunity.
+            </p>
+          </div>
 
           <Link
             href="/what-we-do"
