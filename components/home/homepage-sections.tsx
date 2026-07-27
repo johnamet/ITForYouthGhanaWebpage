@@ -15,6 +15,7 @@ import { getCmsImpactStats } from "@/lib/cms/impact-stats";
 import { HeroSlideshow } from "@/components/home/hero-slideshow";
 import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { ImpactCounter } from "@/components/home/impact-counter";
+import { ChallengeAndMission } from "@/components/home/challenge-and-mission";
 import { ProgrammeShowcase } from "@/components/home/programme-showcase";
 import { DonationCampaign } from "@/components/home/donation-campaign";
 import { FeaturedStoryVideo } from "@/components/home/featured-story-video";
@@ -62,28 +63,31 @@ export async function HomepageSections() {
       {/* 3 ── Impact counter */}
       <ImpactCounter stats={impactStats} />
 
-      {/* 4 ── Programme showcase */}
+      {/* 4 ── Challenge and mission */}
+      <ChallengeAndMission />
+
+      {/* 5 ── Programme showcase */}
       <ProgrammeShowcase items={showcase} />
 
-      {/* 5 ── Donation campaign */}
+      {/* 6 ── Donation campaign */}
       <DonationCampaign campaign={campaign} />
 
-      {/* 6 ── Featured story / video */}
+      {/* 7 ── Featured story / video */}
       <FeaturedStoryVideo story={story} />
 
-      {/* 7 ── Latest news & blog */}
+      {/* 8 ── Latest news & blog */}
       <LatestNewsGrid articles={articles} />
 
-      {/* 8 ── Student testimonials */}
+      {/* 9 ── Student testimonials */}
       <TestimonialsSection testimonials={testimonials} />
 
-      {/* 9 ── Partner strip */}
+      {/* 10 ── Partner strip */}
       <PartnersStrip partners={partners} />
 
-      {/* 10 ── Apply / join CTA block */}
+      {/* 11 ── Apply / join CTA block */}
       <JoinCtaBlock cards={joinCards} />
 
-      {/* 11 ── Newsletter signup */}
+      {/* 12 ── Newsletter signup */}
       <NewsletterSignupSection content={newsletter} />
     </div>
   );
