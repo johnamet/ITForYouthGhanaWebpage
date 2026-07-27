@@ -82,12 +82,12 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
 
           <div className="relative max-w-2xl space-y-6">
             <div className="space-y-3">
-              <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-white/80">
+              <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl">
                 {campaign.eyebrow}
-              </p>
-              <h2 className="font-heading text-3xl font-bold leading-tight text-white sm:text-4xl">
-                {campaign.headline}
               </h2>
+              <p className="font-heading text-2xl font-bold leading-tight text-white sm:text-3xl">
+                {campaign.headline}
+              </p>
               <p className="max-w-xl text-[0.98rem] leading-8 text-white/85">
                 {campaign.description}
               </p>

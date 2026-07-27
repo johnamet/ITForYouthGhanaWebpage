@@ -76,12 +76,12 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
         <div className="grid gap-10 rounded-[36px] border border-white/10 bg-white/[0.04] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-sm lg:grid-cols-[0.36fr_0.64fr] lg:p-10">
           <div className="space-y-6">
             <div>
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-                Testimonial carousel
-              </p>
-              <h2 className="mt-4 font-heading text-3xl font-bold leading-tight text-white sm:text-4xl">
-                The human proof behind the numbers
+              <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl">
+                Student stories
               </h2>
+              <p className="mt-5 font-heading text-2xl font-bold leading-tight text-white sm:text-3xl">
+                The human proof behind the numbers
+              </p>
               <p className="mt-4 max-w-sm text-sm leading-7 text-white/70">
                 One strong story can do what a long paragraph cannot. This carousel keeps the homepage grounded in lived experience.
               </p>

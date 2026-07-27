@@ -7,8 +7,6 @@ import {
   LucideIcon,
 } from "lucide-react";
 
-import { SectionHeading } from "@/components/shared/section-heading";
-
 export type JoinCtaCard = {
   id: string;
   eyebrow: string;
@@ -36,12 +34,18 @@ export function JoinCtaBlock({ cards }: JoinCtaBlockProps) {
   return (
     <section className="bg-white px-6 py-20 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-10">
-        <SectionHeading
-          eyebrow="Join the movement"
-          title="Clear paths for learners, organisations, and volunteers"
-          description="This section gives each audience a focused next step without forcing everyone through the same journey."
-          align="center"
-        />
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="font-heading text-5xl font-bold leading-none text-brand-ink sm:text-6xl lg:text-7xl">
+            Join the movement
+          </h2>
+          <p className="mx-auto mt-5 max-w-3xl font-heading text-2xl font-bold leading-tight text-brand-ink sm:text-3xl">
+            Clear paths for learners, organisations, and volunteers
+          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-[0.95rem] leading-[1.8] text-slate-500">
+            Choose the role that fits you and take a practical next step with IT For Youth
+            Ghana.
+          </p>
+        </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
           {visibleCards.map((card) => {

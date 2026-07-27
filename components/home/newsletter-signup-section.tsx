@@ -21,12 +21,12 @@ export function NewsletterSignupSection({ content }: NewsletterSignupSectionProp
   return (
     <section className="bg-brand-navy px-6 py-20 text-white lg:px-10">
       <div className="mx-auto max-w-4xl text-center">
-        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+        <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl lg:text-7xl">
           {content.eyebrow}
-        </p>
-        <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
-          {content.heading}
         </h2>
+        <p className="mt-5 font-heading text-2xl font-bold leading-tight text-white sm:text-3xl">
+          {content.heading}
+        </p>
         <p className="mx-auto mt-4 max-w-2xl text-[0.98rem] leading-8 text-white/75">
           {content.description}
         </p>

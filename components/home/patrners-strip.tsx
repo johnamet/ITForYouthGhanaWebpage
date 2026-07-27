@@ -24,10 +24,10 @@ export function PartnersStrip({
   return (
     <section className="border-y border-brand-border bg-[#f8f9fa] px-6 py-16 lg:px-10">
       <div className="mx-auto max-w-6xl">
-        <p className="mb-3 text-center text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-          Partner logo strip
-        </p>
-        <p className="mb-10 text-center text-sm font-medium text-slate-500">
+        <h2 className="text-center font-heading text-5xl font-bold leading-none text-brand-ink sm:text-6xl lg:text-7xl">
+          Our partners
+        </h2>
+        <p className="mx-auto mb-10 mt-5 max-w-3xl text-center font-heading text-2xl font-bold leading-tight text-brand-ink sm:text-3xl">
           {heading}
         </p>
 

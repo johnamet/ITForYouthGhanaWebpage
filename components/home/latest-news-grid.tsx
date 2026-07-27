@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-import { SectionHeading } from "@/components/shared/section-heading";
 import {
   getArticleLabel,
   getArticleReadTime,
@@ -26,11 +25,18 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
     <section className="bg-white px-6 py-20 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading
-            eyebrow="Latest news & blog"
-            title="Fresh updates from the programmes, people, and partnerships shaping the work"
-            description="We’re building a homepage that always feels alive. This section previews the most recent stories while keeping the full article system ready for the CMS phase."
-          />
+          <div>
+            <h2 className="font-heading text-5xl font-bold leading-none text-brand-ink sm:text-6xl lg:text-7xl">
+              Latest news &amp; blog
+            </h2>
+            <p className="mt-5 max-w-2xl font-heading text-2xl font-bold leading-tight text-brand-ink sm:text-3xl">
+              Fresh updates from the people and programmes shaping our work
+            </p>
+            <p className="mt-4 max-w-2xl text-[0.95rem] leading-[1.8] text-slate-500">
+              Follow new opportunities, learner stories, programme milestones, and ideas
+              from across the IT For Youth Ghana community.
+            </p>
+          </div>
           <Link
             href="/news-and-updates"
             className="inline-flex items-center gap-2 rounded-full border border-brand-border px-5 py-3 text-sm font-semibold text-brand-ink transition hover:border-brand-gold hover:text-brand-gold"

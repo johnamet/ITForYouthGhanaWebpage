@@ -98,12 +98,12 @@ export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
 
             <div className="relative flex min-h-[34rem] items-end p-6 sm:p-10">
               <div className="max-w-2xl rounded-[28px] bg-brand-navy/60 p-7 text-white backdrop-blur-md sm:p-9">
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl">
                   {story.label}
-                </p>
-                <h2 className="mt-4 font-heading text-3xl font-bold leading-tight sm:text-4xl">
-                  {story.headline}
                 </h2>
+                <p className="mt-5 font-heading text-2xl font-bold leading-tight text-white sm:text-3xl">
+                  {story.headline}
+                </p>
                 <blockquote className="mt-5 text-base leading-8 text-white/82 sm:text-lg">
                   &ldquo;{story.quote}&rdquo;
                 </blockquote>
