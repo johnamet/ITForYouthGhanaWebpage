@@ -116,7 +116,7 @@ export function EditorialImageHero({
           <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 sm:bottom-6 lg:bottom-8">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="pointer-events-auto w-full sm:max-w-md">
-                <div className="bg-brand-navy px-6 py-6 text-white shadow-[0_22px_55px_rgba(7,20,39,0.28)] sm:px-7 sm:py-7">
+                <div className="rounded-3xl border border-white/15 bg-brand-navy/55 px-6 py-6 text-white shadow-[0_8px_32px_rgba(7,20,39,0.45)] backdrop-blur-xl backdrop-saturate-150 sm:px-7 sm:py-7">
                   {hasText(eyebrow) ? (
                     <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
                       {eyebrow}
@@ -148,7 +148,7 @@ export function EditorialImageHero({
                           className={cn(
                             "inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
                             cta.variant === "secondary"
-                              ? "border border-white/35 bg-transparent text-white hover:bg-white/10"
+                              ? "border border-white/35 bg-white/5 text-white hover:bg-white/15"
                               : "bg-brand-gold text-brand-ink hover:-translate-y-0.5 hover:shadow-lg",
                           )}
                         >
