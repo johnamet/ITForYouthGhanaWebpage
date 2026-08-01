@@ -68,7 +68,7 @@ export function ChallengeSectionForm({ initial }: { initial: ChallengeSectionCon
       <div className="grid gap-5 md:grid-cols-2">
         <Field label="Section title" value={values.title} onChange={(value) => update("title", value)} />
         <Field label="Headline" value={values.headline} onChange={(value) => update("headline", value)} />
-        <Field label="Description" value={values.description} onChange={(value) => update("description", value)} textarea wide />
+        <Field label="Description (optional)" value={values.description} onChange={(value) => update("description", value)} textarea wide />
         {values.stats.map((stat, index) => (
           <div key={index} className="rounded-2xl border border-brand-border bg-brand-mist/40 p-4 md:col-span-2">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-gold">Statistic {index + 1}</p>
@@ -118,7 +118,7 @@ export function OverviewSectionForm({ initial }: { initial: OverviewSectionConte
     <div className="grid gap-5 md:grid-cols-2">
       <Field label="Section title" value={values.title} onChange={(value) => update("title", value)} />
       <Field label="Headline" value={values.headline} onChange={(value) => update("headline", value)} />
-      <Field label="Description" value={values.description} onChange={(value) => update("description", value)} textarea wide />
+      <Field label="Description (optional)" value={values.description} onChange={(value) => update("description", value)} textarea wide />
       <Field label="Story title" value={values.storyTitle} onChange={(value) => update("storyTitle", value)} />
       <Field label="Story headline" value={values.storyHeadline} onChange={(value) => update("storyHeadline", value)} />
       <Field label="Story description" value={values.storyDescription} onChange={(value) => update("storyDescription", value)} textarea wide />
@@ -164,7 +164,7 @@ export function MissionSectionForm({ initial }: { initial: MissionSectionContent
       <div className="grid gap-5 md:grid-cols-2">
         <Field label="Section title" value={values.title} onChange={(value) => update("title", value)} />
         <Field label="Headline" value={values.headline} onChange={(value) => update("headline", value)} />
-        <Field label="Description" value={values.description} onChange={(value) => update("description", value)} textarea wide />
+        <Field label="Description (optional)" value={values.description} onChange={(value) => update("description", value)} textarea wide />
         <Field label="Image path" value={values.image} onChange={(value) => update("image", value)} />
         <Field label="Image alt text" value={values.imageAlt} onChange={(value) => update("imageAlt", value)} />
         <Field label="Image label" value={values.imageLabel} onChange={(value) => update("imageLabel", value)} />

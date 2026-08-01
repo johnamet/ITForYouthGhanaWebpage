@@ -88,9 +88,9 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
               <p className="font-heading text-2xl font-bold leading-tight text-white sm:text-3xl">
                 {campaign.headline}
               </p>
-              <p className="max-w-xl text-[0.98rem] leading-8 text-white/85">
+              {campaign.description.trim() ? <p className="max-w-xl text-[0.98rem] leading-8 text-white/85">
                 {campaign.description}
-              </p>
+              </p> : null}
             </div>
 
             {campaign.supportPoints?.length ? (

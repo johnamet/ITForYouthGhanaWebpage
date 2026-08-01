@@ -205,7 +205,7 @@ export function ContactPageForm({ initial }: ContactPageFormProps) {
             <Field label="Title" value={values.title} onChange={(value) => update("title", value)} />
           </div>
           <div className="md:col-span-2">
-            <Field label="Description" value={values.description} multiline onChange={(value) => update("description", value)} />
+            <Field label="Description (optional)" value={values.description} multiline onChange={(value) => update("description", value)} />
           </div>
           <div className="md:col-span-2">
             <Field label="Privacy note" value={values.privacyNote} multiline onChange={(value) => update("privacyNote", value)} />

@@ -64,12 +64,12 @@ function QuickOverview({ content }: { content: OverviewSectionContent }) {
           <h2 className="font-heading text-5xl font-bold leading-none text-brand-navy sm:text-6xl lg:text-7xl">
             {content.title}
           </h2>
-          <p className="mt-5 font-heading text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
+          {content.headline ? <p className="mt-5 font-heading text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
             {content.headline}
-          </p>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
+          </p> : null}
+          {content.description ? <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
             {content.description}
-          </p>
+          </p> : null}
         </div> : null}
 
         <div className="grid items-center gap-12 md:grid-cols-2 lg:gap-16">
@@ -130,12 +130,12 @@ function Challenge({ content }: { content: ChallengeSectionContent }) {
           <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl lg:text-7xl">
             {content.title}
           </h2>
-          <p className="mx-auto mt-5 max-w-5xl font-heading text-3xl font-bold leading-tight text-white/90 sm:text-4xl">
+          {content.headline ? <p className="mx-auto mt-5 max-w-5xl font-heading text-3xl font-bold leading-tight text-white/90 sm:text-4xl">
             {content.headline}
-          </p>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-white/90">
+          </p> : null}
+          {content.description ? <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-white/90">
             {content.description}
-          </p>
+          </p> : null}
         </div>
 
         <div className="mb-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -217,12 +217,12 @@ function Vision({ content }: { content: MissionSectionContent }) {
           <h2 className="font-heading text-5xl font-bold leading-none text-brand-navy sm:text-6xl lg:text-7xl">
             {content.title}
           </h2>
-          <p className="mt-5 font-heading text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
+          {content.headline ? <p className="mt-5 font-heading text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
             {content.headline}
-          </p>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
+          </p> : null}
+          {content.description ? <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
             {content.description}
-          </p>
+          </p> : null}
         </div>
 
         <div className="grid items-center gap-12 md:grid-cols-2 lg:gap-16">

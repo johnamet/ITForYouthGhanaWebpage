@@ -28,8 +28,8 @@ export function ContentPage({ page }: ContentPageProps) {
             <h1 className="max-w-3xl font-heading text-5xl font-semibold leading-tight sm:text-6xl">
               {page.title}
             </h1>
-            <p className="max-w-3xl text-lg leading-8 text-slate-200">{page.description}</p>
-            <p className="max-w-prose text-base leading-8 text-slate-200/90">{page.intro}</p>
+            {page.description.trim() ? <p className="max-w-3xl text-lg leading-8 text-slate-200">{page.description}</p> : null}
+            {page.intro.trim() ? <p className="max-w-prose text-base leading-8 text-slate-200/90">{page.intro}</p> : null}
             {ctas.length ? <div className="flex flex-wrap gap-3">
               {ctas.map((cta) => (
                 <Link

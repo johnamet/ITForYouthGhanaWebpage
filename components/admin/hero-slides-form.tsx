@@ -140,7 +140,7 @@ export function HeroSlidesForm({ initial }: Props) {
                 <input className={input} value={s.heading} onChange={(e) => update(i, "heading", e.target.value)} />
               </div>
               <div className="md:col-span-2">
-                <label className="text-sm font-bold text-brand-ink">Body</label>
+                <label className="text-sm font-bold text-brand-ink">Body / intro (optional)</label>
                 <input className={input} value={s.body} onChange={(e) => update(i, "body", e.target.value)} />
               </div>
               <div>

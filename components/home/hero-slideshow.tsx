@@ -961,25 +961,27 @@ export function HeroSlideshow({
             </div>
 
             {/* Body */}
-            <div
-              key={`body-${current}`}
-              className="animate-fade-in-up-delay-3"
-            >
-              <p
-                className="
-                  mt-6
-                  max-w-xl
-                  text-sm
-                  leading-7
-                  text-white/65
-                  sm:text-base
-                  sm:leading-8
-                  lg:text-[1.05rem]
-                "
+            {slide.body.trim() ? (
+              <div
+                key={`body-${current}`}
+                className="animate-fade-in-up-delay-3"
               >
-                {slide.body}
-              </p>
-            </div>
+                <p
+                  className="
+                    mt-6
+                    max-w-xl
+                    text-sm
+                    leading-7
+                    text-white/65
+                    sm:text-base
+                    sm:leading-8
+                    lg:text-[1.05rem]
+                  "
+                >
+                  {slide.body}
+                </p>
+              </div>
+            ) : null}
 
             {/* Calls to action */}
             <div

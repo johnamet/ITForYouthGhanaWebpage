@@ -89,7 +89,7 @@ export function DonationCampaignForm({ initial }: Props) {
             <input className={input} value={values.headline} onChange={(e) => update("headline", e.target.value)} />
           </div>
           <div className="md:col-span-2">
-            <label className="text-sm font-bold text-brand-ink">Description</label>
+            <label className="text-sm font-bold text-brand-ink">Description (optional)</label>
             <textarea className={input + " h-28"} value={values.description} onChange={(e) => update("description", e.target.value)} />
           </div>
           <div>

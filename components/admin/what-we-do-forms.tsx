@@ -333,7 +333,7 @@ export function WhatWeDoOverviewForm({ initial, endpoint }: WhatWeDoOverviewForm
           <Field label="Eyebrow" value={values.eyebrow} onChange={(value) => update("eyebrow", value)} />
           <Field label="Title" value={values.title} onChange={(value) => update("title", value)} />
           <div className="md:col-span-2">
-            <Field label="Description" value={values.description} multiline onChange={(value) => update("description", value)} />
+            <Field label="Description (optional)" value={values.description} multiline onChange={(value) => update("description", value)} />
           </div>
           <div className="md:col-span-2">
             <Field label="Hero image" value={values.heroImage} onChange={(value) => update("heroImage", value)} />
@@ -487,12 +487,12 @@ export function InitiativeForm({ initial, endpoint }: InitiativeFormProps) {
           <Field label="Slug" value={values.slug} onChange={() => undefined} readOnly />
           <Field label="Eyebrow" value={values.eyebrow} onChange={(value) => update("eyebrow", value)} />
           <Field label="Title" value={values.title} onChange={(value) => update("title", value)} />
-          <Field label="Tagline" value={values.tagline} onChange={(value) => update("tagline", value)} />
+          <Field label="Tagline (optional)" value={values.tagline} onChange={(value) => update("tagline", value)} />
           <div className="md:col-span-2">
-            <Field label="Description" value={values.description} multiline onChange={(value) => update("description", value)} />
+            <Field label="Description (optional)" value={values.description} multiline onChange={(value) => update("description", value)} />
           </div>
           <div className="md:col-span-2">
-            <Field label="Intro" value={values.intro} multiline onChange={(value) => update("intro", value)} />
+            <Field label="Intro (optional)" value={values.intro} multiline onChange={(value) => update("intro", value)} />
           </div>
           <Field label="Hero image" value={values.heroImage} onChange={(value) => update("heroImage", value)} />
           <Field label="Overview image" value={values.overviewImage} onChange={(value) => update("overviewImage", value)} />

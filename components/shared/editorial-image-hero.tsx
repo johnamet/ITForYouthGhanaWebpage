@@ -116,7 +116,7 @@ export function EditorialImageHero({
           <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 sm:bottom-6 lg:bottom-8">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="pointer-events-auto w-full sm:max-w-md">
-                <div className="rounded-3xl border border-white/15 bg-brand-navy/55 px-6 py-6 text-white shadow-[0_8px_32px_rgba(7,20,39,0.45)] backdrop-blur-xl backdrop-saturate-150 sm:px-7 sm:py-7">
+                <div className="rounded-3xl border border-white/15 bg-brand-navy/90 px-6 py-6 text-white shadow-[0_12px_40px_rgba(7,20,39,0.65)] backdrop-blur-xl backdrop-saturate-150 sm:px-7 sm:py-7">
                   {hasText(eyebrow) ? (
                     <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
                       {eyebrow}

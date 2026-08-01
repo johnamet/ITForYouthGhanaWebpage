@@ -330,7 +330,7 @@ export function SitePageForm({
           </div>
           <div className="md:col-span-2">
             <label htmlFor="description" className="text-sm font-bold text-brand-ink">
-              Description
+              Description (optional)
             </label>
             <textarea
               id="description"
@@ -341,7 +341,7 @@ export function SitePageForm({
           </div>
           <div className="md:col-span-2">
             <label htmlFor="intro" className="text-sm font-bold text-brand-ink">
-              Intro
+              Intro (optional)
             </label>
             <textarea
               id="intro"

@@ -303,20 +303,20 @@ export function DepartmentForm({ mode, department }: DepartmentFormProps) {
             </div>
 
             <div>
-              <label htmlFor="summary" className="text-sm font-bold text-brand-ink">Summary</label>
-              <input id="summary" required value={values.summary} onChange={(event) => updateValue("summary", event.target.value)} className={inputClassName} />
+              <label htmlFor="summary" className="text-sm font-bold text-brand-ink">Summary (optional)</label>
+              <input id="summary" value={values.summary} onChange={(event) => updateValue("summary", event.target.value)} className={inputClassName} />
               <FieldError message={getFieldError("summary")} />
             </div>
 
             <div>
-              <label htmlFor="description" className="text-sm font-bold text-brand-ink">Description</label>
-              <textarea id="description" required value={values.description} onChange={(event) => updateValue("description", event.target.value)} className={textareaClassName} />
+              <label htmlFor="description" className="text-sm font-bold text-brand-ink">Description (optional)</label>
+              <textarea id="description" value={values.description} onChange={(event) => updateValue("description", event.target.value)} className={textareaClassName} />
               <FieldError message={getFieldError("description")} />
             </div>
 
             <div>
-              <label htmlFor="intro" className="text-sm font-bold text-brand-ink">Intro</label>
-              <textarea id="intro" required value={values.intro} onChange={(event) => updateValue("intro", event.target.value)} className={textareaClassName} />
+              <label htmlFor="intro" className="text-sm font-bold text-brand-ink">Intro (optional)</label>
+              <textarea id="intro" value={values.intro} onChange={(event) => updateValue("intro", event.target.value)} className={textareaClassName} />
             </div>
 
             <div>

@@ -71,7 +71,7 @@ export function PartnershipOverviewForm({ initial }: Props) {
           <div><label className="text-sm font-bold text-brand-ink">Eyebrow</label><input className={input} value={values.eyebrow} onChange={(e) => update("eyebrow", e.target.value)} /></div>
           <div><label className="text-sm font-bold text-brand-ink">Hero image</label><input className={input} value={values.heroImage} onChange={(e) => update("heroImage", e.target.value)} /></div>
           <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Title</label><input className={input} value={values.title} onChange={(e) => update("title", e.target.value)} /></div>
-          <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Description</label><textarea className={input + " h-28"} value={values.description} onChange={(e) => update("description", e.target.value)} /></div>
+          <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Description (optional)</label><textarea className={input + " h-28"} value={values.description} onChange={(e) => update("description", e.target.value)} /></div>
         </div>
       </section>
 

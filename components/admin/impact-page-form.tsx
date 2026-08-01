@@ -551,7 +551,7 @@ export function ImpactPageForm({ slug, initial, endpoint }: ImpactPageFormProps)
             <Field label="Title" value={readText(values, "title")} onChange={(value) => updateText("title", value)} />
           </div>
           <div className="md:col-span-2">
-            <Field label="Description" value={readText(values, "description")} multiline onChange={(value) => updateText("description", value)} />
+            <Field label="Description (optional)" value={readText(values, "description")} multiline onChange={(value) => updateText("description", value)} />
           </div>
         </div>
       </section>
