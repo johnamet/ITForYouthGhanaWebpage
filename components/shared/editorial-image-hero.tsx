@@ -31,9 +31,10 @@ export type EditorialImageHeroProps = {
 const hasText = (value?: string | null): value is string => Boolean(value?.trim());
 
 /**
- * A reusable, image-led page hero with an editorial content panel overlapping
- * the lower edge of the photograph. Empty optional content is removed along
- * with its wrapper so CMS deletions never leave decorative boxes behind.
+ * A reusable, image-led page hero with an editorial content card anchored to
+ * the bottom-left corner of the photograph. Empty optional content is
+ * removed along with its wrapper so CMS deletions never leave decorative
+ * boxes behind.
  */
 export function EditorialImageHero({
   imageSrc,
@@ -60,16 +61,25 @@ export function EditorialImageHero({
 
   return (
     <section className={cn("relative overflow-hidden bg-white", className)}>
-      <div className={cn("relative", visibleImage ? "min-h-[30rem] sm:min-h-[35rem] lg:min-h-[42rem]" : "min-h-[18rem] bg-brand-navy sm:min-h-[22rem]")}>
-        {visibleImage ? <Image
-          src={visibleImage}
-          alt={imageAlt}
-          fill
-          priority={priority}
-          sizes="100vw"
-          className="object-cover"
-          style={{ objectPosition: imagePosition }}
-        /> : null}
+      <div
+        className={cn(
+          "relative",
+          visibleImage
+            ? "min-h-[30rem] sm:min-h-[35rem] lg:min-h-[42rem]"
+            : "min-h-[18rem] bg-brand-navy sm:min-h-[22rem]",
+        )}
+      >
+        {visibleImage ? (
+          <Image
+            src={visibleImage}
+            alt={imageAlt}
+            fill
+            priority={priority}
+            sizes="100vw"
+            className="object-cover"
+            style={{ objectPosition: imagePosition }}
+          />
+        ) : null}
         <div
           className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,20,39,0.38)_0%,rgba(7,20,39,0.08)_42%,rgba(7,20,39,0.58)_100%)]"
           aria-hidden="true"
@@ -101,54 +111,58 @@ export function EditorialImageHero({
             </nav>
           </div>
         ) : null}
-      </div>
 
-      {hasPanel ? (
-        <div className="relative z-20 mx-auto -mt-24 max-w-7xl px-4 pb-10 sm:-mt-32 sm:px-6 sm:pb-14 lg:-mt-40 lg:px-8 lg:pb-16">
-          <div className="max-w-4xl bg-brand-navy px-6 py-7 text-white shadow-[0_22px_55px_rgba(7,20,39,0.28)] sm:px-9 sm:py-9 lg:px-12 lg:py-11">
-            {hasText(eyebrow) ? (
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
-                {eyebrow}
-              </p>
-            ) : null}
+        {hasPanel ? (
+          <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 sm:bottom-6 lg:bottom-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="pointer-events-auto w-full sm:max-w-md">
+                <div className="bg-brand-navy px-6 py-6 text-white shadow-[0_22px_55px_rgba(7,20,39,0.28)] sm:px-7 sm:py-7">
+                  {hasText(eyebrow) ? (
+                    <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
+                      {eyebrow}
+                    </p>
+                  ) : null}
 
-            {hasText(title) ? (
-              <h1 className="max-w-3xl font-heading text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
-                {title}
-              </h1>
-            ) : null}
+                  {hasText(title) ? (
+                    <h1 className="font-heading text-2xl font-bold leading-[1.1] text-white sm:text-3xl">
+                      {title}
+                    </h1>
+                  ) : null}
 
-            {hasText(description) ? (
-              <p className={cn("max-w-3xl text-lg leading-8 text-white", hasText(title) && "mt-5")}>
-                {description}
-              </p>
-            ) : null}
+                  {hasText(description) ? (
+                    <p className={cn("text-base leading-7 text-white", hasText(title) && "mt-3")}>
+                      {description}
+                    </p>
+                  ) : null}
 
-            {hasText(supportingText) ? (
-              <p className="mt-4 max-w-3xl text-base leading-7 text-white/75">{supportingText}</p>
-            ) : null}
+                  {hasText(supportingText) ? (
+                    <p className="mt-3 text-sm leading-6 text-white/75">{supportingText}</p>
+                  ) : null}
 
-            {visibleCtas.length > 0 ? (
-              <div className="mt-7 flex flex-wrap gap-3">
-                {visibleCtas.map((cta) => (
-                  <Link
-                    key={`${cta.href}-${cta.label}`}
-                    href={cta.href}
-                    className={cn(
-                      "inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
-                      cta.variant === "secondary"
-                        ? "border border-white/35 bg-transparent text-white hover:bg-white/10"
-                        : "bg-brand-gold text-brand-ink hover:-translate-y-0.5 hover:shadow-lg",
-                    )}
-                  >
-                    {cta.label}
-                  </Link>
-                ))}
+                  {visibleCtas.length > 0 ? (
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      {visibleCtas.map((cta) => (
+                        <Link
+                          key={`${cta.href}-${cta.label}`}
+                          href={cta.href}
+                          className={cn(
+                            "inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
+                            cta.variant === "secondary"
+                              ? "border border-white/35 bg-transparent text-white hover:bg-white/10"
+                              : "bg-brand-gold text-brand-ink hover:-translate-y-0.5 hover:shadow-lg",
+                          )}
+                        >
+                          {cta.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               </div>
-            ) : null}
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </section>
   );
 }
