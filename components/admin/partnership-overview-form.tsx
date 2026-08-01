@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertCircle, ArrowDown, ArrowUp, CheckCircle2, Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, Plus, Save, Trash2 } from "lucide-react";
 
 import type {
   PartnershipOverviewCard,

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { emojiToIconImage } from "@/lib/utils/icon-map";
 import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 

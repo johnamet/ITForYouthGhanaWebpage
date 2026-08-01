@@ -1,6 +1,7 @@
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { EditorialGuidanceGrid } from "@/components/shared/editorial-guidance-grid";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { TrainingCourseCatalog } from "@/components/training/training-course-catalog";
 import { TrainingCohortTimeline } from "@/components/training/training-cohort-timeline";
@@ -40,31 +41,10 @@ export function TrainingCourseListingPage({
       />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-5 lg:grid-cols-2">
-          {catalogSections.map((section) => (
-            <article
-              key={section.title}
-              className="rounded-[32px] border border-brand-border bg-white p-7 shadow-sm"
-            >
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-                {page.overviewTitle ?? "Catalog guidance"}
-              </p>
-              <h2 className="mt-4 font-heading text-3xl font-bold text-brand-ink">
-                {section.title}
-              </h2>
-              <p className="mt-4 text-sm leading-8 text-slate-600">{section.body}</p>
-              {section.bullets?.length ? (
-                <div className="mt-5 grid gap-3">
-                  {section.bullets.map((bullet) => (
-                    <p key={bullet} className="rounded-2xl bg-brand-mist/60 px-4 py-3 text-sm leading-7 text-slate-700">
-                      {bullet}
-                    </p>
-                  ))}
-                </div>
-              ) : null}
-            </article>
-          ))}
-        </div>
+        <EditorialGuidanceGrid
+          eyebrow={page.overviewTitle ?? "Catalog guidance"}
+          sections={catalogSections}
+        />
       </section>
 
       <TrainingCourseCatalog courses={courses} />

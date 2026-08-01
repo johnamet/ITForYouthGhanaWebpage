@@ -1750,18 +1750,16 @@ export const trainingCoursesHub: SitePage = {
       title: "What you can compare",
       body: "Use the catalog to compare course level, duration, delivery mode, cost, and start dates before choosing a route.",
       bullets: [
-        "Compare 6+ pathways across software development, design, data, marketing, entrepreneurship, and employability.",
-        "See free options, scholarship-supported routes, and modest-fee programmes side by side.",
-        "Check start dates and deadlines for Cohort 8 Foundations and upcoming short programmes.",
+        "Across more than six pathways, you can weigh software development, design, data, marketing, entrepreneurship, and employability against the kind of work you want to pursue.",
+        "The catalog also makes the practical differences visible, from free and scholarship-supported options to modest-fee programmes, upcoming start dates, and application deadlines.",
       ],
     },
     {
       title: "How to shortlist well",
       body: "A strong shortlist starts with your current stage, not only the trendiest skill. Choose the route that matches what you can commit to now.",
       bullets: [
-        "Beginner routes are best when you need structure and confidence.",
-        "Intermediate routes are best when you can practice outside sessions.",
-        "Career routes are best when you already have work to package and present.",
+        "Choose a beginner route when you need structure and confidence, or an intermediate route when you can practise consistently outside scheduled sessions.",
+        "Career-focused routes make the most sense when you already have work to refine, package, and present to employers or clients.",
       ],
     },
   ],

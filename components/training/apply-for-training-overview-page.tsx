@@ -92,21 +92,17 @@ export function ApplyForTrainingOverviewPage({
             </div>
           </div>
 
-          <div className="rounded-[32px] bg-brand-mist/55 p-8">
+          <aside className="border-l-2 border-brand-gold py-2 pl-6 sm:pl-8">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
               Learner support
             </p>
-            <div className="mt-6 space-y-4">
-              {supportPoints.map((point) => (
-                <div
-                  key={point}
-                  className="rounded-[22px] border border-brand-border bg-white px-5 py-4 text-sm leading-7 text-slate-700"
-                >
-                  {point}
-                </div>
-              ))}
-            </div>
-          </div>
+            <h3 className="mt-4 font-heading text-3xl font-bold leading-tight text-brand-ink">
+              Support should feel connected, not added on later
+            </h3>
+            <p className="mt-5 text-base leading-8 text-slate-600">
+              {supportPoints.join(" ")}
+            </p>
+          </aside>
         </div>
       </section>
 

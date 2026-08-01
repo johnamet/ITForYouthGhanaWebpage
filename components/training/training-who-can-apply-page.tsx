@@ -31,25 +31,23 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
           </p>
         </div>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {audienceSections.map((card) => (
-            <div
+        <div className="mt-10 grid gap-x-10 gap-y-12 border-y border-brand-border py-10 lg:grid-cols-3">
+          {audienceSections.map((card, index) => (
+            <article
               key={card.title}
-              className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
+              className="relative"
             >
-              <h3 className="font-heading text-2xl font-bold text-brand-ink">{card.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-slate-600">{card.body}</p>
-              <div className="mt-6 space-y-3">
-                {(card.bullets ?? []).map((bullet) => (
-                  <div
-                    key={bullet}
-                    className="rounded-[22px] border border-brand-border bg-brand-mist/55 px-4 py-4 text-sm leading-7 text-slate-700"
-                  >
-                    {bullet}
-                  </div>
-                ))}
-              </div>
-            </div>
+              <p className="font-heading text-5xl font-bold text-brand-mist">
+                {String(index + 1).padStart(2, "0")}
+              </p>
+              <h3 className="mt-2 font-heading text-2xl font-bold text-brand-ink">{card.title}</h3>
+              <p className="mt-4 text-base leading-8 text-slate-600">{card.body}</p>
+              {(card.bullets ?? []).length ? (
+                <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-8 text-slate-700">
+                  {(card.bullets ?? []).join(" ")}
+                </p>
+              ) : null}
+            </article>
           ))}
         </div>
       </section>
@@ -69,16 +67,13 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
             </p>
           </div>
 
-          <div className="space-y-4">
-            {(readinessSection?.bullets ?? []).map((point) => (
-              <div
-                key={point}
-                className="rounded-[26px] border border-brand-border bg-white px-5 py-5 shadow-sm"
-              >
-                <p className="text-sm leading-7 text-slate-700">{point}</p>
-              </div>
-            ))}
-          </div>
+          {(readinessSection?.bullets ?? []).length ? (
+            <div className="flex items-center border-y border-brand-border py-8 lg:px-6">
+              <p className="text-lg leading-9 text-slate-700">
+                {(readinessSection?.bullets ?? []).join(" ")}
+              </p>
+            </div>
+          ) : null}
         </div>
       </section>
 
