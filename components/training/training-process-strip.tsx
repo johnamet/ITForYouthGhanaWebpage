@@ -15,6 +15,8 @@ export function TrainingProcessStrip({
   description,
   steps,
 }: TrainingProcessStripProps) {
+  if (!steps.length) return null;
+
   return (
     <section className="space-y-8">
       <div className="max-w-3xl space-y-3">

@@ -53,6 +53,8 @@ export interface SitePage {
   ctas: ActionLink[];
   related: RouteCard[];
   courses?: Course[];
+  cohorts?: TrainingCohort[];
+  process?: TrainingProcessStep[];
   // Optional UI copy for section headings and blurbs
   overviewTitle?: string;
   overviewDescription?: string;
@@ -64,9 +66,18 @@ export interface SitePage {
   principlesDescription?: string;
   principlesHeroEyebrow?: string;
   principlesHeroTitle?: string;
+  principlesImage?: string;
+  principlesImageAlt?: string;
+  highlightsEyebrow?: string;
   exploreEyebrow?: string;
   exploreTitle?: string;
   exploreDescription?: string;
+  processEyebrow?: string;
+  processTitle?: string;
+  processDescription?: string;
+  nextStepEyebrow?: string;
+  nextStepTitle?: string;
+  nextStepDescription?: string;
 }
 
 export type DynamicSitePageStatus = "draft" | "published" | "archived";
@@ -216,6 +227,39 @@ export interface InitiativeApplyCta {
   secondary: ActionLink;
 }
 
+export interface InitiativeSectionContent {
+  overviewEyebrow: string;
+  overviewTitle: string;
+  overviewImageAlt: string;
+  howItWorksEyebrow: string;
+  howItWorksTitle: string;
+  howItWorksDescription: string;
+  impactEyebrow: string;
+  impactTitle: string;
+  impactDescription: string;
+  audienceEyebrow: string;
+  eligibilityEyebrow: string;
+  galleryEyebrow: string;
+  galleryTitle: string;
+  galleryDescription: string;
+  testimonialsEyebrow: string;
+  testimonialsTitle: string;
+  testimonialsDescription: string;
+  partnersEyebrow: string;
+  partnersTitle: string;
+  partnersDescription: string;
+  partnerLinkLabel: string;
+  faqsEyebrow: string;
+  faqsTitle: string;
+  faqsDescription: string;
+  applyCtaEyebrow: string;
+  relatedEyebrow: string;
+  relatedTitle: string;
+  relatedDescription: string;
+  shareEyebrow: string;
+  quickLinksEyebrow: string;
+}
+
 export interface InitiativePage extends SitePage {
   tagline: string;
   heroImage: string;
@@ -230,6 +274,8 @@ export interface InitiativePage extends SitePage {
   partners: InitiativePartner[];
   faqs: InitiativeFaq[];
   applyCta: InitiativeApplyCta;
+  sectionContent: InitiativeSectionContent;
+  quickLinks: ActionLink[];
 }
 
 export type ArticleCategory = "news" | "blogs";
@@ -279,6 +325,23 @@ export interface NewsHubContent {
   stats: HighlightStat[];
   editorialPillars: ContentBlock[];
   routeCards: RouteCard[];
+  heroCtas: ActionLink[];
+  featuredSectionEyebrow: string;
+  featuredSectionTitle: string;
+  featuredSectionDescription: string;
+  browseSectionEyebrow: string;
+  browseSectionTitle: string;
+  browseSectionDescription: string;
+  editorialSectionEyebrow: string;
+  editorialSectionTitle: string;
+  editorialSectionDescription: string;
+  latestSectionEyebrow: string;
+  latestSectionTitle: string;
+  latestSectionDescription: string;
+  subscribeSectionEyebrow: string;
+  subscribeSectionTitle: string;
+  subscribeSectionDescription: string;
+  subscribeCtas: ActionLink[];
 }
 
 export interface ArticleCategoryContent {
@@ -288,6 +351,18 @@ export interface ArticleCategoryContent {
   description: string;
   heroImage: string;
   emptyState: string;
+  heroCtaLabel: string;
+  leadSectionEyebrow: string;
+  leadSectionTitle: string;
+  leadSectionDescription: string;
+  archiveSectionEyebrow: string;
+  archiveSectionTitle: string;
+  archiveSectionDescription: string;
+  topicsSectionEyebrow: string;
+  topicsSectionTitle: string;
+  topicsSectionDescription: string;
+  latestSignalEyebrow: string;
+  latestSignalCtaLabel: string;
 }
 
 export interface TrainingFocusCard {
@@ -870,4 +945,19 @@ export interface ContactPageContent {
   responseSteps: ContactResponseStep[];
   routeCards: RouteCard[];
   privacyNote: string;
+  channelsEyebrow?: string;
+  channelsTitle?: string;
+  channelsDescription?: string;
+  formEyebrow?: string;
+  formTitle?: string;
+  formDescription?: string;
+  messageEyebrow?: string;
+  messageTitle?: string;
+  messageDescription?: string;
+  privacyTitle?: string;
+  routesEyebrow?: string;
+  routesTitle?: string;
+  routesDescription?: string;
+  emailCtaLabel?: string;
+  formCtaLabel?: string;
 }

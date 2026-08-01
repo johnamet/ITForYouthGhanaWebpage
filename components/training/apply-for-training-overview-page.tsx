@@ -128,7 +128,7 @@ export function ApplyForTrainingOverviewPage({
         </div>
       </section>
 
-      <div id="cohorts" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
+      {cohorts.length ? <div id="cohorts" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <TrainingCohortTimeline
           eyebrow={page.principlesEyebrow ?? "Upcoming cohorts"}
           title={page.principlesTitle ?? "See what is opening next before you commit"}
@@ -138,21 +138,21 @@ export function ApplyForTrainingOverviewPage({
           }
           cohorts={cohorts}
         />
-      </div>
+      </div> : null}
 
-      <div
+      {process.length ? <div
         id="process"
         className="scroll-mt-36 bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8"
       >
         <div className="mx-auto max-w-7xl">
           <TrainingProcessStrip
-            eyebrow="Apply process"
-            title="A clearer path from first click to first class"
-            description="The training journey is intentionally simple: choose the right route, apply, hear back clearly, and start with a stronger sense of what to expect."
+            eyebrow={page.processEyebrow ?? ""}
+            title={page.processTitle ?? ""}
+            description={page.processDescription ?? ""}
             steps={process}
           />
         </div>
-      </div>
+      </div> : null}
 
       <section className="bg-brand-navy px-4 py-16 text-white sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">

@@ -42,10 +42,7 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
         title={content.title}
         description={content.description}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "News & Updates" }]}
-        ctas={[
-          { label: "Read latest news", href: "/news-and-updates/news" },
-          { label: "Explore blogs", href: "/news-and-updates/blogs", variant: "secondary" },
-        ]}
+        ctas={content.heroCtas.map((cta, index) => ({ ...cta, variant: index === 0 ? "primary" as const : "secondary" as const }))}
         priority
       />
 
@@ -66,9 +63,9 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
       <section id="featured" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-10">
           <SectionHeading
-            eyebrow="Featured"
-            title="A living front page for the latest mission signals"
-            description="The CMS phase will decide what is featured, published, drafted, archived, and scheduled. For now, this static layer proves the complete public reading experience."
+            eyebrow={content.featuredSectionEyebrow}
+            title={content.featuredSectionTitle}
+            description={content.featuredSectionDescription}
           />
 
           {leadArticle ? (
@@ -87,9 +84,9 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
       <section id="browse" className="scroll-mt-36 bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-10">
           <SectionHeading
-            eyebrow="Browse"
-            title="Choose the kind of update you need"
-            description="News stays practical and current. Blogs give the team room to explain thinking, context, and lessons from the field."
+            eyebrow={content.browseSectionEyebrow}
+            title={content.browseSectionTitle}
+            description={content.browseSectionDescription}
           />
 
           <RouteCardGrid cards={content.routeCards} />
@@ -136,9 +133,9 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
         <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
           <div className="space-y-8">
             <SectionHeading
-              eyebrow="Editorial logic"
-              title="What the news system is designed to carry"
-              description="The content model supports quick updates, deeper analysis, and proof-led storytelling without having to redesign the page structure later."
+              eyebrow={content.editorialSectionEyebrow}
+              title={content.editorialSectionTitle}
+              description={content.editorialSectionDescription}
             />
             <StatList stats={content.stats} compact />
           </div>
@@ -175,13 +172,13 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
         <div className="mx-auto max-w-7xl space-y-10">
           <div className="space-y-3">
             <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
-              Latest
+              {content.latestSectionEyebrow}
             </p>
             <h2 className="max-w-2xl font-heading text-3xl font-bold leading-snug text-white sm:text-4xl">
-              Recently published
+              {content.latestSectionTitle}
             </h2>
             <p className="max-w-2xl text-[0.95rem] leading-[1.8] text-white/70">
-              A quick view of the newest published content, across both news and blog routes.
+              {content.latestSectionDescription}
             </p>
           </div>
 
@@ -200,29 +197,21 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
               <Mail className="h-5 w-5" />
             </div>
             <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-navy">
-              Stay close
+              {content.subscribeSectionEyebrow}
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-              Get cohort windows, stories, and partner opportunities as they go live
+              {content.subscribeSectionTitle}
             </h2>
             <p className="max-w-3xl text-sm leading-7 text-slate-700">
-              Newsletter collection is already scaffolded elsewhere in the site. This route keeps the public article
-              system connected to that audience-building path.
+              {content.subscribeSectionDescription}
             </p>
           </div>
           <div className="flex flex-wrap gap-3 lg:justify-end">
-            <Link
-              href="/contact"
-              className="rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              Contact the team
-            </Link>
-            <Link
-              href="/apply-for-training"
-              className="rounded-full border border-brand-navy/20 bg-white px-6 py-3.5 text-sm font-semibold text-brand-navy transition hover:border-brand-navy"
-            >
-              Apply for training
-            </Link>
+            {content.subscribeCtas.filter((cta) => cta.label.trim() && cta.href.trim()).map((cta, index) => (
+              <Link key={`${cta.href}-${cta.label}`} href={cta.href} className={index === 0 ? "rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg" : "rounded-full border border-brand-navy/20 bg-white px-6 py-3.5 text-sm font-semibold text-brand-navy transition hover:border-brand-navy"}>
+                {cta.label}
+              </Link>
+            ))}
           </div>
         </div>
       </section>

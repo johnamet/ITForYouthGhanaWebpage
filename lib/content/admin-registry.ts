@@ -66,6 +66,7 @@ export const adminNodes: AdminNode[] = [
   { key: "apply.process",   hub: "apply-for-training", label: "How It Works",   type: "singleton",  adminPath: "/admin/content/apply-for-training-how-it-works", previewHref: "/apply-for-training/how-it-works" },
 
   // For Organisations
+  { key: "org.overview", hub: "for-organisations", label: "Overview", type: "singleton", adminPath: "/admin/programmes/for-organisations/overview", previewHref: "/for-organisations" },
   ...organisationServices.map((service): AdminNode => ({
     key: `org.${service.slug}`,
     hub: "for-organisations",
@@ -93,6 +94,7 @@ export const adminNodes: AdminNode[] = [
   { key: "impact.sdgs",     hub: "our-impact", label: "UN SDGs",    type: "singleton",  adminPath: "/admin/our-impact", previewHref: "/our-impact/sdgs" },
 
   // News & Updates
+  { key: "news.hub",    hub: "news-and-updates", label: "Overview", type: "singleton", adminPath: "/admin/news-and-updates/hub", previewHref: "/news-and-updates" },
   { key: "news.news",   hub: "news-and-updates", label: "News",  type: "collection", adminPath: "/admin/news-and-updates", previewHref: "/news-and-updates/news" },
   { key: "news.blogs",  hub: "news-and-updates", label: "Blogs", type: "collection", adminPath: "/admin/news-and-updates", previewHref: "/news-and-updates/blogs" },
 

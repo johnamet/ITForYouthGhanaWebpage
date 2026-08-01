@@ -28,8 +28,6 @@ const anchorLinks = [
 ];
 
 const heroImage = "/images/randomPictures/groupworkstudents.jpg";
-const principlesImage = "/images/randomPictures/mireiotalking.jpg";
-
 const operatingIcons = [Layers3, Compass, HeartHandshake];
 
 function isPresent<T>(value: T | null | undefined): value is T {
@@ -47,9 +45,15 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
     ...remainingSections
   ] = page.sections;
   const operatingSections = [deliverySection, transparencySection, partnershipSection].filter(
-    isPresent,
+    (section) => isPresent(section) && Boolean(section.title || section.body || section.bullets?.length),
   );
-  const principleSections = [principlesLeadSection, ...remainingSections].filter(isPresent);
+  const principleSections = [principlesLeadSection, ...remainingSections].filter(
+    (section) => isPresent(section) && Boolean(section.title || section.body || section.bullets?.length),
+  );
+  const hasOverview = Boolean(leadSection || page.intro || page.stats.length || page.overviewTitle || page.overviewDescription);
+  const visibleAnchors = anchorLinks.filter((link) =>
+    link.id === "overview" ? hasOverview : link.id === "model" ? operatingSections.length : link.id === "principles" ? principleSections.length : page.related.length,
+  );
 
   return (
     <div className="overflow-hidden bg-white text-brand-ink">
@@ -73,7 +77,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
 
       <div className="sticky top-[72px] z-30 border-y border-brand-border bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-4 py-4 [scrollbar-width:none] sm:px-6 lg:px-8">
-          {anchorLinks.map((link) => (
+          {visibleAnchors.map((link) => (
             <a
               key={link.id}
               href={`#${link.id}`}
@@ -85,7 +89,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
         </div>
       </div>
 
-      <section id="overview" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
+      {hasOverview ? <section id="overview" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div className="space-y-7">
             <SectionHeading
@@ -98,10 +102,10 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
               }
             />
 
-            <div className="rounded-[32px] border border-brand-border bg-brand-mist/55 p-7">
+            {page.intro ? <div className="rounded-[32px] border border-brand-border bg-brand-mist/55 p-7">
               <Quote className="h-9 w-9 text-brand-gold" />
               <p className="mt-5 text-lg leading-9 text-slate-700">{page.intro}</p>
-            </div>
+            </div> : null}
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -119,7 +123,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
             ))}
           </div>
         </div>
-      </section>
+      </section> : null}
 
       {operatingSections.length ? (
         <section
@@ -179,18 +183,18 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
       {principleSections.length ? (
         <section id="principles" className="scroll-mt-36 bg-brand-navy px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-20">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div className="relative overflow-hidden rounded-[36px] border border-white/12 bg-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
+            {page.principlesImage ? <div className="relative overflow-hidden rounded-[36px] border border-white/12 bg-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
               <div className="relative min-h-[26rem]">
                 <Image
-                  src={principlesImage}
-                  alt="IT For Youth Ghana facilitator speaking with learners"
+                  src={page.principlesImage}
+                  alt={page.principlesImageAlt ?? "IT For Youth Ghana facilitator speaking with learners"}
                   fill
                   sizes="(max-width: 1023px) 100vw, 42vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/86 via-brand-navy/16 to-transparent" />
               </div>
-              <div className="absolute bottom-5 left-5 right-5 rounded-[28px] border border-white/14 bg-white/12 p-6 backdrop-blur-md">
+              {page.principlesHeroEyebrow || page.principlesHeroTitle ? <div className="absolute bottom-5 left-5 right-5 rounded-[28px] border border-white/14 bg-white/12 p-6 backdrop-blur-md">
                 <div className="flex items-start gap-4">
                   <ShieldCheck className="mt-1 h-7 w-7 shrink-0 text-brand-gold" />
                   <div>
@@ -202,8 +206,8 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
                     </h2>
                   </div>
                 </div>
-              </div>
-            </div>
+              </div> : null}
+            </div> : null}
 
             <div className="space-y-7">
               <div className="space-y-3">
@@ -276,20 +280,19 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
         </section>
       ) : null}
 
-      <section className="px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
+      {page.ctas.length ? <section className="px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
         <div className="mx-auto max-w-7xl space-y-10">
           <div className="overflow-hidden rounded-[36px] bg-brand-gold">
             <div className="grid gap-8 p-7 sm:p-10 lg:grid-cols-[1fr_0.85fr] lg:items-center">
               <div className="space-y-4">
                 <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-ink/70">
-                  Next move
+                  {page.nextStepEyebrow}
                 </p>
                 <h2 className="max-w-3xl font-heading text-4xl font-bold leading-tight text-brand-ink">
-                  Start with the route that matches how you want to join the mission.
+                  {page.nextStepTitle}
                 </h2>
                 <p className="max-w-2xl text-base leading-8 text-brand-ink/75">
-                  Whether you want to meet the team, partner with delivery, or support the next
-                  cohort, the page now gives visitors a clear next step.
+                  {page.nextStepDescription}
                 </p>
               </div>
 
@@ -308,7 +311,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </section> : null}
     </div>
   );
 }

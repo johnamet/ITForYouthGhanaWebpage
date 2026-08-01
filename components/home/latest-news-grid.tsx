@@ -20,6 +20,7 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
         new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime(),
     )
     .slice(0, 3);
+  if (!latest.length) return null;
 
   return (
     <section className="bg-white px-6 py-20 lg:px-10">

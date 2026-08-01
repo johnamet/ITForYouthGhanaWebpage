@@ -30,6 +30,7 @@ const iconMap: Record<JoinCtaCard["icon"], LucideIcon> = {
 
 export function JoinCtaBlock({ cards }: JoinCtaBlockProps) {
   const visibleCards = cards.filter((card) => card.active !== false);
+  if (!visibleCards.length) return null;
 
   return (
     <section className="bg-white px-6 py-20 lg:px-10">

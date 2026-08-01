@@ -5,6 +5,7 @@ import {
   heroSlides as seedHeroSlides,
   homepageTicker as seedHomepageTicker,
   programmeShowcase as seedProgrammeShowcase,
+  overviewSectionContent as seedOverviewSection,
   challengeSectionContent as seedChallengeSection,
   missionSectionContent as seedMissionSection,
   activeDonationCampaign as seedDonationCampaign,
@@ -25,7 +26,7 @@ import type { DonationCampaignContent } from "@/components/home/donation-campaig
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";
 import type { JoinCtaCard } from "@/components/home/join-cta-block";
 import type { NewsletterSignupContent } from "@/components/home/newsletter-signup-section";
-import type { ChallengeSectionContent, MissionSectionContent } from "@/components/home/legacy-homepage-sections";
+import type { ChallengeSectionContent, MissionSectionContent, OverviewSectionContent } from "@/components/home/legacy-homepage-sections";
 
 const DOC_ID = "main";
 
@@ -84,7 +85,7 @@ export async function getCmsHeroSlides(): Promise<HeroSlide[]> {
   try {
     const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
     const slides = getDocField<unknown[]>(getHomepageDocData(doc.data()), "heroSlides") ?? [];
-    if (!Array.isArray(slides) || !slides.length) return seedHeroSlides;
+    if (!Array.isArray(slides)) return seedHeroSlides;
     return slides as HeroSlide[];
   } catch (e) {
     console.error("Homepage heroSlides read failed.", e);
@@ -111,11 +112,24 @@ export async function getCmsProgrammeShowcase(): Promise<ProgrammeShowcaseItem[]
   try {
     const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
     const items = getDocField<unknown[]>(getHomepageDocData(doc.data()), "programmeShowcase") ?? [];
-    if (!Array.isArray(items) || !items.length) return seedProgrammeShowcase;
+    if (!Array.isArray(items)) return seedProgrammeShowcase;
     return items as ProgrammeShowcaseItem[];
   } catch (e) {
     console.error("Homepage programmeShowcase read failed.", e);
     return seedProgrammeShowcase;
+  }
+}
+
+export async function getCmsOverviewSection(): Promise<OverviewSectionContent> {
+  const db = await getAdminFirestore();
+  if (!db) return seedOverviewSection;
+  try {
+    const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
+    const content = getDocField<OverviewSectionContent>(getHomepageDocData(doc.data()), "overviewSection");
+    return content ?? seedOverviewSection;
+  } catch (e) {
+    console.error("Homepage overviewSection read failed.", e);
+    return seedOverviewSection;
   }
 }
 
@@ -177,7 +191,7 @@ export async function getCmsJoinCtaCards(): Promise<JoinCtaCard[]> {
   try {
     const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
     const cards = getDocField<unknown[]>(getHomepageDocData(doc.data()), "joinCtaCards") ?? [];
-    if (!Array.isArray(cards) || !cards.length) return seedJoinCtaCards;
+    if (!Array.isArray(cards)) return seedJoinCtaCards;
     return cards as JoinCtaCard[];
   } catch (e) {
     console.error("Homepage joinCtaCards read failed.", e);

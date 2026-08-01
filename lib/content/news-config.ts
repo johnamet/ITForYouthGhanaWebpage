@@ -86,6 +86,29 @@ export const newsHubContent: NewsHubContent = {
         "Longer-form ideas, field notes, and practical reflections on youth digital opportunity.",
     },
   ],
+  heroCtas: [
+    { label: "Read latest news", href: "/news-and-updates/news" },
+    { label: "Explore blogs", href: "/news-and-updates/blogs" },
+  ],
+  featuredSectionEyebrow: "Featured",
+  featuredSectionTitle: "A living front page for the latest mission signals",
+  featuredSectionDescription: "Follow selected stories, announcements, and programme moments from across IT For Youth Ghana.",
+  browseSectionEyebrow: "Browse",
+  browseSectionTitle: "Choose the kind of update you need",
+  browseSectionDescription: "News stays practical and current. Blogs give the team room to explain thinking, context, and lessons from the field.",
+  editorialSectionEyebrow: "Editorial logic",
+  editorialSectionTitle: "What the news system is designed to carry",
+  editorialSectionDescription: "The content model supports quick updates, deeper analysis, and proof-led storytelling.",
+  latestSectionEyebrow: "Latest",
+  latestSectionTitle: "Recently published",
+  latestSectionDescription: "A quick view of the newest published content across both news and blog routes.",
+  subscribeSectionEyebrow: "Stay close",
+  subscribeSectionTitle: "Get cohort windows, stories, and partner opportunities as they go live",
+  subscribeSectionDescription: "Stay connected to new opportunities, programme milestones, and stories from the ITFY community.",
+  subscribeCtas: [
+    { label: "Contact the team", href: "/contact" },
+    { label: "Apply for training", href: "/apply-for-training" },
+  ],
 };
 
 export const articleCategoryContent: Record<ArticleCategory, ArticleCategoryContent> = {
@@ -98,6 +121,18 @@ export const articleCategoryContent: Record<ArticleCategory, ArticleCategoryCont
     heroImage: "/images/randomPictures/graduationspeaking.jpg",
     emptyState:
       "No news articles are published yet. Once the CMS lands, published updates will appear here automatically.",
+    heroCtaLabel: "Back to hub",
+    leadSectionEyebrow: "Lead article",
+    leadSectionTitle: "Start with the most recent published story",
+    leadSectionDescription: "The newest published update appears first so important information is easy to find.",
+    archiveSectionEyebrow: "Archive",
+    archiveSectionTitle: "More news",
+    archiveSectionDescription: "Browse earlier published updates from across the ITFY community.",
+    topicsSectionEyebrow: "Topics",
+    topicsSectionTitle: "Browse by signal",
+    topicsSectionDescription: "These topics show the themes covered across the published collection.",
+    latestSignalEyebrow: "Latest signal",
+    latestSignalCtaLabel: "Read the lead article",
   },
   blogs: {
     category: "blogs",
@@ -108,6 +143,18 @@ export const articleCategoryContent: Record<ArticleCategory, ArticleCategoryCont
     heroImage: "/images/randomPictures/mireiotalking.jpg",
     emptyState:
       "No blog articles are published yet. Future reflections and field notes will appear here automatically.",
+    heroCtaLabel: "Back to hub",
+    leadSectionEyebrow: "Lead article",
+    leadSectionTitle: "Start with the most recent published story",
+    leadSectionDescription: "The newest published reflection appears first so readers can begin with the latest thinking.",
+    archiveSectionEyebrow: "Archive",
+    archiveSectionTitle: "More blogs",
+    archiveSectionDescription: "Browse earlier reflections, field notes, and practical ideas from the ITFY ecosystem.",
+    topicsSectionEyebrow: "Topics",
+    topicsSectionTitle: "Browse by signal",
+    topicsSectionDescription: "These topics show the themes covered across the published collection.",
+    latestSignalEyebrow: "Latest signal",
+    latestSignalCtaLabel: "Read the lead article",
   },
 };
 

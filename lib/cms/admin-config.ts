@@ -85,7 +85,7 @@ export const cmsCollections: AdminCollectionDefinition[] = [
     key: "forOrganisations",
     label: "Organisation services",
     collection: FIREBASE_COLLECTIONS.forOrganisations,
-    route: "/admin/programmes/for-organisations/corporate-training",
+    route: "/admin/programmes/for-organisations/overview",
     description: "Service pages for corporate training, sponsorships, hiring, and volunteering.",
     readModel: "public-read",
     writeRole: "editor",

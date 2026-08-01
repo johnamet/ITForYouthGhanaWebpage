@@ -49,7 +49,7 @@ export function TrainingCourseListingPage({
 
       <TrainingCourseCatalog courses={courses} />
 
-      <div id="cohorts" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
+      {(page.cohorts ?? []).length ? <div id="cohorts" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <TrainingCohortTimeline
           eyebrow={page.operatingEyebrow ?? trainingCatalogContent.cohortsSectionEyebrow ?? "Upcoming cohorts"}
           title={
@@ -62,11 +62,11 @@ export function TrainingCourseListingPage({
             trainingCatalogContent.cohortsSectionDescription ??
             "Review exact dates, formats, and deadlines so you can plan your application and participation with confidence."
           }
-          cohorts={trainingCatalogContent.cohorts}
+          cohorts={page.cohorts ?? []}
         />
-      </div>
+      </div> : null}
 
-      <div id="process" className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
+      {(page.process ?? []).length ? <div id="process" className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <TrainingProcessStrip
             eyebrow={page.principlesEyebrow ?? trainingCatalogContent.processSectionEyebrow ?? "Apply process"}
@@ -80,10 +80,10 @@ export function TrainingCourseListingPage({
               trainingCatalogContent.processSectionDescription ??
               "We keep the process transparent. Know what to prepare, when decisions happen, and what support is available before you apply."
             }
-            steps={trainingCatalogContent.process}
+            steps={page.process ?? []}
           />
         </div>
-      </div>
+      </div> : null}
 
       {page.related.length ? (
         <section className="px-4 py-16 sm:px-6 lg:px-8">

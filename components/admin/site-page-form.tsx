@@ -20,6 +20,8 @@ import type {
   HighlightStat,
   RouteCard,
   SitePage,
+  TrainingCohort,
+  TrainingProcessStep,
 } from "@/types/content";
 
 type ApiResponse = {
@@ -75,6 +77,9 @@ const emptyRelatedCard: RouteCard = {
   title: "",
   description: "",
 };
+
+const emptyCohort: TrainingCohort = { id: "", name: "", startDate: "", summary: "", format: "", duration: "", location: "", status: "upcoming" };
+const emptyProcessStep: TrainingProcessStep = { number: "", title: "", description: "", icon: "" };
 
 function toLines(value?: string[]) {
   return (value ?? []).join("\n");
@@ -179,6 +184,10 @@ export function SitePageForm({
   const addSection = () => update("sections", [...values.sections, emptySection]);
   const addCta = () => update("ctas", [...values.ctas, emptyCta]);
   const addRelatedCard = () => update("related", [...values.related, emptyRelatedCard]);
+  const updateCohort = (index: number, patch: Partial<TrainingCohort>) =>
+    update("cohorts", (values.cohorts ?? []).map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item));
+  const updateProcessStep = (index: number, patch: Partial<TrainingProcessStep>) =>
+    update("process", (values.process ?? []).map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item));
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -356,6 +365,30 @@ export function SitePageForm({
         </div>
       </section>
 
+      {values.cohorts !== undefined ? (
+        <section className={panelClass}>
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <div><p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">Schedule</p><h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Cohorts</h2></div>
+            <button type="button" onClick={() => update("cohorts", [...(values.cohorts ?? []), emptyCohort])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold"><Plus className="h-4 w-4" /> Add cohort</button>
+          </div>
+          <div className="space-y-4">{(values.cohorts ?? []).map((cohort, index) => (
+            <div key={`${cohort.id}-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+              {(["id", "name", "startDate", "applicationDeadline", "format", "duration", "location"] as const).map((field) => <div key={field}><label className="text-sm font-bold capitalize text-brand-ink">{field.replace(/([A-Z])/g, " $1")}</label><input value={cohort[field] ?? ""} onChange={(event) => updateCohort(index, { [field]: event.target.value })} className={inputClass} /></div>)}
+              <div><label className="text-sm font-bold text-brand-ink">Status</label><select value={cohort.status} onChange={(event) => updateCohort(index, { status: event.target.value as TrainingCohort["status"] })} className={inputClass}><option value="open">Open</option><option value="upcoming">Upcoming</option><option value="waitlist">Waitlist</option></select></div>
+              <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Summary</label><textarea value={cohort.summary} onChange={(event) => updateCohort(index, { summary: event.target.value })} className={`${inputClass} h-24`} /></div>
+              <button type="button" onClick={() => update("cohorts", (values.cohorts ?? []).filter((_, itemIndex) => itemIndex !== index))} className="justify-self-start rounded-xl border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-700"><Trash2 className="mr-1 inline h-4 w-4" /> Remove cohort</button>
+            </div>
+          ))}</div>
+        </section>
+      ) : null}
+
+      {values.process !== undefined ? (
+        <section className={panelClass}>
+          <div className="mb-6 flex items-center justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">Journey</p><h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Process steps</h2></div><button type="button" onClick={() => update("process", [...(values.process ?? []), emptyProcessStep])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold"><Plus className="h-4 w-4" /> Add step</button></div>
+          <div className="space-y-4">{(values.process ?? []).map((step, index) => <div key={`${step.number}-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2"><div><label className="text-sm font-bold text-brand-ink">Number</label><input value={step.number} onChange={(event) => updateProcessStep(index, { number: event.target.value })} className={inputClass} /></div><div><label className="text-sm font-bold text-brand-ink">Title</label><input value={step.title} onChange={(event) => updateProcessStep(index, { title: event.target.value })} className={inputClass} /></div><div><label className="text-sm font-bold text-brand-ink">Icon</label><input value={step.icon} onChange={(event) => updateProcessStep(index, { icon: event.target.value })} className={inputClass} /></div><div><label className="text-sm font-bold text-brand-ink">Icon image URL</label><input value={step.iconImage ?? ""} onChange={(event) => updateProcessStep(index, { iconImage: event.target.value })} className={inputClass} /></div><div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Description</label><textarea value={step.description} onChange={(event) => updateProcessStep(index, { description: event.target.value })} className={`${inputClass} h-24`} /></div><button type="button" onClick={() => update("process", (values.process ?? []).filter((_, itemIndex) => itemIndex !== index))} className="justify-self-start rounded-xl border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-700"><Trash2 className="mr-1 inline h-4 w-4" /> Remove step</button></div>)}</div>
+        </section>
+      ) : null}
+
       <section className={panelClass}>
         <div className="mb-6">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
@@ -482,6 +515,25 @@ export function SitePageForm({
             />
           </div>
           <div>
+            <label htmlFor="principlesImage" className="text-sm font-bold text-brand-ink">Feature image URL</label>
+            <input id="principlesImage" value={values.principlesImage ?? ""} onChange={(event) => update("principlesImage", event.target.value)} className={inputClass} placeholder="https://… or /images/…" />
+          </div>
+          <div>
+            <label htmlFor="principlesImageAlt" className="text-sm font-bold text-brand-ink">Feature image alt text</label>
+            <input id="principlesImageAlt" value={values.principlesImageAlt ?? ""} onChange={(event) => update("principlesImageAlt", event.target.value)} className={inputClass} />
+          </div>
+          <div>
+            <label htmlFor="highlightsEyebrow" className="text-sm font-bold text-brand-ink">
+              Highlights label
+            </label>
+            <input
+              id="highlightsEyebrow"
+              value={values.highlightsEyebrow ?? ""}
+              onChange={(event) => update("highlightsEyebrow", event.target.value)}
+              className={inputClass}
+            />
+          </div>
+          <div>
             <label htmlFor="exploreEyebrow" className="text-sm font-bold text-brand-ink">
               Explore eyebrow
             </label>
@@ -513,6 +565,18 @@ export function SitePageForm({
               onChange={(event) => update("exploreDescription", event.target.value)}
               className={`${inputClass} h-24`}
             />
+          </div>
+          <div>
+            <label htmlFor="nextStepEyebrow" className="text-sm font-bold text-brand-ink">Final CTA eyebrow</label>
+            <input id="nextStepEyebrow" value={values.nextStepEyebrow ?? ""} onChange={(event) => update("nextStepEyebrow", event.target.value)} className={inputClass} />
+          </div>
+          <div>
+            <label htmlFor="nextStepTitle" className="text-sm font-bold text-brand-ink">Final CTA title</label>
+            <input id="nextStepTitle" value={values.nextStepTitle ?? ""} onChange={(event) => update("nextStepTitle", event.target.value)} className={inputClass} />
+          </div>
+          <div className="md:col-span-2">
+            <label htmlFor="nextStepDescription" className="text-sm font-bold text-brand-ink">Final CTA description</label>
+            <textarea id="nextStepDescription" value={values.nextStepDescription ?? ""} onChange={(event) => update("nextStepDescription", event.target.value)} className={`${inputClass} h-24`} />
           </div>
         </div>
       </section>
@@ -762,9 +826,14 @@ export function SitePageForm({
                     value={card.description}
                     onChange={(event) => updateRelatedCard(index, "description", event.target.value)}
                     className={inputClass}
-                  />
-                </div>
-              </div>
+            />
+          </div>
+          {values.process !== undefined ? <>
+            <div><label htmlFor="processEyebrow" className="text-sm font-bold text-brand-ink">Process eyebrow</label><input id="processEyebrow" value={values.processEyebrow ?? ""} onChange={(event) => update("processEyebrow", event.target.value)} className={inputClass} /></div>
+            <div><label htmlFor="processTitle" className="text-sm font-bold text-brand-ink">Process title</label><input id="processTitle" value={values.processTitle ?? ""} onChange={(event) => update("processTitle", event.target.value)} className={inputClass} /></div>
+            <div className="md:col-span-2"><label htmlFor="processDescription" className="text-sm font-bold text-brand-ink">Process description</label><textarea id="processDescription" value={values.processDescription ?? ""} onChange={(event) => update("processDescription", event.target.value)} className={`${inputClass} h-24`} /></div>
+          </> : null}
+        </div>
               <button
                 type="button"
                 onClick={() => removeItem("related", index)}

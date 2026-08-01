@@ -6,6 +6,21 @@ export const contactPageContent: ContactPageContent = {
   description:
     "Reach IT For Youth Ghana for training enquiries, organisation services, partnerships, media requests, volunteering, donor conversations, and general support.",
   heroImage: "/images/randomPictures/groupworkstudents.jpg",
+  channelsEyebrow: "Direct channels",
+  channelsTitle: "Use the fastest route when you already know what you need",
+  channelsDescription: "The form below is best for routing context. These direct channels remain visible for people who need a simpler first step.",
+  formEyebrow: "Enquiry form",
+  formTitle: "Give the team enough context to route your message well",
+  formDescription: "Share the details that will help the team understand what you need and who should respond.",
+  messageEyebrow: "Message",
+  messageTitle: "Send an enquiry",
+  messageDescription: "Choose the closest route, add context, and the team will use it to follow up clearly.",
+  privacyTitle: "Privacy and routing",
+  routesEyebrow: "Before you write",
+  routesTitle: "Some questions already have a better front door",
+  routesDescription: "These routes help learners, organisations, partners, and donors self-serve before sending a message.",
+  emailCtaLabel: "Email the team",
+  formCtaLabel: "Use the form",
   stats: [
     {
       value: "7",

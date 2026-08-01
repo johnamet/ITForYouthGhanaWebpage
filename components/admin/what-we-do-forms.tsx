@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AlertCircle, CheckCircle2, Loader2, Plus, Save, Trash2 } from "lucide-react";
 
 import type {
+  ActionLink,
   EcosystemCardContent,
   HighlightStat,
   InitiativeAudience,
@@ -13,6 +14,7 @@ import type {
   InitiativePage,
   InitiativePartner,
   InitiativeProcessStep,
+  InitiativeSectionContent,
   InitiativeTestimonial,
   PathwayCardContent,
   RouteCard,
@@ -51,6 +53,7 @@ const emptyGalleryImage: InitiativeGalleryImage = { src: "", alt: "" };
 const emptyTestimonial: InitiativeTestimonial = { quote: "", name: "", role: "", avatar: "" };
 const emptyPartner: InitiativePartner = { name: "", description: "", href: "", logo: "" };
 const emptyFaq: InitiativeFaq = { question: "", answer: "" };
+const emptyActionLink: ActionLink = { label: "", href: "" };
 
 function Field({
   label,
@@ -453,6 +456,8 @@ export function InitiativeForm({ initial, endpoint }: InitiativeFormProps) {
     setValues((current) => ({ ...current, [key]: value }));
   const updateAudience = <Key extends keyof InitiativeAudience>(key: Key, value: InitiativeAudience[Key]) =>
     update("audience", { ...values.audience, [key]: value });
+  const updateSectionContent = <Key extends keyof InitiativeSectionContent>(key: Key, value: InitiativeSectionContent[Key]) =>
+    update("sectionContent", { ...values.sectionContent, [key]: value });
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -492,7 +497,52 @@ export function InitiativeForm({ initial, endpoint }: InitiativeFormProps) {
           <Field label="Hero image" value={values.heroImage} onChange={(value) => update("heroImage", value)} />
           <Field label="Overview image" value={values.overviewImage} onChange={(value) => update("overviewImage", value)} />
           <div className="md:col-span-2">
+            <Field label="Overview image alt text" value={values.sectionContent.overviewImageAlt} onChange={(value) => updateSectionContent("overviewImageAlt", value)} />
+          </div>
+          <div className="md:col-span-2">
             <Field label="Mission" value={values.mission} multiline onChange={(value) => update("mission", value)} />
+          </div>
+        </div>
+        <div className="mt-8">
+          <Repeater title="Hero CTAs" addLabel="Add hero CTA" onAdd={() => update("ctas", [...values.ctas, emptyActionLink])}>
+            {values.ctas.map((cta, index) => (
+              <div key={`hero-cta-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+                <Field label="Label" value={cta.label} onChange={(value) => update("ctas", values.ctas.map((item, itemIndex) => itemIndex === index ? { ...item, label: value } : item))} />
+                <Field label="Href" value={cta.href} onChange={(value) => update("ctas", values.ctas.map((item, itemIndex) => itemIndex === index ? { ...item, href: value } : item))} />
+                <RemoveButton onClick={() => update("ctas", values.ctas.filter((_, itemIndex) => itemIndex !== index))} />
+              </div>
+            ))}
+          </Repeater>
+        </div>
+      </Panel>
+
+      <Panel title="Section headings and descriptions" description="Controls the framing copy around each CMS-backed initiative section. Empty copy is hidden on the public page.">
+        <div className="space-y-8">
+          {([
+            ["Overview", "overviewEyebrow", "overviewTitle", null],
+            ["How it works", "howItWorksEyebrow", "howItWorksTitle", "howItWorksDescription"],
+            ["Impact", "impactEyebrow", "impactTitle", "impactDescription"],
+            ["Gallery", "galleryEyebrow", "galleryTitle", "galleryDescription"],
+            ["Testimonials", "testimonialsEyebrow", "testimonialsTitle", "testimonialsDescription"],
+            ["Partners", "partnersEyebrow", "partnersTitle", "partnersDescription"],
+            ["FAQs", "faqsEyebrow", "faqsTitle", "faqsDescription"],
+            ["Related routes", "relatedEyebrow", "relatedTitle", "relatedDescription"],
+          ] as const).map(([label, eyebrowKey, titleKey, descriptionKey]) => (
+            <div key={label} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+              <p className="font-heading text-lg font-semibold text-brand-ink md:col-span-2">{label}</p>
+              <Field label="Eyebrow" value={values.sectionContent[eyebrowKey]} onChange={(value) => updateSectionContent(eyebrowKey, value)} />
+              <Field label="Title" value={values.sectionContent[titleKey]} onChange={(value) => updateSectionContent(titleKey, value)} />
+              {descriptionKey ? <div className="md:col-span-2"><Field label="Description" value={values.sectionContent[descriptionKey]} multiline onChange={(value) => updateSectionContent(descriptionKey, value)} /></div> : null}
+            </div>
+          ))}
+          <div className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+            <p className="font-heading text-lg font-semibold text-brand-ink md:col-span-2">Labels and utility copy</p>
+            <Field label="Audience eyebrow" value={values.sectionContent.audienceEyebrow} onChange={(value) => updateSectionContent("audienceEyebrow", value)} />
+            <Field label="Eligibility eyebrow" value={values.sectionContent.eligibilityEyebrow} onChange={(value) => updateSectionContent("eligibilityEyebrow", value)} />
+            <Field label="Partner link label" value={values.sectionContent.partnerLinkLabel} onChange={(value) => updateSectionContent("partnerLinkLabel", value)} />
+            <Field label="Apply CTA eyebrow" value={values.sectionContent.applyCtaEyebrow} onChange={(value) => updateSectionContent("applyCtaEyebrow", value)} />
+            <Field label="Share eyebrow" value={values.sectionContent.shareEyebrow} onChange={(value) => updateSectionContent("shareEyebrow", value)} />
+            <Field label="Quick links eyebrow" value={values.sectionContent.quickLinksEyebrow} onChange={(value) => updateSectionContent("quickLinksEyebrow", value)} />
           </div>
         </div>
       </Panel>
@@ -598,6 +648,17 @@ export function InitiativeForm({ initial, endpoint }: InitiativeFormProps) {
         </div>
         <div className="mt-8">
           <RouteCardsEditor values={values.related} onChange={(related) => update("related", related)} />
+        </div>
+        <div className="mt-8">
+          <Repeater title="Sidebar quick links" addLabel="Add quick link" onAdd={() => update("quickLinks", [...values.quickLinks, emptyActionLink])}>
+            {values.quickLinks.map((link, index) => (
+              <div key={`quick-link-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+                <Field label="Label" value={link.label} onChange={(value) => update("quickLinks", values.quickLinks.map((item, itemIndex) => itemIndex === index ? { ...item, label: value } : item))} />
+                <Field label="Href" value={link.href} onChange={(value) => update("quickLinks", values.quickLinks.map((item, itemIndex) => itemIndex === index ? { ...item, href: value } : item))} />
+                <RemoveButton onClick={() => update("quickLinks", values.quickLinks.filter((_, itemIndex) => itemIndex !== index))} />
+              </div>
+            ))}
+          </Repeater>
         </div>
       </Panel>
 

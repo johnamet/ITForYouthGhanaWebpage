@@ -214,6 +214,28 @@ export function ContactPageForm({ initial }: ContactPageFormProps) {
       </section>
 
       <section className={panelClass}>
+        <h3 className="font-heading text-xl font-semibold text-brand-ink">Section headings and calls to action</h3>
+        <p className="mt-2 text-sm text-slate-500">Clear a field to hide that piece of copy. Image fields accept URLs or public paths only.</p>
+        <div className="mt-4 grid gap-5 md:grid-cols-2">
+          <Field label="Channels eyebrow" value={values.channelsEyebrow ?? ""} onChange={(value) => update("channelsEyebrow", value)} />
+          <Field label="Channels title" value={values.channelsTitle ?? ""} onChange={(value) => update("channelsTitle", value)} />
+          <div className="md:col-span-2"><Field label="Channels description" value={values.channelsDescription ?? ""} multiline onChange={(value) => update("channelsDescription", value)} /></div>
+          <Field label="Form eyebrow" value={values.formEyebrow ?? ""} onChange={(value) => update("formEyebrow", value)} />
+          <Field label="Form title" value={values.formTitle ?? ""} onChange={(value) => update("formTitle", value)} />
+          <div className="md:col-span-2"><Field label="Form description" value={values.formDescription ?? ""} multiline onChange={(value) => update("formDescription", value)} /></div>
+          <Field label="Message eyebrow" value={values.messageEyebrow ?? ""} onChange={(value) => update("messageEyebrow", value)} />
+          <Field label="Message title" value={values.messageTitle ?? ""} onChange={(value) => update("messageTitle", value)} />
+          <div className="md:col-span-2"><Field label="Message description" value={values.messageDescription ?? ""} multiline onChange={(value) => update("messageDescription", value)} /></div>
+          <Field label="Privacy box title" value={values.privacyTitle ?? ""} onChange={(value) => update("privacyTitle", value)} />
+          <Field label="Routes eyebrow" value={values.routesEyebrow ?? ""} onChange={(value) => update("routesEyebrow", value)} />
+          <Field label="Routes title" value={values.routesTitle ?? ""} onChange={(value) => update("routesTitle", value)} />
+          <div className="md:col-span-2"><Field label="Routes description" value={values.routesDescription ?? ""} multiline onChange={(value) => update("routesDescription", value)} /></div>
+          <Field label="Email CTA label" value={values.emailCtaLabel ?? ""} onChange={(value) => update("emailCtaLabel", value)} />
+          <Field label="Form CTA label" value={values.formCtaLabel ?? ""} onChange={(value) => update("formCtaLabel", value)} />
+        </div>
+      </section>
+
+      <section className={panelClass}>
         <h3 className="font-heading text-xl font-semibold text-brand-ink">Stats</h3>
         <div className="mt-4 space-y-4">
           {values.stats.map((stat, index) => (

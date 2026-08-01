@@ -83,7 +83,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
           />
 
           <div className="grid gap-5 md:grid-cols-2">
-            {page.overviewCards.map((card) => (
+            {page.overviewCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => (
               <div
                 key={card.title}
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
@@ -140,7 +140,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
           />
 
           <div className="grid gap-5 lg:grid-cols-4">
-            {page.howItWorks.map((step) => (
+            {page.howItWorks.filter((step) => step.title?.trim() || step.description?.trim()).map((step) => (
               <div
                 key={step.number}
                 className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
@@ -187,7 +187,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
           />
 
           <div className="grid gap-5 lg:grid-cols-2">
-            {page.caseStudies.map((study) => (
+            {page.caseStudies.filter((study) => study.title?.trim() || study.summary?.trim() || study.outcome?.trim()).map((study) => (
               <div
                 key={study.title}
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
@@ -232,7 +232,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
             />
 
             <div className="grid gap-5 md:grid-cols-2">
-              {page.packages.map((item) => (
+                {page.packages.filter((item) => item.name?.trim() || item.description?.trim()).map((item) => (
                 <div
                   key={item.name}
                   className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
@@ -291,7 +291,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
           />
 
           <div className="space-y-4">
-            {page.faqs.map((faq) => (
+            {page.faqs.filter((faq) => faq.question?.trim() || faq.answer?.trim()).map((faq) => (
               <details
                 key={faq.question}
                 className="group rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"

@@ -76,6 +76,26 @@ export function PartnershipOverviewForm({ initial }: Props) {
       </section>
 
       <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
+        <h3 className="font-heading text-xl font-semibold text-brand-ink">Section headings</h3>
+        <p className="mt-2 text-sm text-slate-500">Clear any section’s copy and remove its cards below to hide that section on the public page.</p>
+        <div className="mt-4 space-y-6">
+          {([
+            ["Overview", "overviewSectionEyebrow", "overviewSectionTitle", "overviewSectionDescription"],
+            ["Partnership tracks", "tracksSectionEyebrow", "tracksSectionTitle", "tracksSectionDescription"],
+            ["Partner types", "partnerTypesSectionEyebrow", "partnerTypesSectionTitle", "partnerTypesSectionDescription"],
+            ["Next steps", "nextStepsSectionEyebrow", "nextStepsSectionTitle", "nextStepsSectionDescription"],
+          ] as const).map(([label, eyebrowKey, titleKey, descriptionKey]) => (
+            <fieldset key={label} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+              <legend className="px-2 text-sm font-bold text-brand-ink">{label}</legend>
+              <div><label className="text-sm font-bold text-brand-ink">Eyebrow</label><input className={input} value={values[eyebrowKey] ?? ""} onChange={(e) => update(eyebrowKey, e.target.value)} /></div>
+              <div><label className="text-sm font-bold text-brand-ink">Title</label><input className={input} value={values[titleKey] ?? ""} onChange={(e) => update(titleKey, e.target.value)} /></div>
+              <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Description</label><textarea className={input + " h-24"} value={values[descriptionKey] ?? ""} onChange={(e) => update(descriptionKey, e.target.value)} /></div>
+            </fieldset>
+          ))}
+        </div>
+      </section>
+
+      <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
         <h3 className="font-heading text-xl font-semibold text-brand-ink">Value cards</h3>
         <div className="mt-4 space-y-4">
           {valueCards.map((c, i) => (

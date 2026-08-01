@@ -20,6 +20,7 @@ type ProgrammeShowcaseProps = {
 
 export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
   const visibleItems = items.filter((item) => item.active !== false);
+  if (!visibleItems.length) return null;
 
   return (
     <section className="overflow-hidden bg-white px-6 py-20 lg:px-10 lg:py-28">

@@ -42,7 +42,7 @@ export function NewsListingPage({
           { label: "News & Updates", href: "/news-and-updates" },
           { label: articleCategoryLabels[content.category] },
         ]}
-        ctas={[{ label: "Back to hub", href: "/news-and-updates", variant: "secondary" }]}
+        ctas={[{ label: content.heroCtaLabel, href: "/news-and-updates", variant: "secondary" }]}
         priority
       />
 
@@ -50,9 +50,9 @@ export function NewsListingPage({
         {leadArticle ? (
           <div className="space-y-10">
             <SectionHeading
-              eyebrow="Lead article"
-              title="Start with the most recent published story"
-              description="The listing sorts by published date now and can keep the same behaviour once Firestore powers the article collection."
+              eyebrow={content.leadSectionEyebrow}
+              title={content.leadSectionTitle}
+              description={content.leadSectionDescription}
             />
             <ArticleCard article={leadArticle} variant="featured" />
           </div>
@@ -67,9 +67,9 @@ export function NewsListingPage({
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.76fr_0.24fr] lg:items-start">
           <div className="space-y-8">
             <SectionHeading
-              eyebrow="Archive"
-              title={`More ${articleCategoryLabels[content.category].toLowerCase()}`}
-              description="This archive is deliberately simple for the foundation pass: published content, stable route shapes, and a body renderer ready for CMS HTML."
+              eyebrow={content.archiveSectionEyebrow}
+              title={content.archiveSectionTitle}
+              description={content.archiveSectionDescription}
             />
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -86,10 +86,10 @@ export function NewsListingPage({
               </div>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-                  Topics
+                  {content.topicsSectionEyebrow}
                 </p>
                 <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                  Browse by signal
+                  {content.topicsSectionTitle}
                 </h2>
               </div>
             </div>
@@ -107,7 +107,7 @@ export function NewsListingPage({
 
             <div className="mt-7 border-t border-brand-border pt-6">
               <p className="text-sm leading-7 text-slate-600">
-                Filter UI will become interactive in the CMS pass. The content model already carries the tag data needed for it.
+                {content.topicsSectionDescription}
               </p>
             </div>
           </aside>
@@ -120,7 +120,7 @@ export function NewsListingPage({
             <div className="grid gap-8 lg:grid-cols-[0.72fr_0.28fr] lg:items-center">
               <div className="space-y-3">
                 <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
-                  Latest signal
+                  {content.latestSignalEyebrow}
                 </p>
                 <h2 className="font-heading text-3xl font-bold sm:text-4xl">
                   {leadArticle.title}
@@ -134,7 +134,7 @@ export function NewsListingPage({
                 href={`/news-and-updates/${leadArticle.category}/${leadArticle.slug}`}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-bold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
               >
-                Read the lead article
+                {content.latestSignalCtaLabel}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

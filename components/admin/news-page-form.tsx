@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import type {
+  ActionLink,
   ContentBlock,
   HighlightStat,
   RouteCard,
@@ -32,7 +33,16 @@ type TextFieldKey =
   | "title"
   | "description"
   | "heroImage"
-  | "emptyState";
+  | "emptyState"
+  | "featuredSectionEyebrow" | "featuredSectionTitle" | "featuredSectionDescription"
+  | "browseSectionEyebrow" | "browseSectionTitle" | "browseSectionDescription"
+  | "editorialSectionEyebrow" | "editorialSectionTitle" | "editorialSectionDescription"
+  | "latestSectionEyebrow" | "latestSectionTitle" | "latestSectionDescription"
+  | "subscribeSectionEyebrow" | "subscribeSectionTitle" | "subscribeSectionDescription"
+  | "heroCtaLabel" | "leadSectionEyebrow" | "leadSectionTitle" | "leadSectionDescription"
+  | "archiveSectionEyebrow" | "archiveSectionTitle" | "archiveSectionDescription"
+  | "topicsSectionEyebrow" | "topicsSectionTitle" | "topicsSectionDescription"
+  | "latestSignalEyebrow" | "latestSignalCtaLabel";
 
 const inputClass =
   "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
@@ -43,6 +53,7 @@ const compactButtonClass =
 const emptyStat: HighlightStat = { value: "", label: "", description: "", icon: "", iconImage: "" };
 const emptyPillar: ContentBlock = { title: "", body: "", bullets: [] };
 const emptyRouteCard: RouteCard = { href: "/", eyebrow: "", title: "", description: "" };
+const emptyActionLink: ActionLink = { label: "", href: "" };
 
 function hasKey<Key extends PropertyKey>(value: object, key: Key): value is Record<Key, unknown> {
   return key in value;
@@ -166,6 +177,20 @@ function RouteCardsEditor({ values, onChange }: { values: RouteCard[]; onChange:
   );
 }
 
+function ActionLinksEditor({ title, values, onChange }: { title: string; values: ActionLink[]; onChange: (values: ActionLink[]) => void }) {
+  return <section className={panelClass}>
+    <h3 className="font-heading text-xl font-semibold text-brand-ink">{title}</h3>
+    <div className="mt-4 space-y-4">
+      {values.map((link, index) => <div key={`${title}-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+        <Field label="Label" value={link.label} onChange={(value) => onChange(values.map((item, itemIndex) => itemIndex === index ? { ...item, label: value } : item))} />
+        <Field label="Href" value={link.href} onChange={(value) => onChange(values.map((item, itemIndex) => itemIndex === index ? { ...item, href: value } : item))} />
+        <button type="button" onClick={() => onChange(values.filter((_, itemIndex) => itemIndex !== index))} className="justify-self-start rounded-full border border-rose-200 p-3 text-rose-700"><Trash2 className="h-4 w-4" /></button>
+      </div>)}
+      <button type="button" onClick={() => onChange([...values, emptyActionLink])} className={compactButtonClass}><Plus className="h-4 w-4" /> Add link</button>
+    </div>
+  </section>;
+}
+
 export function NewsPageForm({ slug, initial, endpoint }: NewsPageFormProps) {
   const router = useRouter();
   const [values, setValues] = useState<NewsPageContent>(() => initial);
@@ -239,11 +264,49 @@ export function NewsPageForm({ slug, initial, endpoint }: NewsPageFormProps) {
 
       {slug === "hub" ? (
         <>
+          <section className={panelClass}>
+            <h3 className="font-heading text-xl font-semibold text-brand-ink">Public section framing</h3>
+            <div className="mt-4 space-y-6">
+              {([
+                ["Featured", "featuredSectionEyebrow", "featuredSectionTitle", "featuredSectionDescription"],
+                ["Browse", "browseSectionEyebrow", "browseSectionTitle", "browseSectionDescription"],
+                ["Editorial", "editorialSectionEyebrow", "editorialSectionTitle", "editorialSectionDescription"],
+                ["Latest", "latestSectionEyebrow", "latestSectionTitle", "latestSectionDescription"],
+                ["Subscribe", "subscribeSectionEyebrow", "subscribeSectionTitle", "subscribeSectionDescription"],
+              ] as const).map(([label, eyebrow, title, description]) => <div key={label} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+                <p className="font-heading text-lg font-semibold text-brand-ink md:col-span-2">{label}</p>
+                <Field label="Eyebrow" value={readText(values, eyebrow)} onChange={(value) => updateText(eyebrow, value)} />
+                <Field label="Title" value={readText(values, title)} onChange={(value) => updateText(title, value)} />
+                <div className="md:col-span-2"><Field label="Description" value={readText(values, description)} multiline onChange={(value) => updateText(description, value)} /></div>
+              </div>)}
+            </div>
+          </section>
+          <ActionLinksEditor title="Hero CTAs" values={arrayValue<ActionLink>(values, "heroCtas")} onChange={(nextValues) => updateArray("heroCtas", nextValues)} />
           <StatsEditor values={arrayValue<HighlightStat>(values, "stats")} onChange={(nextValues) => updateArray("stats", nextValues)} />
           <PillarsEditor values={arrayValue<ContentBlock>(values, "editorialPillars")} onChange={(nextValues) => updateArray("editorialPillars", nextValues)} />
           <RouteCardsEditor values={arrayValue<RouteCard>(values, "routeCards")} onChange={(nextValues) => updateArray("routeCards", nextValues)} />
+          <ActionLinksEditor title="Subscribe CTAs" values={arrayValue<ActionLink>(values, "subscribeCtas")} onChange={(nextValues) => updateArray("subscribeCtas", nextValues)} />
         </>
-      ) : null}
+      ) : <section className={panelClass}>
+        <h3 className="font-heading text-xl font-semibold text-brand-ink">Public section framing</h3>
+        <div className="mt-4 space-y-6">
+          {([
+            ["Lead article", "leadSectionEyebrow", "leadSectionTitle", "leadSectionDescription"],
+            ["Archive", "archiveSectionEyebrow", "archiveSectionTitle", "archiveSectionDescription"],
+            ["Topics", "topicsSectionEyebrow", "topicsSectionTitle", "topicsSectionDescription"],
+          ] as const).map(([label, eyebrow, title, description]) => <div key={label} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+            <p className="font-heading text-lg font-semibold text-brand-ink md:col-span-2">{label}</p>
+            <Field label="Eyebrow" value={readText(values, eyebrow)} onChange={(value) => updateText(eyebrow, value)} />
+            <Field label="Title" value={readText(values, title)} onChange={(value) => updateText(title, value)} />
+            <div className="md:col-span-2"><Field label="Description" value={readText(values, description)} multiline onChange={(value) => updateText(description, value)} /></div>
+          </div>)}
+          <div className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
+            <Field label="Hero CTA label" value={readText(values, "heroCtaLabel")} onChange={(value) => updateText("heroCtaLabel", value)} />
+            <Field label="Latest signal eyebrow" value={readText(values, "latestSignalEyebrow")} onChange={(value) => updateText("latestSignalEyebrow", value)} />
+            <Field label="Latest signal CTA label" value={readText(values, "latestSignalCtaLabel")} onChange={(value) => updateText("latestSignalCtaLabel", value)} />
+          </div>
+        </div>
+      </section>}
 
       <div className="flex items-center gap-3 rounded-[26px] border border-brand-border bg-white px-5 py-4 shadow-sm">
         <button

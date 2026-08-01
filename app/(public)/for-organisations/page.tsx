@@ -1,21 +1,20 @@
 import type { Metadata } from "next";
 
 import { ForOrganisationsOverviewPage } from "@/components/organisations/for-organisations-overview-page";
-import {
-  organisationOverviewContent,
-  organisationServices,
-} from "@/lib/content/organisation-config";
+import { organisationOverviewContent } from "@/lib/content/organisation-config";
+import { getCmsOrganisationOverview, getCmsOrganisationServices } from "@/lib/cms/organisations";
 
 export const metadata: Metadata = {
   title: organisationOverviewContent.title,
   description: organisationOverviewContent.description,
 };
 
-export default function ForOrganisationsPage() {
+export default async function ForOrganisationsPage() {
+  const [content, services] = await Promise.all([getCmsOrganisationOverview(), getCmsOrganisationServices()]);
   return (
     <ForOrganisationsOverviewPage
-      content={organisationOverviewContent}
-      services={organisationServices}
+      content={content}
+      services={services}
     />
   );
 }

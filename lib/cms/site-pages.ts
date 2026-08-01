@@ -64,9 +64,18 @@ const optionalStringFields = [
   "principlesDescription",
   "principlesHeroEyebrow",
   "principlesHeroTitle",
+  "principlesImage",
+  "principlesImageAlt",
+  "highlightsEyebrow",
   "exploreEyebrow",
   "exploreTitle",
   "exploreDescription",
+  "processEyebrow",
+  "processTitle",
+  "processDescription",
+  "nextStepEyebrow",
+  "nextStepTitle",
+  "nextStepDescription",
 ] as const satisfies readonly (keyof SitePage)[];
 
 function asString(value: unknown) {
@@ -79,6 +88,8 @@ function mergeSitePage(fallback: SitePage, data: Record<string, unknown>): SiteP
   const ctas = Array.isArray(data.ctas) ? data.ctas : fallback.ctas;
   const related = Array.isArray(data.related) ? data.related : fallback.related;
   const courses = Array.isArray(data.courses) ? data.courses : fallback.courses;
+  const cohorts = Array.isArray(data.cohorts) ? data.cohorts : fallback.cohorts;
+  const process = Array.isArray(data.process) ? data.process : fallback.process;
   const optionalFields = Object.fromEntries(
     optionalStringFields.map((field) => [field, asString(data[field]) ?? fallback[field]]),
   );
@@ -94,6 +105,8 @@ function mergeSitePage(fallback: SitePage, data: Record<string, unknown>): SiteP
     ctas,
     related,
     courses,
+    cohorts,
+    process,
     ...optionalFields,
   };
 }

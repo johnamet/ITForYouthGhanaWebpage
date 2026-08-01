@@ -19,6 +19,7 @@ export function PartnersStrip({
   heading = "Trusted by organisations across Ghana and beyond",
 }: PartnersStripProps) {
   const visiblePartners = partners.filter((partner) => partner.active !== false);
+  if (!visiblePartners.length) return null;
   const doubled = [...visiblePartners, ...visiblePartners];
 
   return (

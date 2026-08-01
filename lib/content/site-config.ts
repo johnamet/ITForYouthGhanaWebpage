@@ -9,7 +9,7 @@ import type { HeroSlide }       from "@/components/home/hero-slideshow";
 import type { MarqueeTickerContent } from "@/components/home/marquee-ticker";
 import type { FeaturedProgram } from "@/components/home/featured-programs";
 import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
-import type { ChallengeSectionContent, MissionSectionContent } from "@/components/home/legacy-homepage-sections";
+import type { ChallengeSectionContent, MissionSectionContent, OverviewSectionContent } from "@/components/home/legacy-homepage-sections";
 import type { DonationCampaignContent } from "@/components/home/donation-campaign";
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";
 import type { JoinCtaCard } from "@/components/home/join-cta-block";
@@ -20,6 +20,7 @@ import type { Partner }         from "@/components/home/patrners-strip";
 import type { EventItem }       from "@/components/home/upcoming-events";
 import type { Announcement }    from "@/components/layout/announcement-bar";
 import type { AdminNavItem }    from "@/types/admin";
+import { trainingCohorts, trainingProcessSteps } from "@/lib/content/training-config";
 import type {
   ArticleSeed,
   DepartmentProfile,
@@ -289,6 +290,43 @@ function buildInitiativePage(config: InitiativeSeedConfig): InitiativePage {
       primary: { label: "Apply for Cohort 8", href: "/apply-for-training/courses" },
       secondary: { label: "Ask a question", href: "/contact" },
     },
+    sectionContent: {
+      overviewEyebrow: "Overview",
+      overviewTitle: "A focused pathway with clear outcomes",
+      overviewImageAlt: `${config.title} participants and programme activity`,
+      howItWorksEyebrow: "How it works",
+      howItWorksTitle: "A programme journey that moves from access to confidence",
+      howItWorksDescription: "Each initiative uses a clear process so participants and partners know what to expect from first contact to measurable outcomes.",
+      impactEyebrow: "Impact stats",
+      impactTitle: "Proof that the model is translating into real opportunity",
+      impactDescription: "These indicators help show who the initiative is reaching, how consistently it is delivering, and why it matters.",
+      audienceEyebrow: "Who it's for",
+      eligibilityEyebrow: "Eligibility",
+      galleryEyebrow: "Gallery",
+      galleryTitle: "Scenes from the classrooms, workshops, and communities behind the work",
+      galleryDescription: "See the people, learning environments, and shared moments that bring this initiative to life.",
+      testimonialsEyebrow: "Testimonials",
+      testimonialsTitle: "Stories that show what this initiative feels like from the inside",
+      testimonialsDescription: "Participant and partner voices add the context that numbers alone cannot carry.",
+      partnersEyebrow: "Partners & sponsors",
+      partnersTitle: "Organisations that help this initiative reach further",
+      partnersDescription: "Partnerships extend the reach, resources, and pathways available through this initiative.",
+      partnerLinkLabel: "Learn more",
+      faqsEyebrow: "FAQs",
+      faqsTitle: "Answers to common questions about the initiative",
+      faqsDescription: "Find practical information about participation, delivery, and the next steps available.",
+      applyCtaEyebrow: "Take the next step",
+      relatedEyebrow: "Related routes",
+      relatedTitle: "Keep exploring the wider work around this initiative",
+      relatedDescription: "These next links connect you to relevant training, partnership, and impact routes.",
+      shareEyebrow: "Share this page",
+      quickLinksEyebrow: "Quick routes",
+    },
+    quickLinks: [
+      { label: "Apply for training", href: "/apply-for-training" },
+      { label: "Partner with us", href: "/partner-with-us" },
+      { label: "See our impact", href: "/our-impact/reports" },
+    ],
   };
 }
 
@@ -1182,9 +1220,14 @@ export const whoWeAreHub: SitePage = {
     "The Who We Are story should show how decisions are made, what standards matter, and why partners can trust the delivery model.",
   principlesHeroEyebrow: "What we protect",
   principlesHeroTitle: "Trust, inclusion, and accountability as the work grows.",
+  principlesImage: "/images/randomPictures/mireiotalking.jpg",
+  principlesImageAlt: "IT For Youth Ghana facilitator speaking with learners",
   exploreEyebrow: "Keep exploring",
   exploreTitle: "Meet the people, partners, and opportunities behind the mission",
   exploreDescription: "These connected routes make the Who We Are page a hub, not a dead end.",
+  nextStepEyebrow: "Next move",
+  nextStepTitle: "Start with the route that matches how you want to join the mission.",
+  nextStepDescription: "Whether you want to meet the team, partner with delivery, or support the next cohort, choose a clear next step.",
   sections: [
     {
       title: "What drives us",
@@ -1260,6 +1303,11 @@ export const applyForTrainingHub: SitePage = {
   description: "Cohort-based digital skills programmes in Accra. 12 weeks. Real projects. Clear progression into work or enterprise.",
   intro: "Our training is not a lecture series. You learn by building, presenting, and iterating with mentors who have shipped products. Cohorts run twice a year. Scholarships and device support are available for those who need them. 85% of graduates are in work, learning, or building within six months.",
   heroImage: "/images/randomPictures/peterblackboard.jpg",
+  cohorts: trainingCohorts,
+  process: trainingProcessSteps,
+  processEyebrow: "Apply process",
+  processTitle: "A clearer path from first click to first class",
+  processDescription: "The training journey is intentionally simple: choose the right route, apply, hear back clearly, and start with a stronger sense of what to expect.",
   stats: heroStats,
   overviewTitle: "The training experience is built to turn interest into momentum",
   overviewDescription:
@@ -1729,6 +1777,8 @@ export const trainingCoursesHub: SitePage = {
   description: "Compare current programmes by level, format, and focus. Cohort 8 Foundations is now open, with short sprints and career labs starting through August.",
   intro: "Browse seeded and live options side by side. Every pathway is project-driven, with clear start dates, deadlines, and progression support. Use the timeline and process sections below to plan your application.",
   heroImage: "/images/randomPictures/studentslistening.jpg",
+  cohorts: trainingCohorts,
+  process: trainingProcessSteps,
   stats: heroStats,
   overviewTitle: "Compare the pathways before you choose",
   overviewDescription:
@@ -2075,6 +2125,23 @@ export const featuredPrograms: FeaturedProgram[] = [
     tags: ["Venture support", "Networking"],
   },
 ];
+
+export const overviewSectionContent: OverviewSectionContent = {
+  title: "Digital opportunity",
+  headline: "Skills that move young people forward",
+  description: "IT For Youth Ghana helps young people build practical digital skills, confidence, and clear pathways into work, further study, and enterprise.",
+  storyTitle: "Why we exist",
+  storyHeadline: "Ghana’s digital growth should include every young person.",
+  storyDescription: "Ghana’s digital economy is creating new possibilities, but access to quality training, devices, and career guidance remains uneven. We close that gap with structured learning built around the skills young people can use.",
+  callout: "Our programmes prioritise young women and underserved communities. Each cohort combines hands-on training, mentorship, and real projects so participants leave with evidence of what they can do and a practical next step.",
+  image: "/images/randomPictures/studentslistening.jpg",
+  imageAlt: "Students learning technology",
+  imageLabel: "Learning by doing",
+  imageCaption: "Practical training, projects, and mentorship",
+  ctaLabel: "Find your training pathway",
+  ctaHref: "/apply-for-training",
+  active: true,
+};
 
 export const challengeSectionContent: ChallengeSectionContent = {
   title: "The challenge",

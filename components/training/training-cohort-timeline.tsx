@@ -37,6 +37,8 @@ export function TrainingCohortTimeline({
   description,
   cohorts,
 }: TrainingCohortTimelineProps) {
+  if (!cohorts.length) return null;
+
   return (
     <section className="space-y-8">
       <div className="max-w-3xl space-y-3">

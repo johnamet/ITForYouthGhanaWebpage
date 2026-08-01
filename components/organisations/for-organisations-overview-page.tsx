@@ -74,7 +74,7 @@ export function ForOrganisationsOverviewPage({
           />
 
           <div className="grid gap-5 lg:grid-cols-3">
-            {content.valueCards.map((card) => (
+            {content.valueCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => (
               <div
                 key={card.title}
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
@@ -107,7 +107,7 @@ export function ForOrganisationsOverviewPage({
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            {services.map((service) => (
+            {services.filter((service) => service.title?.trim() || service.description?.trim()).map((service) => (
               <Link
                 key={service.slug}
                 href={`/for-organisations/${service.slug}`}
@@ -191,7 +191,7 @@ export function ForOrganisationsOverviewPage({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            {content.engagementCards.map((card) => (
+            {content.engagementCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => (
               <div
                 key={card.title}
                 className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"

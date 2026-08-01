@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { OrganisationServicePage as OrganisationServiceTemplate } from "@/components/organisations/organisation-service-page";
 import { organisationServices } from "@/lib/content/organisation-config";
+import { getCmsOrganisationService } from "@/lib/cms/organisations";
 
 type OrganisationServicePageProps = {
   params: { slug: string };
@@ -27,8 +28,8 @@ export function generateMetadata({ params }: OrganisationServicePageProps): Meta
   };
 }
 
-export default function OrganisationServiceRoute({ params }: OrganisationServicePageProps) {
-  const page = organisationServices.find((service) => service.slug === params.slug);
+export default async function OrganisationServiceRoute({ params }: OrganisationServicePageProps) {
+  const page = await getCmsOrganisationService(params.slug);
   if (!page) {
     notFound();
   }

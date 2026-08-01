@@ -5,6 +5,8 @@ const optionalTrimmedString = z.preprocess(
   z.string().trim().optional(),
 );
 
+const editableCmsString = z.string().trim().optional();
+
 const consentBoolean = z.preprocess(
   (value) => value === true || value === "true" || value === "on",
   z.boolean().refine(Boolean, "Please confirm that the team can contact you about this enquiry."),
@@ -193,7 +195,7 @@ export const departmentSchema = z.object({
   description: z.string().trim().min(24, "Please add a public description."),
   intro: z.string().trim().min(12, "Please add intro copy."),
   mission: z.string().trim().min(12, "Please add a mission statement."),
-  heroImage: optionalTrimmedString,
+  heroImage: editableCmsString,
   icon: optionalTrimmedString,
   // New optional image URL for icon
   iconImage: optionalTrimmedString,
@@ -347,6 +349,26 @@ const sitePageCourseSchema = z.object({
   previewVideoUrl: optionalTrimmedString.nullable().optional(),
 });
 
+const trainingCohortSchema = z.object({
+  id: z.string().trim().min(1),
+  name: z.string().trim().min(1),
+  startDate: z.string().trim().min(1),
+  applicationDeadline: optionalTrimmedString,
+  summary: z.string().trim().min(1),
+  format: z.string().trim().min(1),
+  duration: z.string().trim().min(1),
+  location: z.string().trim().min(1),
+  status: z.enum(["open", "upcoming", "waitlist"]),
+});
+
+const trainingProcessStepSchema = z.object({
+  number: z.string().trim().min(1),
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1),
+  icon: z.string().trim().default(""),
+  iconImage: optionalTrimmedString,
+});
+
 export const sitePageSchema = z.object({
   slug: optionalTrimmedString,
   eyebrow: z.string().trim().min(2, "Please add an eyebrow label."),
@@ -354,24 +376,35 @@ export const sitePageSchema = z.object({
   description: z.string().trim().min(12, "Please add a page description."),
   intro: z.string().trim().min(12, "Please add intro copy."),
   heroImage: optionalTrimmedString,
-  stats: z.array(sitePageHighlightStatSchema).min(1, "Please add at least one stat."),
-  sections: z.array(sitePageSectionSchema).min(1, "Please add at least one content section."),
+  stats: z.array(sitePageHighlightStatSchema).default([]),
+  sections: z.array(sitePageSectionSchema).default([]),
   ctas: z.array(sitePageActionLinkSchema).default([]),
   related: z.array(sitePageRouteCardSchema).default([]),
   courses: z.array(sitePageCourseSchema).optional().default([]),
-  overviewTitle: optionalTrimmedString,
-  overviewDescription: optionalTrimmedString,
-  operatingEyebrow: optionalTrimmedString,
-  operatingTitle: optionalTrimmedString,
-  operatingDescription: optionalTrimmedString,
-  principlesEyebrow: optionalTrimmedString,
-  principlesTitle: optionalTrimmedString,
-  principlesDescription: optionalTrimmedString,
-  principlesHeroEyebrow: optionalTrimmedString,
-  principlesHeroTitle: optionalTrimmedString,
-  exploreEyebrow: optionalTrimmedString,
-  exploreTitle: optionalTrimmedString,
-  exploreDescription: optionalTrimmedString,
+  cohorts: z.array(trainingCohortSchema).optional().default([]),
+  process: z.array(trainingProcessStepSchema).optional().default([]),
+  overviewTitle: editableCmsString,
+  overviewDescription: editableCmsString,
+  operatingEyebrow: editableCmsString,
+  operatingTitle: editableCmsString,
+  operatingDescription: editableCmsString,
+  principlesEyebrow: editableCmsString,
+  principlesTitle: editableCmsString,
+  principlesDescription: editableCmsString,
+  principlesHeroEyebrow: editableCmsString,
+  principlesHeroTitle: editableCmsString,
+  principlesImage: editableCmsString,
+  principlesImageAlt: editableCmsString,
+  highlightsEyebrow: editableCmsString,
+  exploreEyebrow: editableCmsString,
+  exploreTitle: editableCmsString,
+  exploreDescription: editableCmsString,
+  processEyebrow: editableCmsString,
+  processTitle: editableCmsString,
+  processDescription: editableCmsString,
+  nextStepEyebrow: editableCmsString,
+  nextStepTitle: editableCmsString,
+  nextStepDescription: editableCmsString,
 });
 
 export type SitePagePayload = z.infer<typeof sitePageSchema>;
@@ -461,6 +494,39 @@ const initiativeApplyCtaSchema = z.object({
   secondary: initiativeActionLinkSchema,
 });
 
+const initiativeSectionContentSchema = z.object({
+  overviewEyebrow: z.string().trim().default(""),
+  overviewTitle: z.string().trim().default(""),
+  overviewImageAlt: z.string().trim().default(""),
+  howItWorksEyebrow: z.string().trim().default(""),
+  howItWorksTitle: z.string().trim().default(""),
+  howItWorksDescription: z.string().trim().default(""),
+  impactEyebrow: z.string().trim().default(""),
+  impactTitle: z.string().trim().default(""),
+  impactDescription: z.string().trim().default(""),
+  audienceEyebrow: z.string().trim().default(""),
+  eligibilityEyebrow: z.string().trim().default(""),
+  galleryEyebrow: z.string().trim().default(""),
+  galleryTitle: z.string().trim().default(""),
+  galleryDescription: z.string().trim().default(""),
+  testimonialsEyebrow: z.string().trim().default(""),
+  testimonialsTitle: z.string().trim().default(""),
+  testimonialsDescription: z.string().trim().default(""),
+  partnersEyebrow: z.string().trim().default(""),
+  partnersTitle: z.string().trim().default(""),
+  partnersDescription: z.string().trim().default(""),
+  partnerLinkLabel: z.string().trim().default(""),
+  faqsEyebrow: z.string().trim().default(""),
+  faqsTitle: z.string().trim().default(""),
+  faqsDescription: z.string().trim().default(""),
+  applyCtaEyebrow: z.string().trim().default(""),
+  relatedEyebrow: z.string().trim().default(""),
+  relatedTitle: z.string().trim().default(""),
+  relatedDescription: z.string().trim().default(""),
+  shareEyebrow: z.string().trim().default(""),
+  quickLinksEyebrow: z.string().trim().default(""),
+});
+
 export const initiativeSchema = z.object({
   slug: z
     .string()
@@ -488,6 +554,8 @@ export const initiativeSchema = z.object({
   partners: z.array(initiativePartnerSchema).default([]),
   faqs: z.array(initiativeFaqSchema).default([]),
   applyCta: initiativeApplyCtaSchema,
+  sectionContent: initiativeSectionContentSchema,
+  quickLinks: z.array(initiativeActionLinkSchema).default([]),
 });
 
 export type InitiativePayload = z.infer<typeof initiativeSchema>;
@@ -570,6 +638,7 @@ export const homepageSchema = z
     heroSlides: z.array(z.unknown()).optional(),
     ticker: z.unknown().optional(),
     programmeShowcase: z.array(z.unknown()).optional(),
+    overviewSection: z.unknown().optional(),
     challengeSection: z.unknown().optional(),
     missionSection: z.unknown().optional(),
     donationCampaign: z.unknown().optional(),
@@ -627,16 +696,31 @@ const contactPageRouteCardSchema = z.object({
 
 export const contactPageSchema = z
   .object({
-    eyebrow: optionalTrimmedString,
-    title: optionalTrimmedString,
-    description: optionalTrimmedString,
-    heroImage: optionalTrimmedString,
+    eyebrow: editableCmsString,
+    title: editableCmsString,
+    description: editableCmsString,
+    heroImage: editableCmsString,
     stats: z.array(highlightStatSchema).optional(),
     channels: z.array(contactPageChannelSchema).optional(),
     enquiryOptions: z.array(contactPageEnquiryOptionSchema).optional(),
     responseSteps: z.array(contactPageResponseStepSchema).optional(),
     routeCards: z.array(contactPageRouteCardSchema).optional(),
-    privacyNote: optionalTrimmedString,
+    privacyNote: editableCmsString,
+    channelsEyebrow: editableCmsString,
+    channelsTitle: editableCmsString,
+    channelsDescription: editableCmsString,
+    formEyebrow: editableCmsString,
+    formTitle: editableCmsString,
+    formDescription: editableCmsString,
+    messageEyebrow: editableCmsString,
+    messageTitle: editableCmsString,
+    messageDescription: editableCmsString,
+    privacyTitle: editableCmsString,
+    routesEyebrow: editableCmsString,
+    routesTitle: editableCmsString,
+    routesDescription: editableCmsString,
+    emailCtaLabel: editableCmsString,
+    formCtaLabel: editableCmsString,
   })
   .partial();
 

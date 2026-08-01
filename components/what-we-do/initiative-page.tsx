@@ -41,6 +41,7 @@ function buildShareLinks(page: InitiativePage) {
 }
 
 export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
+  const section = page.sectionContent;
   const shareLinks = buildShareLinks(page);
   const objectives = page.objectives.filter(hasText);
   const howItWorks = page.howItWorks.filter(
@@ -70,13 +71,13 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
     (hasText(page.applyCta.primary.label) && hasText(page.applyCta.primary.href)) ||
     (hasText(page.applyCta.secondary.label) && hasText(page.applyCta.secondary.href));
   const anchorLinks = [
-    hasOverview ? { id: "overview", label: "Overview" } : null,
-    howItWorks.length ? { id: "how-it-works", label: "How It Works" } : null,
-    impactStats.length ? { id: "impact", label: "Impact" } : null,
-    hasAudience ? { id: "who-its-for", label: "Who It's For" } : null,
-    gallery.length ? { id: "gallery", label: "Gallery" } : null,
-    testimonials.length ? { id: "testimonials", label: "Testimonials" } : null,
-    faqs.length ? { id: "faqs", label: "FAQs" } : null,
+    hasOverview && hasText(section.overviewEyebrow) ? { id: "overview", label: section.overviewEyebrow } : null,
+    howItWorks.length && hasText(section.howItWorksEyebrow) ? { id: "how-it-works", label: section.howItWorksEyebrow } : null,
+    impactStats.length && hasText(section.impactEyebrow) ? { id: "impact", label: section.impactEyebrow } : null,
+    hasAudience && hasText(section.audienceEyebrow) ? { id: "who-its-for", label: section.audienceEyebrow } : null,
+    gallery.length && hasText(section.galleryEyebrow) ? { id: "gallery", label: section.galleryEyebrow } : null,
+    testimonials.length && hasText(section.testimonialsEyebrow) ? { id: "testimonials", label: section.testimonialsEyebrow } : null,
+    faqs.length && hasText(section.faqsEyebrow) ? { id: "faqs", label: section.faqsEyebrow } : null,
   ].filter((link): link is { id: string; label: string } => link !== null);
 
   return (
@@ -93,12 +94,10 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
           { label: "What We Do", href: "/what-we-do" },
           { label: page.title },
         ]}
-        ctas={[
-          { label: "Apply now", href: "/apply-for-training" },
-          ...(hasOverview
-            ? [{ label: "Learn more", href: "#overview", variant: "secondary" as const }]
-            : []),
-        ]}
+        ctas={page.ctas.map((cta, index) => ({
+          ...cta,
+          variant: index === 0 ? "primary" as const : "secondary" as const,
+        }))}
         priority
       />
 
@@ -122,8 +121,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
             <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
               <div className="space-y-6">
                 {hasText(page.intro) ? <SectionHeading
-                  eyebrow="Overview"
-                  title="A focused pathway with clear outcomes"
+                  eyebrow={section.overviewEyebrow}
+                  title={section.overviewTitle}
                   description={page.intro}
                 /> : null}
                 {hasText(page.mission) ? <p className="text-base leading-8 text-slate-700">{page.mission}</p> : null}
@@ -142,7 +141,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               {hasText(page.overviewImage) ? <div className="relative min-h-[24rem] overflow-hidden rounded-[32px] bg-brand-mist">
                 <Image
                   src={page.overviewImage}
-                  alt={`${page.title} overview`}
+                  alt={section.overviewImageAlt || page.title}
                   fill
                   sizes="(max-width: 1023px) 100vw, 45vw"
                   className="object-cover"
@@ -153,9 +152,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {howItWorks.length ? <section id="how-it-works" className="scroll-mt-36">
             <SectionHeading
-              eyebrow="How it works"
-              title="A programme journey that moves from access to confidence"
-              description="Each initiative uses a clear process so participants and partners know what to expect from first contact to measurable outcomes."
+              eyebrow={section.howItWorksEyebrow}
+              title={section.howItWorksTitle}
+              description={section.howItWorksDescription}
             />
             <div className="mt-8 grid gap-5 lg:grid-cols-4">
               {howItWorks.map((step) => (
@@ -190,9 +189,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {impactStats.length ? <section id="impact" className="scroll-mt-36">
             <SectionHeading
-              eyebrow="Impact stats"
-              title="Proof that the model is translating into real opportunity"
-              description="These indicators help show who the initiative is reaching, how consistently it is delivering, and why it matters."
+              eyebrow={section.impactEyebrow}
+              title={section.impactTitle}
+              description={section.impactDescription}
             />
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
               {impactStats.map((stat) => (
@@ -226,9 +225,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
           {hasAudience ? <section id="who-its-for" className="scroll-mt-36">
             <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
               {hasText(page.audience.summary) || audienceGroups.length ? <div className="rounded-[32px] bg-brand-navy p-8 text-white">
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                  Who it&apos;s for
-                </p>
+                {hasText(section.audienceEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+                  {section.audienceEyebrow}
+                </p> : null}
                 {hasText(page.audience.summary) ? <p className="mt-5 text-lg leading-8 text-white/85">{page.audience.summary}</p> : null}
                 {audienceGroups.length ? <div className="mt-8 grid gap-3">
                   {audienceGroups.map((group) => (
@@ -243,9 +242,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               </div> : null}
 
               {eligibility.length ? <div className="rounded-[32px] border border-brand-border bg-white p-8 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                  Eligibility
-                </p>
+                {hasText(section.eligibilityEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+                  {section.eligibilityEyebrow}
+                </p> : null}
                 <div className="mt-6 space-y-4">
                   {eligibility.map((item) => (
                     <div
@@ -262,18 +261,18 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {gallery.length ? <section id="gallery" className="scroll-mt-36 space-y-8">
             <SectionHeading
-              eyebrow="Gallery"
-              title="Scenes from the classrooms, workshops, and communities behind the work"
-              description="The gallery is seeded with local images now and is ready for a future CMS-backed upload and reordering flow."
+              eyebrow={section.galleryEyebrow}
+              title={section.galleryTitle}
+              description={section.galleryDescription}
             />
             <InitiativeGallery images={gallery} />
           </section> : null}
 
           {testimonials.length ? <section id="testimonials" className="scroll-mt-36 space-y-8">
             <SectionHeading
-              eyebrow="Testimonials"
-              title="Stories that show what this initiative feels like from the inside"
-              description="Participant and partner voices add the context that numbers alone cannot carry."
+              eyebrow={section.testimonialsEyebrow}
+              title={section.testimonialsTitle}
+              description={section.testimonialsDescription}
             />
             <div className="grid gap-5 lg:grid-cols-3">
               {testimonials.map((testimonial) => (
@@ -309,9 +308,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {partners.length ? <section className="space-y-8">
             <SectionHeading
-              eyebrow="Partners & sponsors"
-              title="Organisations that help this initiative reach further"
-              description="These partnership routes are represented with seeded data now and can later connect to a richer partner CMS."
+              eyebrow={section.partnersEyebrow}
+              title={section.partnersTitle}
+              description={section.partnersDescription}
             />
             <div className="grid gap-5 md:grid-cols-2">
               {partners.map((partner) => (
@@ -337,12 +336,12 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                     {hasText(partner.description) ? <p className="mt-2 text-sm leading-7 text-slate-600">
                       {partner.description}
                     </p> : null}
-                    {hasText(partner.href) ? (
+                    {hasText(partner.href) && hasText(section.partnerLinkLabel) ? (
                       <Link
                         href={partner.href}
                         className="mt-3 inline-flex text-sm font-semibold text-brand-navy"
                       >
-                        Learn more
+                        {section.partnerLinkLabel}
                       </Link>
                     ) : null}
                   </div>
@@ -353,9 +352,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {faqs.length ? <section id="faqs" className="scroll-mt-36 space-y-8">
             <SectionHeading
-              eyebrow="FAQs"
-              title="Answers to common questions about the initiative"
-              description="These are seeded FAQs for the rebuild phase and map cleanly to the future CMS model."
+              eyebrow={section.faqsEyebrow}
+              title={section.faqsTitle}
+              description={section.faqsDescription}
             />
             <div className="space-y-4">
               {faqs.map((faq) => (
@@ -375,9 +374,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
           {hasApplyCta ? <section className="overflow-hidden rounded-[36px] bg-brand-navy px-8 py-10 text-white">
             <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                  Apply CTA
-                </p>
+                {hasText(section.applyCtaEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+                  {section.applyCtaEyebrow}
+                </p> : null}
                 {hasText(page.applyCta.heading) ? <h2 className="mt-4 font-heading text-3xl font-bold leading-tight">
                   {page.applyCta.heading}
                 </h2> : null}
@@ -405,9 +404,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
           {page.related.length ? (
             <section className="space-y-8">
               <SectionHeading
-                eyebrow="Related routes"
-                title="Keep exploring the wider work around this initiative"
-                description="These next links help visitors move into training, partnership, and impact routes without losing context."
+                eyebrow={section.relatedEyebrow}
+                title={section.relatedTitle}
+                description={section.relatedDescription}
               />
               <RouteCardGrid cards={page.related} />
             </section>
@@ -417,9 +416,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
         <aside className="hidden lg:block">
           <div className="sticky top-36 space-y-6 rounded-[30px] border border-brand-border bg-brand-mist/35 p-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                Share this page
-              </p>
+              {hasText(section.shareEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+                {section.shareEyebrow}
+              </p> : null}
               <div className="mt-4 flex flex-wrap gap-2">
                 {shareLinks.map((link) => (
                   <a
@@ -435,22 +434,18 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               </div>
             </div>
 
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                Quick routes
-              </p>
+            {page.quickLinks.length ? <div>
+              {hasText(section.quickLinksEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+                {section.quickLinksEyebrow}
+              </p> : null}
               <div className="mt-4 space-y-3">
-                <Link href="/apply-for-training" className="block text-sm font-medium text-brand-navy">
-                  Apply for training
-                </Link>
-                <Link href="/partner-with-us" className="block text-sm font-medium text-brand-navy">
-                  Partner with us
-                </Link>
-                <Link href="/our-impact/reports" className="block text-sm font-medium text-brand-navy">
-                  See our impact
-                </Link>
+                {page.quickLinks.filter((link) => hasText(link.label) && hasText(link.href)).map((link) => (
+                  <Link key={`${link.href}-${link.label}`} href={link.href} className="block text-sm font-medium text-brand-navy">
+                    {link.label}
+                  </Link>
+                ))}
               </div>
-            </div>
+            </div> : null}
           </div>
         </aside>
       </div>

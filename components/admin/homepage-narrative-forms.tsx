@@ -7,6 +7,7 @@ import { AlertCircle, CheckCircle2, Loader2, Save } from "lucide-react";
 import type {
   ChallengeSectionContent,
   MissionSectionContent,
+  OverviewSectionContent,
 } from "@/components/home/legacy-homepage-sections";
 
 type ApiResponse = { success?: boolean; message?: string };
@@ -91,6 +92,47 @@ export function ChallengeSectionForm({ initial }: { initial: ChallengeSectionCon
       <SaveButton busy={busy} label="Save challenge section" />
     </form>
   );
+}
+
+export function OverviewSectionForm({ initial }: { initial: OverviewSectionContent }) {
+  const router = useRouter();
+  const [values, setValues] = useState(initial);
+  const [busy, setBusy] = useState(false);
+  const [state, setState] = useState<SubmitState>({ type: "idle", message: "" });
+  const update = <K extends keyof OverviewSectionContent>(key: K, value: OverviewSectionContent[K]) =>
+    setValues((current) => ({ ...current, [key]: value }));
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    setBusy(true);
+    setState({ type: "idle", message: "" });
+    try {
+      const message = await saveHomepageField("overviewSection", values);
+      setState({ type: "success", message });
+      router.refresh();
+    } catch (error) {
+      setState({ type: "error", message: error instanceof Error ? error.message : "Save failed." });
+    } finally { setBusy(false); }
+  };
+  return <form onSubmit={submit} className="space-y-6">
+    <Notice state={state} />
+    <div className="grid gap-5 md:grid-cols-2">
+      <Field label="Section title" value={values.title} onChange={(value) => update("title", value)} />
+      <Field label="Headline" value={values.headline} onChange={(value) => update("headline", value)} />
+      <Field label="Description" value={values.description} onChange={(value) => update("description", value)} textarea wide />
+      <Field label="Story title" value={values.storyTitle} onChange={(value) => update("storyTitle", value)} />
+      <Field label="Story headline" value={values.storyHeadline} onChange={(value) => update("storyHeadline", value)} />
+      <Field label="Story description" value={values.storyDescription} onChange={(value) => update("storyDescription", value)} textarea wide />
+      <Field label="Callout" value={values.callout} onChange={(value) => update("callout", value)} textarea wide />
+      <Field label="Image URL" value={values.image} onChange={(value) => update("image", value)} />
+      <Field label="Image alt text" value={values.imageAlt} onChange={(value) => update("imageAlt", value)} />
+      <Field label="Image label" value={values.imageLabel} onChange={(value) => update("imageLabel", value)} />
+      <Field label="Image caption" value={values.imageCaption} onChange={(value) => update("imageCaption", value)} />
+      <Field label="CTA label" value={values.ctaLabel} onChange={(value) => update("ctaLabel", value)} />
+      <Field label="CTA link" value={values.ctaHref} onChange={(value) => update("ctaHref", value)} />
+      <Active checked={values.active !== false} onChange={(checked) => update("active", checked)} />
+    </div>
+    <SaveButton busy={busy} label="Save overview section" />
+  </form>;
 }
 
 export function MissionSectionForm({ initial }: { initial: MissionSectionContent }) {

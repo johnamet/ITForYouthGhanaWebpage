@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { ApplyForTrainingOverviewPage } from "@/components/training/apply-for-training-overview-page";
 import { getCmsApplyForTrainingPage } from "@/lib/cms/site-pages";
-import { trainingLandingContent } from "@/lib/content/training-config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getCmsApplyForTrainingPage();
@@ -23,8 +22,8 @@ export default async function ApplyForTrainingPage() {
   return (
     <ApplyForTrainingOverviewPage
       page={page}
-      cohorts={trainingLandingContent.cohorts}
-      process={trainingLandingContent.process}
+      cohorts={page.cohorts ?? []}
+      process={page.process ?? []}
     />
   );
 }

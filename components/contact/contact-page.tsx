@@ -49,11 +49,8 @@ export function ContactPage({ content }: ContactPageProps) {
         description={content.description}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
         ctas={[
-          {
-            label: "Email the team",
-            href: emailChannel?.href ?? "mailto:info@itforyouthghana.org",
-          },
-          { label: "Use the form", href: "#form", variant: "secondary" },
+          ...(emailChannel && content.emailCtaLabel ? [{ label: content.emailCtaLabel, href: emailChannel.href }] : []),
+          ...(content.formCtaLabel ? [{ label: content.formCtaLabel, href: "#form", variant: "secondary" as const }] : []),
         ]}
         priority
       />
@@ -72,13 +69,13 @@ export function ContactPage({ content }: ContactPageProps) {
         </div>
       </div>
 
-      <section id="channels" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
+      {content.channels.length || content.stats.length ? <section id="channels" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
           <div className="space-y-8">
             <SectionHeading
-              eyebrow="Direct channels"
-              title="Use the fastest route when you already know what you need"
-              description="The form below is best for routing context. These direct channels remain visible for people who need a simpler first step."
+              eyebrow={content.channelsEyebrow ?? ""}
+              title={content.channelsTitle ?? ""}
+              description={content.channelsDescription ?? ""}
             />
             <StatList stats={content.stats} compact />
           </div>
@@ -116,15 +113,15 @@ export function ContactPage({ content }: ContactPageProps) {
             })}
           </div>
         </div>
-      </section>
+      </section> : null}
 
       <section id="form" className="scroll-mt-36 bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
           <div className="space-y-8">
             <SectionHeading
-              eyebrow="Enquiry form"
-              title="Give the team enough context to route your message well"
-              description="Share the details that will help the team understand what you need and who should respond."
+              eyebrow={content.formEyebrow ?? ""}
+              title={content.formTitle ?? ""}
+              description={content.formDescription ?? ""}
             />
 
             <div className="grid gap-4">
@@ -150,21 +147,21 @@ export function ContactPage({ content }: ContactPageProps) {
               ))}
             </div>
 
-            <div className="rounded-[28px] border border-brand-border bg-brand-warm p-6">
+            {content.privacyNote ? <div className="rounded-[28px] border border-brand-border bg-brand-warm p-6">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
                   <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                    Privacy and routing
+                    {content.privacyTitle}
                   </h2>
                   <p className="mt-2 text-sm leading-7 text-slate-700">
                     {content.privacyNote}
                   </p>
                 </div>
               </div>
-            </div>
+            </div> : null}
           </div>
 
           <div className="rounded-[34px] border border-brand-border bg-white p-6 shadow-sm sm:p-8">
@@ -174,13 +171,13 @@ export function ContactPage({ content }: ContactPageProps) {
               </div>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-                  Message
+                  {content.messageEyebrow}
                 </p>
                 <h2 className="font-heading text-3xl font-bold text-brand-ink">
-                  Send an enquiry
+                  {content.messageTitle}
                 </h2>
                 <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Choose the closest route, add context, and the team will use it to follow up clearly.
+                  {content.messageDescription}
                 </p>
               </div>
             </div>
@@ -193,16 +190,16 @@ export function ContactPage({ content }: ContactPageProps) {
         </div>
       </section>
 
-      <section id="routing" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
+      {content.routeCards.length ? <section id="routing" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-8">
           <SectionHeading
-            eyebrow="Before you write"
-            title="Some questions already have a better front door"
-            description="These routes help learners, organisations, partners, and donors self-serve before sending a message."
+            eyebrow={content.routesEyebrow ?? ""}
+            title={content.routesTitle ?? ""}
+            description={content.routesDescription ?? ""}
           />
           <RouteCardGrid cards={content.routeCards} />
         </div>
-      </section>
+      </section> : null}
     </div>
   );
 }

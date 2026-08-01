@@ -34,71 +34,85 @@ export type MissionSectionContent = {
   active?: boolean;
 };
 
-function QuickOverview() {
+export type OverviewSectionContent = {
+  title: string;
+  headline: string;
+  description: string;
+  storyTitle: string;
+  storyHeadline: string;
+  storyDescription: string;
+  callout: string;
+  image: string;
+  imageAlt: string;
+  imageLabel: string;
+  imageCaption: string;
+  ctaLabel: string;
+  ctaHref: string;
+  active?: boolean;
+};
+
+function QuickOverview({ content }: { content: OverviewSectionContent }) {
+  if (content.active === false) return null;
+  const hasIntro = Boolean(content.title || content.headline || content.description);
+  const hasStory = Boolean(content.storyTitle || content.storyHeadline || content.storyDescription || content.callout || (content.ctaLabel && content.ctaHref));
+
+  if (!hasIntro && !hasStory && !content.image) return null;
   return (
     <section className="bg-white px-6 py-20 lg:px-10 lg:py-24">
       <div className="mx-auto max-w-6xl">
-        <div className="mx-auto mb-16 max-w-4xl text-center">
+        {hasIntro ? <div className="mx-auto mb-16 max-w-4xl text-center">
           <h2 className="font-heading text-5xl font-bold leading-none text-brand-navy sm:text-6xl lg:text-7xl">
-            Digital opportunity
+            {content.title}
           </h2>
           <p className="mt-5 font-heading text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
-            Skills that move young people forward
+            {content.headline}
           </p>
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-            IT For Youth Ghana helps young people build practical digital skills,
-            confidence, and clear pathways into work, further study, and enterprise.
+            {content.description}
           </p>
-        </div>
+        </div> : null}
 
         <div className="grid items-center gap-12 md:grid-cols-2 lg:gap-16">
-          <div>
+          {hasStory ? <div>
             <h3 className="font-heading text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
-              Why we exist
+              {content.storyTitle}
             </h3>
             <p className="mt-4 font-heading text-2xl font-bold leading-tight text-brand-navy sm:text-3xl">
-              Ghana’s digital growth should include every young person.
+              {content.storyHeadline}
             </p>
             <p className="mt-6 leading-8 text-slate-600">
-              Ghana’s digital economy is creating new possibilities, but access to quality
-              training, devices, and career guidance remains uneven. We close that gap with
-              structured learning built around the skills young people can use.
+              {content.storyDescription}
             </p>
-            <div className="mt-6 rounded-xl border border-brand-border bg-brand-mist/50 p-6">
+            {content.callout ? <div className="mt-6 rounded-xl border border-brand-border bg-brand-mist/50 p-6">
               <p className="leading-8 text-slate-600">
-                Our programmes prioritise{" "}
-                <span className="font-semibold text-brand-navy">
-                  young women and underserved communities
-                </span>
-                . Each cohort combines hands-on training, mentorship, and real projects so
-                participants leave with evidence of what they can do and a practical next step.
+                {content.callout}
               </p>
-            </div>
-            <Link
+            </div> : null}
+            {content.ctaLabel && content.ctaHref ? <Link
               href="/apply-for-training"
               className="itfy-button-blue mt-7 px-6 py-3.5 text-sm"
             >
-              Find your training pathway
+              {content.ctaLabel}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
+            </Link> : null}
+          </div> : null}
 
-          <div className="relative h-80 overflow-hidden rounded-2xl shadow-lg">
+          {content.image ? <div className="relative h-80 overflow-hidden rounded-2xl shadow-lg">
             <Image
-              src="/images/randomPictures/studentslistening.jpg"
-              alt="Students learning technology"
+              src={content.image}
+              alt={content.imageAlt}
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-brand-navy/20" />
-            <div className="absolute bottom-4 left-4 rounded-lg bg-brand-navy/95 p-4 text-white">
-              <p className="text-sm font-semibold text-white">Learning by doing</p>
+            {content.imageLabel || content.imageCaption ? <div className="absolute bottom-4 left-4 rounded-lg bg-brand-navy/95 p-4 text-white">
+              {content.imageLabel ? <p className="text-sm font-semibold text-white">{content.imageLabel}</p> : null}
               <p className="mt-1 text-xs text-white/90">
-                Practical training, projects, and mentorship
+                {content.imageCaption}
               </p>
-            </div>
-          </div>
+            </div> : null}
+          </div> : null}
         </div>
       </div>
     </section>
@@ -107,6 +121,7 @@ function QuickOverview() {
 
 function Challenge({ content }: { content: ChallengeSectionContent }) {
   if (content.active === false) return null;
+  if (!content.title && !content.headline && !content.description && !content.stats.length && !content.problemItems.length && !content.solutionItems.length) return null;
 
   return (
     <section className="bg-brand-navy px-6 py-20 text-white lg:px-10 lg:py-24">
@@ -193,6 +208,7 @@ function Challenge({ content }: { content: ChallengeSectionContent }) {
 
 function Vision({ content }: { content: MissionSectionContent }) {
   if (content.active === false) return null;
+  if (!content.title && !content.headline && !content.description && !content.image && !content.missionTitle && !content.missionHeadline && !content.missionDescription) return null;
 
   return (
     <section className="bg-white px-6 py-20 lg:px-10 lg:py-24">
@@ -252,15 +268,17 @@ function Vision({ content }: { content: MissionSectionContent }) {
 }
 
 export function LegacyHomepageSections({
+  overview,
   challenge,
   mission,
 }: {
+  overview: OverviewSectionContent;
   challenge: ChallengeSectionContent;
   mission: MissionSectionContent;
 }) {
   return (
     <>
-      <QuickOverview />
+      <QuickOverview content={overview} />
       <Challenge content={challenge} />
       <Vision content={mission} />
     </>

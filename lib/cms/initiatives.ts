@@ -60,6 +60,10 @@ function normalizeInitiative(id: string, data: Record<string, unknown>): Initiat
   return {
     ...fallback,
     ...data,
+    sectionContent: {
+      ...fallback.sectionContent,
+      ...((data.sectionContent as Partial<InitiativePage["sectionContent"]> | undefined) ?? {}),
+    },
     slug,
   } as InitiativePage;
 }
