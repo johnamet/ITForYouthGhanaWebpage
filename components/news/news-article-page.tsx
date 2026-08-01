@@ -1,15 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowLeft,
-  CalendarDays,
-  Clock3,
   Mail,
   Tags,
   UserRound,
 } from "lucide-react";
 
 import { ArticleCard } from "@/components/news/article-card";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import {
   articleCategoryLabels,
   getArticleLabel,
@@ -37,92 +35,22 @@ export function NewsArticlePage({
 }: NewsArticlePageProps) {
   return (
     <article className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          {article.coverImage ? (
-            <Image
-              src={article.coverImage}
-              alt={article.coverAlt ?? article.title}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-          ) : (
-            <div className="h-full w-full bg-hero-grid" />
-          )}
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,27,52,0.95)_0%,rgba(10,27,52,0.8)_52%,rgba(10,27,52,0.34)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              Home
-            </Link>
-            <span>/</span>
-            <Link href="/news-and-updates" className="transition hover:text-white">
-              News & Updates
-            </Link>
-            <span>/</span>
-            <Link
-              href={`/news-and-updates/${article.category}`}
-              className="transition hover:text-white"
-            >
-              {articleCategoryLabels[article.category]}
-            </Link>
-            <span>/</span>
-            <span className="text-white">Article</span>
-          </nav>
-
-          <div className="space-y-6">
-            <Link
-              href={`/news-and-updates/${article.category}`}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white/75 transition hover:text-white"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to {articleCategoryLabels[article.category].toLowerCase()}
-            </Link>
-
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-brand-gold px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-ink">
-                {getArticleLabel(article)}
-              </span>
-              {article.featured ? (
-                <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
-                  Featured
-                </span>
-              ) : null}
-            </div>
-
-            <h1 className="font-heading text-5xl font-bold leading-tight sm:text-6xl">
-              {article.title}
-            </h1>
-            <p className="max-w-3xl text-xl leading-8 text-slate-100">
-              {article.excerpt}
-            </p>
-
-            <div className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold text-white/78">
-              <span className="inline-flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-brand-gold" />
-                {formatDate(article.publishedAt)}
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <Clock3 className="h-4 w-4 text-brand-gold" />
-                {getArticleReadTime(article)} min read
-              </span>
-              {article.author ? (
-                <span className="inline-flex items-center gap-2">
-                  <UserRound className="h-4 w-4 text-brand-gold" />
-                  {article.author.name}
-                </span>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero
+        imageSrc={article.coverImage || "/images/randomPictures/groupworkstudents.jpg"}
+        imageAlt={article.coverAlt ?? article.title}
+        eyebrow={`${getArticleLabel(article)}${article.featured ? " · Featured" : ""}`}
+        title={article.title}
+        description={article.excerpt}
+        supportingText={`${formatDate(article.publishedAt)} · ${getArticleReadTime(article)} min read${article.author?.name ? ` · ${article.author.name}` : ""}`}
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "News & Updates", href: "/news-and-updates" },
+          { label: articleCategoryLabels[article.category], href: `/news-and-updates/${article.category}` },
+          { label: "Article" },
+        ]}
+        ctas={[{ label: `Back to ${articleCategoryLabels[article.category].toLowerCase()}`, href: `/news-and-updates/${article.category}`, variant: "secondary" }]}
+        priority
+      />
 
       <section className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[0.72fr_0.28fr] lg:px-8">
         <div className="min-w-0">

@@ -5,6 +5,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type {
   OrganisationOverviewContent,
   OrganisationServicePage,
@@ -28,85 +29,22 @@ export function ForOrganisationsOverviewPage({
 }: ForOrganisationsOverviewPageProps) {
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={content.heroImage}
-            alt="Team and learner engagement across ITFY organisation partnerships"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,27,52,0.92)_0%,rgba(10,27,52,0.78)_45%,rgba(10,27,52,0.4)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              {breadcrumbs.home}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{breadcrumbs.organisations.root}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
-            <div className="space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {content.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {content.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                {content.description}
-              </p>
-
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/contact"
-                  className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
-                >
-                  Start the conversation
-                </Link>
-                <Link
-                  href="/partner-with-us"
-                  className="rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/15"
-                >
-                  Explore partnership routes
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {content.stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-[28px] border border-white/12 bg-white/10 p-5 backdrop-blur-sm"
-                >
-                  {(() => stat.iconImage ?? emojiToIconImage(stat.icon))() ? (
-                    <span className="inline-flex items-center justify-center" aria-hidden="true">
-                      <Image src={(stat.iconImage ?? emojiToIconImage(stat.icon)) as string} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
-                    </span>
-                  ) : stat.icon ? (
-                    <span className="text-2xl" aria-hidden="true">
-                      {stat.icon}
-                    </span>
-                  ) : null}
-                  <p className="mt-3 font-heading text-3xl font-bold text-white">{stat.value}</p>
-                  <p className="mt-2 text-sm font-semibold text-white">{stat.label}</p>
-                  {stat.description ? (
-                    <p className="mt-2 text-sm leading-7 text-white/65">{stat.description}</p>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero
+        imageSrc={content.heroImage}
+        imageAlt="Team and learner engagement across ITFY organisation partnerships"
+        eyebrow={content.eyebrow}
+        title={content.title}
+        description={content.description}
+        breadcrumbs={[
+          { label: breadcrumbs.home, href: "/" },
+          { label: breadcrumbs.organisations.root },
+        ]}
+        ctas={[
+          { label: "Start the conversation", href: "/contact" },
+          { label: "Explore partnership routes", href: "/partner-with-us", variant: "secondary" },
+        ]}
+        priority
+      />
 
       <div className="sticky top-[72px] z-30 border-y border-brand-border bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-4 py-4 [scrollbar-width:none] sm:px-6 lg:px-8">

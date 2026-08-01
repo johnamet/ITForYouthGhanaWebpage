@@ -1,8 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { TrainingProcessStrip } from "@/components/training/training-process-strip";
 import type { SitePage, TrainingProcessStep } from "@/types/content";
 
@@ -28,61 +27,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
 
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={page.heroImage ?? "/images/randomPictures/studentslisteningfrontal.JPG"}
-            alt="Learners listening during orientation and onboarding"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(125deg,rgba(10,27,52,0.92)_0%,rgba(10,27,52,0.78)_44%,rgba(10,27,52,0.45)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              {breadcrumbs.home}
-            </Link>
-            <span>/</span>
-            <Link href="/apply-for-training" className="transition hover:text-white">
-              {breadcrumbs.apply.root}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{breadcrumbs.apply.howItWorks}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-end">
-            <div className="space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {page.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {page.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                {page.description}
-              </p>
-              <p className="max-w-3xl text-base leading-8 text-white/78">{page.intro}</p>
-            </div>
-
-            <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                {page.principlesHeroEyebrow ?? "Why this matters"}
-              </p>
-              <p className="mt-5 text-base leading-8 text-white/78">
-                {page.principlesHeroTitle ??
-                  "When learners know the sequence ahead of time, they can prepare better, reduce anxiety, and make stronger decisions about whether to apply now or wait for a better-fit cohort."}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero imageSrc={page.heroImage ?? "/images/randomPictures/studentslisteningfrontal.JPG"} imageAlt="Learners listening during orientation and onboarding" eyebrow={page.eyebrow} title={page.title} description={page.description} supportingText={[page.intro, page.principlesHeroTitle].filter((value): value is string => Boolean(value?.trim())).join(" ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.apply.root, href: "/apply-for-training" }, { label: breadcrumbs.apply.howItWorks }]} priority />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <TrainingProcessStrip

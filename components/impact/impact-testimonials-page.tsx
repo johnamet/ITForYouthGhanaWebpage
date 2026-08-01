@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { FeaturedStoryVideo } from "@/components/home/featured-story-video";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import type { ImpactTestimonialsContent } from "@/types/content";
@@ -22,66 +22,7 @@ export function ImpactTestimonialsPage({
 }: ImpactTestimonialsPageProps) {
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={content.heroImage}
-            alt="Learner stories and testimonials"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,27,52,0.92)_0%,rgba(10,27,52,0.78)_45%,rgba(10,27,52,0.38)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              {breadcrumbs.home}
-            </Link>
-            <span>/</span>
-            <Link href="/our-impact" className="transition hover:text-white">
-              {breadcrumbs.impact.root}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{breadcrumbs.impact.testimonials}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-            <div className="space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {content.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {content.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                {content.description}
-              </p>
-            </div>
-
-            <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                {content.heroAsideEyebrow ?? "Story themes"}
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {content.themes.map((theme) => (
-                  <span
-                    key={theme}
-                    className="rounded-full border border-white/10 bg-white/8 px-4 py-2 text-sm text-white/82"
-                  >
-                    {theme}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero imageSrc={content.heroImage} imageAlt="Learner stories and testimonials" eyebrow={content.eyebrow} title={content.title} description={content.description} supportingText={content.themes.filter((theme) => theme.trim()).join(" • ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.impact.root, href: "/our-impact" }, { label: breadcrumbs.impact.testimonials }]} priority />
 
       <FeaturedStoryVideo
         story={{

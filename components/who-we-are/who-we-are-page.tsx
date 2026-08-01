@@ -9,9 +9,9 @@ import {
   Layers3,
   Quote,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import type { SitePage } from "@/types/content";
@@ -28,7 +28,6 @@ const anchorLinks = [
 ];
 
 const heroImage = "/images/randomPictures/groupworkstudents.jpg";
-const storyImage = "/images/randomPictures/studentpresenting.jpg";
 const principlesImage = "/images/randomPictures/mireiotalking.jpg";
 
 const operatingIcons = [Layers3, Compass, HeartHandshake];
@@ -51,118 +50,26 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
     isPresent,
   );
   const principleSections = [principlesLeadSection, ...remainingSections].filter(isPresent);
-  const statCards = page.stats.slice(0, 4);
 
   return (
     <div className="overflow-hidden bg-white text-brand-ink">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={heroImage}
-            alt="IT For Youth Ghana learners collaborating during a training session"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(15,23,42,0.96)_0%,rgba(37,99,235,0.84)_48%,rgba(15,23,42,0.42)_100%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(245,158,11,0.26),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.16),transparent_24%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              {breadcrumbs.home}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{breadcrumbs.whoWeAre?.root ?? "Who We Are"}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-            <div className="space-y-7">
-              <p className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-brand-gold backdrop-blur-sm">
-                {page.eyebrow}
-              </p>
-              <div className="space-y-5">
-                <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl lg:text-7xl">
-                  {page.title}
-                </h1>
-                <p className="max-w-3xl text-xl leading-9 text-slate-100">
-                  {page.description}
-                </p>
-                <p className="max-w-3xl text-base leading-8 text-white/76">{page.intro}</p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {primaryCta ? (
-                  <Link
-                    href={primaryCta.href}
-                    className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-bold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
-                  >
-                    {primaryCta.label}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                ) : null}
-                {secondaryCta ? (
-                  <Link
-                    href={secondaryCta.href}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/15"
-                  >
-                    {secondaryCta.label}
-                  </Link>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-brand-gold/25 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[36px] border border-white/14 bg-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.32)] backdrop-blur-md">
-                <div className="relative min-h-[18rem] bg-brand-mist sm:min-h-[22rem]">
-                  <Image
-                    src={storyImage}
-                    alt="An IT For Youth Ghana learner presenting work to peers"
-                    fill
-                    sizes="(max-width: 1023px) 100vw, 42vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/12 to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 rounded-[26px] border border-white/14 bg-white/12 p-5 backdrop-blur-md">
-                    <div className="flex items-start justify-between gap-6">
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-                          Mission shape
-                        </p>
-                        <h2 className="mt-3 font-heading text-3xl font-bold text-white">
-                          Practical, recurring, measurable.
-                        </h2>
-                      </div>
-                      <Sparkles className="h-8 w-8 text-brand-gold" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid gap-3 p-5 sm:grid-cols-2 sm:p-6">
-                  {statCards.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="rounded-[24px] border border-white/12 bg-white/10 p-5"
-                    >
-                      <p className="font-heading text-3xl font-bold text-white">{stat.value}</p>
-                      <p className="mt-2 text-sm font-semibold text-white">{stat.label}</p>
-                      {stat.description ? (
-                        <p className="mt-2 text-xs leading-6 text-white/65">{stat.description}</p>
-                      ) : null}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero
+        imageSrc={page.heroImage ?? heroImage}
+        imageAlt="IT For Youth Ghana learners collaborating during a training session"
+        eyebrow={page.eyebrow}
+        title={page.title}
+        description={page.description}
+        supportingText={page.intro}
+        breadcrumbs={[
+          { label: breadcrumbs.home, href: "/" },
+          { label: breadcrumbs.whoWeAre?.root ?? "Who We Are" },
+        ]}
+        ctas={[
+          ...(primaryCta ? [{ ...primaryCta, variant: "primary" as const }] : []),
+          ...(secondaryCta ? [{ ...secondaryCta, variant: "secondary" as const }] : []),
+        ]}
+        priority
+      />
 
       <div className="sticky top-[72px] z-30 border-y border-brand-border bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-4 py-4 [scrollbar-width:none] sm:px-6 lg:px-8">

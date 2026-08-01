@@ -6,9 +6,15 @@ type RouteCardGridProps = {
 };
 
 export function RouteCardGrid({ cards }: RouteCardGridProps) {
+  const visibleCards = cards.filter(
+    (card) => card.href?.trim() && [card.eyebrow, card.title, card.description].some((value) => value?.trim()),
+  );
+
+  if (!visibleCards.length) return null;
+
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {cards.map((card) => (
+      {visibleCards.map((card) => (
         <Link
           key={card.href}
           href={card.href}
@@ -31,12 +37,12 @@ export function RouteCardGrid({ cards }: RouteCardGridProps) {
               {card.eyebrow}
             </p>
           )}
-          <h3 className="font-heading text-xl font-bold text-brand-ink">
+          {card.title?.trim() ? <h3 className="font-heading text-xl font-bold text-brand-ink">
             {card.title}
-          </h3>
-          <p className="mt-2.5 text-[0.8rem] leading-[1.65] text-slate-500">
+          </h3> : null}
+          {card.description?.trim() ? <p className="mt-2.5 text-[0.8rem] leading-[1.65] text-slate-500">
             {card.description}
-          </p>
+          </p> : null}
           <p className="mt-5 flex items-center gap-1.5 text-[0.75rem] font-bold text-brand-navy transition-[gap] duration-200 group-hover:gap-2.5">
             Open route →
           </p>

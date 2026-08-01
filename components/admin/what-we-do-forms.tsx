@@ -16,7 +16,6 @@ import type {
   InitiativeTestimonial,
   PathwayCardContent,
   RouteCard,
-  WhatWeDoHeroStatLabel,
   WhatWeDoGalleryItem,
   WhatWeDoOverviewContent,
 } from "@/types/content";
@@ -42,7 +41,6 @@ const addButtonClass =
 const removeButtonClass =
   "inline-flex items-center gap-2 rounded-full border border-rose-200 px-3 py-2 text-xs font-bold text-rose-700 transition hover:bg-rose-50";
 
-const emptyHeroStat: WhatWeDoHeroStatLabel = { label: "", description: "" };
 const emptyEcosystemCard: EcosystemCardContent = { eyebrow: "", title: "", description: "" };
 const emptyPathwayCard: PathwayCardContent = { title: "", description: "" };
 const emptyGalleryItem: WhatWeDoGalleryItem = { type: "image", url: "", title: "", description: "", thumbnailUrl: "" };
@@ -340,18 +338,6 @@ export function WhatWeDoOverviewForm({ initial, endpoint }: WhatWeDoOverviewForm
         </div>
       </Panel>
 
-      <Panel title="Hero stat labels" description="The public page computes values from initiative records. These fields control labels and descriptions.">
-        <Repeater title="Hero stats" addLabel="Add stat label" onAdd={() => update("heroStats", [...values.heroStats, emptyHeroStat])}>
-          {values.heroStats.map((stat, index) => (
-            <div key={`hero-stat-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
-              <Field label="Label" value={stat.label} onChange={(value) => update("heroStats", values.heroStats.map((item, itemIndex) => (itemIndex === index ? { ...item, label: value } : item)))} />
-              <Field label="Description" value={stat.description} onChange={(value) => update("heroStats", values.heroStats.map((item, itemIndex) => (itemIndex === index ? { ...item, description: value } : item)))} />
-              <RemoveButton onClick={() => update("heroStats", values.heroStats.filter((_, itemIndex) => itemIndex !== index))} />
-            </div>
-          ))}
-        </Repeater>
-      </Panel>
-
       <Panel title="Overview section">
         <div className="grid gap-5 md:grid-cols-2">
           <Field label="Section eyebrow" value={values.overviewSectionEyebrow ?? ""} onChange={(value) => update("overviewSectionEyebrow", value)} />
@@ -511,11 +497,8 @@ export function InitiativeForm({ initial, endpoint }: InitiativeFormProps) {
         </div>
       </Panel>
 
-      <Panel title="Snapshot and objectives">
-        <StatsEditor title="Hero snapshot stats" values={values.stats} onChange={(stats) => update("stats", stats)} />
-        <div className="mt-8">
-          <StringListEditor label="Objectives" values={values.objectives} onChange={(objectives) => update("objectives", objectives)} />
-        </div>
+      <Panel title="Objectives">
+        <StringListEditor label="Objectives" values={values.objectives} onChange={(objectives) => update("objectives", objectives)} />
       </Panel>
 
       <Panel title="How it works">

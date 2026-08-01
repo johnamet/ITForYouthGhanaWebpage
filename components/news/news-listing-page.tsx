@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Tags } from "lucide-react";
+import { ArrowRight, Tags } from "lucide-react";
 
 import { ArticleCard } from "@/components/news/article-card";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import {
   articleCategoryLabels,
@@ -31,87 +31,20 @@ export function NewsListingPage({
 
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={content.heroImage}
-            alt={`${articleCategoryLabels[content.category]} listing`}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,27,52,0.94)_0%,rgba(10,27,52,0.76)_50%,rgba(10,27,52,0.34)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              Home
-            </Link>
-            <span>/</span>
-            <Link href="/news-and-updates" className="transition hover:text-white">
-              News & Updates
-            </Link>
-            <span>/</span>
-            <span className="text-white">{articleCategoryLabels[content.category]}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
-            <div className="space-y-6">
-              <Link
-                href="/news-and-updates"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white/75 transition hover:text-white"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Back to hub
-              </Link>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {content.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {content.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                {content.description}
-              </p>
-            </div>
-
-            <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                Listing snapshot
-              </p>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-[24px] border border-white/10 bg-white/8 p-5">
-                  <p className="font-heading text-4xl font-bold text-white">
-                    {articles.length}
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-white">
-                    Published articles
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-white/68">
-                    Static seed count now, Firestore count later.
-                  </p>
-                </div>
-                <div className="rounded-[24px] border border-white/10 bg-white/8 p-5">
-                  <p className="font-heading text-4xl font-bold text-white">
-                    {tags.length}
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-white">
-                    Topic tags
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-white/68">
-                    Tags are ready for CMS filtering.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero
+        imageSrc={content.heroImage}
+        imageAlt={`${articleCategoryLabels[content.category]} listing`}
+        eyebrow={content.eyebrow}
+        title={content.title}
+        description={content.description}
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "News & Updates", href: "/news-and-updates" },
+          { label: articleCategoryLabels[content.category] },
+        ]}
+        ctas={[{ label: "Back to hub", href: "/news-and-updates", variant: "secondary" }]}
+        priority
+      />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         {leadArticle ? (

@@ -1,8 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { PartnersStrip, type Partner } from "@/components/home/patrners-strip";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatList } from "@/components/shared/stat-list";
@@ -25,76 +24,17 @@ export function ImpactOverviewPage({
 }: ImpactOverviewPageProps) {
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={content.heroImage}
-            alt="Graduates and learners representing IT For Youth Ghana impact"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,27,52,0.92)_0%,rgba(10,27,52,0.78)_45%,rgba(10,27,52,0.38)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              {breadcrumbs.home}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{breadcrumbs.impact.root}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-            <div className="space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {content.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {content.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                {content.description}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/our-impact/reports"
-                  className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
-                >
-                  Explore reports
-                </Link>
-                <Link
-                  href="/our-impact/testimonials"
-                  className="rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/15"
-                >
-                  Read stories
-                </Link>
-              </div>
-            </div>
-
-            <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                {content.heroAsideEyebrow ?? "Why this section exists"}
-              </p>
-              <div className="mt-5 space-y-3">
-                {content.proofPoints.map((point) => (
-                  <div
-                    key={point}
-                    className="rounded-[22px] border border-white/10 bg-white/8 px-4 py-4 text-sm leading-7 text-white/82"
-                  >
-                    {point}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero
+        imageSrc={content.heroImage}
+        imageAlt="Graduates and learners representing IT For Youth Ghana impact"
+        eyebrow={content.eyebrow}
+        title={content.title}
+        description={content.description}
+        supportingText={content.proofPoints.filter((point) => point.trim()).join(" • ") || null}
+        breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.impact.root }]}
+        ctas={[{ label: "Explore reports", href: "/our-impact/reports" }, { label: "Read stories", href: "/our-impact/testimonials", variant: "secondary" }]}
+        priority
+      />
 
       <div className="sticky top-[72px] z-30 border-y border-brand-border bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-4 py-4 [scrollbar-width:none] sm:px-6 lg:px-8">

@@ -1,7 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { TrainingCourseCatalog } from "@/components/training/training-course-catalog";
 import { TrainingCohortTimeline } from "@/components/training/training-cohort-timeline";
@@ -15,133 +14,30 @@ type TrainingCourseListingPageProps = {
   courses: Course[];
 };
 
-function formatDeadline(value: string | undefined) {
-  if (!value) {
-    return "Open";
-  }
-
-  return new Intl.DateTimeFormat("en-GH", {
-    day: "numeric",
-    month: "short",
-  }).format(new Date(value));
-}
-
 export function TrainingCourseListingPage({
   page,
   courses,
 }: TrainingCourseListingPageProps) {
-  const freeCourses = courses.filter((course) => course.pricing.isFree).length;
-  const categories = new Set(courses.map((course) => course.category)).size;
-  const [catalogStat, categoryStat, freeStat, deadlineStat] = page.stats;
   const [comparisonSection, shortlistSection] = page.sections;
   const catalogSections = [comparisonSection, shortlistSection].filter(
     (section): section is NonNullable<typeof section> => Boolean(section),
   );
-  const highlights = comparisonSection?.bullets?.length
-    ? comparisonSection.bullets
-    : trainingCatalogContent.highlights;
-  const heroStats = [
-    {
-      value: String(courses.length),
-      label: catalogStat?.label ?? "Courses available",
-      description:
-        catalogStat?.description ??
-        "Seeded and live options across development, design, data, and career pathways.",
-    },
-    {
-      value: String(categories),
-      label: categoryStat?.label ?? "Categories",
-      description:
-        categoryStat?.description ??
-        "Technical, creative, and employability-focused entry points for different starting points.",
-    },
-    {
-      value: String(freeCourses),
-      label: freeStat?.label ?? "Free options",
-      description:
-        freeStat?.description ??
-        "No-cost routes that remove financial barriers for motivated first-time learners.",
-    },
-    {
-      value: formatDeadline(trainingCatalogContent.cohorts[0]?.applicationDeadline),
-      label: deadlineStat?.label ?? "Next deadline",
-      description:
-        deadlineStat?.description ??
-        "Cohort 8 Foundations deadline. See the full timeline below for all upcoming dates.",
-    },
-  ];
-
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={page.heroImage ?? trainingCatalogContent.heroImage}
-            alt="Learners exploring training pathways"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(125deg,rgba(10,27,52,0.92)_0%,rgba(10,27,52,0.78)_44%,rgba(10,27,52,0.45)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              {breadcrumbs.home}
-            </Link>
-            <span>/</span>
-            <Link href="/apply-for-training" className="transition hover:text-white">
-              {breadcrumbs.apply.root}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{breadcrumbs.apply.courses}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-            <div className="space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {page.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {page.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                {page.description}
-              </p>
-              <p className="max-w-3xl text-base leading-8 text-white/78">{page.intro}</p>
-
-              <div className="grid gap-3 sm:grid-cols-3">
-                {highlights.map((highlight) => (
-                  <div
-                    key={highlight}
-                    className="rounded-[24px] border border-white/12 bg-white/10 px-4 py-4 text-sm leading-7 text-white/82"
-                  >
-                    {highlight}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {heroStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-[28px] border border-white/12 bg-white/10 p-5 backdrop-blur-sm"
-                >
-                  <p className="font-heading text-4xl font-bold text-white">{stat.value}</p>
-                  <p className="mt-2 text-sm font-semibold text-white">{stat.label}</p>
-                  <p className="mt-2 text-sm leading-7 text-white/65">{stat.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero
+        imageSrc={page.heroImage ?? trainingCatalogContent.heroImage}
+        imageAlt="Learners exploring training pathways"
+        eyebrow={page.eyebrow}
+        title={page.title}
+        description={page.description}
+        supportingText={page.intro}
+        breadcrumbs={[
+          { label: breadcrumbs.home, href: "/" },
+          { label: breadcrumbs.apply.root, href: "/apply-for-training" },
+          { label: breadcrumbs.apply.courses },
+        ]}
+        priority
+      />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-5 lg:grid-cols-2">

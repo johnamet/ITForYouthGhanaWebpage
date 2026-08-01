@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { AlertCircle, ArrowDown, ArrowUp, CheckCircle2, Loader2, Plus, Save, Trash2 } from "lucide-react";
 
 import type {
-  HighlightStat,
   PartnershipOverviewCard,
   PartnershipOverviewContent,
   RouteCard,
@@ -22,7 +21,6 @@ const input =
 export function PartnershipOverviewForm({ initial }: Props) {
   const router = useRouter();
   const [values, setValues] = useState<PartnershipOverviewContent>(() => initial);
-  const [stats, setStats] = useState<HighlightStat[]>(initial.stats ?? []);
   const [valueCards, setValueCards] = useState<PartnershipOverviewCard[]>(initial.valueCards ?? []);
   const [partnerTypeCards, setPartnerTypeCards] = useState<PartnershipOverviewCard[]>(initial.partnerTypeCards ?? []);
   const [nextSteps, setNextSteps] = useState<RouteCard[]>(initial.nextSteps ?? []);
@@ -39,7 +37,7 @@ export function PartnershipOverviewForm({ initial }: Props) {
     setIsSubmitting(true);
     setSubmitState({ type: "idle", message: "" });
     try {
-      const payload = { ...values, stats, valueCards, partnerTypeCards, nextSteps };
+      const payload = { ...values, valueCards, partnerTypeCards, nextSteps };
       const resp = await fetch("/api/admin/partnerships/overview", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -74,27 +72,6 @@ export function PartnershipOverviewForm({ initial }: Props) {
           <div><label className="text-sm font-bold text-brand-ink">Hero image</label><input className={input} value={values.heroImage} onChange={(e) => update("heroImage", e.target.value)} /></div>
           <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Title</label><input className={input} value={values.title} onChange={(e) => update("title", e.target.value)} /></div>
           <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Description</label><textarea className={input + " h-28"} value={values.description} onChange={(e) => update("description", e.target.value)} /></div>
-        </div>
-      </section>
-
-      <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
-        <h3 className="font-heading text-xl font-semibold text-brand-ink">Stats</h3>
-        <div className="mt-4 space-y-4">
-          {stats.map((s, i) => (
-            <div key={i} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_1fr_1fr_auto_auto]">
-              <div><label className="text-sm font-bold text-brand-ink">Value</label><input className={input} value={s.value ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, value: e.target.value } : it))} /></div>
-              <div><label className="text-sm font-bold text-brand-ink">Label</label><input className={input} value={s.label ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, label: e.target.value } : it))} /></div>
-              <div><label className="text-sm font-bold text-brand-ink">Icon</label><input className={input} value={s.icon ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, icon: e.target.value } : it))} /></div>
-              <div><label className="text-sm font-bold text-brand-ink">Icon image URL</label><input className={input} value={s.iconImage ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, iconImage: e.target.value } : it))} /></div>
-              <button type="button" onClick={() => setStats((arr) => (i <= 0 ? arr : ((n) => ([n[i-1], n[i]] = [n[i], n[i-1]], n))([...arr])))} className="rounded-full border border-brand-border p-2 text-brand-ink"><ArrowUp className="h-4 w-4" /></button>
-              <div className="flex items-center gap-2">
-                <button type="button" onClick={() => setStats((arr) => (i >= arr.length-1 ? arr : ((n) => ([n[i], n[i+1]] = [n[i+1], n[i]], n))([...arr])))} className="rounded-full border border-brand-border p-2 text-brand-ink"><ArrowDown className="h-4 w-4" /></button>
-                <button type="button" onClick={() => setStats((arr) => arr.filter((_it, idx) => idx !== i))} className="rounded-full border border-rose-200 p-2 text-rose-700"><Trash2 className="h-4 w-4" /></button>
-              </div>
-              <div className="md:col-span-3"><label className="text-sm font-bold text-brand-ink">Description</label><input className={input} value={s.description ?? ""} onChange={(e) => setStats((arr) => arr.map((it, idx) => idx === i ? { ...it, description: e.target.value } : it))} /></div>
-            </div>
-          ))}
-          <button type="button" onClick={() => setStats((arr) => [...arr, { value: "", label: "", description: "", icon: "", iconImage: "" }])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"><Plus className="h-4 w-4" /> Add stat</button>
         </div>
       </section>
 

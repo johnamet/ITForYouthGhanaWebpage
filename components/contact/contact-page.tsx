@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import {
   ArrowRight,
   Mail,
@@ -8,9 +6,9 @@ import {
   Phone,
   ShieldCheck,
 } from "lucide-react";
-import { emojiToIconImage } from "@/lib/utils/icon-map";
 
 import { ContactForm } from "@/components/contact/contact-form";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatList } from "@/components/shared/stat-list";
@@ -43,97 +41,22 @@ export function ContactPage({ content }: ContactPageProps) {
 
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={content.heroImage}
-            alt="Learners and facilitators collaborating during an IT For Youth Ghana session"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,27,52,0.94)_0%,rgba(10,27,52,0.78)_48%,rgba(10,27,52,0.34)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              Home
-            </Link>
-            <span>/</span>
-            <span className="text-white">Contact</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-            <div className="space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {content.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {content.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                {content.description}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href={emailChannel?.href ?? "mailto:info@itforyouthghana.org"}
-                  className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
-                >
-                  Email the team
-                </a>
-                <a
-                  href="#form"
-                  className="rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/15"
-                >
-                  Use the form
-                </a>
-              </div>
-            </div>
-
-            <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                Contact snapshot
-              </p>
-              <div className="mt-5 grid gap-3">
-                {content.stats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-[24px] border border-white/10 bg-white/8 px-4 py-4"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="font-heading text-3xl font-bold text-white">
-                          {stat.value}
-                        </p>
-                        <p className="mt-1 text-sm font-semibold text-white">
-                          {stat.label}
-                        </p>
-                      </div>
-                      {(() => stat.iconImage ?? emojiToIconImage(stat.icon))() ? (
-                        <span className="rounded-full bg-brand-gold px-2 py-1 text-xs font-bold text-brand-ink">
-                          <Image src={(stat.iconImage ?? emojiToIconImage(stat.icon)) as string} alt={stat.label} width={18} height={18} className="h-[18px] w-[18px] object-contain" />
-                        </span>
-                      ) : stat.icon ? (
-                        <span className="rounded-full bg-brand-gold px-3 py-1 text-xs font-bold text-brand-ink">
-                          {stat.icon}
-                        </span>
-                      ) : null}
-                    </div>
-                    <p className="mt-3 text-sm leading-7 text-white/70">
-                      {stat.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero
+        imageSrc={content.heroImage}
+        imageAlt="Learners and facilitators collaborating during an IT For Youth Ghana session"
+        eyebrow={content.eyebrow}
+        title={content.title}
+        description={content.description}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
+        ctas={[
+          {
+            label: "Email the team",
+            href: emailChannel?.href ?? "mailto:info@itforyouthghana.org",
+          },
+          { label: "Use the form", href: "#form", variant: "secondary" },
+        ]}
+        priority
+      />
 
       <div className="sticky top-[72px] z-30 border-y border-brand-border bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-4 py-4 [scrollbar-width:none] sm:px-6 lg:px-8">

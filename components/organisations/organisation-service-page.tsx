@@ -5,6 +5,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { OrganisationServicePage as OrganisationServicePageType } from "@/types/content";
 
 type OrganisationServicePageProps = {
@@ -35,81 +36,24 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
 
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={page.heroImage}
-            alt={page.title}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,27,52,0.9)_0%,rgba(10,27,52,0.76)_44%,rgba(10,27,52,0.4)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              {breadcrumbs.home}
-            </Link>
-            <span>/</span>
-            <Link href="/for-organisations" className="transition hover:text-white">
-              {breadcrumbs.organisations.root}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{page.title}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
-            <div className="space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {page.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {page.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">{page.tagline}</p>
-              <p className="max-w-3xl text-base leading-8 text-white/80">{page.description}</p>
-
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href={page.contactCta.primary.href}
-                  className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
-                >
-                  {page.contactCta.primary.label}
-                </Link>
-                <a
-                  href="#overview"
-                  className="rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/15"
-                >
-                  Learn more
-                </a>
-              </div>
-            </div>
-
-            <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                {page.snapshotEyebrow ?? "Service snapshot"}
-              </p>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                {page.stats.map((stat) => (
-                  <div key={stat.label} className="rounded-[24px] bg-white/8 p-4">
-                    <p className="font-heading text-3xl font-bold text-white">{stat.value}</p>
-                    <p className="mt-2 text-sm font-semibold text-white">{stat.label}</p>
-                    {stat.description ? (
-                      <p className="mt-2 text-sm leading-6 text-white/65">{stat.description}</p>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero
+        imageSrc={page.heroImage}
+        imageAlt={page.title}
+        eyebrow={page.eyebrow}
+        title={page.title}
+        description={page.tagline}
+        supportingText={page.description}
+        breadcrumbs={[
+          { label: breadcrumbs.home, href: "/" },
+          { label: breadcrumbs.organisations.root, href: "/for-organisations" },
+          { label: page.title },
+        ]}
+        ctas={[
+          { label: page.contactCta.primary.label, href: page.contactCta.primary.href },
+          { label: "Learn more", href: "#overview", variant: "secondary" },
+        ]}
+        priority
+      />
 
       <div className="sticky top-[72px] z-30 border-y border-brand-border bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-4 py-4 [scrollbar-width:none] sm:px-6 lg:px-8">

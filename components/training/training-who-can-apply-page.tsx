@@ -1,8 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
+import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { SitePage } from "@/types/content";
 
 type TrainingWhoCanApplyPageProps = {
@@ -16,70 +15,7 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
 
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={page.heroImage ?? "/images/randomPictures/studentsblueclothing.jpg"}
-            alt="Learners gathering for an ITFY training session"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(125deg,rgba(10,27,52,0.92)_0%,rgba(10,27,52,0.78)_44%,rgba(10,27,52,0.45)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <nav
-            aria-label="Breadcrumb"
-            className="mb-10 flex flex-wrap items-center gap-2 text-sm text-white/70"
-          >
-            <Link href="/" className="transition hover:text-white">
-              {breadcrumbs.home}
-            </Link>
-            <span>/</span>
-            <Link href="/apply-for-training" className="transition hover:text-white">
-              {breadcrumbs.apply.root}
-            </Link>
-            <span>/</span>
-            <span className="text-white">{breadcrumbs.apply.whoCanApply}</span>
-          </nav>
-
-          <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
-            <div className="space-y-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
-                {page.eyebrow}
-              </p>
-              <h1 className="max-w-4xl font-heading text-5xl font-bold leading-tight sm:text-6xl">
-                {page.title}
-              </h1>
-              <p className="max-w-3xl text-xl leading-8 text-slate-100">
-                {page.description}
-              </p>
-              <p className="max-w-3xl text-base leading-8 text-white/78">{page.intro}</p>
-            </div>
-
-            <div className="rounded-[32px] border border-white/12 bg-white/10 p-6 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
-                {practiceSection?.title ?? "In practice"}
-              </p>
-              {practiceSection ? (
-                <p className="mt-4 text-sm leading-7 text-white/78">{practiceSection.body}</p>
-              ) : null}
-              <div className="mt-5 space-y-3">
-                {(practiceSection?.bullets ?? []).map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-[22px] border border-white/10 bg-white/8 px-4 py-4 text-sm leading-7 text-white/82"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialImageHero imageSrc={page.heroImage ?? "/images/randomPictures/studentsblueclothing.jpg"} imageAlt="Learners gathering for an ITFY training session" eyebrow={page.eyebrow} title={page.title} description={page.description} supportingText={[page.intro, practiceSection?.body, ...(practiceSection?.bullets ?? [])].filter((value): value is string => Boolean(value?.trim())).join(" • ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.apply.root, href: "/apply-for-training" }, { label: breadcrumbs.apply.whoCanApply }]} priority />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-3xl space-y-3">
