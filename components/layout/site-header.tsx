@@ -24,7 +24,7 @@ function DropdownPanel({ items }: { items: { label: string; href: string }[] }) 
         // Positioning
         "absolute left-1/2 top-[calc(100%+12px)] z-50 -translate-x-1/2",
         // Glass dark panel
-        "rounded-2xl border border-white/10 bg-slate-700/95 backdrop-blur-2xl",
+        "rounded-2xl border border-white/10 bg-brand-navy/95 backdrop-blur-2xl",
         "shadow-[0_24px_60px_rgba(0,0,0,0.42),0_0_0_1px_rgba(255,255,255,0.06)]",
         "p-2",
         // Show/hide — pure CSS group-hover
@@ -68,7 +68,7 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
   const [mobileSection, setMobileSection] = useState<string | null>(null);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.12] bg-slate-600/95 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/[0.12] bg-brand-navy/95 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 py-0 sm:px-6 lg:px-8">
 
         {/* ── Logo ─────────────────────────────────────────────────── */}
@@ -158,7 +158,7 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
 
       {/* ── Mobile drawer ─────────────────────────────────────────────── */}
       {mobileOpen && (
-        <div className="border-t border-white/[0.12] bg-slate-600 xl:hidden">
+        <div className="border-t border-white/[0.12] bg-brand-navy xl:hidden">
           <div className="mx-auto max-w-[1400px] space-y-0.5 px-4 py-4 sm:px-6">
             {publicNavigation.map((item) =>
               item.items ? (
