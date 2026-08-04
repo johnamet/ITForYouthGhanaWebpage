@@ -56,8 +56,8 @@ export function EditorialImageHero({
     hasText(eyebrow) ||
     hasText(title) ||
     hasText(description) ||
-    hasText(supportingText) ||
-    visibleCtas.length > 0;
+    hasText(supportingText);
+  const hasHeroContent = hasPanel || visibleCtas.length > 0;
 
   return (
     <section className={cn("relative overflow-hidden bg-white", className)}>
@@ -112,35 +112,38 @@ export function EditorialImageHero({
           </div>
         ) : null}
 
-        {hasPanel ? (
+        {hasHeroContent ? (
           <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 sm:bottom-6 lg:bottom-8">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="pointer-events-auto w-full sm:max-w-md">
-                <div className="rounded-3xl border border-white/15 bg-brand-navy/90 px-6 py-6 text-white shadow-[0_12px_40px_rgba(7,20,39,0.65)] backdrop-blur-xl backdrop-saturate-150 sm:px-7 sm:py-7">
-                  {hasText(eyebrow) ? (
-                    <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
-                      {eyebrow}
-                    </p>
-                  ) : null}
+                {hasPanel ? (
+                  <div className="rounded-3xl border border-white/15 bg-brand-navy/90 px-6 py-6 text-white shadow-[0_12px_40px_rgba(7,20,39,0.65)] backdrop-blur-xl backdrop-saturate-150 sm:px-7 sm:py-7">
+                    {hasText(eyebrow) ? (
+                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
+                        {eyebrow}
+                      </p>
+                    ) : null}
 
-                  {hasText(title) ? (
-                    <h1 className="font-heading text-2xl font-bold leading-[1.1] text-white sm:text-3xl">
-                      {title}
-                    </h1>
-                  ) : null}
+                    {hasText(title) ? (
+                      <h1 className="font-heading text-2xl font-bold leading-[1.1] text-white sm:text-3xl">
+                        {title}
+                      </h1>
+                    ) : null}
 
-                  {hasText(description) ? (
-                    <p className={cn("text-base leading-7 text-white", hasText(title) && "mt-3")}>
-                      {description}
-                    </p>
-                  ) : null}
+                    {hasText(description) ? (
+                      <p className={cn("text-base leading-7 text-white", hasText(title) && "mt-3")}>
+                        {description}
+                      </p>
+                    ) : null}
 
-                  {hasText(supportingText) ? (
-                    <p className="mt-3 text-sm leading-6 text-white/75">{supportingText}</p>
-                  ) : null}
+                    {hasText(supportingText) ? (
+                      <p className="mt-3 text-sm leading-6 text-white/75">{supportingText}</p>
+                    ) : null}
+                  </div>
+                ) : null}
 
-                  {visibleCtas.length > 0 ? (
-                    <div className="mt-5 flex flex-wrap gap-3">
+                {visibleCtas.length > 0 ? (
+                  <div className={cn("flex flex-wrap gap-3", hasPanel && "mt-4")}>
                       {visibleCtas.map((cta) => (
                         <Link
                           key={`${cta.href}-${cta.label}`}
@@ -155,9 +158,8 @@ export function EditorialImageHero({
                           {cta.label}
                         </Link>
                       ))}
-                    </div>
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
