@@ -45,6 +45,11 @@ export type NavItem = {
   items?: { label: string; href: string }[];
 };
 
+export type NavigationColumn = {
+  heading: string;
+  links: Array<{ label: string; href: string }>;
+};
+
 // ─── Site metadata (shared defaults for layout and pages) ─────────────────────
 
 export const siteMeta = {
@@ -180,6 +185,55 @@ export const publicNavigation: NavItem[] = [
       { label: "Blogs", href: "/news-and-updates/blogs" },
     ],
   },
+  { label: "Contact", href: "/contact" },
+];
+
+/** Footer links are maintained beside the header navigation to prevent route drift. */
+export const footerNavigation: NavigationColumn[] = [
+  {
+    heading: "Who We Are",
+    links: [
+      { label: "About Us", href: "/who-we-are" },
+      { label: "Our Team", href: "/who-we-are/team" },
+      { label: "Our Partners", href: "/who-we-are/partners" },
+      { label: "Join Our Team", href: "/who-we-are/careers" },
+    ],
+  },
+  {
+    heading: "What We Do",
+    links: [
+      { label: "Overview", href: "/what-we-do" },
+      { label: "Girls in Tech", href: "/what-we-do/girls-in-tech" },
+      { label: "Youth Tech Academy", href: "/what-we-do/youth-academy" },
+      { label: "Entrepreneurship Hub", href: "/what-we-do/entrepreneurship-hub" },
+      { label: "Tech Clubs", href: "/what-we-do/tech-clubs" },
+    ],
+  },
+  {
+    heading: "Apply & Partner",
+    links: [
+      { label: "Apply for Training", href: "/apply-for-training" },
+      { label: "Browse Courses", href: "/apply-for-training/courses" },
+      { label: "For Organisations", href: "/for-organisations" },
+      { label: "Partner With Us", href: "/partner-with-us" },
+      { label: "Donate", href: "/donate" },
+    ],
+  },
+  {
+    heading: "Impact & Contact",
+    links: [
+      { label: "Impact Reports", href: "/our-impact/reports" },
+      { label: "Testimonials", href: "/our-impact/testimonials" },
+      { label: "News", href: "/news-and-updates/news" },
+      { label: "Blogs", href: "/news-and-updates/blogs" },
+      { label: "Contact Us", href: "/contact" },
+    ],
+  },
+];
+
+export const legalNavigation = [
+  { label: "Programs Portal", href: "/programs" },
+  { label: "Admin Login", href: "/admin-login" },
   { label: "Contact", href: "/contact" },
 ];
 

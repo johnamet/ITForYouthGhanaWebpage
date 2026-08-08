@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ChevronDown, X } from "lucide-react";
 
 import { cn } from "@/lib/utils/cn";
+import { Button } from "@/components/ui/button";
 import { publicNavigation, headerCtas } from "@/lib/content/site-config";
 
 // ─── Dropdown panel ───────────────────────────────────────────────────────────
@@ -124,18 +125,22 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
         {/* ── Desktop actions ───────────────────────────────────────── */}
         <div className="hidden items-center gap-2 xl:flex">
           <div className="mx-1 h-5 w-px bg-white/10" />
-          <Link
+          <Button
             href={headerCtas.primary.href}
-            className="itfy-button-ghost-light rounded-lg px-4 py-2 text-[0.7rem]"
+            variant="ghost"
+            size="sm"
+            className="rounded-lg text-[0.7rem]"
           >
             {headerCtas.primary.label}
-          </Link>
-          <Link
+          </Button>
+          <Button
             href={headerCtas.secondary.href}
-            className="itfy-button-primary rounded-lg px-5 py-2 text-[0.7rem]"
+            variant="primary"
+            size="sm"
+            className="rounded-lg px-5 text-[0.7rem]"
           >
             {headerCtas.secondary.label}
-          </Link>
+          </Button>
         </div>
 
         {/* ── Hamburger ─────────────────────────────────────────────── */}

@@ -1,4 +1,5 @@
 import type { HighlightStat } from "@/types/content";
+import { Card } from "@/components/ui/card";
 
 type StatListProps = {
   stats: HighlightStat[];
@@ -15,11 +16,11 @@ export function StatList({ stats, compact = false }: StatListProps) {
   return (
     <div className={`grid gap-4 ${compact ? "sm:grid-cols-3" : "md:grid-cols-3"}`}>
       {visibleStats.map((stat, index) => (
-        <div key={`${stat.label}-${index}`} className="rounded-3xl border border-brand-border bg-white p-6 shadow-sm">
+        <Card key={`${stat.label}-${index}`} className="rounded-3xl">
           {stat.value?.trim() ? <p className="font-heading text-3xl font-semibold text-brand-navy">{stat.value}</p> : null}
           {stat.label?.trim() ? <p className="mt-2 text-sm font-semibold text-brand-ink">{stat.label}</p> : null}
           {stat.description?.trim() ? <p className="mt-2 text-sm leading-7 text-slate-600">{stat.description}</p> : null}
-        </div>
+        </Card>
       ))}
     </div>
   );

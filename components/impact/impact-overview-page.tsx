@@ -4,7 +4,7 @@ import { PartnersStrip, type Partner } from "@/components/home/patrners-strip";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { StatList } from "@/components/shared/stat-list";
+import { StatsSection } from "@/components/content/stats-section";
 import type { ImpactOverviewContent } from "@/types/content";
 
 type ImpactOverviewPageProps = {
@@ -63,7 +63,7 @@ export function ImpactOverviewPage({
               "These top-line indicators are not the full story, but they provide a fast and practical sense of scale before you move into deeper reporting, stories, and alignment frameworks."
             }
           />
-          <StatList stats={content.stats} />
+          <StatsSection stats={content.stats} />
         </div>
       </section>
 

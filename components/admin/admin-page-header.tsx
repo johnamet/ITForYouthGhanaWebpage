@@ -1,6 +1,7 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
+
+import { Button } from "@/components/ui/button";
 
 type AdminPageHeaderProps = {
   eyebrow?: string;
@@ -41,13 +42,13 @@ export function AdminPageHeader({
         </div>
 
         {primaryAction ? (
-          <Link
+          <Button
             href={primaryAction.href}
-            className="itfy-button-primary px-5 py-3 text-sm"
+            size="md"
           >
             {primaryAction.label}
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </Button>
         ) : null}
       </div>
     </div>

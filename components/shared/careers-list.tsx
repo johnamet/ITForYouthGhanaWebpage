@@ -1,6 +1,7 @@
-import Link from "next/link";
-
 import type { JobListing } from "@/types/content";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { StateMessage } from "@/components/ui/state-message";
 
 type CareersListProps = {
   jobs: JobListing[];
@@ -14,12 +15,10 @@ export function CareersList({ jobs }: CareersListProps) {
   if (!jobs.length) {
     return (
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-[28px] border border-brand-border bg-white p-8 text-center shadow-sm">
-          <h2 className="font-heading text-2xl font-semibold text-brand-ink">No open roles right now</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            We are not hiring at the moment. Check back soon for opportunities.
-          </p>
-        </div>
+        <StateMessage
+          title="No open roles right now"
+          description="We are not hiring at the moment. Check back soon for opportunities."
+        />
       </section>
     );
   }
@@ -33,7 +32,7 @@ export function CareersList({ jobs }: CareersListProps) {
 
       <div className="grid gap-5">
         {jobs.map((job) => (
-          <article key={job.id} className="rounded-[26px] border border-brand-border bg-white p-6 shadow-sm">
+          <Card key={job.id} className="rounded-[26px]">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <h3 className="font-heading text-2xl font-semibold text-brand-ink">{job.title}</h3>
@@ -53,24 +52,25 @@ export function CareersList({ jobs }: CareersListProps) {
 
             <div className="mt-5">
               {job.applyUrl ? (
-                <a
+                <Button
                   href={job.applyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex rounded-full bg-slate-950 px-4 py-2 text-xs font-semibold text-white transition hover:-translate-y-0.5"
+                  external
+                  variant="secondary"
+                  size="sm"
                 >
                   Apply now
-                </a>
+                </Button>
               ) : (
-                <Link
+                <Button
                   href="/contact"
-                  className="inline-flex rounded-full border border-brand-border px-4 py-2 text-xs font-semibold text-brand-ink transition hover:bg-brand-mist"
+                  variant="outline"
+                  size="sm"
                 >
                   Contact us
-                </Link>
+                </Button>
               )}
             </div>
-          </article>
+          </Card>
         ))}
       </div>
     </section>

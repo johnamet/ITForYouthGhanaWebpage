@@ -3,6 +3,9 @@
 import { FormEvent, useState } from "react";
 import clsx from "clsx";
 
+import { Button } from "@/components/ui/button";
+import { TextInput } from "@/components/ui/form-field";
+
 type NewsletterSignupFormProps = {
   variant?: "compact" | "full";
   interest?: string;
@@ -95,7 +98,7 @@ export function NewsletterSignupForm({
             : "mx-auto max-w-2xl flex-col sm:flex-row",
         )}
       >
-        <input
+        <TextInput
           type="email"
           name="email"
           required
@@ -103,25 +106,22 @@ export function NewsletterSignupForm({
           onChange={(event) => setEmail(event.target.value)}
           placeholder={placeholder}
           className={clsx(
-            "w-full rounded-full border outline-none transition focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20",
+            "rounded-full",
             isCompact
               ? "border-white/35 bg-white/10 px-4 py-2.5 text-[0.8rem] text-white placeholder:text-white/65"
               : "border-white/12 bg-white px-5 py-4 text-sm text-brand-ink placeholder:text-slate-400",
           )}
           aria-label="Email address"
         />
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className={clsx(
-            "shrink-0 font-bold disabled:cursor-not-allowed disabled:opacity-60",
-            isCompact
-              ? "itfy-button-outline-pink px-5 py-2.5 text-[0.75rem]"
-              : "itfy-button-primary px-7 py-4 text-sm",
-          )}
+          variant={isCompact ? "outline" : "primary"}
+          size={isCompact ? "sm" : "lg"}
+          className={clsx("shrink-0", isCompact && "border-brand-gold bg-white text-brand-gold hover:bg-brand-gold hover:text-white")}
         >
           {isSubmitting ? "Submitting..." : buttonLabel}
-        </button>
+        </Button>
       </form>
 
       <p

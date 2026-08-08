@@ -1,6 +1,8 @@
 import Image from "next/image";
 
 import type { Partner } from "@/components/home/patrners-strip";
+import { Card } from "@/components/ui/card";
+import { StateMessage } from "@/components/ui/state-message";
 
 type PartnerDirectoryProps = {
   partners: Partner[];
@@ -12,12 +14,10 @@ export function PartnerDirectory({ partners }: PartnerDirectoryProps) {
   if (!visiblePartners.length) {
     return (
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-[28px] border border-brand-border bg-white p-8 text-center shadow-sm">
-          <h2 className="font-heading text-2xl font-semibold text-brand-ink">Partners will appear here soon</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            We are currently curating partner profiles and collaboration highlights.
-          </p>
-        </div>
+        <StateMessage
+          title="Partners will appear here soon"
+          description="We are currently curating partner profiles and collaboration highlights."
+        />
       </section>
     );
   }
@@ -35,7 +35,7 @@ export function PartnerDirectory({ partners }: PartnerDirectoryProps) {
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {visiblePartners.map((partner) => (
-            <article key={partner.id} className="rounded-[26px] border border-brand-border bg-white p-6 shadow-sm">
+            <Card key={partner.id} className="rounded-[26px]">
               <div className="mb-4 flex h-16 items-center">
                 {partner.logo ? (
                   <Image
@@ -64,7 +64,7 @@ export function PartnerDirectory({ partners }: PartnerDirectoryProps) {
                   Visit organisation
                 </a>
               ) : null}
-            </article>
+            </Card>
           ))}
         </div>
       </div>

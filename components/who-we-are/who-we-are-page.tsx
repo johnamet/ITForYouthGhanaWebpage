@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { VideoCard } from "@/components/media/video-card";
+import { StatsSection } from "@/components/content/stats-section";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import type { SitePage } from "@/types/content";
@@ -108,22 +110,24 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
             </div> : null}
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {page.stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <p className="font-heading text-4xl font-bold text-brand-navy">{stat.value}</p>
-                <p className="mt-3 text-base font-bold text-brand-ink">{stat.label}</p>
-                {stat.description ? (
-                  <p className="mt-3 text-sm leading-7 text-slate-500">{stat.description}</p>
-                ) : null}
-              </div>
-            ))}
+          <div>
+            <VideoCard
+              thumbnail={page.heroImage ?? heroImage}
+              title={page.overviewVideoTitle ?? page.title}
+              videoUrl={page.overviewVideoUrl}
+              className="max-w-3xl lg:ml-auto"
+            />
           </div>
         </div>
       </section> : null}
+
+      {page.stats.length ? (
+        <StatsSection
+          stats={page.stats}
+          eyebrow={page.highlightsEyebrow || "In focus"}
+          title={"The numbers behind the work"}
+        />
+      ) : null}
 
       {operatingSections.length ? (
         <section

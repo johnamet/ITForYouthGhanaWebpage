@@ -4,7 +4,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { StatList } from "@/components/shared/stat-list";
+import { StatsSection } from "@/components/content/stats-section";
 import type { ImpactSdgsContent } from "@/types/content";
 
 type ImpactSdgsPageProps = {
@@ -50,7 +50,7 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
               "These top-line metrics help anchor the SDG conversation in the same real programme evidence used elsewhere on the site."
             }
           />
-          <StatList stats={content.stats} />
+          <StatsSection stats={content.stats} />
         </div>
       </section>
 

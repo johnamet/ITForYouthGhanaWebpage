@@ -14,6 +14,8 @@ import type {
   ContactEnquiryType,
   PreferredContactMethod,
 } from "@/types/content";
+import { Button } from "@/components/ui/button";
+import { TextArea, TextInput } from "@/components/ui/form-field";
 
 type ContactFormValues = {
   name: string;
@@ -153,7 +155,7 @@ export function ContactForm({
           <label htmlFor="name" className="text-sm font-bold text-brand-ink">
             Full name
           </label>
-          <input
+          <TextInput
             id="name"
             name="name"
             type="text"
@@ -161,7 +163,6 @@ export function ContactForm({
             value={values.name}
             onChange={(event) => updateValue("name", event.target.value)}
             aria-invalid={Boolean(getFieldError("name"))}
-            className="mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
             placeholder="Your name"
           />
           <FieldError message={getFieldError("name")} />
@@ -171,7 +172,7 @@ export function ContactForm({
           <label htmlFor="email" className="text-sm font-bold text-brand-ink">
             Email address
           </label>
-          <input
+          <TextInput
             id="email"
             name="email"
             type="email"
@@ -179,7 +180,6 @@ export function ContactForm({
             value={values.email}
             onChange={(event) => updateValue("email", event.target.value)}
             aria-invalid={Boolean(getFieldError("email"))}
-            className="mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
             placeholder="you@example.com"
           />
           <FieldError message={getFieldError("email")} />
@@ -189,14 +189,13 @@ export function ContactForm({
           <label htmlFor="phone" className="text-sm font-bold text-brand-ink">
             Phone number
           </label>
-          <input
+          <TextInput
             id="phone"
             name="phone"
             type="tel"
             value={values.phone}
             onChange={(event) => updateValue("phone", event.target.value)}
             aria-invalid={Boolean(getFieldError("phone"))}
-            className="mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
             placeholder="+233 ..."
           />
           <FieldError message={getFieldError("phone")} />
@@ -206,14 +205,13 @@ export function ContactForm({
           <label htmlFor="organisation" className="text-sm font-bold text-brand-ink">
             Organisation
           </label>
-          <input
+          <TextInput
             id="organisation"
             name="organisation"
             type="text"
             value={values.organisation}
             onChange={(event) => updateValue("organisation", event.target.value)}
             aria-invalid={Boolean(getFieldError("organisation"))}
-            className="mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
             placeholder="Optional"
           />
           <FieldError message={getFieldError("organisation")} />
@@ -297,14 +295,14 @@ export function ContactForm({
         <label htmlFor="message" className="text-sm font-bold text-brand-ink">
           Message
         </label>
-        <textarea
+        <TextArea
           id="message"
           name="message"
           required
           value={values.message}
           onChange={(event) => updateValue("message", event.target.value)}
           aria-invalid={Boolean(getFieldError("message"))}
-          className="mt-2 min-h-44 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
+          className="min-h-44"
           placeholder="Tell us what you need, who it concerns, and any timing details that matter."
         />
         <div className="mt-2 flex flex-wrap justify-between gap-2 text-xs text-slate-500">
@@ -332,10 +330,12 @@ export function ContactForm({
         </span>
       </label>
 
-      <button
+      <Button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-navy px-6 py-4 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        variant="dark"
+        size="lg"
+        className="w-full sm:w-auto"
       >
         {isSubmitting ? (
           <>
@@ -348,7 +348,7 @@ export function ContactForm({
             Send message
           </>
         )}
-      </button>
+      </Button>
 
       <p
         aria-live="polite"

@@ -38,6 +38,11 @@ export interface ContentBlock {
   title: string;
   body: string;
   bullets?: string[];
+  // Optional editorial media for pairing text with visuals
+  image?: string;
+  imageAlt?: string;
+  videoUrl?: string;
+  videoTitle?: string;
 }
 
 
@@ -48,6 +53,9 @@ export interface SitePage {
   description: string;
   intro: string;
   heroImage?: string;
+  /** Optional: video to feature alongside the overview/story intro */
+  overviewVideoUrl?: string;
+  overviewVideoTitle?: string;
   stats: HighlightStat[];
   sections: ContentBlock[];
   ctas: ActionLink[];
@@ -578,6 +586,9 @@ export interface OrganisationOverviewContent {
   description: string;
   heroImage: string;
   stats: HighlightStat[];
+  /** Optional: feature a video in the overview alongside text */
+  overviewVideoUrl?: string;
+  overviewVideoTitle?: string;
   valueCards: OrganisationOverviewCard[];
   engagementCards: OrganisationOverviewCard[];
   nextSteps: RouteCard[];
@@ -841,6 +852,9 @@ export interface ImpactReportsContent {
   evidenceCards: ImpactEvidenceCard[];
   methodologyPoints: string[];
   related: RouteCard[];
+  // Optional media to strengthen the "Reading the evidence" section
+  methodVideoUrl?: string;
+  methodVideoTitle?: string;
   // Optional section copy to avoid hardcoded UI strings
   heroAsideEyebrow?: string;
   snapshotSectionEyebrow?: string;

@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+
 import {
   getArticleLabel,
   getArticleReadTime,
@@ -38,13 +40,13 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
               from across the IT For Youth Ghana community.
             </p>
           </div>
-          <Link
+          <Button
             href="/news-and-updates"
-            className="inline-flex items-center gap-2 rounded-full border border-brand-border px-5 py-3 text-sm font-semibold text-brand-ink transition hover:border-brand-gold hover:text-brand-gold"
+            variant="blue-outline"
           >
             View all updates
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </Button>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">

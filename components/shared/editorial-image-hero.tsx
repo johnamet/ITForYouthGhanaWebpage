@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 
 export type EditorialHeroBreadcrumb = {
@@ -65,7 +66,7 @@ export function EditorialImageHero({
         className={cn(
           "relative",
           visibleImage
-            ? "min-h-[30rem] sm:min-h-[35rem] lg:min-h-[42rem]"
+            ? "min-h-[34rem] sm:min-h-[40rem] lg:min-h-[46rem]"
             : "min-h-[18rem] bg-brand-navy sm:min-h-[22rem]",
         )}
       >
@@ -115,9 +116,9 @@ export function EditorialImageHero({
         {hasHeroContent ? (
           <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 sm:bottom-6 lg:bottom-8">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="pointer-events-auto w-full sm:max-w-md">
+              <div className="pointer-events-auto w-full sm:max-w-xl">
                 {hasPanel ? (
-                  <div className="rounded-3xl border border-white/15 bg-brand-navy/90 px-6 py-6 text-white shadow-[0_12px_40px_rgba(7,20,39,0.65)] backdrop-blur-xl backdrop-saturate-150 sm:px-7 sm:py-7">
+                  <div className="border-l-4 border-brand-gold bg-brand-navy/90 px-6 py-7 text-white shadow-editorial backdrop-blur-xl backdrop-saturate-150 sm:px-8 sm:py-9">
                     {hasText(eyebrow) ? (
                       <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
                         {eyebrow}
@@ -125,13 +126,13 @@ export function EditorialImageHero({
                     ) : null}
 
                     {hasText(title) ? (
-                      <h1 className="font-heading text-2xl font-bold leading-[1.1] text-white sm:text-3xl">
+                      <h1 className="font-heading text-4xl font-bold leading-[1.04] text-white sm:text-5xl lg:text-6xl">
                         {title}
                       </h1>
                     ) : null}
 
                     {hasText(description) ? (
-                      <p className={cn("text-base leading-7 text-white", hasText(title) && "mt-3")}>
+                      <p className={cn("text-lg leading-8 text-white/90", hasText(title) && "mt-5")}>
                         {description}
                       </p>
                     ) : null}
@@ -145,18 +146,14 @@ export function EditorialImageHero({
                 {visibleCtas.length > 0 ? (
                   <div className={cn("flex flex-wrap gap-3", hasPanel && "mt-4")}>
                       {visibleCtas.map((cta) => (
-                        <Link
+                        <Button
                           key={`${cta.href}-${cta.label}`}
                           href={cta.href}
-                          className={cn(
-                            "inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
-                            cta.variant === "secondary"
-                              ? "border border-white/35 bg-white/5 text-white hover:bg-white/15"
-                              : "bg-brand-gold text-brand-ink hover:-translate-y-0.5 hover:shadow-lg",
-                          )}
+                          variant={cta.variant === "secondary" ? "white-outline" : "pink"}
+                          size="lg"
                         >
                           {cta.label}
-                        </Link>
+                        </Button>
                       ))}
                   </div>
                 ) : null}

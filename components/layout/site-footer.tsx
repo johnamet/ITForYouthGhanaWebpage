@@ -1,50 +1,8 @@
 import Link from "next/link";
 
 import { NewsletterSignupForm } from "@/components/shared/newsletter-signup-form";
-import { newsletterSignupContent } from "@/lib/content/site-config";
+import { footerNavigation, legalNavigation, newsletterSignupContent } from "@/lib/content/site-config";
 import { getCmsSettings, type CmsPublicSettings } from "@/lib/cms/settings";
-
-const footerNav = [
-  {
-    heading: "Who We Are",
-    links: [
-      { label: "About Us", href: "/who-we-are" },
-      { label: "Our Team", href: "/who-we-are/team" },
-      { label: "Our Partners", href: "/who-we-are/partners" },
-      { label: "Join Our Team", href: "/who-we-are/careers" },
-    ],
-  },
-  {
-    heading: "What We Do",
-    links: [
-      { label: "Overview", href: "/what-we-do" },
-      { label: "Girls in Tech", href: "/what-we-do/girls-in-tech" },
-      { label: "Youth Tech Academy", href: "/what-we-do/youth-academy" },
-      { label: "Entrepreneurship Hub", href: "/what-we-do/entrepreneurship-hub" },
-      { label: "Tech Clubs", href: "/what-we-do/tech-clubs" },
-    ],
-  },
-  {
-    heading: "Apply & Partner",
-    links: [
-      { label: "Apply for Training", href: "/apply-for-training" },
-      { label: "Browse Courses", href: "/apply-for-training/courses" },
-      { label: "For Organisations", href: "/for-organisations" },
-      { label: "Partner With Us", href: "/partner-with-us" },
-      { label: "Donate", href: "/donate" },
-    ],
-  },
-  {
-    heading: "Impact & Contact",
-    links: [
-      { label: "Impact Reports", href: "/our-impact/reports" },
-      { label: "Testimonials", href: "/our-impact/testimonials" },
-      { label: "News", href: "/news-and-updates/news" },
-      { label: "Blogs", href: "/news-and-updates/blogs" },
-      { label: "Contact Us", href: "/contact" },
-    ],
-  },
-];
 
 function SocialIcon({ label }: { label: string }) {
   const l = label.toLowerCase();
@@ -91,14 +49,14 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
           {/* Brand column */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[0.65rem] font-bold tracking-wide text-brand-navy">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[0.72rem] font-bold tracking-wide text-brand-navy">
                 ITFY
               </span>
-              <span className="font-heading text-[1rem] font-bold leading-tight text-white">
+              <span className="font-heading text-[1.15rem] font-bold leading-tight text-white">
                 IT For Youth<br />Ghana
               </span>
             </Link>
-            <p className="mt-4 text-[0.8rem] leading-[1.75] text-white/85">
+            <p className="mt-4 text-[0.92rem] leading-[1.75] text-white/85">
               Empowering Ghanaian youth with the digital skills, confidence, and pathways needed to shape tomorrow&apos;s economy.
             </p>
 
@@ -119,7 +77,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
             </div>
 
             {/* Contact snippet */}
-            <div className="mt-6 space-y-1.5 text-[0.75rem] text-white/85">
+            <div className="mt-6 space-y-1.5 text-[0.85rem] text-white/85">
               {settings.contact.location && <p>{settings.contact.location}</p>}
               {settings.contact.email && <p>{settings.contact.email}</p>}
               {settings.contact.phone && <p>{settings.contact.phone}</p>}
@@ -128,9 +86,9 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
 
           {/* Nav columns */}
           <div className="grid grid-cols-2 gap-8 lg:col-span-4 lg:grid-cols-4">
-            {footerNav.map((col) => (
+            {footerNavigation.map((col) => (
               <div key={col.heading}>
-                <h3 className="mb-4 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-white">
+                <h3 className="mb-4 text-[0.75rem] font-bold uppercase tracking-[0.22em] text-white">
                   {col.heading}
                 </h3>
                 <ul className="space-y-2.5">
@@ -138,7 +96,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-[0.8rem] text-white/85 transition hover:text-white hover:underline"
+                        className="text-[0.92rem] text-white/85 transition hover:text-white hover:underline"
                       >
                         {link.label}
                       </Link>
@@ -155,8 +113,8 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
       <div className="border-t border-white/8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6 lg:px-10">
           <div>
-            <p className="text-[0.82rem] font-semibold text-white">{newsletterSignupContent.heading}</p>
-            <p className="text-[0.75rem] text-white/85">{newsletterSignupContent.description}</p>
+            <p className="text-[0.95rem] font-semibold text-white">{newsletterSignupContent.heading}</p>
+            <p className="text-[0.85rem] text-white/85">{newsletterSignupContent.description}</p>
           </div>
           <NewsletterSignupForm
             variant="compact"
@@ -169,16 +127,12 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
       {/* Legal strip */}
       <div className="border-t border-white/8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-4 lg:px-10">
-          <p className="text-[0.72rem] text-white/80">
+          <p className="text-[0.8rem] text-white/80">
             © {new Date().getFullYear()} IT For Youth Ghana. Registered NGO. All rights reserved.
           </p>
           <div className="flex gap-4">
-            {[
-              { label: "Programs Portal", href: "/programs" },
-              { label: "Admin Login", href: "/admin-login" },
-              { label: "Contact", href: "/contact" },
-            ].map((l) => (
-              <Link key={l.href} href={l.href} className="text-[0.72rem] text-white/80 hover:text-white hover:underline">
+            {legalNavigation.map((l) => (
+              <Link key={l.href} href={l.href} className="text-[0.8rem] text-white/80 hover:text-white hover:underline">
                 {l.label}
               </Link>
             ))}

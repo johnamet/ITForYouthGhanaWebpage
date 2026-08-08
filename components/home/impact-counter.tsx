@@ -29,7 +29,7 @@ function ImpactCounterItem({ stat, start }: { stat: HighlightStat; start: boolea
   const count = useCountUp(parsed.numeric, 2000, start);
 
   return (
-    <div className="px-6 py-8 text-center sm:px-8">
+    <div className="px-6 py-10 sm:px-8">
       {(() => stat.iconImage ?? emojiToIconImage(stat.icon))() ? (
         <span className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-mist">
           <Image src={(stat.iconImage ?? emojiToIconImage(stat.icon)) as string} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
@@ -39,15 +39,15 @@ function ImpactCounterItem({ stat, start }: { stat: HighlightStat; start: boolea
           {stat.icon}
         </span>
       ) : null}
-      <p className="font-heading text-[2.8rem] font-bold leading-none text-brand-navy">
+      <p className="font-heading text-5xl font-bold leading-none text-brand-navy sm:text-6xl">
         {count.toLocaleString("en-US")}
         {parsed.suffix ? <span className="text-brand-gold">{parsed.suffix}</span> : null}
       </p>
-      <p className="mt-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-brand-ink">
+      <p className="mt-3 text-sm font-bold uppercase tracking-[0.14em] text-brand-ink">
         {stat.label}
       </p>
       {stat.description ? (
-        <p className="mt-2 text-[0.78rem] leading-6 text-slate-500">{stat.description}</p>
+        <p className="mt-3 text-sm leading-6 text-slate-600">{stat.description}</p>
       ) : null}
     </div>
   );
@@ -77,7 +77,7 @@ export function ImpactCounter({ stats }: ImpactCounterProps) {
   }, [hasEntered]);
 
   return (
-    <section ref={ref} className="border-b border-brand-border bg-white">
+    <section ref={ref} className="border-y border-brand-border bg-brand-primary-light/45 py-8 sm:py-12">
       <div className="mx-auto grid max-w-6xl divide-y divide-brand-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
         {stats.map((stat) => (
           <ImpactCounterItem key={stat.label} stat={stat} start={hasEntered} />

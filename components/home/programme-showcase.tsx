@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+
 export type ProgrammeShowcaseItem = {
   id: string;
   title: string;
@@ -41,21 +43,15 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
             </p>
           </div>
 
-          <Link
+          <Button
             href="/what-we-do"
-            className="
-              group/button inline-flex w-fit shrink-0 items-center gap-2
-              rounded-full border border-brand-border bg-white
-              px-5 py-3 text-sm font-semibold text-brand-ink
-              transition-all duration-300
-              hover:border-brand-gold hover:bg-brand-gold
-              hover:text-brand-navy
-            "
+            variant="pink-outline"
+            className="group/button w-fit shrink-0"
           >
             Explore all initiatives
 
             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" />
-          </Link>
+          </Button>
         </div>
 
         {/* Programme cards */}
@@ -143,7 +139,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                 <div className="absolute left-5 top-5">
                   <span
                     className="
-                      inline-flex rounded-full border border-white/35
+                      inline-flex rounded-control border border-white/35
                       bg-white/90 px-3 py-1.5
                       text-[0.62rem] font-bold uppercase
                       tracking-[0.17em] text-brand-navy

@@ -5,6 +5,8 @@ import { breadcrumbs } from "@/lib/content/site-config";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { VideoCard } from "@/components/media/video-card";
+import { StatsSection } from "@/components/content/stats-section";
 import type {
   OrganisationOverviewContent,
   OrganisationServicePage,
@@ -61,17 +63,34 @@ export function ForOrganisationsOverviewPage({
 
       <section id="overview" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-8">
-          <SectionHeading
-            eyebrow={content.overviewSectionEyebrow ?? "Overview"}
-            title={
-              content.overviewSectionTitle ??
-              "A partner route should match the decision the organisation is actually making"
-            }
-            description={
-              content.overviewSectionDescription ??
-              "Some teams want internal training. Others want visible mission support, early-career talent, or a meaningful volunteering pathway. The section below helps organisations choose the right starting point instead of flattening everything into one generic partnership pitch."
-            }
-          />
+          <div className="grid items-start gap-10 lg:grid-cols-2">
+            <SectionHeading
+              eyebrow={content.overviewSectionEyebrow ?? "Overview"}
+              title={
+                content.overviewSectionTitle ??
+                "A partner route should match the decision the organisation is actually making"
+              }
+              description={
+                content.overviewSectionDescription ??
+                "Some teams want internal training. Others want visible mission support, early-career talent, or a meaningful volunteering pathway. The section below helps organisations choose the right starting point instead of flattening everything into one generic partnership pitch."
+              }
+            />
+
+            <VideoCard
+              thumbnail={content.heroImage}
+              title={content.overviewVideoTitle ?? content.title}
+              videoUrl={content.overviewVideoUrl}
+              className="max-w-3xl lg:ml-auto"
+            />
+          </div>
+
+          {content.stats?.length ? (
+            <StatsSection
+              stats={content.stats}
+              eyebrow="In focus"
+              title="Impact indicators"
+            />
+          ) : null}
 
           <div className="grid gap-5 lg:grid-cols-3">
             {content.valueCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => (

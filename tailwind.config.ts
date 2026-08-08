@@ -12,7 +12,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        heading: ["var(--font-heading)", "sans-serif"],
+        heading: ["var(--font-heading)", "Georgia", "serif"],
         sans: ["var(--font-body)", "system-ui", "sans-serif"],
       },
 
@@ -40,6 +40,19 @@ const config: Config = {
 
       boxShadow: {
         panel: "0 8px 32px rgba(20,40,80,0.10)",
+        editorial: "0 20px 50px rgba(20, 40, 80, 0.12)",
+      },
+
+      borderRadius: {
+        control: "0.375rem",
+        media: "0.75rem",
+      },
+
+      spacing: {
+        "section-sm": "3.5rem",
+        "section-md": "5rem",
+        "section-lg": "7rem",
+        "section-xl": "9rem",
       },
 
       animation: {

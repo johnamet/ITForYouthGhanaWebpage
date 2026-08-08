@@ -83,41 +83,39 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
           />
 
           <div className="grid gap-5 md:grid-cols-2">
-            {page.overviewCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => (
-              <div
-                key={card.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <div className="flex items-center justify-between">
-                  {(() => card.iconImage ?? emojiToIconImage(card.icon))() ? (
-                    <span className="inline-flex items-center justify-center" aria-hidden="true">
-                      <Image src={(card.iconImage ?? emojiToIconImage(card.icon)) as string} alt={card.title} width={28} height={28} className="h-7 w-7 object-contain" />
+            {page.overviewCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => {
+              const bulletParagraph = (card.bullets || [])
+                .map((b) => (b || "").trim())
+                .filter(Boolean)
+                .map((b) => (/[.!?]$/.test(b) ? b : `${b}.`))
+                .join(" ");
+              const description = [card.description, bulletParagraph].filter(Boolean).join(" ");
+              return (
+                <div
+                  key={card.title}
+                  className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    {(() => card.iconImage ?? emojiToIconImage(card.icon))() ? (
+                      <span className="inline-flex items-center justify-center" aria-hidden="true">
+                        <Image src={(card.iconImage ?? emojiToIconImage(card.icon)) as string} alt={card.title} width={28} height={28} className="h-7 w-7 object-contain" />
+                      </span>
+                    ) : (
+                      <span className="text-3xl" aria-hidden="true">
+                        {card.icon}
+                      </span>
+                    )}
+                    <span className="rounded-full bg-brand-mist/70 px=3 py-1 text-xs font-semibold text-brand-navy">
+                      {page.overviewCardBadgeLabel ?? "Service area"}
                     </span>
-                  ) : (
-                    <span className="text-3xl" aria-hidden="true">
-                      {card.icon}
-                    </span>
-                  )}
-                  <span className="rounded-full bg-brand-mist/70 px=3 py-1 text-xs font-semibold text-brand-navy">
-                    {page.overviewCardBadgeLabel ?? "Service area"}
-                  </span>
+                  </div>
+                  <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
+                    {card.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
                 </div>
-                <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                  {card.title}
-                </h2>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{card.description}</p>
-                <div className="mt-5 space-y-3">
-                  {card.bullets.map((bullet) => (
-                    <div
-                      key={bullet}
-                      className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
-                    >
-                      {bullet}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Play, X } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 export type FeaturedStoryContent = {
   id: string;
@@ -115,21 +116,23 @@ export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
                 </div>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => setIsOpen(true)}
-                    className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={!embedUrl}
+                    variant="pink"
+                    size="lg"
                   >
                     <Play className="h-4 w-4" />
                     {story.primaryCtaLabel}
-                  </button>
-                  <Link
+                  </Button>
+                  <Button
                     href={story.secondaryCta.href}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/15"
+                    variant="white-outline"
+                    size="lg"
                   >
                     {story.secondaryCta.label}
-                  </Link>
+                  </Button>
                 </div>
               </div>
             </div>

@@ -2,8 +2,9 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { VideoCard } from "@/components/media/video-card";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { StatList } from "@/components/shared/stat-list";
+import { StatsSection } from "@/components/content/stats-section";
 import type { ImpactReportsContent } from "@/types/content";
 
 type ImpactReportsPageProps = {
@@ -49,7 +50,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
               "These top-line figures are meant to help readers orient themselves quickly before moving into the supporting documents and context below."
             }
           />
-          <StatList stats={content.stats} />
+          <StatsSection stats={content.stats} />
         </div>
       </section>
 
@@ -118,47 +119,53 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
 
       <section id="method" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-10">
-          <SectionHeading
-            eyebrow={content.methodSectionEyebrow ?? "Reading the evidence"}
-            title={
-              content.methodSectionTitle ?? "What makes impact reporting credible here"
-            }
-            description={
-              content.methodSectionDescription ??
-              "These themes explain how the evidence is meant to be interpreted, especially by partners who need more than a simple list of metrics."
-            }
-          />
+          <div className="grid items-start gap-10 lg:grid-cols-2">
+            <SectionHeading
+              eyebrow={content.methodSectionEyebrow ?? "Reading the evidence"}
+              title={
+                content.methodSectionTitle ?? "What makes impact reporting credible here"
+              }
+              description={
+                content.methodSectionDescription ??
+                "These themes explain how the evidence is meant to be interpreted, especially by partners who need more than a simple list of metrics."
+              }
+            />
+            <VideoCard
+              thumbnail={content.heroImage}
+              title={content.methodVideoTitle ?? content.title}
+              videoUrl={content.methodVideoUrl}
+              className="max-w-3xl lg:ml-auto"
+            />
+          </div>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {content.evidenceCards.map((card) => (
-              <div
-                key={card.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-3xl" aria-hidden="true">
-                    {card.icon}
-                  </span>
-                  <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
-                    {content.methodCardBadgeLabel ?? "Evidence theme"}
-                  </span>
+            {content.evidenceCards.map((card) => {
+              const bulletParagraph = (card.bullets || [])
+                .map((b) => (b || "").trim())
+                .filter(Boolean)
+                .map((b) => (/[.!?]$/.test(b) ? b : `${b}.`))
+                .join(" ");
+              const description = [card.description, bulletParagraph].filter(Boolean).join(" ");
+              return (
+                <div
+                  key={card.title}
+                  className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-3xl" aria-hidden="true">
+                      {card.icon}
+                    </span>
+                    <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
+                      {content.methodCardBadgeLabel ?? "Evidence theme"}
+                    </span>
+                  </div>
+                  <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
+                    {card.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
                 </div>
-                <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                  {card.title}
-                </h2>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{card.description}</p>
-                <div className="mt-5 space-y-3">
-                  {card.bullets.map((bullet) => (
-                    <div
-                      key={bullet}
-                      className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
-                    >
-                      {bullet}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="rounded-[32px] bg-brand-navy p-8 text-white">

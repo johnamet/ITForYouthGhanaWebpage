@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Mail, Linkedin } from "lucide-react";
 
 import type { TeamMemberProfile } from "@/types/content";
+import { Card } from "@/components/ui/card";
+import { StateMessage } from "@/components/ui/state-message";
 
 type TeamDirectoryProps = {
   members: TeamMemberProfile[];
@@ -43,12 +45,10 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
   if (!members.length) {
     return (
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-[28px] border border-brand-border bg-white p-8 text-center shadow-sm">
-          <h2 className="font-heading text-2xl font-semibold text-brand-ink">Team profiles coming soon</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            We are preparing a richer view of the team. Please check back shortly.
-          </p>
-        </div>
+        <StateMessage
+          title="Team profiles coming soon"
+          description="We are preparing a richer view of the team. Please check back shortly."
+        />
       </section>
     );
   }
@@ -74,9 +74,9 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {group.members.map((member) => (
-              <article
+              <Card
                 key={member.id}
-                className="rounded-[26px] border border-brand-border bg-white p-6 shadow-sm"
+                className="rounded-[26px]"
               >
                 <div className="mb-4 flex items-center gap-4">
                   <Image
@@ -123,7 +123,7 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
                     </a>
                   ) : null}
                 </div>
-              </article>
+              </Card>
             ))}
           </div>
         </div>

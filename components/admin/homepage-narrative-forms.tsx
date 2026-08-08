@@ -127,6 +127,8 @@ export function OverviewSectionForm({ initial }: { initial: OverviewSectionConte
       <Field label="Image alt text" value={values.imageAlt} onChange={(value) => update("imageAlt", value)} />
       <Field label="Image label" value={values.imageLabel} onChange={(value) => update("imageLabel", value)} />
       <Field label="Image caption" value={values.imageCaption} onChange={(value) => update("imageCaption", value)} />
+      <Field label="Video URL (optional)" value={values.videoUrl ?? ""} onChange={(value) => update("videoUrl", value)} wide />
+      <Field label="Video title (optional)" value={values.videoTitle ?? ""} onChange={(value) => update("videoTitle", value)} wide />
       <Field label="CTA label" value={values.ctaLabel} onChange={(value) => update("ctaLabel", value)} />
       <Field label="CTA link" value={values.ctaHref} onChange={(value) => update("ctaHref", value)} />
       <Active checked={values.active !== false} onChange={(checked) => update("active", checked)} />
@@ -169,6 +171,8 @@ export function MissionSectionForm({ initial }: { initial: MissionSectionContent
         <Field label="Image alt text" value={values.imageAlt} onChange={(value) => update("imageAlt", value)} />
         <Field label="Image label" value={values.imageLabel} onChange={(value) => update("imageLabel", value)} />
         <Field label="Image caption" value={values.imageCaption} onChange={(value) => update("imageCaption", value)} />
+        <Field label="Video URL (optional)" value={values.videoUrl ?? ""} onChange={(value) => update("videoUrl", value)} wide />
+        <Field label="Video title (optional)" value={values.videoTitle ?? ""} onChange={(value) => update("videoTitle", value)} wide />
         <Field label="Mission title" value={values.missionTitle} onChange={(value) => update("missionTitle", value)} />
         <Field label="Mission headline" value={values.missionHeadline} onChange={(value) => update("missionHeadline", value)} />
         <Field label="Mission description" value={values.missionDescription} onChange={(value) => update("missionDescription", value)} textarea wide />
