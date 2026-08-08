@@ -172,16 +172,18 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
               {content.methodBadgeEyebrow ?? "Method notes"}
             </p>
-            <div className="mt-6 grid gap-3">
-              {content.methodologyPoints.map((point) => (
-                <div
-                  key={point}
-                  className="rounded-[22px] border border-white/10 bg-white/8 px-4 py-4 text-sm leading-7 text-white/82"
-                >
-                  {point}
-                </div>
-              ))}
-            </div>
+            {(() => {
+              const notesParagraph = (content.methodologyPoints || [])
+                .map((p) => (p || "").trim())
+                .filter(Boolean)
+                .map((p) => (/[.!?]$/.test(p) ? p : `${p}.`))
+                .join(" ");
+              return (
+                <p className="mt-6 text-base leading-8 text-white/82">
+                  {notesParagraph}
+                </p>
+              );
+            })()}
           </div>
         </div>
       </section>

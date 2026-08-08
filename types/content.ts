@@ -684,6 +684,9 @@ export interface PartnershipTrackPage {
   relatedSectionEyebrow?: string;
   relatedSectionTitle?: string;
   relatedSectionDescription?: string;
+  // Optional media for overview section
+  overviewVideoUrl?: string;
+  overviewVideoTitle?: string;
 }
 
 export interface PartnershipOverviewContent {
@@ -708,6 +711,9 @@ export interface PartnershipOverviewContent {
   nextStepsSectionEyebrow?: string;
   nextStepsSectionTitle?: string;
   nextStepsSectionDescription?: string;
+  // Optional media for overview section
+  overviewVideoUrl?: string;
+  overviewVideoTitle?: string;
 }
 
 export interface WhatWeDoHeroStatLabel {
@@ -913,6 +919,9 @@ export interface ImpactSdgsContent {
   principlesSectionEyebrow?: string;
   principlesSectionTitle?: string;
   principlesSectionDescription?: string;
+  // Optional media to strengthen the principles section
+  principlesVideoUrl?: string;
+  principlesVideoTitle?: string;
   nextStepsSectionEyebrow?: string;
   nextStepsSectionTitle?: string;
   nextStepsSectionDescription?: string;

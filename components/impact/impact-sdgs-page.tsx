@@ -5,6 +5,7 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatsSection } from "@/components/content/stats-section";
+import { VideoCard } from "@/components/media/video-card";
 import type { ImpactSdgsContent } from "@/types/content";
 
 type ImpactSdgsPageProps = {
@@ -91,16 +92,16 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
                 </div>
 
                 <div className="space-y-5">
-                  <div className="space-y-3">
-                    {goal.contributions.map((item) => (
-                      <div
-                        key={item}
-                        className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
-                      >
-                        {item}
-                      </div>
-                    ))}
-                  </div>
+                  {(() => {
+                    const contributionsParagraph = (goal.contributions || [])
+                      .map((c) => (c || "").trim())
+                      .filter(Boolean)
+                      .map((c) => (/[.!?]$/.test(c) ? c : `${c}.`))
+                      .join(" ");
+                    return (
+                      <p className="text-sm leading-7 text-slate-700">{contributionsParagraph}</p>
+                    );
+                  })()}
 
                   <div className="grid gap-4 md:grid-cols-2">
                     {goal.linkedRoutes.map((route) => (
@@ -130,28 +131,36 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
 
       <section id="principles" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-8">
-          <SectionHeading
-            eyebrow={content.principlesSectionEyebrow ?? "Alignment principles"}
-            title={
-              content.principlesSectionTitle ??
-              "How the SDG lens is meant to be used here"
-            }
-            description={
-              content.principlesSectionDescription ??
-              "The goal mapping helps translate the work for development audiences, but it should always stay anchored in the lived local reality of the programmes."
-            }
-          />
-
-          <div className="grid gap-4">
-            {content.alignmentPrinciples.map((point) => (
-              <div
-                key={point}
-                className="rounded-[26px] border border-brand-border bg-white px-5 py-5 shadow-sm"
-              >
-                <p className="text-sm leading-7 text-slate-700">{point}</p>
-              </div>
-            ))}
+          <div className="grid items-start gap-10 lg:grid-cols-2">
+            <SectionHeading
+              eyebrow={content.principlesSectionEyebrow ?? "Alignment principles"}
+              title={
+                content.principlesSectionTitle ??
+                "How the SDG lens is meant to be used here"
+              }
+              description={
+                content.principlesSectionDescription ??
+                "The goal mapping helps translate the work for development audiences, but it should always stay anchored in the lived local reality of the programmes."
+              }
+            />
+            <VideoCard
+              thumbnail={content.heroImage}
+              title={content.principlesVideoTitle ?? content.title}
+              videoUrl={content.principlesVideoUrl}
+              className="max-w-3xl lg:ml-auto"
+            />
           </div>
+
+          {(() => {
+            const principlesParagraph = (content.alignmentPrinciples || [])
+              .map((p) => (p || "").trim())
+              .filter(Boolean)
+              .map((p) => (/[.!?]$/.test(p) ? p : `${p}.`))
+              .join(" ");
+            return (
+              <p className="rounded-[26px] border border-brand-border bg-white px-5 py-5 text-sm leading-7 text-slate-700 shadow-sm">{principlesParagraph}</p>
+            );
+          })()}
         </div>
       </section>
 

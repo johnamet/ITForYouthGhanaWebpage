@@ -4,6 +4,8 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { VideoCard } from "@/components/media/video-card";
+import { StatsSection } from "@/components/content/stats-section";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type {
   PartnershipOverviewContent,
@@ -61,17 +63,29 @@ export function PartnerWithUsOverviewPage({
 
       <section id="overview" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-8">
-          <SectionHeading
-            eyebrow={content.overviewSectionEyebrow ?? "Overview"}
-            title={
-              content.overviewSectionTitle ??
-              "The right partnership starts with the right collaboration logic"
-            }
-            description={
-              content.overviewSectionDescription ??
-              "Each track below is built around a different type of institution and a different kind of decision. That makes it easier to move from interest into a practical, better-scoped relationship."
-            }
-          />
+          <div className="grid items-start gap-10 lg:grid-cols-2">
+            <SectionHeading
+              eyebrow={content.overviewSectionEyebrow ?? "Overview"}
+              title={
+                content.overviewSectionTitle ??
+                "The right partnership starts with the right collaboration logic"
+              }
+              description={
+                content.overviewSectionDescription ??
+                "Each track below is built around a different type of institution and a different kind of decision. That makes it easier to move from interest into a practical, better-scoped relationship."
+              }
+            />
+            <VideoCard
+              thumbnail={content.heroImage}
+              title={content.overviewVideoTitle ?? content.title}
+              videoUrl={content.overviewVideoUrl}
+              className="max-w-3xl lg:ml-auto"
+            />
+          </div>
+
+          {content.stats?.length ? (
+            <StatsSection stats={content.stats} eyebrow="In focus" title="Impact indicators" />
+          ) : null}
 
           <div className="grid gap-5 lg:grid-cols-3">
             {content.valueCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => (
