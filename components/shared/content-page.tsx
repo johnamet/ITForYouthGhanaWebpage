@@ -1,5 +1,4 @@
 import type { SitePage } from "@/types/content";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { StatsSection } from "@/components/content/stats-section";
 import { PageContainer } from "@/components/layout/page-container";

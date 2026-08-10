@@ -68,7 +68,11 @@ type TextFieldKey =
   | "goalsSectionDescription"
   | "principlesSectionEyebrow"
   | "principlesSectionTitle"
-  | "principlesSectionDescription";
+  | "principlesSectionDescription"
+  | "methodVideoUrl"
+  | "methodVideoTitle"
+  | "principlesVideoUrl"
+  | "principlesVideoTitle";
 
 const inputClass =
   "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
@@ -580,6 +584,21 @@ export function ImpactPageForm({ slug, initial, endpoint }: ImpactPageFormProps)
       {slug === "reports" ? (
         <>
           <ReportsEditor values={arrayValue<ImpactReportResource>(values, "reportResources")} onChange={(nextValues) => updateArray("reportResources", nextValues)} />
+          <section className={panelClass}>
+            <h3 className="font-heading text-xl font-semibold text-brand-ink">Method media</h3>
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
+              <Field
+                label="Method video URL"
+                value={readText(values, "methodVideoUrl")}
+                onChange={(value) => updateText("methodVideoUrl", value)}
+              />
+              <Field
+                label="Method video title"
+                value={readText(values, "methodVideoTitle")}
+                onChange={(value) => updateText("methodVideoTitle", value)}
+              />
+            </div>
+          </section>
           <EvidenceCardsEditor title="Evidence cards" values={arrayValue<ImpactEvidenceCard>(values, "evidenceCards")} onChange={(nextValues) => updateArray("evidenceCards", nextValues)} />
           <TextListEditor title="Methodology points" values={arrayValue<string>(values, "methodologyPoints")} onChange={(nextValues) => updateArray("methodologyPoints", nextValues)} addLabel="Add method point" />
           <RouteCardsEditor title="Related routes" values={arrayValue<RouteCard>(values, "related")} onChange={(nextValues) => updateArray("related", nextValues)} />
@@ -601,6 +620,21 @@ export function ImpactPageForm({ slug, initial, endpoint }: ImpactPageFormProps)
       {slug === "sdgs" ? (
         <>
           <GoalsEditor values={arrayValue<ImpactSdgGoal>(values, "goals")} onChange={(nextValues) => updateArray("goals", nextValues)} />
+          <section className={panelClass}>
+            <h3 className="font-heading text-xl font-semibold text-brand-ink">Principles media</h3>
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
+              <Field
+                label="Principles video URL"
+                value={readText(values, "principlesVideoUrl")}
+                onChange={(value) => updateText("principlesVideoUrl", value)}
+              />
+              <Field
+                label="Principles video title"
+                value={readText(values, "principlesVideoTitle")}
+                onChange={(value) => updateText("principlesVideoTitle", value)}
+              />
+            </div>
+          </section>
           <TextListEditor title="Alignment principles" values={arrayValue<string>(values, "alignmentPrinciples")} onChange={(nextValues) => updateArray("alignmentPrinciples", nextValues)} addLabel="Add principle" />
           <RouteCardsEditor title="Related routes" values={arrayValue<RouteCard>(values, "related")} onChange={(nextValues) => updateArray("related", nextValues)} />
         </>

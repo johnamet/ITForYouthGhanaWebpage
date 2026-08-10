@@ -132,6 +132,14 @@ export function PartnershipTrackForm({ mode, initial }: Props) {
       </section>
 
       <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
+        <h3 className="font-heading text-xl font-semibold text-brand-ink">Overview media</h3>
+        <div className="mt-4 grid gap-5 md:grid-cols-2">
+          <div><label className="text-sm font-bold text-brand-ink">Overview video URL</label><input className={input} value={values.overviewVideoUrl ?? ""} onChange={(e) => update("overviewVideoUrl", e.target.value)} placeholder="https://..." /></div>
+          <div><label className="text-sm font-bold text-brand-ink">Overview video title</label><input className={input} value={values.overviewVideoTitle ?? ""} onChange={(e) => update("overviewVideoTitle", e.target.value)} placeholder="Optional video title" /></div>
+        </div>
+      </section>
+
+      <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
         <h3 className="font-heading text-xl font-semibold text-brand-ink">Section headings and labels</h3>
         <p className="mt-2 text-sm text-slate-500">These fields control every piece of framing copy shown around the seeded collections.</p>
         <div className="mt-4 space-y-6">

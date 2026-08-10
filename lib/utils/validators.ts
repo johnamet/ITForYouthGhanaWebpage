@@ -803,6 +803,8 @@ export const partnershipOverviewSchema = z
     nextStepsSectionEyebrow: optionalTrimmedString,
     nextStepsSectionTitle: optionalTrimmedString,
     nextStepsSectionDescription: optionalTrimmedString,
+    overviewVideoUrl: optionalTrimmedString,
+    overviewVideoTitle: optionalTrimmedString,
     valueCards: z.array(partnershipOverviewCardSchema).optional(),
     partnerTypeCards: z.array(partnershipOverviewCardSchema).optional(),
     nextSteps: z.array(sitePageRouteCardSchema).optional(),
@@ -844,6 +846,8 @@ export const partnershipTrackSchema = z
     relatedSectionTitle: optionalTrimmedString,
     relatedSectionDescription: optionalTrimmedString,
     related: z.array(sitePageRouteCardSchema).optional(),
+    overviewVideoUrl: optionalTrimmedString,
+    overviewVideoTitle: optionalTrimmedString,
   })
   .partial();
 
