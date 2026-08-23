@@ -355,6 +355,8 @@ export function WhatWeDoOverviewForm({ initial, endpoint }: WhatWeDoOverviewForm
               <div key={`ecosystem-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
                 <Field label="Eyebrow" value={card.eyebrow} onChange={(value) => update("ecosystemCards", values.ecosystemCards.map((item, itemIndex) => (itemIndex === index ? { ...item, eyebrow: value } : item)))} />
                 <Field label="Title" value={card.title} onChange={(value) => update("ecosystemCards", values.ecosystemCards.map((item, itemIndex) => (itemIndex === index ? { ...item, title: value } : item)))} />
+                <Field label="Image URL (optional)" value={card.image ?? ""} onChange={(value) => update("ecosystemCards", values.ecosystemCards.map((item, itemIndex) => (itemIndex === index ? { ...item, image: value } : item)))} />
+                <Field label="Image alt (optional)" value={card.imageAlt ?? ""} onChange={(value) => update("ecosystemCards", values.ecosystemCards.map((item, itemIndex) => (itemIndex === index ? { ...item, imageAlt: value } : item)))} />
                 <div className="md:col-span-2">
                   <Field label="Description" value={card.description} multiline onChange={(value) => update("ecosystemCards", values.ecosystemCards.map((item, itemIndex) => (itemIndex === index ? { ...item, description: value } : item)))} />
                 </div>

@@ -5,6 +5,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { VideoCard } from "@/components/media/video-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { PartnershipTrackPage as PartnershipTrackPageType } from "@/types/content";
@@ -80,39 +81,29 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
           </div>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {page.focusCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => {
-              const bulletParagraph = (card.bullets || [])
-                .map((b) => (b || "").trim())
-                .filter(Boolean)
-                .map((b) => (/[.!?]$/.test(b) ? b : `${b}.`))
-                .join(" ");
-              const description = [card.description, bulletParagraph].filter(Boolean).join(" ");
-              return (
-                <div
-                  key={card.title}
-                  className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-                >
-                  <div className="flex items-center justify-between">
-                    {(() => card.iconImage ?? emojiToIconImage(card.icon))() ? (
-                      <span className="inline-flex items-center justify-center" aria-hidden="true">
-                        <Image src={(card.iconImage ?? emojiToIconImage(card.icon)) as string} alt={card.title} width={28} height={28} className="h-7 w-7 object-contain" />
-                      </span>
-                    ) : (
-                      <span className="text-3xl" aria-hidden="true">
-                        {card.icon}
-                      </span>
-                    )}
-                    <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
-                      {page.overviewCardBadgeLabel ?? "Focus area"}
-                    </span>
-                  </div>
-                  <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                    {card.title}
-                  </h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
-                </div>
-              );
-            })}
+            {page.focusCards
+              .filter((card) => card.title?.trim() || card.description?.trim())
+              .map((card) => {
+                const bulletParagraph = (card.bullets || [])
+                  .map((b) => (b || "").trim())
+                  .filter(Boolean)
+                  .map((b) => (/[.!?]$/.test(b) ? b : `${b}.`))
+                  .join(" ");
+                const description = [card.description, bulletParagraph].filter(Boolean).join(" ");
+                const image = (card.image || card.iconImage || (emojiToIconImage(card.icon) as string | undefined)) as string | undefined;
+                return (
+                  <SpotlightCard
+                    key={card.title}
+                    image={image}
+                    imageAlt={card.title}
+                    categoryLabel={page.overviewCardBadgeLabel ?? "Focus area"}
+                    title={card.title}
+                    excerpt={description}
+                    ctaLabel={page.contactCta?.primary?.label ?? "Get in touch"}
+                    ctaHref={page.contactCta?.primary?.href ?? "/contact"}
+                  />
+                );
+              })}
           </div>
         </div>
       </section>

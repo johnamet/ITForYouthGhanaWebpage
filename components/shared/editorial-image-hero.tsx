@@ -12,7 +12,7 @@ export type EditorialHeroBreadcrumb = {
 export type EditorialHeroCta = {
   label: string;
   href: string;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "primaryBlue";
 };
 
 export type EditorialImageHeroProps = {
@@ -149,7 +149,7 @@ export function EditorialImageHero({
                         <Button
                           key={`${cta.href}-${cta.label}`}
                           href={cta.href}
-                          variant={cta.variant === "secondary" ? "white-outline" : "pink"}
+                          variant={cta.variant === "secondary" ? "white-outline" : cta.variant === "primaryBlue" ? "solid-blue" : "solid-pink"}
                           size="lg"
                         >
                           {cta.label}

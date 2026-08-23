@@ -107,9 +107,11 @@ export function PartnershipOverviewForm({ initial }: Props) {
         <h3 className="font-heading text-xl font-semibold text-brand-ink">Value cards</h3>
         <div className="mt-4 space-y-4">
           {valueCards.map((c, i) => (
-            <div key={i} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_2fr_auto]">
+            <div key={i} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_2fr_1fr_1fr_auto]">
               <div><label className="text-sm font-bold text-brand-ink">Title</label><input className={input} value={c.title ?? ""} onChange={(e) => setValueCards((arr) => arr.map((it, idx) => idx === i ? { ...it, title: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Description</label><input className={input} value={c.description ?? ""} onChange={(e) => setValueCards((arr) => arr.map((it, idx) => idx === i ? { ...it, description: e.target.value } : it))} /></div>
+              <div><label className="text-sm font-bold text-brand-ink">Image URL</label><input className={input} value={c.image ?? ""} onChange={(e) => setValueCards((arr) => arr.map((it, idx) => idx === i ? { ...it, image: e.target.value } : it))} /></div>
+              <div><label className="text-sm font-bold text-brand-ink">Image alt</label><input className={input} value={c.imageAlt ?? ""} onChange={(e) => setValueCards((arr) => arr.map((it, idx) => idx === i ? { ...it, imageAlt: e.target.value } : it))} /></div>
               <div className="flex items-center gap-2"><button type="button" onClick={() => setValueCards((arr) => arr.filter((_it, idx) => idx !== i))} className="rounded-full border border-rose-200 p-2 text-rose-700"><Trash2 className="h-4 w-4" /></button></div>
             </div>
           ))}
@@ -121,9 +123,11 @@ export function PartnershipOverviewForm({ initial }: Props) {
         <h3 className="font-heading text-xl font-semibold text-brand-ink">Partner type cards</h3>
         <div className="mt-4 space-y-4">
           {partnerTypeCards.map((c, i) => (
-            <div key={i} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_2fr_auto]">
+            <div key={i} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_2fr_1fr_1fr_auto]">
               <div><label className="text-sm font-bold text-brand-ink">Title</label><input className={input} value={c.title ?? ""} onChange={(e) => setPartnerTypeCards((arr) => arr.map((it, idx) => idx === i ? { ...it, title: e.target.value } : it))} /></div>
               <div><label className="text-sm font-bold text-brand-ink">Description</label><input className={input} value={c.description ?? ""} onChange={(e) => setPartnerTypeCards((arr) => arr.map((it, idx) => idx === i ? { ...it, description: e.target.value } : it))} /></div>
+              <div><label className="text-sm font-bold text-brand-ink">Image URL</label><input className={input} value={c.image ?? ""} onChange={(e) => setPartnerTypeCards((arr) => arr.map((it, idx) => idx === i ? { ...it, image: e.target.value } : it))} /></div>
+              <div><label className="text-sm font-bold text-brand-ink">Image alt</label><input className={input} value={c.imageAlt ?? ""} onChange={(e) => setPartnerTypeCards((arr) => arr.map((it, idx) => idx === i ? { ...it, imageAlt: e.target.value } : it))} /></div>
               <div className="flex items-center gap-2"><button type="button" onClick={() => setPartnerTypeCards((arr) => arr.filter((_it, idx) => idx !== i))} className="rounded-full border border-rose-200 p-2 text-rose-700"><Trash2 className="h-4 w-4" /></button></div>
             </div>
           ))}

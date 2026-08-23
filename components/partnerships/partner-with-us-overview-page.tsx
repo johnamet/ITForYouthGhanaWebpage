@@ -88,17 +88,21 @@ export function PartnerWithUsOverviewPage({
           ) : null}
 
           <div className="grid gap-5 lg:grid-cols-3">
-            {content.valueCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => (
-              <div
-                key={card.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                  {card.title}
-                </h2>
-                <p className="mt-4 text-sm leading-7 text-slate-600">{card.description}</p>
-              </div>
-            ))}
+            {content.valueCards
+              .filter((card) => card.title?.trim() || card.description?.trim())
+              .map((card) => (
+                <div key={card.title} className="overflow-hidden rounded-[30px] border border-brand-border bg-white shadow-sm">
+                  {card.image ? (
+                    <div className="relative aspect-[16/9] w-full">
+                      <Image src={card.image} alt={card.imageAlt || card.title} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" />
+                    </div>
+                  ) : null}
+                  <div className="p-7">
+                    <h2 className="font-heading text-2xl font-bold text-brand-ink">{card.title}</h2>
+                    <p className="mt-4 text-sm leading-7 text-slate-600">{card.description}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </section>
@@ -203,17 +207,21 @@ export function PartnerWithUsOverviewPage({
           />
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {content.partnerTypeCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => (
-              <div
-                key={card.title}
-                className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
-              >
-                <h3 className="font-heading text-2xl font-bold text-brand-ink">
-                  {card.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{card.description}</p>
-              </div>
-            ))}
+            {content.partnerTypeCards
+              .filter((card) => card.title?.trim() || card.description?.trim())
+              .map((card) => (
+                <div key={card.title} className="overflow-hidden rounded-[28px] border border-brand-border bg-white shadow-sm">
+                  {card.image ? (
+                    <div className="relative aspect-[16/9] w-full">
+                      <Image src={card.image} alt={card.imageAlt || card.title} fill sizes="(max-width: 1280px) 100vw, 33vw" className="object-cover" />
+                    </div>
+                  ) : null}
+                  <div className="p-6">
+                    <h3 className="font-heading text-2xl font-bold text-brand-ink">{card.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600">{card.description}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </section>

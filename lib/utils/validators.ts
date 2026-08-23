@@ -376,6 +376,8 @@ export const sitePageSchema = z.object({
   description: z.string().trim().default(""),
   intro: z.string().trim().default(""),
   heroImage: optionalTrimmedString,
+  heroVideoUrl: optionalTrimmedString,
+  heroVideoThumbnail: optionalTrimmedString,
   stats: z.array(sitePageHighlightStatSchema).default([]),
   sections: z.array(sitePageSectionSchema).default([]),
   ctas: z.array(sitePageActionLinkSchema).default([]),
@@ -569,6 +571,8 @@ const whatWeDoEcosystemCardSchema = z.object({
   eyebrow: z.string().trim().min(1, "Please add an eyebrow label."),
   title: z.string().trim().min(1, "Please add a card title."),
   description: z.string().trim().min(1, "Please add card copy."),
+  image: optionalTrimmedString,
+  imageAlt: optionalTrimmedString,
 });
 
 const whatWeDoPathwayCardSchema = z.object({
@@ -743,6 +747,8 @@ export type ImpactPagePayload = z.infer<typeof impactPageSchema>;
 const partnershipOverviewCardSchema = z.object({
   title: z.string().trim().min(1, "Please add a card title."),
   description: z.string().trim().min(1, "Please add a card description."),
+  image: optionalTrimmedString,
+  imageAlt: optionalTrimmedString,
 });
 
 const partnershipFocusCardSchema = z.object({
@@ -751,6 +757,8 @@ const partnershipFocusCardSchema = z.object({
   icon: z.string().trim().min(1).default(""),
   // Optional image URL alternative to icon
   iconImage: optionalTrimmedString,
+  image: optionalTrimmedString,
+  imageAlt: optionalTrimmedString,
   bullets: z.array(z.string().trim().min(1)).default([]),
 });
 

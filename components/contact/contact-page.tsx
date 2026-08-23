@@ -49,8 +49,12 @@ export function ContactPage({ content }: ContactPageProps) {
         description={content.description}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
         ctas={[
-          ...(emailChannel && content.emailCtaLabel ? [{ label: content.emailCtaLabel, href: emailChannel.href }] : []),
-          ...(content.formCtaLabel ? [{ label: content.formCtaLabel, href: "#form", variant: "secondary" as const }] : []),
+          ...(emailChannel && content.emailCtaLabel
+            ? [{ label: content.emailCtaLabel, href: emailChannel.href, variant: "primaryBlue" as const }]
+            : []),
+          ...(content.formCtaLabel
+            ? [{ label: content.formCtaLabel, href: "#form", variant: "secondary" as const }]
+            : []),
         ]}
         priority
       />

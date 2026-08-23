@@ -177,6 +177,66 @@ main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-br
     border-color: #ffffff;
     color: #ffffff;
   }
+
+  /* New solid rectangle button set (non-inverting) */
+  .itfy-btn-solid-pink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--color-accent);
+    color: #fff;
+    border-radius: 6px;
+    border: 1.5px solid var(--color-accent);
+    font-weight: 700;
+    padding: 0.875rem 1.5rem; /* py-3.5 px-6 */
+    font-size: 0.9375rem; /* text-base-ish */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .itfy-btn-solid-pink:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+  .itfy-btn-solid-pink:focus-visible { outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-accent); }
+
+  .itfy-btn-solid-blue {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 6px;
+    border: 1.5px solid var(--color-primary);
+    font-weight: 700;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .itfy-btn-solid-blue:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+  .itfy-btn-solid-blue:focus-visible { outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-primary); }
+
+  .itfy-btn-outline-on-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: #fff;
+    color: var(--color-accent);
+    border-radius: 6px;
+    border: 1.5px solid #fff;
+    font-weight: 700;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .itfy-btn-outline-on-dark:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+
+  .itfy-btn-underline-link {
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 
 .article-prose {
@@ -306,4 +366,16 @@ main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-br
   padding: 0.75rem;
   text-align: left;
   vertical-align: top;
+}
+
+/* Color-blocked section utilities */
+.section-block-accent {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.section-block-warm {
+  background: var(--color-card);
+  /* Use brand warm as a subtle backdrop via tailwind in components, this provides a default */
+  background: var(--brand-warm, #FBE7EF);
 }

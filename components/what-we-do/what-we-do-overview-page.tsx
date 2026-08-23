@@ -71,17 +71,21 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
 
           <div className="grid gap-5 lg:grid-cols-3">
             {content.ecosystemCards.map((card) => (
-              <div
-                key={card.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-                  {card.eyebrow}
-                </p>
-                <h2 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
-                  {card.title}
-                </h2>
-                <p className="mt-4 text-sm leading-7 text-slate-600">{card.description}</p>
+              <div key={card.title} className="overflow-hidden rounded-[30px] border border-brand-border bg-white shadow-sm">
+                {card.image ? (
+                  <div className="relative aspect-[16/9] w-full">
+                    <Image src={card.image} alt={card.imageAlt || card.title} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" />
+                  </div>
+                ) : null}
+                <div className="p-7">
+                  <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                    {card.eyebrow}
+                  </p>
+                  <h2 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
+                    {card.title}
+                  </h2>
+                  <p className="mt-4 text-sm leading-7 text-slate-600">{card.description}</p>
+                </div>
               </div>
             ))}
           </div>

@@ -10,6 +10,8 @@ export type ButtonVariant =
   | "ghost"
   | "pink"
   | "blue"
+  | "solid-pink"
+  | "solid-blue"
   | "pink-outline"
   | "blue-outline"
   | "white"
@@ -42,6 +44,8 @@ const variantClasses: Record<ButtonVariant, string> = {
   ghost: "border-white/70 bg-transparent text-white hover:border-white hover:bg-white/10",
   pink: "border-brand-gold bg-brand-gold text-white hover:border-brand-gold hover:bg-white hover:text-brand-gold",
   blue: "border-brand-primary bg-brand-primary text-white hover:border-brand-primary hover:bg-white hover:text-brand-primary",
+  "solid-pink": "border-brand-gold bg-brand-gold text-white hover:border-brand-gold hover:bg-brand-gold hover:text-white",
+  "solid-blue": "border-brand-primary bg-brand-primary text-white hover:border-brand-primary hover:bg-brand-primary hover:text-white",
   "pink-outline": "border-brand-gold bg-white text-brand-gold hover:bg-brand-gold hover:text-white",
   "blue-outline": "border-brand-primary bg-white text-brand-primary hover:bg-brand-primary hover:text-white",
   white: "border-white bg-white text-brand-navy hover:bg-transparent hover:text-white",

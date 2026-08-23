@@ -7,6 +7,7 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { InitiativePage } from "@/types/content";
+import { AlternatingFeatureRow } from "@/components/shared/alternating-feature-row";
 
 type InitiativePageTemplateProps = {
   page: InitiativePage;
@@ -156,34 +157,19 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               title={section.howItWorksTitle}
               description={section.howItWorksDescription}
             />
-            <div className="mt-8 grid gap-5 lg:grid-cols-4">
-              {howItWorks.map((step) => (
-                <div
-                  key={step.number}
-                  className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
-                >
-                  <div className="flex items-center justify-between">
-                    {(() => step.iconImage ?? emojiToIconImage(step.icon))() ? (
-                      <span className="inline-flex items-center justify-center" aria-hidden="true">
-                        <Image src={(step.iconImage ?? emojiToIconImage(step.icon)) as string} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
-                      </span>
-                    ) : (
-                      <span className="text-3xl" aria-hidden="true">
-                        {step.icon}
-                      </span>
-                    )}
-                    <span className="font-heading text-3xl font-bold text-brand-gold/70">
-                      {step.number}
-                    </span>
-                  </div>
-                  {hasText(step.title) ? <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                    {step.title}
-                  </h3> : null}
-                  {hasText(step.description) ? <p className="mt-3 text-sm leading-7 text-slate-600">
-                    {step.description}
-                  </p> : null}
-                </div>
-              ))}
+            <div className="mt-8">
+              <AlternatingFeatureRow
+                items={howItWorks.map((step) => ({
+                  title: step.title,
+                  description: step.description,
+                  number: step.number,
+                  // Prefer a richer image if provided on the step; else fallback to iconImage, else emoji-derived image
+                  image: undefined,
+                  iconImage: step.iconImage ?? (emojiToIconImage(step.icon) || undefined),
+                  icon: step.icon,
+                  imageAlt: step.title,
+                }))}
+              />
             </div>
           </section> : null}
 

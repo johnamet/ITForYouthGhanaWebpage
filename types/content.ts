@@ -26,6 +26,8 @@ export type RouteCard = {
   eyebrow?: string;
   title: string;
   description: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 export type NavItem = {
@@ -53,6 +55,10 @@ export interface SitePage {
   description: string;
   intro: string;
   heroImage?: string;
+  // Optional: video to feature in the page hero
+  heroVideoUrl?: string;
+  // Optional: thumbnail image to show when the hero video is present
+  heroVideoThumbnail?: string;
   /** Optional: video to feature alongside the overview/story intro */
   overviewVideoUrl?: string;
   overviewVideoTitle?: string;
@@ -500,6 +506,9 @@ export interface OrganisationServiceCard {
   icon: string;
   // Optional image URL alternative to icon
   iconImage?: string;
+  // Full card photo support
+  image?: string;
+  imageAlt?: string;
   bullets: string[];
 }
 
@@ -507,6 +516,8 @@ export interface OrganisationProcessStep {
   number: string;
   title: string;
   description: string;
+  image?: string;
+  imageAlt?: string;
   icon: string;
   // Optional image URL alternative to icon
   iconImage?: string;
@@ -610,6 +621,8 @@ export interface OrganisationOverviewContent {
 export interface PartnershipOverviewCard {
   title: string;
   description: string;
+  image?: string;
+  imageAlt?: string;
 }
 
 export interface PartnershipFocusCard {
@@ -618,6 +631,9 @@ export interface PartnershipFocusCard {
   icon: string;
   // Optional image URL alternative to icon
   iconImage?: string;
+  // Full card photo support
+  image?: string;
+  imageAlt?: string;
   bullets: string[];
 }
 
@@ -656,6 +672,8 @@ export interface PartnershipTrackPage {
   eyebrow: string;
   title: string;
   description: string;
+  image?: string;
+  imageAlt?: string;
   tagline: string;
   heroImage: string;
   stats: HighlightStat[];
@@ -725,6 +743,9 @@ export interface EcosystemCardContent {
   eyebrow: string;
   title: string;
   description: string;
+  // Optional image support
+  image?: string;
+  imageAlt?: string;
 }
 
 export interface PathwayCardContent {
@@ -774,6 +795,9 @@ export interface ImpactEvidenceCard {
   icon: string;
   // Optional image URL alternative to icon
   iconImage?: string;
+  // Full card photo support
+  image?: string;
+  imageAlt?: string;
   bullets: string[];
 }
 
@@ -828,6 +852,8 @@ export interface ImpactOverviewContent {
   eyebrow: string;
   title: string;
   description: string;
+  image?: string;
+  imageAlt?: string;
   heroImage: string;
   stats: HighlightStat[];
   measurementCards: ImpactEvidenceCard[];
@@ -946,6 +972,9 @@ export interface ContactChannel {
 }
 
 export interface ContactEnquiryOption {
+  /** Optional: video in the hero area */
+  heroVideoUrl?: string;
+  heroVideoThumbnail?: string;
   value: ContactEnquiryType;
   label: string;
   description: string;

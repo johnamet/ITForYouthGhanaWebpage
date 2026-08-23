@@ -362,6 +362,30 @@ export function SitePageForm({
               placeholder="/images/randomPictures/groupworkstudents.jpg"
             />
           </div>
+          <div>
+            <label htmlFor="heroVideoUrl" className="text-sm font-bold text-brand-ink">
+              Hero video URL (optional)
+            </label>
+            <input
+              id="heroVideoUrl"
+              value={values.heroVideoUrl ?? ""}
+              onChange={(event) => update("heroVideoUrl", event.target.value)}
+              className={inputClass}
+              placeholder="https://www.youtube.com/watch?v=… or https://vimeo.com/…"
+            />
+          </div>
+          <div>
+            <label htmlFor="heroVideoThumbnail" className="text-sm font-bold text-brand-ink">
+              Hero video thumbnail (optional)
+            </label>
+            <input
+              id="heroVideoThumbnail"
+              value={values.heroVideoThumbnail ?? ""}
+              onChange={(event) => update("heroVideoThumbnail", event.target.value)}
+              className={inputClass}
+              placeholder="/images/… or https://…"
+            />
+          </div>
         </div>
       </section>
 
