@@ -10,8 +10,8 @@
 | landscape | 32 |
 | portrait | 18 |
 | square | 10 |
-| unreferenced | 5 |
-| reused across files | 27 |
+| unreferenced | 3 |
+| reused across files | 31 |
 | oversized | 19 |
 | generic names | 7 |
 | extension mismatch | 2 |
@@ -28,7 +28,7 @@ Orientation matters more than it sounds: a layout needing tall portrait media ca
 | `/images/logo` | 3 | 0 | 0 | 3 | 1 | 2 |
 | `/images/partnerorga` | 7 | 1 | 1 | 5 | 0 | 7 |
 | `/images/people` | 18 | 1 | 16 | 1 | 0 | 9 |
-| `/images/randomPictures` | 31 | 30 | 1 | 0 | 2 | 1 |
+| `/images/randomPictures` | 31 | 30 | 1 | 0 | 0 | 1 |
 
 ## Needs optimisation (over 1 MB)
 
@@ -80,49 +80,51 @@ Unintentional repetition is invisible when reviewing one page at a time and obvi
 | 10 | `/images/randomPictures/groupworkstudents.jpg` |
 | 6 | `/images/randomPictures/studentsblueclothing.jpg` |
 | 4 | `/images/logo/logo_small.jpg` |
+| 4 | `/images/randomPictures/graduationspeaking.jpg` |
 | 4 | `/images/randomPictures/mireiotalking.jpg` |
 | 4 | `/images/randomPictures/studentpresenting.jpg` |
 | 4 | `/images/randomPictures/studentsBackcoding.jpg` |
+| 4 | `/images/randomPictures/studentslistening.jpg` |
 | 4 | `/images/randomPictures/studentslisteningfrontal.JPG` |
+| 3 | `/images/randomPictures/UXcours.jpg` |
 | 3 | `/images/randomPictures/frontalgraduation.jpg` |
-| 3 | `/images/randomPictures/graduationspeaking.jpg` |
+| 3 | `/images/randomPictures/graduations.jpg` |
+| 3 | `/images/randomPictures/groupofgirlsentrance.jpg` |
 | 3 | `/images/randomPictures/maingraduationpic.jpg` |
+| 3 | `/images/randomPictures/mave_peter.JPG` |
 | 3 | `/images/randomPictures/peterblackboard.jpg` |
+| 3 | `/images/randomPictures/uXstudents.jpg` |
 | 2 | `/images/fallback/placeholder.svg` |
 | 2 | `/images/people/Belinda.jpg` |
 | 2 | `/images/people/peter.jpg` |
 | 2 | `/images/randomPictures/UX4.jpg` |
-| 2 | `/images/randomPictures/UXcours.jpg` |
 | 2 | `/images/randomPictures/UXteacher.png` |
+| 2 | `/images/randomPictures/UXteacher_opt.jpg` |
 | 2 | `/images/randomPictures/children_holding_sign_in_streets.jpg` |
-| 2 | `/images/randomPictures/graduations.jpg` |
 | 2 | `/images/randomPictures/group_girls.jpg` |
-| 2 | `/images/randomPictures/groupofgirlsentrance.jpg` |
+| 2 | `/images/randomPictures/happystudentscasual.jpg` |
 | 2 | `/images/randomPictures/peterTalking.jpg` |
 | 2 | `/images/randomPictures/petertalkingtostudentscoloful.jpg` |
+| 2 | `/images/randomPictures/redclothingStudents.jpg` |
 | 2 | `/images/randomPictures/redstudentgrouplesson.jpg` |
 | 2 | `/images/randomPictures/studentpresentin.jpg` |
-| 2 | `/images/randomPictures/studentslistening.jpg` |
-| 2 | `/images/randomPictures/uXstudents.jpg` |
 
-## Never referenced in source (5)
+## Never referenced in source (3)
 
 - `/Asset-1.png`
 - `/favicon-32x32.svg`
 - `/images/logo/logo.jpg`
-- `/images/randomPictures/graduation.jpg`
-- `/images/randomPictures/happystudentscasual.jpg`
 
 ## Pairing gap analysis
 
 | Measure | Count |
 | --- | --- |
 | public routes | 32 |
-| components scanned | 172 |
-| content sections | 96 |
-| paired with media or a graphic form | 67 |
-| unpaired text-only | 19 |
-| routes fully paired | 15 of 32 |
+| components scanned | 190 |
+| content sections | 111 |
+| paired with media or a graphic form | 105 |
+| unpaired text-only | 0 |
+| routes fully paired | 32 of 32 |
 
 Structural components (section openers, link grids, forms) and purposeful graphic forms (a sequence drawn as a line, a tree over real groupings, figures from real numbers) are excluded from the gap list, per the addendum.
 
@@ -130,22 +132,3 @@ Structural components (section openers, link grids, forms) and purposeful graphi
 
 | Route | Section | Suggested resolution |
 | --- | --- | --- |
-| `/` | legacy-homepage-sections | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/` | closing-block | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/apply-for-training` | apply-for-training-overview-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/apply-for-training/courses` | editorial-guidance-grid | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/apply-for-training/how-it-works` | training-how-it-works-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/apply-for-training/who-can-apply` | training-who-can-apply-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/contact` | contact-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/departments/[slug]` | department-detail-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/news-and-updates` | news-hub-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/news-and-updates/[category]` | news-listing-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/our-impact` | impact-overview-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/programs` | programs-overview | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/programs/[category]` | programs-overview | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/what-we-do/[slug]` | content-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/who-we-are/[slug]` | content-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/who-we-are/careers` | content-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/who-we-are/careers` | careers-list | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/who-we-are/partners` | content-page | _decide: photograph, video, graphic form, or merge into neighbour_ |
-| `/who-we-are/team` | content-page | _decide: photograph, video, graphic form, or merge into neighbour_ |

@@ -36,6 +36,8 @@ export const impactOverviewContent: ImpactOverviewContent = {
     {
       title: "Reach",
       description: "We look at how many young people, schools, and communities the work is actually touching across routes and regions.",
+      image: "/images/randomPictures/studentslistening.jpg",
+      imageAlt: "A large group of learners listening during a school outreach session",
       icon: "📍",
       bullets: [
         "Tracks participation across training, outreach, clubs, and public activations.",
@@ -46,6 +48,8 @@ export const impactOverviewContent: ImpactOverviewContent = {
     {
       title: "Inclusion",
       description: "We pay close attention to who is being reached, especially where gender, geography, and access barriers can distort opportunity.",
+      image: "/images/randomPictures/groupofgirlsentrance.jpg",
+      imageAlt: "Young women arriving together for a Girls in Tech session",
       icon: "⚖️",
       bullets: [
         "Supports more honest conversations about who still gets left out.",
@@ -56,6 +60,8 @@ export const impactOverviewContent: ImpactOverviewContent = {
     {
       title: "Transition",
       description: "The strongest impact stories usually involve what happens after first contact, not only during a programme moment itself.",
+      image: "/images/randomPictures/frontalgraduation.jpg",
+      imageAlt: "Graduates receiving certificates at the end of a cohort",
       icon: "🚀",
       bullets: [
         "Looks at movement into work, deeper learning, projects, or entrepreneurship.",
@@ -66,6 +72,8 @@ export const impactOverviewContent: ImpactOverviewContent = {
     {
       title: "Systems value",
       description: "Impact also lives in partnerships, school relationships, civic credibility, and the strength of the ecosystem around young people.",
+      image: "/images/randomPictures/graduations.jpg",
+      imageAlt: "Partners, facilitators and graduates together at a cohort graduation",
       icon: "🧩",
       bullets: [
         "Shows why collaboration routes matter alongside direct learner delivery.",

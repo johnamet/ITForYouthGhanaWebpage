@@ -13,6 +13,7 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatList } from "@/components/shared/stat-list";
 import type { ContactChannel, ContactPageContent } from "@/types/content";
+import { WideFrame } from "@/components/media/wide-frame";
 
 type ContactPageProps = {
   content: ContactPageContent;
@@ -94,7 +95,7 @@ export function ContactPage({ content }: ContactPageProps) {
                   href={channel.href}
                   target={isExternal ? "_blank" : undefined}
                   rel={isExternal ? "noreferrer" : undefined}
-                  className="group rounded-[30px] border border-brand-border bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
+                  className="group rounded-panel border border-brand-border bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
                     <ChannelIcon channel={channel} />
@@ -128,11 +129,24 @@ export function ContactPage({ content }: ContactPageProps) {
               description={content.formDescription ?? ""}
             />
 
+            {/* A wide plate above the response steps. The page hero is a
+                landscape image and the steps below are a numbered stack, so a
+                contained cinema frame here is a third distinct shape rather
+                than a repeat. It also answers the question a contact page
+                leaves open: who is on the other end of the form. */}
+            <WideFrame
+              src="/images/randomPictures/mave_peter.JPG"
+              alt="Two members of the IT For Youth Ghana team working together at a desk"
+              ratio="cinema"
+              caption="Messages reach the programmes and partnerships team in Accra."
+              sizes="(min-width: 1024px) 38vw, 100vw"
+            />
+
             <div className="grid gap-4">
               {content.responseSteps.map((step) => (
                 <div
                   key={step.number}
-                  className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
+                  className="rounded-panel border border-brand-border bg-white p-6 shadow-sm"
                 >
                   <div className="flex items-start gap-4">
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-deep text-sm font-bold text-brand-accent">
@@ -151,7 +165,7 @@ export function ContactPage({ content }: ContactPageProps) {
               ))}
             </div>
 
-            {content.privacyNote ? <div className="rounded-[28px] border border-brand-border bg-brand-warm p-6">
+            {content.privacyNote ? <div className="rounded-panel border border-brand-border bg-brand-warm p-6">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
                   <ShieldCheck className="h-5 w-5" />

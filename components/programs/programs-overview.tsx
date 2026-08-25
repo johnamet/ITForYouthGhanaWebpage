@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { Course } from "@/types/course";
 import { FeatureCard } from "@/components/content/feature-card";
 
@@ -10,11 +12,17 @@ export function ProgramsOverview({ courses }: ProgramsOverviewProps) {
 
   return (
     <div className="space-y-10">
-      <div className="rounded-[32px] border border-brand-border bg-white p-8 shadow-sm">
-        <h1 className="font-heading text-4xl font-semibold text-brand-ink">Programs Portal Compatibility</h1>
+      {/* This header previously read "Programs Portal Compatibility" and
+          explained that /programs/** remained available "in the rebuild branch
+          while the rest of the public site moves into the new information
+          architecture". That is developer-facing text on a public page: a
+          visitor does not know what a rebuild branch is. Replaced with copy
+          that describes what the page is for. */}
+      <div className="rounded-panel border border-brand-border bg-white p-8 shadow-sm">
+        <h1 className="font-heading text-4xl font-semibold text-brand-ink">Browse courses</h1>
         <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
-          `/programs/**` remains available in the rebuild branch so course discovery keeps working while the
-          rest of the public site moves into the new information architecture.
+          Every course IT For Youth Ghana currently runs, in one list. Open any course to see its
+          length, level, start date and what you will build, then apply from the same page.
         </p>
       </div>
 
@@ -33,8 +41,14 @@ export function ProgramsOverview({ courses }: ProgramsOverviewProps) {
             />
           ))
         ) : (
-          <div className="rounded-[28px] border border-dashed border-brand-border bg-white p-8 text-sm text-slate-600 md:col-span-2 xl:col-span-3">
-            Course data is scaffolded through the new integration layer. The page compiled successfully even if the external API is unavailable during this pass.
+          /* The empty state also spoke to developers about integration layers
+             and successful compilation. A visitor needs to know what to do. */
+          <div className="rounded-panel border border-dashed border-brand-border bg-white p-8 text-sm text-slate-600 md:col-span-2 xl:col-span-3">
+            The course list is not available right now. Try again shortly, or{" "}
+            <Link href="/contact" className="font-bold text-brand-primary underline decoration-2 underline-offset-4">
+              contact the team
+            </Link>{" "}
+            and we will tell you what is opening next.
           </div>
         )}
       </div>

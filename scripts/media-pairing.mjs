@@ -81,10 +81,36 @@ const GRAPHIC_FORM = /(process-sequence|pathway-tree|stats-section|stat-list|imp
 
 const rows = pages.map((p) => {
   const tree = [...new Set(componentTree(p.file))].filter((f) => !SHELL.test(f));
+  /* A component that delegates its media to a child is still paired as far as a
+     reader is concerned: news-listing-page renders ArticleCard, which renders
+     the cover image. Evaluating each file in isolation reported those parents as
+     unpaired, so pairing is resolved one level through the components a file
+     actually renders. */
+  const ownMedia = (file) => MEDIA_SIGNALS.some((r) => r.test(read(file)));
+
+  /* A hero pairs ITSELF, not the body sections below it. Every page has a hero
+     with an image, so counting it as delegation would mark every page paired and
+     make the measure meaningless. */
+  const HERO = /(editorial-image-hero|capsule-page-hero|hero-capsule|page-header)/;
+
+  const delegatesMedia = (file) => {
+    const text = read(file);
+    for (const m of text.matchAll(/from\s+"(@\/components\/[^"]+)"/g)) {
+      if (HERO.test(m[1])) continue;
+      const target = resolveComponent(m[1]);
+      if (!target) continue;
+      const child = target.split("/").pop().replace(/\.tsx?$/, "");
+      // Only count it if the child is actually rendered here.
+      const rendered = new RegExp(`<${child.replace(/(^|-)(\w)/g, (_, __, c) => c.toUpperCase())}[\\s/>]`);
+      if (rendered.test(text) && ownMedia(target)) return true;
+    }
+    return false;
+  };
+
   const sections = tree.map((file) => {
     const text = read(file);
     const name = file.split("/").pop().replace(".tsx", "");
-    const hasMedia = MEDIA_SIGNALS.some((r) => r.test(text));
+    const hasMedia = ownMedia(file) || delegatesMedia(file);
     const graphic = GRAPHIC_FORM.test(file);
     return {
       file,

@@ -2,6 +2,7 @@ import type { JobListing } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { StateMessage } from "@/components/ui/state-message";
+import { WideFrame } from "@/components/media/wide-frame";
 
 type CareersListProps = {
   jobs: JobListing[];
@@ -25,6 +26,17 @@ export function CareersList({ jobs }: CareersListProps) {
 
   return (
     <section className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:px-8">
+      {/* A wide plate, not a portrait. These are roles rather than people, so
+          the honest subject is the work itself, and the work photography is
+          landscape. Portraits on this page would imply the openings are already
+          filled. See docs/addendum-media-pairing.md. */}
+      <WideFrame
+        src="/images/randomPictures/happystudentscasual.jpg"
+        alt="Facilitators and learners talking together between sessions"
+        ratio="cinema"
+        caption="The team runs cohorts, clubs and outreach across Greater Accra and partner regions."
+      />
+
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">Open opportunities</p>
         <h2 className="mt-2 font-heading text-4xl font-semibold text-brand-ink">Join the team</h2>
@@ -32,7 +44,7 @@ export function CareersList({ jobs }: CareersListProps) {
 
       <div className="grid gap-5">
         {jobs.map((job) => (
-          <Card key={job.id} className="rounded-[26px]">
+          <Card key={job.id} className="rounded-panel">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <h3 className="font-heading text-2xl font-semibold text-brand-ink">{job.title}</h3>

@@ -1,3 +1,5 @@
+import { CircularFigure } from "@/components/media/circular-figure";
+import { WideFrame } from "@/components/media/wide-frame";
 import type { ContentBlock } from "@/types/content";
 
 type EditorialGuidanceGridProps = {
@@ -21,6 +23,25 @@ export function EditorialGuidanceGrid({ eyebrow, sections }: EditorialGuidanceGr
     <div className="grid overflow-hidden border-y border-brand-border lg:grid-cols-2">
       {visibleSections.map((section, index) => {
         const supportingParagraph = section.bullets?.filter(hasText).join(" ");
+        const image = section.image?.trim();
+        /* The two columns take DIFFERENT treatments. They sit side by side, so
+           two identical plates would read as a repeated arrangement; a wide
+           frame against a circular figure reads as one composition. */
+        const media = !image ? null : index % 2 === 0 ? (
+          <WideFrame
+            className="relative mt-7 max-w-xl"
+            src={image}
+            alt={section.imageAlt || section.title}
+            sizes="(min-width: 1024px) 45vw, 100vw"
+          />
+        ) : (
+          <CircularFigure
+            className="relative mt-7 items-start text-left"
+            src={image}
+            alt={section.imageAlt || section.title}
+            size="md"
+          />
+        );
 
         return (
           <article
@@ -56,6 +77,8 @@ export function EditorialGuidanceGrid({ eyebrow, sections }: EditorialGuidanceGr
                 <p className="text-[0.95rem] leading-8 text-slate-600">{supportingParagraph}</p>
               </div>
             ) : null}
+
+            {media}
           </article>
         );
       })}

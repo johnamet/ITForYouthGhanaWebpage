@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { CapsulePageHero } from "@/components/capsule";
+import { OffsetFrames } from "@/components/media/offset-frames";
 import { SectionIntro } from "@/components/content/section-intro";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { TrainingCohortTimeline } from "@/components/training/training-cohort-timeline";
@@ -94,6 +95,25 @@ export function ApplyForTrainingOverviewPage({
             <p className="mt-5 text-base leading-8 text-slate-600">
               {supportPoints.join(" ")}
             </p>
+
+            {/* Stacked offset landscape plates. This aside is a tall column, and
+                stacking wide photographs is the only honest way to build
+                vertical mass from a library that is roughly 30:1 landscape:
+                cropping one wide frame into a portrait hole would throw most of
+                it away. See docs/addendum-media-pairing.md. */}
+            <OffsetFrames
+              className="mt-8"
+              frames={[
+                {
+                  src: "/images/randomPictures/UXteacher_opt.jpg",
+                  alt: "A facilitator working through an exercise at a learner's screen",
+                },
+                {
+                  src: "/images/randomPictures/graduations.jpg",
+                  alt: "Graduates together at the end of a cohort",
+                },
+              ]}
+            />
           </aside>
         </div>
       </section>

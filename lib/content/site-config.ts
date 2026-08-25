@@ -1886,6 +1886,8 @@ export const trainingCoursesHub: SitePage = {
     {
       title: "What you can compare",
       body: "Use the catalog to compare course level, duration, delivery mode, cost, and start dates before choosing a route.",
+      image: "/images/randomPictures/UX4.jpg",
+      imageAlt: "A learner comparing layout options on screen during a design session",
       bullets: [
         "Across more than six pathways, you can weigh software development, design, data, marketing, entrepreneurship, and employability against the kind of work you want to pursue.",
         "The catalog also makes the practical differences visible, from free and scholarship-supported options to modest-fee programmes, upcoming start dates, and application deadlines.",
@@ -1894,6 +1896,8 @@ export const trainingCoursesHub: SitePage = {
     {
       title: "How to shortlist well",
       body: "A strong shortlist starts with your current stage, not only the trendiest skill. Choose the route that matches what you can commit to now.",
+      image: "/images/randomPictures/mave_peter.JPG",
+      imageAlt: "Two facilitators reviewing course options together",
       bullets: [
         "Choose a beginner route when you need structure and confidence, or an intermediate route when you can practise consistently outside scheduled sessions.",
         "Career-focused routes make the most sense when you already have work to refine, package, and present to employers or clients.",
@@ -2694,7 +2698,7 @@ export const departments: DepartmentProfile[] = [
     intro:
       "It helps programme teams focus on learners by making sure the practical details are planned, resourced, and documented.",
     mission: "Build reliable operating systems that support accountable, scalable programme delivery.",
-    heroImage: "/images/randomPictures/groupstudents.jpg",
+    heroImage: "/images/randomPictures/studentgroupguys.jpg",
     icon: "⚙️",
     color: "#1A1A1A",
     responsibilities: [

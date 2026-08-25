@@ -2,6 +2,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { CapsulePageHero } from "@/components/capsule";
+import { CircularFigure } from "@/components/media/circular-figure";
 import { SectionIntro } from "@/components/content/section-intro";
 import { TrainingProcessStrip } from "@/components/training/training-process-strip";
 import type { SitePage, TrainingProcessStep } from "@/types/content";
@@ -99,6 +100,18 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
               {page.principlesDescription ??
                 "Most friction in application flows comes from uncertainty. These simple preparation steps help learners submit with more confidence and fewer surprises."}
             </p>
+
+            {/* Circular, not wide. The apply process above this is a numbered
+                sequence and the page hero is a capsule, so a third wide plate
+                here would be the third similar shape in a row. The circular
+                crop also works from this landscape source without waste. */}
+            <CircularFigure
+              className="mt-8 items-start text-left"
+              src={page.principlesImage || "/images/randomPictures/studentslistening.jpg"}
+              alt={page.principlesImageAlt || "A learner listening during an orientation session"}
+              size="md"
+              accent="var(--color-accent)"
+            />
           </div>
 
           <div className="space-y-4">

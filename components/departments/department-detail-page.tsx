@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { PortraitFigure } from "@/components/media/portrait-figure";
 import type { DepartmentProfile, TeamMemberProfile } from "@/types/content";
 
 type DepartmentDetailPageProps = {
@@ -56,7 +57,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
               <Panel title="Services and workflows">
                 <div className="grid gap-4 md:grid-cols-2">
                   {department.services.map((service) => (
-                    <article key={service.title} className="rounded-[24px] border border-brand-border p-5">
+                    <article key={service.title} className="rounded-panel border border-brand-border p-5">
                       <h3 className="font-heading text-xl font-bold text-brand-ink">{service.title}</h3>
                       <p className="mt-3 text-sm leading-7 text-slate-600">{service.body}</p>
                       {service.bullets?.length ? (
@@ -75,8 +76,20 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
             {selectedMembers.length ? (
               <Panel title="Department team">
                 <div className="grid gap-4 md:grid-cols-2">
+                  {/* Portrait, because this is people content. The library is
+                      about 16:1 portrait for people and portrait is the honest
+                      shape for a person; programme sections on this same page
+                      take the wide treatments instead. See
+                      docs/addendum-media-pairing.md. */}
                   {selectedMembers.map((member) => (
-                    <article key={member.id} className="rounded-[24px] border border-brand-border bg-white p-5">
+                    <article key={member.id} className="rounded-panel border border-brand-border bg-white p-5">
+                      {member.photo?.trim() ? (
+                        <PortraitFigure
+                          className="mb-5"
+                          src={member.photo}
+                          alt={`${member.name}, ${member.role} at IT For Youth Ghana`}
+                        />
+                      ) : null}
                       <h3 className="font-heading text-xl font-bold text-brand-ink">{member.name}</h3>
                       <p className="mt-1 text-sm font-semibold text-brand-deep">{member.role}</p>
                       <p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">{member.bio}</p>
@@ -89,7 +102,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
 
           <aside className="space-y-6">
             {department.stats.length ? (
-              <div className="rounded-[28px] border border-brand-border bg-brand-mist/50 p-6">
+              <div className="rounded-panel border border-brand-border bg-brand-mist/50 p-6">
                 <h2 className="font-heading text-xl font-bold text-brand-ink">Signals</h2>
                 <div className="mt-5 grid gap-4">
                   {department.stats.map((stat) => (
@@ -106,7 +119,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
             ) : null}
 
             {department.workflows.length ? (
-              <div className="rounded-[28px] border border-brand-border bg-white p-6">
+              <div className="rounded-panel border border-brand-border bg-white p-6">
                 <h2 className="font-heading text-xl font-bold text-brand-ink">How work moves</h2>
                 <div className="mt-5 grid gap-4">
                   {department.workflows.map((step, index) => (
@@ -125,7 +138,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
             ) : null}
 
             {department.priorities.length ? (
-              <div className="rounded-[28px] border border-brand-border bg-white p-6">
+              <div className="rounded-panel border border-brand-border bg-white p-6">
                 <h2 className="font-heading text-xl font-bold text-brand-ink">Current priorities</h2>
                 <ul className="mt-5 grid gap-3 text-sm leading-7 text-slate-600">
                   {department.priorities.map((priority) => (
@@ -138,7 +151,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
             ) : null}
 
             {department.resources.length ? (
-              <div className="rounded-[28px] border border-brand-border bg-white p-6">
+              <div className="rounded-panel border border-brand-border bg-white p-6">
                 <h2 className="font-heading text-xl font-bold text-brand-ink">Resources</h2>
                 <div className="mt-5 grid gap-3">
                   {department.resources.map((resource) => (
@@ -165,7 +178,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
 
 function Panel({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
+    <section className="rounded-panel border border-brand-border bg-white p-6 shadow-sm lg:p-8">
       <h2 className="font-heading text-2xl font-bold text-brand-ink">{title}</h2>
       <div className="mt-5">{children}</div>
     </section>

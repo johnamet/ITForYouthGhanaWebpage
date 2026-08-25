@@ -2,6 +2,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { CapsulePageHero } from "@/components/capsule";
+import { MediaBand } from "@/components/media/media-band";
 import { SectionIntro } from "@/components/content/section-intro";
 import type { SitePage } from "@/types/content";
 
@@ -64,6 +65,27 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
           ))}
         </div>
       </section>
+
+      {/* A full-bleed band. The section above is a bordered three-column
+          numbered grid and the hero is a capsule, so the widest treatment here
+          changes the pacing rather than adding a third contained plate. */}
+      <MediaBand
+        src="/images/randomPictures/redclothingStudents.jpg"
+        alt="Learners working together around a shared table during a session"
+        height="short"
+      >
+        <p className="flex items-center gap-3 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-white">
+          <span aria-hidden="true" className="h-[2px] w-6 flex-none bg-brand-accent" />
+          {page.principlesEyebrow ?? "Who this is for"}
+        </p>
+        <h2 className="mt-4 font-heading text-3xl font-bold text-white sm:text-4xl">
+          {page.principlesTitle ?? "Come as you are, and commit to the work"}
+        </h2>
+        <p className="mt-4 text-base leading-8 text-white/85">
+          {page.principlesDescription ??
+            "Eligibility is about timing and commitment as much as prior knowledge. If the level matches what you need right now, you are in the right place."}
+        </p>
+      </MediaBand>
 
       <section className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">

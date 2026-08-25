@@ -6,6 +6,7 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatsSection } from "@/components/content/stats-section";
 import type { ImpactOverviewContent } from "@/types/content";
+import { CircularFigure } from "@/components/media/circular-figure";
 
 type ImpactOverviewPageProps = {
   content: ImpactOverviewContent;
@@ -88,13 +89,25 @@ export function ImpactOverviewPage({
             {content.measurementCards.map((card) => (
               <div
                 key={card.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
+                className="rounded-panel border border-brand-border bg-white p-7 shadow-sm"
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-3xl" aria-hidden="true">
-                    {card.icon}
-                  </span>
-                  <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-deep">
+                <div className="flex items-start justify-between gap-4">
+                  {/* Circular, one per evidence lens. This replaces an emoji
+                      rendered at text-3xl, which the brief bans outright, and
+                      the circular crop works from the landscape programme
+                      library without waste. The surrounding page uses wide
+                      treatments, so circles here change the pacing. */}
+                  {card.image?.trim() ? (
+                    <CircularFigure
+                      src={card.image}
+                      alt={card.imageAlt || card.title}
+                      size="sm"
+                      accent="var(--color-primary)"
+                    />
+                  ) : (
+                    <span aria-hidden="true" className="mt-2 block h-[3px] w-9 rounded-capsule bg-brand-accent" />
+                  )}
+                  <span className="rounded-capsule bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-deep">
                     {content.measurementCardBadgeLabel ?? "Evidence lens"}
                   </span>
                 </div>
@@ -106,7 +119,7 @@ export function ImpactOverviewPage({
                   {card.bullets.map((bullet) => (
                     <div
                       key={bullet}
-                      className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
+                      className="rounded-panel border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
                     >
                       {bullet}
                     </div>

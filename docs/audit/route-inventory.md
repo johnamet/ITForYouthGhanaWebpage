@@ -49,9 +49,9 @@ Visible surfaces that also need design attention and are routinely forgotten.
 
 ## Reconciliation findings
 
-### Built but unreachable from the navigation or any copy (1)
+### Built but unreachable from the navigation or any copy (0)
 
-- `/our-impact`
+_None._
 
 ### Dead internal links in seed copy (0)
 

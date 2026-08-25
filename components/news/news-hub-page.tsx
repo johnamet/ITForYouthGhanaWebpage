@@ -12,6 +12,7 @@ import {
   articleCategories,
 } from "@/lib/content/news-config";
 import type { ArticleSeed, NewsHubContent } from "@/types/content";
+import { OffsetFrames } from "@/components/media/offset-frames";
 
 type NewsHubPageProps = {
   content: NewsHubContent;
@@ -100,7 +101,7 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
                 <Link
                   key={category}
                   href={`/news-and-updates/${category}`}
-                  className="group rounded-[30px] border border-brand-border bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
+                  className="group rounded-panel border border-brand-border bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-5">
                     <div>
@@ -138,13 +139,30 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
               description={content.editorialSectionDescription}
             />
             <StatList stats={content.stats} compact />
+
+            {/* Offset plates. This column is tall next to the pillar stack, and
+                stacking wide photographs is how vertical mass is built from a
+                landscape library rather than cropping one frame into a
+                portrait hole. */}
+            <OffsetFrames
+              frames={[
+                {
+                  src: "/images/randomPictures/graduationspeaking.jpg",
+                  alt: "A graduate speaking at a cohort graduation ceremony",
+                },
+                {
+                  src: "/images/randomPictures/uXstudents.jpg",
+                  alt: "Learners working through a design exercise at their laptops",
+                },
+              ]}
+            />
           </div>
 
           <div className="grid gap-5">
             {content.editorialPillars.map((pillar) => (
               <div
                 key={pillar.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
+                className="rounded-panel border border-brand-border bg-white p-7 shadow-sm"
               >
                 <h2 className="font-heading text-2xl font-bold text-brand-ink">
                   {pillar.title}
@@ -155,7 +173,7 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
                     {pillar.bullets.map((bullet) => (
                       <div
                         key={bullet}
-                        className="rounded-[20px] border border-brand-border bg-brand-mist/55 px-4 py-4 text-sm font-medium leading-6 text-slate-700"
+                        className="rounded-panel border border-brand-border bg-brand-mist/55 px-4 py-4 text-sm font-medium leading-6 text-slate-700"
                       >
                         {bullet}
                       </div>
