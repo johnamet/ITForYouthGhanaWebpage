@@ -174,7 +174,7 @@ export function ApplyForTrainingOverviewPage({
               <Link
                 key={cta.href}
                 href={cta.href}
-                className="rounded-full bg-brand-accent px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="rounded-full bg-brand-accent px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
               >
                 {cta.label}
               </Link>

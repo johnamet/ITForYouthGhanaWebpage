@@ -184,7 +184,7 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
               href={course.applyUrl ?? "https://portal.itforyouthghana.org"}
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex w-full justify-center rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
+              className="mt-5 inline-flex w-full justify-center rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
             >
               Continue to application
             </a>

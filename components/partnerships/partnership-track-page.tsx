@@ -258,7 +258,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
           <div className="flex flex-wrap gap-3">
             <Link
               href={page.contactCta.primary.href}
-              className="rounded-full bg-brand-accent px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
+              className="rounded-full bg-brand-accent px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
             >
               {page.contactCta.primary.label}
             </Link>

@@ -240,7 +240,7 @@ export function UserForm({ mode, user }: UserFormProps) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md disabled:opacity-60"
           >
             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {mode === "edit" ? "Save changes" : "Create user"}

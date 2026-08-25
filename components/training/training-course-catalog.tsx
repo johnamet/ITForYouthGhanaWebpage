@@ -310,7 +310,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                         }
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-4 py-2.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
+                        className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
                       >
                         Apply now
                         <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -348,7 +348,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
               </button>
               <a
                 href="#cohorts"
-                className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
               >
                 See upcoming cohorts
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

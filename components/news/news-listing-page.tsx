@@ -132,7 +132,7 @@ export function NewsListingPage({
               </div>
               <Link
                 href={`/news-and-updates/${leadArticle.category}/${leadArticle.slug}`}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-accent px-6 py-3.5 text-sm font-bold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-accent px-6 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
               >
                 {content.latestSignalCtaLabel}
                 <ArrowRight className="h-4 w-4" />

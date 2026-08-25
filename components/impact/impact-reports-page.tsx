@@ -107,7 +107,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
                 <a
                   href={resource.href}
                   download
-                  className="mt-6 inline-flex rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
+                  className="mt-6 inline-flex rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
                 >
                   {resource.fileLabel}
                 </a>

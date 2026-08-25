@@ -234,7 +234,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
                     className="rounded-[28px] border border-white/12 bg-white/8 p-6"
                   >
                     <div className="flex gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-accent text-brand-ink">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-accent text-white">
                         {index + 1}
                       </div>
                       <div>

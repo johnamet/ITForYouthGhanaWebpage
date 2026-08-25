@@ -50,7 +50,7 @@ export function WhatWeDoGallery({ items }: { items: WhatWeDoGalleryItem[] }) {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/15 to-transparent" />
             {item.type === "video" ? (
-              <span className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-brand-accent text-brand-ink shadow-lg">
+              <span className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-brand-accent text-white shadow-lg">
                 <Play className="ml-0.5 h-5 w-5 fill-current" />
               </span>
             ) : null}
