@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 
 import { ALLOWED_REMOTE_IMAGE_HOSTS, isExternalImageSrc, resolveImageSrc } from "./remote-image.ts";
@@ -56,9 +57,14 @@ describe("isExternalImageSrc", () => {
  * missing content. Neither failure surfaces in the build.
  */
 describe("remote host allowlist", () => {
-  it("matches next.config.mjs remotePatterns exactly", async () => {
-    const config = (await import("../../next.config.mjs")).default;
-    const configured = (config.images?.remotePatterns ?? []).map((p: { hostname: string }) => p.hostname);
+  it("matches next.config.mjs remotePatterns exactly", () => {
+    // Read rather than import: next.config.mjs is untyped JavaScript, and
+    // evaluating it in a test buys nothing that parsing the literal does not.
+    const config = readFileSync("next.config.mjs", "utf8");
+    const patterns = config.slice(config.indexOf("remotePatterns"), config.indexOf("async redirects"));
+    const configured = [...patterns.matchAll(/hostname:\s*"([^"]+)"/g)].map((m) => m[1]);
+
+    assert.ok(configured.length > 0, "parsed no hostnames out of next.config.mjs remotePatterns");
 
     assert.deepEqual(
       [...configured].sort(),

@@ -18,12 +18,12 @@ export function generateMetadata({ params }: OrganisationServicePageProps): Meta
 
   if (!page) {
     return {
-      title: "For Organisations | IT For Youth Ghana",
+      title: "For Organisations",
     };
   }
 
   return {
-    title: `${page.title} | IT For Youth Ghana`,
+    title: page.title,
     description: page.description,
   };
 }

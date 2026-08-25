@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const content = await getCmsContactPage();
 
   return {
-    title: `${content.eyebrow} | IT For Youth Ghana`,
+    title: content.eyebrow,
     description: content.description,
   };
 }

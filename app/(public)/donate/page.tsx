@@ -4,7 +4,7 @@ import { DonationCampaign } from "@/components/home/donation-campaign";
 import { getCmsDonationCampaign } from "@/lib/cms/homepage";
 
 export const metadata: Metadata = {
-  title: "Donate | IT For Youth Ghana",
+  title: "Donate",
   description:
     "Support scholarships, devices, mentorship, and measurable pathways into work and enterprise for young Ghanaians.",
 };

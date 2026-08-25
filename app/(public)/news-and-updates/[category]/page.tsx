@@ -26,14 +26,14 @@ export async function generateMetadata({
 }: ArticleCategoryPageProps): Promise<Metadata> {
   if (!isArticleCategory(params.category)) {
     return {
-      title: "News & Updates | IT For Youth Ghana",
+      title: "News & Updates",
     };
   }
 
   const content = await getCmsArticleCategoryContent(params.category);
 
   return {
-    title: `${articleCategoryLabels[params.category]} | IT For Youth Ghana`,
+    title: articleCategoryLabels[params.category],
     description: content.description,
   };
 }

@@ -18,12 +18,12 @@ export function generateMetadata({ params }: PartnershipDetailPageProps): Metada
 
   if (!page) {
     return {
-      title: "Partner With Us | IT For Youth Ghana",
+      title: "Partner With Us",
     };
   }
 
   return {
-    title: `${page.title} | IT For Youth Ghana`,
+    title: page.title,
     description: page.description,
   };
 }

@@ -27,7 +27,7 @@ export async function generateMetadata({
 }: ArticleDetailPageProps): Promise<Metadata> {
   if (!isArticleCategory(params.category)) {
     return {
-      title: "Article | IT For Youth Ghana",
+      title: "Article",
     };
   }
 
@@ -35,12 +35,12 @@ export async function generateMetadata({
 
   if (!article) {
     return {
-      title: "Article | IT For Youth Ghana",
+      title: "Article",
     };
   }
 
   return {
-    title: article.seo?.title ?? `${article.title} | IT For Youth Ghana`,
+    title: article.seo?.title ?? article.title,
     description: article.seo?.description ?? article.excerpt,
     openGraph: {
       title: article.seo?.title ?? article.title,

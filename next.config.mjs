@@ -46,6 +46,28 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      /**
+       * Retired duplicate course-detail URLs.
+       *
+       * Three routes rendered the same course page from the same lookup.
+       * /programs/[category]/[courseId] never read params.category, so every
+       * course was reachable at unbounded URLs. The canonical shape is
+       * /apply-for-training/courses/[slug]; the live portal API resolves a bare
+       * slug, so nothing is lost by dropping the category segment.
+       *
+       * The two-segment rule cannot swallow /programs/[category], because a
+       * Next path parameter matches exactly one segment.
+       */
+      {
+        source: "/programs/course/:courseSlug",
+        destination: "/apply-for-training/courses/:courseSlug",
+        permanent: true,
+      },
+      {
+        source: "/programs/:category/:courseId",
+        destination: "/apply-for-training/courses/:courseId",
+        permanent: true,
+      },
       {
         source: "/what-we-offer/students-graduates",
         destination: "/apply-for-training",
