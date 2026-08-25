@@ -79,6 +79,8 @@ export function ChallengeSectionForm({ initial }: { initial: ChallengeSectionCon
             </div>
           </div>
         ))}
+        <Field label="Band image URL (optional)" value={values.image ?? ""} onChange={(value) => update("image", value)} />
+        <Field label="Band image alt text" value={values.imageAlt ?? ""} onChange={(value) => update("imageAlt", value)} />
         <Field label="Comparison title" value={values.comparisonTitle} onChange={(value) => update("comparisonTitle", value)} wide />
         <Field label="Problem column title" value={values.problemTitle} onChange={(value) => update("problemTitle", value)} />
         <Field label="Solution column title" value={values.solutionTitle} onChange={(value) => update("solutionTitle", value)} />

@@ -362,6 +362,22 @@ export function SitePageForm({
               placeholder="/images/randomPictures/groupworkstudents.jpg"
             />
           </div>
+          <div className="md:col-span-2">
+            <label htmlFor="heroImageAlt" className="text-sm font-bold text-brand-ink">
+              Hero image alt text
+            </label>
+            <input
+              id="heroImageAlt"
+              value={values.heroImageAlt ?? ""}
+              onChange={(event) => update("heroImageAlt", event.target.value)}
+              className={inputClass}
+              placeholder="Learners working through a practical exercise together"
+            />
+            <p className="mt-1.5 text-xs text-brand-muted">
+              Describe what is happening in the photograph. Do not repeat the page title:
+              a screen-reader user has already heard it.
+            </p>
+          </div>
           <div>
             <label htmlFor="heroVideoUrl" className="text-sm font-bold text-brand-ink">
               Hero video URL (optional)

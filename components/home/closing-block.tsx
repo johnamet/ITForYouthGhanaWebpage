@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { SectionIntro } from "@/components/content/section-intro";
+import { CircularFigure } from "@/components/media/circular-figure";
 import { NewsletterSignupForm } from "@/components/shared/newsletter-signup-form";
 import type { JoinCtaCard, NewsletterSignupContent } from "@/types/content";
 
@@ -46,10 +47,23 @@ export function ClosingBlock({ cards, newsletter }: ClosingBlockProps) {
                   key={card.id}
                   className="flex h-full flex-col rounded-panel border border-white/12 bg-white/[0.06] p-8 transition duration-200 hover:-translate-y-1 hover:border-white/25"
                 >
-                  <span
-                    aria-hidden="true"
-                    className="block h-[3px] w-9 rounded-capsule bg-brand-accent"
-                  />
+                  {card.image?.trim() ? (
+                    /* A circular figure per audience. The homepage's challenge
+                       section immediately above is a full-bleed band, so this
+                       deliberately does not repeat that treatment. */
+                    <CircularFigure
+                      className="items-start text-left"
+                      src={card.image}
+                      alt={card.imageAlt || card.title}
+                      size="sm"
+                      accent="var(--color-accent)"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden="true"
+                      className="block h-[3px] w-9 rounded-capsule bg-brand-accent"
+                    />
+                  )}
 
                   <div className="mt-6 space-y-3">
                     <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-white/70">

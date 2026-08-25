@@ -59,6 +59,10 @@ const MEDIA_SIGNALS = [
   /from "next\/image"/,
   /<ContentImage/, /<VideoCard/, /<CapsuleMedia/, /<InitiativeGallery/,
   /<WhatWeDoGallery/, /<iframe/, /<video/,
+  /* Treatment primitives from the orientation rule. Wide for programme content,
+     portrait for people, circular for either. */
+  /<MediaBand/, /<WideFrame/, /<OffsetFrames/, /<PortraitFigure/, /<CircularFigure/,
+  /<StorySection/,
 ];
 const PLACEHOLDER_SIGNALS = [/linear-gradient\(135deg,var\(--color-primary-light\)/, /bg-\[linear-gradient/];
 const TEXT_SIGNALS = [/<p[\s>]/, /<h2[\s>]/, /<h3[\s>]/, /leading-\[?1?\.?[678]/];

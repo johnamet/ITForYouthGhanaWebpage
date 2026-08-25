@@ -170,8 +170,12 @@ export const publicNavigation: NavItem[] = [
   },
   {
     label: "Our Impact",
-    href: "/our-impact/reports",
+    /* Points at the hub, not past it. This column previously linked straight to
+       /our-impact/reports, which left the hub reachable only by clicking a
+       breadcrumb on one of its own children. */
+    href: "/our-impact",
     items: [
+      { label: "Impact Overview", href: "/our-impact" },
       { label: "Impact Reports", href: "/our-impact/reports" },
       { label: "Testimonials", href: "/our-impact/testimonials" },
       { label: "UN SDGs", href: "/our-impact/sdgs" },
@@ -222,6 +226,7 @@ export const footerNavigation: NavigationColumn[] = [
   {
     heading: "Impact & Contact",
     links: [
+      { label: "Impact Overview", href: "/our-impact" },
       { label: "Impact Reports", href: "/our-impact/reports" },
       { label: "Testimonials", href: "/our-impact/testimonials" },
       { label: "News", href: "/news-and-updates/news" },
@@ -1553,15 +1558,21 @@ export const teamHub: SitePage = {
   title: "Our Team",
   description: "Facilitators, mentors, and operations staff who run cohort training, school clubs, and partnerships across Ghana.",
   intro: "We are practitioners first — people who have built products, taught in classrooms, and worked with young people in real Ghanaian contexts. The team combines technical depth, facilitation experience, and operational discipline.",
+  heroImage: "/images/randomPictures/mave_peter.JPG",
+  heroImageAlt: "Two IT For Youth Ghana facilitators working together during a session",
   stats: heroStats,
   sections: [
     {
       title: "What the team actually does",
       body: "We design and deliver 12-week cohorts. We train and support school facilitators. We run outreach that turns first exposure into sustained interest. We manage partnerships, track outcomes, and publish honest reports. Every role exists to make the learner journey work.",
+      image: "/images/randomPictures/peterTalking.jpg",
+      imageAlt: "A facilitator explaining a concept to a group of learners",
     },
     {
       title: "How we stay grounded",
       body: "Most of us are Ghanaian or long-term residents. We hire alumni where possible. We spend time in schools and communities, not just offices. We measure what happens to learners after they leave, not just what happens in the room.",
+      image: "/images/randomPictures/girlstaslkingUX.jpg",
+      imageAlt: "Two young women discussing a user-experience exercise together",
     },
   ],
   ctas: [
@@ -1580,15 +1591,21 @@ export const partnersHub: SitePage = {
   title: "Our Partners",
   description: "Google.org, UNICEF Ghana, GIZ, Mastercard Foundation, Vodafone Ghana, Microsoft, Tony Elumelu Foundation, and USAID — organisations that have chosen ITFY for delivery.",
   intro: "We do not list logos for decoration. Every partner on this page has worked with us on real programmes — funded cohorts, co-designed clubs, sponsored learners, or hired graduates. They return because we deliver numbers and stories they can stand behind.",
+  heroImage: "/images/randomPictures/graduation.jpg",
+  heroImageAlt: "Partners and graduates together at an IT For Youth Ghana graduation",
   stats: heroStats,
   sections: [
     {
       title: "What partners get",
       body: "Clear proposals. Reliable delivery. Cohort-level reporting. Participant stories with consent. Financial transparency. A Ghanaian organisation that can represent the work credibly in-country and in donor conversations.",
+      image: "/images/randomPictures/studentpresentin.jpg",
+      imageAlt: "A learner presenting project work to a room",
     },
     {
       title: "Partnership principles",
       body: "We say yes to work we can actually do well. We report honestly, including what did not go to plan. We protect learner dignity in all storytelling. We are comfortable being an implementing partner or a visible co-brand, depending on what serves the mission.",
+      image: "/images/randomPictures/redclothingStudents.jpg",
+      imageAlt: "Learners collaborating around a shared table during a session",
     },
   ],
   ctas: [
@@ -1607,15 +1624,21 @@ export const careersHub: SitePage = {
   title: "Join Our Team",
   description: "Roles, volunteering, and contribution pathways for people who want to build digital opportunity in Ghana.",
   intro: "We hire facilitators, programme coordinators, partnership leads, and operations staff who are serious about outcomes. We also create structured volunteering and internship routes for professionals and students who want to contribute without a full-time role.",
+  heroImage: "/images/randomPictures/happystudentscasual.jpg",
+  heroImageAlt: "Facilitators and learners talking informally between sessions",
   stats: heroStats,
   sections: [
     {
       title: "What we look for",
       body: "People who can teach or mentor at a high standard. People who can run operations without drama. People who treat young Ghanaians with respect and high expectations at the same time. Technical skill matters, but character and consistency matter more.",
+      image: "/images/randomPictures/uXstudents.jpg",
+      imageAlt: "Learners working through a design exercise at their laptops",
     },
     {
       title: "How to engage",
       body: "Full-time and contract roles are posted when open. Volunteering windows (mentorship, portfolio review, career talks) can be proposed anytime. Alumni often return as facilitators or mentors — that pipeline is real.",
+      image: "/images/randomPictures/whiteLady.jpg",
+      imageAlt: "A mentor working one to one with a learner",
     },
   ],
   ctas: [
@@ -2217,6 +2240,8 @@ export const challengeSectionContent: ChallengeSectionContent = {
   title: "The challenge",
   headline: "Talent is everywhere. Access is not.",
   description: "Ghana’s digital divide keeps capable young people from the learning, connections, and opportunities they need to participate in the digital economy.",
+  image: "/images/randomPictures/children_holding_sign_in_streets.jpg",
+  imageAlt: "Young people holding handwritten signs during a community outreach activity",
   stats: [
     { label: "Offline Population", value: "30.1%", description: "10.5M people without internet access" },
     { label: "Rural Digital Gap", value: "77.3%", description: "Rural residents without internet" },
@@ -2898,6 +2923,8 @@ export const partners: Partner[] = [
 export const joinCtaCards: JoinCtaCard[] = [
   {
     id: "join-students",
+    image: "/images/randomPictures/UXcours.jpg",
+    imageAlt: "A learner working through a design exercise at a laptop",
     eyebrow: "For learners",
     title: "Apply for training",
     description: "Review eligibility, browse current courses, and take the next step from interest to enrolment with clear guidance.",
@@ -2907,6 +2934,8 @@ export const joinCtaCards: JoinCtaCard[] = [
   },
   {
     id: "join-organisations",
+    image: "/images/randomPictures/studentpresenting.jpg",
+    imageAlt: "A graduate presenting project work to an audience",
     eyebrow: "For organisations",
     title: "Partner with us",
     description: "Explore sponsorship, graduate hiring, staff volunteering, and custom corporate training designed for mission-aligned partners.",
@@ -2916,6 +2945,8 @@ export const joinCtaCards: JoinCtaCard[] = [
   },
   {
     id: "join-volunteer",
+    image: "/images/randomPictures/petertalkingtostudentscoloful.jpg",
+    imageAlt: "A volunteer mentor talking with a small group of learners",
     eyebrow: "For volunteers",
     title: "Contribute your expertise",
     description: "Mentor learners, review projects, deliver guest sessions, or support programme delivery where your skills can create lasting impact.",

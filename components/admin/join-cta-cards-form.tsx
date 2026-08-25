@@ -110,6 +110,8 @@ export function JoinCtaCardsForm({ initial }: Props) {
             <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Description</label><input className={input} value={card.description} onChange={(e) => update(i, "description", e.target.value)} /></div>
             <div><label className="text-sm font-bold text-brand-ink">Href</label><input className={input} value={card.href} onChange={(e) => update(i, "href", e.target.value)} /></div>
             <div><label className="text-sm font-bold text-brand-ink">Button label</label><input className={input} value={card.buttonLabel} onChange={(e) => update(i, "buttonLabel", e.target.value)} /></div>
+            <div><label className="text-sm font-bold text-brand-ink">Circular image URL</label><input className={input} value={card.image ?? ""} onChange={(e) => update(i, "image", e.target.value)} placeholder="/images/randomPictures/UXcours.jpg" /></div>
+            <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Circular image alt text</label><input className={input} value={card.imageAlt ?? ""} onChange={(e) => update(i, "imageAlt", e.target.value)} placeholder="What is happening in the photograph" /></div>
             <label className="inline-flex items-center gap-3 rounded-2xl border border-brand-border bg-brand-mist px-4 py-3 text-sm font-medium text-brand-ink">
               <input type="checkbox" checked={card.active !== false} onChange={(e) => update(i, "active", e.target.checked)} className="h-4 w-4 rounded border-slate-300" /> Active
             </label>

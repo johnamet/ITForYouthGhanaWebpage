@@ -55,6 +55,12 @@ export interface SitePage {
   description: string;
   intro: string;
   heroImage?: string;
+  /**
+   * What is happening in the hero photograph. Not a restatement of the title:
+   * the template previously passed the page title as alt text, which tells a
+   * screen-reader user nothing they had not already heard.
+   */
+  heroImageAlt?: string;
   // Optional: video to feature in the page hero
   heroVideoUrl?: string;
   // Optional: thumbnail image to show when the hero video is present
@@ -266,6 +272,14 @@ export interface JoinCtaCard {
    * through colour, shape, type and spacing.
    */
   icon: "students" | "organisations" | "volunteer";
+
+  /**
+   * Circular portrait for this audience. The circular crop is the one treatment
+   * the landscape/portrait split does not constrain, because it crops cleanly
+   * from either library. See docs/addendum-media-pairing.md.
+   */
+  image?: string;
+  imageAlt?: string;
   active?: boolean;
 }
 
