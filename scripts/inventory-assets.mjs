@@ -13,10 +13,9 @@
  */
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, relative, extname } from "node:path";
-import { execSync } from "node:child_process";
+import { pathToFileURL } from "node:url";
 
 const ROOT = process.cwd();
-const PUBLIC = join(ROOT, "public");
 
 /* ------------------------------------------------------------- dimensions */
 
@@ -70,11 +69,11 @@ function dimensions(file) {
 
 const MEDIA = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif", ".svg", ".mp4", ".webm"]);
 
-function walk(dir, out = []) {
+export function walkMedia(dir, out = []) {
   if (!existsSync(dir)) return out;
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
-    if (statSync(full).isDirectory()) walk(full, out);
+    if (statSync(full).isDirectory()) walkMedia(full, out);
     else if (MEDIA.has(extname(entry).toLowerCase())) out.push(full);
   }
   return out;
@@ -82,16 +81,29 @@ function walk(dir, out = []) {
 
 /* ------------------------------------------------------- reference counting */
 
-/** How many times each asset path appears in source, and in which files. */
-function references(assetPaths) {
-  const index = new Map(assetPaths.map((p) => [p, []]));
-  const sources = execSync(
-    "grep -rl --include=*.ts --include=*.tsx '/images\\|/reports\\|/videos' app components lib || true",
-    { cwd: ROOT, encoding: "utf8" },
-  ).split("\n").filter(Boolean);
+const SOURCE_EXTENSIONS = new Set([".ts", ".tsx"]);
 
-  for (const file of sources) {
-    const text = readFileSync(join(ROOT, file), "utf8");
+/** Recursively find source files without relying on an installed shell tool. */
+export function walkSourceFiles(dir, out = []) {
+  if (!existsSync(dir)) return out;
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) walkSourceFiles(full, out);
+    else if (SOURCE_EXTENSIONS.has(extname(entry).toLowerCase())) out.push(full);
+  }
+  return out;
+}
+
+/** How many times each asset path appears in source, and in which files. */
+export function references(assetPaths, root = ROOT) {
+  const index = new Map(assetPaths.map((p) => [p, []]));
+  const sources = ["app", "components", "lib"]
+    .flatMap((directory) => walkSourceFiles(join(root, directory)))
+    .filter((file) => /\/(?:images|reports|videos)\b/.test(readFileSync(file, "utf8")));
+
+  for (const absoluteFile of sources) {
+    const text = readFileSync(absoluteFile, "utf8");
+    const file = relative(root, absoluteFile).split("\\").join("/");
     for (const p of assetPaths) {
       if (text.includes(p)) index.get(p).push(file);
     }
@@ -101,81 +113,82 @@ function references(assetPaths) {
 
 /* ------------------------------------------------------------------- report */
 
-const files = walk(PUBLIC);
 // Matches "Download", "Download (3)", "IMG_1234", "DSC0001", "Screenshot 2".
 const GENERIC = /^(download|image|img|photo|untitled|screenshot|whatsapp|dsc)[-_ ]*(\(\d+\)|\d*)$/i;
 
-const assets = files.map((full) => {
-  const webPath = "/" + relative(PUBLIC, full).split("\\").join("/");
-  const dim = dimensions(full);
-  const bytes = statSync(full).size;
-  const base = webPath.split("/").pop().replace(extname(webPath), "");
+export function createAssetInventory(root = ROOT) {
+  const publicDirectory = join(root, "public");
+  const files = walkMedia(publicDirectory);
+  const assets = files.map((full) => {
+    const webPath = "/" + relative(publicDirectory, full).split("\\").join("/");
+    const dim = dimensions(full);
+    const bytes = statSync(full).size;
+    const base = webPath.split("/").pop().replace(extname(webPath), "");
+    return {
+      path: webPath,
+      dir: "/" + relative(publicDirectory, full).split("\\").join("/").split("/").slice(0, -1).join("/"),
+      ext: extname(webPath).toLowerCase(),
+      bytes,
+      kb: Math.round(bytes / 1024),
+      width: dim?.w ?? null,
+      height: dim?.h ?? null,
+      orientation: dim?.w && dim?.h
+        ? (dim.w > dim.h * 1.15 ? "landscape" : dim.h > dim.w * 1.15 ? "portrait" : "square")
+        : "unknown",
+      genericName: GENERIC.test(base),
+      oversized: bytes > 1024 * 1024,
+      // A .png that is really a JPEG, or similar. Confuses tooling and humans.
+      extensionMismatch: Boolean(
+        dim?.real &&
+          !((dim.real === "jpeg" && [".jpg", ".jpeg"].includes(extname(webPath).toLowerCase())) ||
+            dim.real === extname(webPath).toLowerCase().slice(1)),
+      ),
+    };
+  });
+
+  const refs = references(assets.map((a) => a.path), root);
+  for (const a of assets) {
+    a.referencedIn = refs.get(a.path) ?? [];
+    a.refCount = a.referencedIn.length;
+  }
+
+  const byDir = {};
+  for (const a of assets) {
+    byDir[a.dir] ??= { count: 0, landscape: 0, portrait: 0, square: 0, unknown: 0, unused: 0, oversized: 0, generic: 0 };
+    const d = byDir[a.dir];
+    d.count += 1;
+    d[a.orientation] += 1;
+    if (a.refCount === 0) d.unused += 1;
+    if (a.oversized) d.oversized += 1;
+    if (a.genericName) d.generic += 1;
+  }
+
   return {
-    path: webPath,
-    dir: "/" + relative(PUBLIC, full).split("/").slice(0, -1).join("/"),
-    ext: extname(webPath).toLowerCase(),
-    bytes,
-    kb: Math.round(bytes / 1024),
-    width: dim?.w ?? null,
-    height: dim?.h ?? null,
-    orientation: dim?.w && dim?.h
-      ? (dim.w > dim.h * 1.15 ? "landscape" : dim.h > dim.w * 1.15 ? "portrait" : "square")
-      : "unknown",
-    genericName: GENERIC.test(base),
-    oversized: bytes > 1024 * 1024,
-    // A .png that is really a JPEG, or similar. Confuses tooling and humans.
-    extensionMismatch: Boolean(
-      dim?.real &&
-        !((dim.real === "jpeg" && [".jpg", ".jpeg"].includes(extname(webPath).toLowerCase())) ||
-          dim.real === extname(webPath).toLowerCase().slice(1)),
-    ),
+    totals: {
+      files: assets.length,
+      landscape: assets.filter((a) => a.orientation === "landscape").length,
+      portrait: assets.filter((a) => a.orientation === "portrait").length,
+      square: assets.filter((a) => a.orientation === "square").length,
+      unreferenced: assets.filter((a) => a.refCount === 0).length,
+      reusedAcrossFiles: assets.filter((a) => a.refCount > 1).length,
+      oversized: assets.filter((a) => a.oversized).length,
+      genericNames: assets.filter((a) => a.genericName).length,
+      extensionMismatch: assets.filter((a) => a.extensionMismatch).length,
+    },
+    byDirectory: byDir,
+    reused: assets.filter((a) => a.refCount > 1).sort((a, b) => b.refCount - a.refCount)
+      .map((a) => ({ path: a.path, refCount: a.refCount, referencedIn: a.referencedIn })),
+    oversized: assets.filter((a) => a.oversized).sort((a, b) => b.bytes - a.bytes)
+      .map((a) => ({ path: a.path, kb: a.kb, width: a.width, height: a.height })),
+    genericNames: assets.filter((a) => a.genericName).map((a) => a.path),
+    extensionMismatch: assets.filter((a) => a.extensionMismatch)
+      .map((a) => ({ path: a.path, actually: `${a.width}x${a.height}` })),
+    unreferenced: assets.filter((a) => a.refCount === 0).map((a) => a.path),
+    assets,
   };
-});
-
-const refs = references(assets.map((a) => a.path));
-for (const a of assets) {
-  a.referencedIn = refs.get(a.path) ?? [];
-  a.refCount = a.referencedIn.length;
 }
 
-const byDir = {};
-for (const a of assets) {
-  byDir[a.dir] ??= { count: 0, landscape: 0, portrait: 0, square: 0, unknown: 0, unused: 0, oversized: 0, generic: 0 };
-  const d = byDir[a.dir];
-  d.count += 1;
-  d[a.orientation] += 1;
-  if (a.refCount === 0) d.unused += 1;
-  if (a.oversized) d.oversized += 1;
-  if (a.genericName) d.generic += 1;
-}
-
-const report = {
-  totals: {
-    files: assets.length,
-    landscape: assets.filter((a) => a.orientation === "landscape").length,
-    portrait: assets.filter((a) => a.orientation === "portrait").length,
-    square: assets.filter((a) => a.orientation === "square").length,
-    unreferenced: assets.filter((a) => a.refCount === 0).length,
-    reusedAcrossFiles: assets.filter((a) => a.refCount > 1).length,
-    oversized: assets.filter((a) => a.oversized).length,
-    genericNames: assets.filter((a) => a.genericName).length,
-    extensionMismatch: assets.filter((a) => a.extensionMismatch).length,
-  },
-  byDirectory: byDir,
-  reused: assets.filter((a) => a.refCount > 1).sort((a, b) => b.refCount - a.refCount)
-    .map((a) => ({ path: a.path, refCount: a.refCount, referencedIn: a.referencedIn })),
-  oversized: assets.filter((a) => a.oversized).sort((a, b) => b.bytes - a.bytes)
-    .map((a) => ({ path: a.path, kb: a.kb, width: a.width, height: a.height })),
-  genericNames: assets.filter((a) => a.genericName).map((a) => a.path),
-  extensionMismatch: assets.filter((a) => a.extensionMismatch)
-    .map((a) => ({ path: a.path, actually: `${a.width}x${a.height}` })),
-  unreferenced: assets.filter((a) => a.refCount === 0).map((a) => a.path),
-  assets,
-};
-
-if (process.argv.includes("--json")) {
-  console.log(JSON.stringify(report, null, 2));
-} else {
+export function printAssetInventory(report) {
   const t = report.totals;
   console.log("\nASSET INVENTORY\n");
   console.log(`  media files          ${t.files}`);
@@ -190,7 +203,7 @@ if (process.argv.includes("--json")) {
 
   console.log("\n  BY DIRECTORY");
   console.log(`    ${"directory".padEnd(30)} ${"n".padStart(4)} ${"land".padStart(5)} ${"port".padStart(5)} ${"sqr".padStart(4)} ${"unused".padStart(7)} ${">1MB".padStart(5)}`);
-  for (const [dir, d] of Object.entries(byDir).sort()) {
+  for (const [dir, d] of Object.entries(report.byDirectory).sort()) {
     console.log(`    ${dir.padEnd(30)} ${String(d.count).padStart(4)} ${String(d.landscape).padStart(5)} ${String(d.portrait).padStart(5)} ${String(d.square).padStart(4)} ${String(d.unused).padStart(7)} ${String(d.oversized).padStart(5)}`);
   }
 
@@ -210,4 +223,10 @@ if (process.argv.includes("--json")) {
   console.log("\n  GENERIC FILENAMES (unmaintainable at scale)");
   for (const p of report.genericNames.slice(0, 20)) console.log(`    ${p}`);
   console.log("");
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const report = createAssetInventory();
+  if (process.argv.includes("--json")) console.log(JSON.stringify(report, null, 2));
+  else printAssetInventory(report);
 }

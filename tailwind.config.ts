@@ -12,8 +12,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        heading: ["var(--font-heading)", "Georgia", "serif"],
-        sans: ["var(--font-body)", "system-ui", "sans-serif"],
+        heading: ["var(--font-heading)"],
+        sans: ["var(--font-body)"],
       },
 
 
