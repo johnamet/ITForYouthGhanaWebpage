@@ -116,3 +116,54 @@ describe("redirects", () => {
     assert.equal(existsSync("app/(public)/programs/[category]/[courseId]"), false);
   });
 });
+
+/**
+ * The sitemap's static list and the route files must agree in both directions.
+ *
+ * /our-impact reached the sitemap only by being spread in from
+ * publicNavigation, so a purely editorial decision to drop it from the menu
+ * would also have dropped the impact hub out of search. Nothing would have
+ * failed. Deriving indexability from a navigation menu is the bug; this test
+ * is what stops it coming back.
+ */
+describe("sitemap coverage", () => {
+  const source = readFileSync("app/sitemap.ts", "utf8");
+  const listed = [
+    ...source
+      .slice(source.indexOf("const STATIC_ROUTES"), source.indexOf("type Entry"))
+      .matchAll(/"(\/[^"]*)"/g),
+  ].map((match) => match[1]);
+
+  const staticRoutes = ROUTES.filter((route) => !route.dynamic).map((route) => route.pattern);
+
+  it("parses the static list", () => {
+    assert.ok(listed.length >= 20, `parsed only ${listed.length} routes out of app/sitemap.ts`);
+  });
+
+  it("lists every static public route", () => {
+    const missing = staticRoutes.filter((pattern) => !listed.includes(pattern));
+    assert.deepEqual(missing, [], `public routes absent from the sitemap:\n  ${missing.join("\n  ")}`);
+  });
+
+  it("lists nothing that is not a route", () => {
+    // A listed URL may be served by a dynamic segment: /news-and-updates/news
+    // and /news-and-updates/blogs are both real pages under [category].
+    const phantom = listed.filter((pattern) => !matchesRoute(pattern));
+    assert.deepEqual(phantom, [], `sitemap entries with no page:\n  ${phantom.join("\n  ")}`);
+  });
+
+  it("does not stamp every entry with the current time", () => {
+    // lastModified: new Date() on every URL tells a crawler the whole site
+    // changed on every fetch, which is the same as telling it nothing.
+    assert.doesNotMatch(
+      source,
+      /lastModified:\s*new Date\(\)/,
+      "sitemap fabricates a modification date for entries that have none",
+    );
+  });
+
+  it("includes the canonical course URLs", () => {
+    assert.match(source, /apply-for-training\/courses\/\$\{slug\}/);
+    assert.match(source, /getTrainingCatalogMixed/);
+  });
+});

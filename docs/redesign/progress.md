@@ -41,7 +41,7 @@ No asset audit is being performed. See `media-policy.md` for why.
 | Real 404s on dynamic routes | done | `app/routes.test.ts` |
 | Titles render the org name once | done | `app/metadata-titles.test.ts` |
 | Redirect integrity gate | done | `app/routes.test.ts` |
-| Sitemap: courses, real lastModified | not started | `routing-decisions.md` §3 |
+| Sitemap: courses, real lastModified | done | `app/routes.test.ts` sitemap coverage |
 | 8 routes with no metadata, 22 with no OG image | not started | `routing-decisions.md` §5 |
 | `discover-routes.mjs` is wrong four ways | not started | route floor is 60, not 53 |
 
@@ -71,6 +71,32 @@ the crimson accent stays valid. The brief remains authoritative on layout,
 archetypes and editorial direction; the logo and the implemented tokens are
 authoritative on colour. Do not reopen this by citing the brief's colour
 section.
+
+## Known issues, not caused by the redesign
+
+`npm run build` logs this twice during static generation and still exits 0:
+
+```
+Error: Only plain objects, and a few built-ins, can be passed to Client
+Components from Server Components. Classes or null prototypes are not supported.
+digest: '2616353881'
+```
+
+Next attributes it to no page, and the stack is entirely inside
+`next-server/app-page.runtime.prod.js`. The likely cause is an admin page
+passing a Firestore value straight into a client form: `lib/cms/applications.ts`
+and `lib/cms/contact-messages.ts` both convert timestamps on read, and the
+readers that do not convert are the suspects. It predates this work and sits in
+the admin surface, outside the public redesign. Worth a separate investigation,
+because a prop that fails to serialise is a real runtime fault, not a warning.
+
+Three WCAG AA failures measured in the current palette and still unfixed:
+`accent` on `brand-warm` 4.38:1, `primary` on `brand-mist` 4.41:1, and
+`brand-border` `#D8E5F2` at 1.28:1 where it is used as a form-control boundary
+rather than a hairline. See `design-system.md` §2.3.
+
+`scripts/discover-routes.mjs` is wrong four ways and reports 53 routes where the
+floor is 60. See `routing-decisions.md`.
 
 ## Verification baseline
 
