@@ -8,12 +8,12 @@ Routes are discovered from the filesystem, not from the navigation menu, because
 
 | Measure | Count |
 | --- | --- |
-| public page files | 32 |
-| public routes after expansion | 53 |
+| public page files | 30 |
+| public routes after expansion | 56 |
 | admin page files | 67 |
 | auth page files | 1 |
 | api route files | 47 |
-| chrome files | 7 |
+| chrome files | 6 |
 
 ## Dynamic segments, expanded
 
@@ -24,12 +24,10 @@ A single `[slug]` file is not one page. These are the pages it actually produces
 | `/apply-for-training/courses/[slug]` | runtime | live course catalogue (lib/api/training) |
 | `/departments/[slug]` | 8 pages | programmes, training-curriculum, partnerships, community-outreach, monitoring-evaluation-learning, operations, communications, people-governance |
 | `/for-organisations/[slug]` | 4 pages | corporate-training, sponsorships, hire-graduates, staff-volunteering |
-| `/news-and-updates/[category]/[slug]` | 5 pages | news/cohort-8-scholarship-campaign, news/community-tech-clubs-expansion, news/cohort-8-now-open, news/why-homepage-clarity-matters, news/why-partnership-storytelling-builds-trust |
+| `/news-and-updates/[category]/[slug]` | 8 pages | news/cohort-8-scholarship-campaign, news/community-tech-clubs-expansion, news/rebuild-foundation-update, news/digital-skills-fair-preview, blogs/why-homepage-clarity-matters, blogs/why-partnership-storytelling-builds-trust, blogs/what-young-people-need-after-the-first-workshop, blogs/mentor-labs-and-practical-confidence |
 | `/news-and-updates/[category]` | 2 pages | news, blogs |
 | `/partner-with-us/[slug]` | 5 pages | educational, government, ngo-foundations, international-development, technology |
-| `/programs/[category]/[courseId]` | runtime | force-dynamic, from getCourseCatalog() |
 | `/programs/[category]` | runtime | force-dynamic, from getCourseCatalog() |
-| `/programs/course/[courseSlug]` | runtime | force-dynamic, from getCourseCatalog() |
 | `/what-we-do/[slug]` | 8 pages | girls-in-tech, youth-academy, entrepreneurship-hub, code-impact-challenge, rural-tech-connect, community-outreach, advocacy, tech-clubs |
 | `/who-we-are/[slug]` | runtime | Firestore custom pages (getCmsWhoWeAreDynamicPages), no seed |
 
@@ -42,7 +40,6 @@ Visible surfaces that also need design attention and are routinely forgotten.
 | layout | `app/(admin)/layout.tsx` |
 | loading | `app/(public)/apply-for-training/courses/loading.tsx` |
 | layout | `app/(public)/layout.tsx` |
-| loading | `app/(public)/programs/course/[courseSlug]/loading.tsx` |
 | error | `app/error.tsx` |
 | layout | `app/layout.tsx` |
 | not-found | `app/not-found.tsx` |
@@ -57,10 +54,12 @@ _None._
 
 _None._
 
-### Redirects and rewrites (25)
+### Redirects and rewrites (27)
 
 | From | To |
 | --- | --- |
+| `/programs/course/:courseSlug` | `/apply-for-training/courses/:courseSlug` |
+| `/programs/:category/:courseId` | `/apply-for-training/courses/:courseId` |
 | `/what-we-offer/students-graduates` | `/apply-for-training` |
 | `/what-we-offer/businesses` | `/for-organisations` |
 | `/what-we-offer/volunteers` | `/who-we-are/careers` |
@@ -112,8 +111,6 @@ _None._
 - `/partner-with-us/[slug]`
 - `/programs`
 - `/programs/[category]`
-- `/programs/[category]/[courseId]`
-- `/programs/course/[courseSlug]`
 - `/what-we-do`
 - `/what-we-do/[slug]`
 - `/who-we-are`

@@ -3,7 +3,7 @@
  * Regenerates the audit documents under docs/audit/ from the analysis scripts.
  *
  * The documents are living: run this after any change to routes, readers,
- * assets or sections rather than hand-editing them, so they never drift from
+ * routes, CMS coverage or pairing rather than hand-editing them, so they never drift from
  * the repository they describe.
  *
  * Usage: node scripts/generate-audit-docs.mjs
@@ -16,7 +16,6 @@ const json = (script) =>
 
 const routes = json("scripts/discover-routes.mjs");
 const coverage = json("scripts/cms-coverage.mjs");
-const assets = json("scripts/inventory-assets.mjs");
 const pairing = json("scripts/media-pairing.mjs");
 
 mkdirSync("docs/audit", { recursive: true });
@@ -98,56 +97,48 @@ for (const r of coverage.readers.sort((a, b) => a.name.localeCompare(b.name))) {
 }
 writeFileSync("docs/audit/cms-coverage-map.md", c);
 
-/* ------------------------------------------------- 3. media inventory ----- */
+/* ---------------------------------------------- 3. media pairing status ----- */
 
-let m = `# Media inventory and pairing gap analysis\n\n${STAMP}\n`;
-const t = assets.totals;
-m += `## Asset totals\n\n| Measure | Count |\n| --- | --- |\n`;
-for (const [k, v] of Object.entries(t)) m += `| ${k.replace(/([A-Z])/g, " $1").toLowerCase()} | ${v} |\n`;
-
-m += `\n## Orientation by directory\n\n`;
-m += `Orientation matters more than it sounds: a layout needing tall portrait media cannot be built from a library of wide landscape shots.\n\n`;
-m += `| Directory | Files | Landscape | Portrait | Square | Unused | Over 1 MB |\n| --- | --- | --- | --- | --- | --- | --- |\n`;
-for (const [dir, v] of Object.entries(assets.byDirectory).sort()) {
-  m += `| \`${dir}\` | ${v.count} | ${v.landscape} | ${v.portrait} | ${v.square} | ${v.unused} | ${v.oversized} |\n`;
-}
-
-m += `\n## Needs optimisation (over 1 MB)\n\n| Size | Dimensions | Path |\n| --- | --- | --- |\n`;
-for (const a of assets.oversized) m += `| ${a.kb} KB | ${a.width}×${a.height} | \`${a.path}\` |\n`;
-
-m += `\n## Generic filenames\n\nUnmaintainable at scale; rename with care because other code may reference them.\n\n`;
-for (const p of assets.genericNames) m += `- \`${p}\`\n`;
-
-if (assets.extensionMismatch?.length) {
-  m += `\n## Extension does not match content\n\n`;
-  for (const a of assets.extensionMismatch) m += `- \`${a.path}\` is really ${a.actually}\n`;
-}
-
-m += `\n## Reused across more than one source file\n\n`;
-m += `Unintentional repetition is invisible when reviewing one page at a time and obvious to a visitor browsing the site.\n\n`;
-m += `| Uses | Path |\n| --- | --- |\n`;
-for (const a of assets.reused) m += `| ${a.refCount} | \`${a.path}\` |\n`;
-
-m += `\n## Never referenced in source (${assets.unreferenced.length})\n\n`;
-for (const p of assets.unreferenced) m += `- \`${p}\`\n`;
-
+/**
+ * The asset inventory is deliberately gone.
+ *
+ * This block used to write an orientation table, an optimisation list, a
+ * generic-filename list, a reuse report and a commissioning gap analysis into
+ * docs/audit/media-inventory.md. The organisation will replace the site's
+ * photography before launch, so all of it is design-phase placeholder media and
+ * none of those measurements can inform a design decision any more. See
+ * docs/redesign/media-policy.md. docs/audit/media-inventory.md is now a short
+ * historical marker and is not regenerated.
+ *
+ * What still matters is whether every substantive text block is paired with a
+ * visual, and whether a gradient is standing in for a photograph anywhere.
+ * Both are asserted by gate tests; this is the human-readable view of the same
+ * numbers.
+ */
 const pt = pairing.totals;
-m += `\n## Pairing gap analysis\n\n| Measure | Count |\n| --- | --- |\n`;
+let m = `# Media pairing status\n\n${STAMP}\n`;
+m += `\nThis is not an asset inventory. See \`docs/redesign/media-policy.md\`.\n`;
+m += `\n| Measure | Count |\n| --- | --- |\n`;
 m += `| public routes | ${pt.routes} |\n| components scanned | ${pt.componentsScanned} |\n`;
 m += `| content sections | ${pt.contentSections} |\n| paired with media or a graphic form | ${pt.paired} |\n`;
 m += `| unpaired text-only | ${pt.textOnly} |\n| routes fully paired | ${pt.routesFullyPaired} of ${pt.routes} |\n`;
+m += `| placeholder gradients | ${pt.placeholderGradients ?? 0} |\n`;
 
-m += `\nStructural components (section openers, link grids, forms) and purposeful graphic forms (a sequence drawn as a line, a tree over real groupings, figures from real numbers) are excluded from the gap list, per the addendum.\n`;
+m += `\nStructural components (section openers, link grids, forms) and purposeful graphic forms (a sequence drawn as a line, a tree over real groupings, figures from real numbers) are excluded from the gap list.\n`;
 
-m += `\n### Unpaired content sections\n\n| Route | Section | Suggested resolution |\n| --- | --- | --- |\n`;
-for (const r of pairing.rows.filter((x) => x.textOnly.length)) {
-  for (const s of r.textOnly) {
-    m += `| \`${r.route}\` | ${s} | _decide: photograph, video, graphic form, or merge into neighbour_ |\n`;
+if (pairing.rows.some((x) => x.textOnly.length)) {
+  m += `\n## Unpaired content sections\n\n| Route | Section | Suggested resolution |\n| --- | --- | --- |\n`;
+  for (const r of pairing.rows.filter((x) => x.textOnly.length)) {
+    for (const s of r.textOnly) {
+      m += `| \`${r.route}\` | ${s} | _decide: photograph, video, graphic form, or merge into neighbour_ |\n`;
+    }
   }
+} else {
+  m += `\nNo unpaired content sections.\n`;
 }
-writeFileSync("docs/audit/media-inventory.md", m);
+writeFileSync("docs/audit/media-pairing-status.md", m);
 
 console.log("wrote:");
-for (const f of ["route-inventory.md", "cms-coverage-map.md", "media-inventory.md"]) {
+for (const f of ["route-inventory.md", "cms-coverage-map.md", "media-pairing-status.md"]) {
   console.log(`  docs/audit/${f}`);
 }

@@ -10,10 +10,10 @@ One row per public route, with the sections it renders and the content path behi
 
 | Measure | Count |
 | --- | --- |
-| public routes | 32 |
+| public routes | 30 |
 | full coverage | 19 |
 | partial coverage | 9 |
-| no coverage | 4 |
+| no coverage | 2 |
 | readers discovered | 60 |
 
 ## Coverage by route
@@ -43,8 +43,6 @@ One row per public route, with the sections it renders and the content path behi
 | `/partner-with-us/[slug]` | getCmsPartnershipTrackBySlug | partnerships | **missing** | yes | **partial** |
 | `/programs` | _none_ | _none_ | **missing** | yes | **none** |
 | `/programs/[category]` | _none_ | _none_ | **missing** | yes | **none** |
-| `/programs/[category]/[courseId]` | _none_ | _none_ | **missing** | yes | **none** |
-| `/programs/course/[courseSlug]` | _none_ | _none_ | **missing** | yes | **none** |
 | `/what-we-do` | getCmsInitiatives<br>getCmsWhatWeDoOverview | initiatives, siteContent | `/admin/programmes`<br>`/admin/what-we-do-pages` | yes | full |
 | `/what-we-do/[slug]` | getCmsInitiativeBySlug<br>getCmsInitiatives<br>getCmsWhatWeDoDynamicPageBySlug<br>getCmsWhatWeDoDynamicPages | initiatives, siteContent | **missing** | yes | **partial** |
 | `/who-we-are` | getCmsWhoWeArePage | _none_ | **missing** | yes | **partial** |
@@ -192,18 +190,6 @@ Source: `app/(public)/programs/page.tsx`
 Source: `app/(public)/programs/[category]/page.tsx`
 
 - ProgramsOverview
-
-### `/programs/[category]/[courseId]`
-
-Source: `app/(public)/programs/[category]/[courseId]/page.tsx`
-
-- CourseDetailCard
-
-### `/programs/course/[courseSlug]`
-
-Source: `app/(public)/programs/course/[courseSlug]/page.tsx`
-
-- CourseDetailCard
 
 ### `/what-we-do`
 

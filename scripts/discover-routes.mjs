@@ -16,6 +16,7 @@
  */
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, relative } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const ROOT = process.cwd();
 const APP = join(ROOT, "app");
@@ -73,8 +74,35 @@ const organisationConfig = src("lib/content/organisation-config.ts");
 const impactConfig = src("lib/content/impact-config.ts");
 const newsConfig = src("lib/content/news-config.ts");
 
+/** The block of source belonging to one exported array, without bleeding into the next. */
+function exportBlock(source, exportName) {
+  const start = source.indexOf(`export const ${exportName}`);
+  if (start === -1) return "";
+  const next = source.indexOf("\nexport const ", start + 1);
+  return source.slice(start, next === -1 ? undefined : next);
+}
+
+/**
+ * Slugs paired with the category recorded beside them.
+ *
+ * Article URLs are /news-and-updates/<category>/<slug>, and the category is per
+ * article. Hardcoding "news/" onto every slug put the four blog articles at
+ * /news-and-updates/news/... in this report, two URLs that 404, in the document
+ * whose job is to say which URLs exist.
+ */
+export function categorisedSlugsIn(source, exportName) {
+  const block = exportBlock(source, exportName);
+  const out = [];
+  for (const match of block.matchAll(/^\s{2,}slug: "([^"]+)"/gm)) {
+    const after = block.slice(match.index, match.index + 400);
+    const category = after.match(/^\s{2,}category: "([^"]+)"/m);
+    out.push({ slug: match[1], category: category ? category[1] : null });
+  }
+  return out;
+}
+
 /** Slugs declared in an exported array of objects, e.g. `slug: "girls-in-tech"`. */
-function slugsIn(source, exportName) {
+export function slugsIn(source, exportName) {
   const start = source.indexOf(`export const ${exportName}`);
   if (start === -1) return [];
   // Stop at the next top-level export so we do not bleed into the next array.
@@ -85,10 +113,18 @@ function slugsIn(source, exportName) {
 
 const EXPANSIONS = {
   "/what-we-do/[slug]": slugsIn(siteConfig, "initiatives"),
-  "/partner-with-us/[slug]": slugsIn(siteConfig, "partnershipPages"),
+  /* partnershipPages does not exist in site-config; the pages come from
+     partnershipTracks in partnership-config, and reading the wrong array
+     reported this route as expanding to zero pages. */
+  "/partner-with-us/[slug]": slugsIn(partnershipConfig, "partnershipTracks"),
   "/departments/[slug]": slugsIn(siteConfig, "departments"),
   "/news-and-updates/[category]": ["news", "blogs"],
-  "/news-and-updates/[category]/[slug]": slugsIn(siteConfig, "articles").map((s) => `news/${s}`),
+  /* Articles live in news-config, not site-config, and each one carries its own
+     category. Reading site-config found five entries where the app renders
+     seven, and forcing "news/" onto all of them invented two 404s. */
+  "/news-and-updates/[category]/[slug]": categorisedSlugsIn(newsConfig, "articles").map(
+    (a) => `${a.category ?? "news"}/${a.slug}`,
+  ),
   "/for-organisations/[slug]": slugsIn(organisationConfig, "organisationServices"),
 };
 
@@ -99,8 +135,6 @@ const RUNTIME_RESOLVED = {
   "/who-we-are/[slug]": "Firestore custom pages (getCmsWhoWeAreDynamicPages), no seed",
   "/apply-for-training/courses/[slug]": "live course catalogue (lib/api/training)",
   "/programs/[category]": "force-dynamic, from getCourseCatalog()",
-  "/programs/[category]/[courseId]": "force-dynamic, from getCourseCatalog()",
-  "/programs/course/[courseSlug]": "force-dynamic, from getCourseCatalog()",
 };
 
 /* ----------------------------------------------------- reconciliation sources */
@@ -199,38 +233,47 @@ const report = {
   publicRoutes: publicPages.map((r) => r.route).sort(),
 };
 
-if (process.argv.includes("--json")) {
-  console.log(JSON.stringify(report, null, 2));
-} else {
-  const t = report.totals;
-  console.log("\nROUTE DISCOVERY\n");
-  console.log(`  public page files           ${t.publicPageFiles}`);
-  console.log(`  public routes (expanded)    ${t.publicRoutesAfterExpansion}`);
-  console.log(`  admin page files            ${t.adminPageFiles}`);
-  console.log(`  auth page files             ${t.authPageFiles}`);
-  console.log(`  api route files             ${t.apiRouteFiles}`);
-  console.log(`  layout/loading/error/404    ${t.chromeFiles}`);
+/* Importing this module must not print a report: the slug expanders above
+   are imported by the gate test. */
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  if (process.argv.includes("--json")) {
+    console.log(JSON.stringify(report, null, 2));
+  } else {
+    const t = report.totals;
+    console.log("\nROUTE DISCOVERY\n");
+    console.log(`  public page files           ${t.publicPageFiles}`);
+    console.log(`  public routes (expanded)    ${t.publicRoutesAfterExpansion}`);
+    console.log(`  admin page files            ${t.adminPageFiles}`);
+    console.log(`  auth page files             ${t.authPageFiles}`);
+    console.log(`  api route files             ${t.apiRouteFiles}`);
+    console.log(`  layout/loading/error/404    ${t.chromeFiles}`);
 
-  console.log("\n  DYNAMIC SEGMENTS");
-  for (const d of report.dynamicExpansion) {
-    const n = d.expandsTo !== null
-      ? `${d.expandsTo} pages`
-      : d.runtime
-        ? `runtime: ${d.runtime}`
-        : "UNRESOLVED";
-    console.log(`    ${d.route.padEnd(40)} ${n}`);
+    console.log("\n  DYNAMIC SEGMENTS");
+    for (const d of report.dynamicExpansion) {
+      const n = d.expandsTo !== null
+        ? `${d.expandsTo} pages`
+        : d.runtime
+          ? `runtime: ${d.runtime}`
+          : "UNRESOLVED";
+      console.log(`    ${d.route.padEnd(40)} ${n}`);
+    }
+
+    console.log("\n  CHROME (also needs design attention)");
+    for (const c of report.chrome) console.log(`    ${c.kind.padEnd(10)} ${c.file}`);
+
+    const f = report.findings;
+    console.log(`\n  FINDINGS`);
+    console.log(`    dead internal links in seed copy   ${f.deadInternalLinks.length}`);
+    for (const l of f.deadInternalLinks) console.log(`      ${l}`);
+    console.log(`    built but unreachable from nav/copy ${f.unreachableFromNavOrCopy.length}`);
+    for (const l of f.unreachableFromNavOrCopy) console.log(`      ${l}`);
+    /* Computed since the first version of this script and never printed, so the
+       one finding that would have caught /our-impact missing from the sitemap
+       was visible only in --json. */
+    console.log(`    built but missing from sitemap     ${f.missingFromSitemap.length}`);
+    for (const l of f.missingFromSitemap) console.log(`      ${l}`);
+    console.log(`    redirects/rewrites declared        ${f.redirects.length}`);
+    for (const r of f.redirects) console.log(`      ${r.from} -> ${r.to}`);
+    console.log("");
   }
-
-  console.log("\n  CHROME (also needs design attention)");
-  for (const c of report.chrome) console.log(`    ${c.kind.padEnd(10)} ${c.file}`);
-
-  const f = report.findings;
-  console.log(`\n  FINDINGS`);
-  console.log(`    dead internal links in seed copy   ${f.deadInternalLinks.length}`);
-  for (const l of f.deadInternalLinks) console.log(`      ${l}`);
-  console.log(`    built but unreachable from nav/copy ${f.unreachableFromNavOrCopy.length}`);
-  for (const l of f.unreachableFromNavOrCopy) console.log(`      ${l}`);
-  console.log(`    redirects/rewrites declared        ${f.redirects.length}`);
-  for (const r of f.redirects) console.log(`      ${r.from} -> ${r.to}`);
-  console.log("");
 }
