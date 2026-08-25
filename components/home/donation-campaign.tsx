@@ -66,7 +66,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
   return (
     <section className="overflow-hidden bg-[linear-gradient(135deg,var(--color-primary-light)_0%,var(--color-bg)_52%,#ffffff_100%)] px-6 py-20 lg:px-10">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-[linear-gradient(135deg,var(--color-primary-dark)_0%,var(--color-primary)_58%,var(--color-accent)_130%)] p-8 text-white shadow-[0_20px_50px_rgba(1,82,190,0.18)] sm:p-10">
+        <div className="relative overflow-hidden rounded-panel border border-white/15 bg-[linear-gradient(135deg,var(--color-primary-dark)_0%,var(--color-primary)_58%,var(--color-accent)_130%)] p-8 text-white shadow-[0_20px_50px_rgba(1,82,190,0.18)] sm:p-10">
           {campaign.image ? (
             <div className="absolute inset-y-0 right-0 hidden w-[42%] overflow-hidden lg:block">
               <Image
@@ -98,7 +98,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                 {campaign.supportPoints.map((point) => (
                   <div
                     key={point}
-                    className="rounded-[22px] border border-white/15 bg-white/10 px-4 py-4 text-sm leading-7 text-white/85 backdrop-blur-sm"
+                    className="rounded-panel border border-white/15 bg-white/10 px-4 py-4 text-sm leading-7 text-white/85 backdrop-blur-sm"
                   >
                     {point}
                   </div>
@@ -127,7 +127,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
           </div>
         </div>
 
-        <div className="rounded-[32px] border border-brand-border bg-white p-8 shadow-[0_22px_55px_rgba(1,82,190,0.14)] sm:p-10">
+        <div className="rounded-panel border border-brand-border bg-white p-8 shadow-[0_22px_55px_rgba(1,82,190,0.14)] sm:p-10">
           <div className="space-y-8">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -168,7 +168,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[24px] border border-brand-border bg-brand-mist/50 p-5">
+              <div className="rounded-panel border border-brand-border bg-brand-mist/50 p-5">
                 <div className="flex items-center gap-3">
                   <Users className="h-5 w-5 text-brand-accent" />
                   <div>
@@ -177,7 +177,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                   </div>
                 </div>
               </div>
-              <div className="rounded-[24px] border border-brand-border bg-brand-mist/50 p-5">
+              <div className="rounded-panel border border-brand-border bg-brand-mist/50 p-5">
                 <div className="flex items-center gap-3">
                   <Clock3 className="h-5 w-5 text-brand-accent" />
                   <div>

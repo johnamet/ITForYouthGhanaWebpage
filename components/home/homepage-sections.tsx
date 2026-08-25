@@ -1,6 +1,5 @@
 import {
   getCmsHeroSlides,
-  getCmsHomepageTicker,
   getCmsProgrammeShowcase,
   getCmsOverviewSection,
   getCmsChallengeSection,
@@ -16,7 +15,6 @@ import { getCmsTestimonials } from "@/lib/cms/testimonials";
 import { getCmsImpactStats } from "@/lib/cms/impact-stats";
 
 import { HeroCapsuleSlideshow } from "@/components/home/hero-capsule-slideshow";
-import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { ImpactCounter } from "@/components/home/impact-counter";
 import { LegacyHomepageSections } from "@/components/home/legacy-homepage-sections";
 import { ProgrammeShowcase } from "@/components/home/programme-showcase";
@@ -25,9 +23,28 @@ import { FeaturedStoryVideo } from "@/components/home/featured-story-video";
 import { LatestNewsGrid } from "@/components/home/latest-news-grid";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
 import { PartnersStrip } from "@/components/home/patrners-strip";
-import { JoinCtaBlock } from "@/components/home/join-cta-block";
-import { NewsletterSignupSection } from "@/components/home/newsletter-signup-section";
+import { ClosingBlock } from "@/components/home/closing-block";
 
+/**
+ * The homepage composition.
+ *
+ * Three redundancies were removed rather than restyled:
+ *
+ *   The marquee ticker restated the impact counter's figures a few hundred
+ *   pixels above it, so the page opened by making the same claim twice. The
+ *   component, its CMS data and its admin editor all remain (the editor renders
+ *   a live preview of it); it is only off the public page.
+ *
+ *   The overview section answered "what we do", which the programme showcase
+ *   answered again further down. Its copy now drives the showcase heading,
+ *   which also fixes that heading having been hardcoded and uneditable.
+ *
+ *   The join-the-movement grid and the newsletter band were consecutive
+ *   sections both asking the reader to act, splitting one decision across two
+ *   screens. They are one closing block now.
+ *
+ * Fourteen rendered sections became eleven.
+ */
 export async function HomepageSections() {
   const [
     articles,
@@ -35,7 +52,6 @@ export async function HomepageSections() {
     partners,
     impactStats,
     slides,
-    ticker,
     showcase,
     campaign,
     story,
@@ -50,7 +66,6 @@ export async function HomepageSections() {
     getCmsPartners(),
     getCmsImpactStats(),
     getCmsHeroSlides(),
-    getCmsHomepageTicker(),
     getCmsProgrammeShowcase(),
     getCmsDonationCampaign(),
     getCmsFeaturedStory(),
@@ -63,41 +78,42 @@ export async function HomepageSections() {
 
   return (
     <div className="bg-white">
-      {/* 1 ── Hero slideshow */}
+      {/* 1 ── Hero capsule slideshow */}
       <HeroCapsuleSlideshow slides={slides} interval={6000} />
 
-      {/* 2 ── Marquee ticker */}
-      <MarqueeTicker ticker={ticker} />
+      {/* 2 ── Why this work exists, and what it aims at */}
+      <LegacyHomepageSections challenge={challenge} mission={mission} />
 
-      {/* 3 ── Legacy overview, challenge, and vision sections */}
-      <LegacyHomepageSections overview={overview} challenge={challenge} mission={mission} />
-
-      {/* 4 ── Impact counter */}
+      {/* 3 ── Impact counter: the page's single figures moment */}
       <ImpactCounter stats={impactStats} />
 
-      {/* 5 ── Programme showcase */}
-      <ProgrammeShowcase items={showcase} />
+      {/* 4 ── What we do, led by the folded-in overview copy */}
+      <ProgrammeShowcase
+        items={showcase}
+        intro={{
+          eyebrow: overview.title,
+          title: overview.headline,
+          description: overview.description,
+        }}
+      />
 
-      {/* 6 ── Donation campaign */}
+      {/* 5 ── Donation campaign */}
       <DonationCampaign campaign={campaign} />
 
-      {/* 7 ── Featured story / video */}
+      {/* 6 ── Featured story / video */}
       <FeaturedStoryVideo story={story} />
 
-      {/* 8 ── Latest news & blog */}
+      {/* 7 ── Latest news & blog */}
       <LatestNewsGrid articles={articles} />
 
-      {/* 9 ── Student testimonials */}
+      {/* 8 ── Student testimonials */}
       <TestimonialsSection testimonials={testimonials} />
 
-      {/* 10 ── Partner strip */}
+      {/* 9 ── Partner strip */}
       <PartnersStrip partners={partners} />
 
-      {/* 11 ── Apply / join CTA block */}
-      <JoinCtaBlock cards={joinCards} />
-
-      {/* 12 ── Newsletter signup */}
-      <NewsletterSignupSection content={newsletter} />
+      {/* 10 ── One closing moment: pick a route, or stay in touch */}
+      <ClosingBlock cards={joinCards} newsletter={newsletter} />
     </div>
   );
 }

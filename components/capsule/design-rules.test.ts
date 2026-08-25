@@ -31,6 +31,8 @@ const REDESIGNED = [
   "components/content/section-intro.tsx",
   "components/content/label-pills.tsx",
   "components/shared/route-card-grid.tsx",
+  "components/home/closing-block.tsx",
+  "components/home/programme-showcase.tsx",
   "components/training/apply-for-training-overview-page.tsx",
   "components/training/training-who-can-apply-page.tsx",
   "components/training/training-how-it-works-page.tsx",

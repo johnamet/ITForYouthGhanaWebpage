@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, CheckCircle2, Loader2, Save } from "lucide-react";
 
-import type { NewsletterSignupContent } from "@/components/home/newsletter-signup-section";
+import type { NewsletterSignupContent } from "@/types/content";
 
 type ApiResponse = { success?: boolean; message?: string };
 type SubmitState = { type: "idle" | "success" | "error"; message: string };

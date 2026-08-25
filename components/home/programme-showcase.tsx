@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 
+import { SectionIntro } from "@/components/content/section-intro";
 import { Button } from "@/components/ui/button";
 
 export type ProgrammeShowcaseItem = {
@@ -18,9 +18,24 @@ export type ProgrammeShowcaseItem = {
 
 type ProgrammeShowcaseProps = {
   items: ProgrammeShowcaseItem[];
+
+  /**
+   * Section copy, folded in from the homepage overview content.
+   *
+   * The heading here used to be hardcoded, so no editor could change it even
+   * though every other homepage section was editable. The overview section that
+   * previously sat above this one said the same thing in different words, so
+   * merging them removes a duplicated "what we do" moment and makes this
+   * heading editable at the same time.
+   */
+  intro?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+  };
 };
 
-export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
+export function ProgrammeShowcase({ items, intro }: ProgrammeShowcaseProps) {
   const visibleItems = items.filter((item) => item.active !== false);
   if (!visibleItems.length) return null;
 
@@ -29,28 +44,21 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
       <div className="mx-auto max-w-6xl">
         {/* Section heading */}
         <div className="mb-12 flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <h2 className="font-heading text-5xl font-bold leading-none text-brand-ink sm:text-6xl lg:text-7xl">
-              What we do
-            </h2>
-            <p className="mt-5 max-w-2xl font-heading text-2xl font-bold leading-tight text-brand-ink sm:text-3xl">
-              Eight initiatives opening real pathways into tech
-            </p>
-            <p className="mt-4 max-w-2xl text-[0.95rem] leading-[1.8] text-slate-500">
-              From girls&apos; participation and school clubs to entrepreneurship and rural
-              access, each initiative is designed to move young people from interest to
-              opportunity.
-            </p>
-          </div>
+          <SectionIntro
+            eyebrow={intro?.eyebrow ?? "What we do"}
+            title={intro?.title ?? "Eight initiatives opening real pathways into tech"}
+            description={
+              intro?.description ??
+              "From girls' participation and school clubs to entrepreneurship and rural access, each initiative is designed to move young people from interest to opportunity."
+            }
+          />
 
-          <Button
-            href="/what-we-do"
-            variant="pink-outline"
-            className="group/button w-fit shrink-0"
-          >
+          <Button href="/what-we-do" variant="pink-outline" className="w-fit shrink-0">
             Explore all initiatives
-
-            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" />
+            <span
+              aria-hidden="true"
+              className="size-1.5 flex-none -rotate-45 border-r-[1.6px] border-t-[1.6px] border-current"
+            />
           </Button>
         </div>
 
@@ -78,7 +86,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
               aria-label={`Learn more about ${item.title}`}
               className="
                 group relative min-h-[29rem] snap-start
-                overflow-hidden rounded-[2rem]
+                overflow-hidden rounded-panel
                 border border-brand-border bg-white
                 shadow-[0_18px_45px_rgba(1,82,190,0.10)]
                 transition-all duration-500 ease-out
@@ -166,25 +174,19 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
 
               {/* Card content */}
               <div className="relative flex min-h-[29rem] flex-col p-5">
-                {/* Floating icon */}
+                {/* Accent marker. This was an emoji badge; the colour is the
+                    initiative's own identity and carries the weight now. */}
                 <div className="mt-[12.7rem]">
                   <span
                     className="
-                      relative z-10 flex h-14 w-14
-                      items-center justify-center
-                      rounded-[1.15rem] border-4 border-white
-                      text-2xl text-brand-deep
-                      shadow-[0_12px_30px_rgba(5,25,52,0.20)]
+                      relative z-10 block h-2.5 w-16 rounded-capsule
+                      shadow-[0_10px_24px_rgba(5,25,52,0.18)]
                       transition-all duration-500
-                      group-hover:-translate-y-1
-                      group-hover:rotate-3
-                      group-hover:scale-105
+                      group-hover:-translate-y-1 group-hover:w-20
                     "
                     style={{ backgroundColor: item.accent }}
                     aria-hidden="true"
-                  >
-                    {item.icon ?? "•"}
-                  </span>
+                  />
                 </div>
 
                 <div className="mt-5 flex flex-1 flex-col">
@@ -220,7 +222,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                         group-hover:bg-brand-accent
                       "
                     >
-                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      <span aria-hidden="true" className="size-1.5 flex-none -rotate-45 border-r-[1.6px] border-t-[1.6px] border-current transition-transform duration-300" />
                     </span>
                   </div>
                 </div>
@@ -239,7 +241,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
               />
 
               {/* Hover border highlight */}
-              <div className="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/30" />
+              <div className="pointer-events-none absolute inset-0 rounded-panel ring-1 ring-inset ring-white/30" />
             </Link>
           ))}
         </div>

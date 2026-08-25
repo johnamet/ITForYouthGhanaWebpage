@@ -1,5 +1,3 @@
-import { Heart } from "lucide-react";
-
 import { StorySection } from "@/components/content/story-section";
 import { StatsSection } from "@/components/content/stats-section";
 import { Button } from "@/components/ui/button";
@@ -59,15 +57,6 @@ export type OverviewSectionContent = {
   active?: boolean;
 };
 
-function QuickOverview({ content }: { content: OverviewSectionContent }) {
-  if (content.active === false) return null;
-  const hasIntro = Boolean(content.title || content.headline || content.description);
-  const hasStory = Boolean(content.storyTitle || content.storyHeadline || content.storyDescription || content.callout || (content.ctaLabel && content.ctaHref));
-
-  if (!hasIntro && !hasStory && !content.image) return null;
-  return <StorySection eyebrow={content.title} title={content.storyTitle || content.headline} headline={content.storyHeadline || content.headline} description={content.storyDescription || content.description} supportingText={content.callout} image={content.image} imageAlt={content.imageAlt} videoUrl={content.videoUrl} videoTitle={content.videoTitle} action={content.ctaLabel && content.ctaHref ? { label: content.ctaLabel, href: content.ctaHref } : undefined} />;
-}
-
 function Challenge({ content }: { content: ChallengeSectionContent }) {
   if (content.active === false) return null;
   if (!content.title && !content.headline && !content.description && !content.stats.length && !content.problemItems.length && !content.solutionItems.length) return null;
@@ -119,7 +108,6 @@ function Challenge({ content }: { content: ChallengeSectionContent }) {
             variant="white"
             size="lg"
           >
-            <Heart className="h-5 w-5" aria-hidden="true" />
             {content.ctaLabel}
           </Button>
         </div>
@@ -135,18 +123,22 @@ function Vision({ content }: { content: MissionSectionContent }) {
   return <StorySection eyebrow={content.title} title={content.missionTitle || content.headline} headline={content.missionHeadline || content.headline} description={content.missionDescription || content.description} supportingText={content.imageCaption} image={content.image} imageAlt={content.imageAlt} imagePosition="right" videoUrl={content.videoUrl} videoTitle={content.videoTitle} action={content.ctaLabel && content.ctaHref ? { label: content.ctaLabel, href: content.ctaHref, variant: "pink-outline" } : undefined} tone="mist" />;
 }
 
+/**
+ * The homepage narrative: why this work exists, and what it is aiming at.
+ *
+ * The overview section that used to lead this group is gone. It answered "what
+ * we do", which the programme showcase already answered a few screens later, so
+ * its copy now drives the showcase heading instead of repeating it here.
+ */
 export function LegacyHomepageSections({
-  overview,
   challenge,
   mission,
 }: {
-  overview: OverviewSectionContent;
   challenge: ChallengeSectionContent;
   mission: MissionSectionContent;
 }) {
   return (
     <>
-      <QuickOverview content={overview} />
       <Challenge content={challenge} />
       <Vision content={mission} />
     </>

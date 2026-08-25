@@ -222,6 +222,39 @@ export interface HeroSlide {
   };
 }
 
+/**
+ * A "join the movement" card on the homepage closing block.
+ *
+ * Lives here rather than beside a component because lib/content and lib/cms
+ * both consume it.
+ */
+export interface JoinCtaCard {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  href: string;
+  buttonLabel: string;
+
+  /**
+   * Audience key. Retained so existing documents and the admin editor keep
+   * working, but no longer used to select an icon: the redesign carries weight
+   * through colour, shape, type and spacing.
+   */
+  icon: "students" | "organisations" | "volunteer";
+  active?: boolean;
+}
+
+/** Newsletter sign-up copy for the homepage closing block. */
+export interface NewsletterSignupContent {
+  eyebrow: string;
+  heading: string;
+  description: string;
+  privacyNote: string;
+  interest?: string;
+  active?: boolean;
+}
+
 export interface HomepageSection {
   id: string;
   title: string;

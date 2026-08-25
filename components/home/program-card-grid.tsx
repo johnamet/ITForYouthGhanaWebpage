@@ -34,7 +34,7 @@ export function ProgramCardGrid({ cards }: ProgramCardGridProps) {
       {cards.map((card) => (
         <div
           key={card.id}
-          className={`relative overflow-hidden rounded-[20px] border p-8 transition duration-300 hover:-translate-y-1 hover:shadow-xl ${variantStyles[card.variant]} ${
+          className={`relative overflow-hidden rounded-panel border p-8 transition duration-300 hover:-translate-y-1 hover:shadow-xl ${variantStyles[card.variant]} ${
             card.featured ? "lg:col-span-2" : ""
           }`}
         >

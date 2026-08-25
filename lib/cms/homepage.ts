@@ -14,6 +14,7 @@ import {
   newsletterSignupContent as seedNewsletterSignup,
   floatingElementsContent as seedFloatingElements,
 } from "@/lib/content/site-config";
+import { resolveCmsArray } from "@/lib/cms/fallback";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 // Import UI-facing types from components to keep prop compatibility
@@ -24,8 +25,8 @@ import type { MarqueeTickerContent } from "@/components/home/marquee-ticker";
 import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
 import type { DonationCampaignContent } from "@/components/home/donation-campaign";
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";
-import type { JoinCtaCard } from "@/components/home/join-cta-block";
-import type { NewsletterSignupContent } from "@/components/home/newsletter-signup-section";
+import type { JoinCtaCard } from "@/types/content";
+import type { NewsletterSignupContent } from "@/types/content";
 import type { ChallengeSectionContent, MissionSectionContent, OverviewSectionContent } from "@/components/home/legacy-homepage-sections";
 
 const DOC_ID = "main";
@@ -84,9 +85,8 @@ export async function getCmsHeroSlides(): Promise<HeroSlide[]> {
   if (!db) return seedHeroSlides;
   try {
     const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
-    const slides = getDocField<unknown[]>(getHomepageDocData(doc.data()), "heroSlides") ?? [];
-    if (!Array.isArray(slides)) return seedHeroSlides;
-    return slides as HeroSlide[];
+    const raw = getDocField<unknown[]>(getHomepageDocData(doc.data()), "heroSlides");
+    return resolveCmsArray<HeroSlide>(raw, seedHeroSlides);
   } catch (e) {
     console.error("Homepage heroSlides read failed.", e);
     return seedHeroSlides;
@@ -111,9 +111,8 @@ export async function getCmsProgrammeShowcase(): Promise<ProgrammeShowcaseItem[]
   if (!db) return seedProgrammeShowcase;
   try {
     const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
-    const items = getDocField<unknown[]>(getHomepageDocData(doc.data()), "programmeShowcase") ?? [];
-    if (!Array.isArray(items)) return seedProgrammeShowcase;
-    return items as ProgrammeShowcaseItem[];
+    const raw = getDocField<unknown[]>(getHomepageDocData(doc.data()), "programmeShowcase");
+    return resolveCmsArray<ProgrammeShowcaseItem>(raw, seedProgrammeShowcase);
   } catch (e) {
     console.error("Homepage programmeShowcase read failed.", e);
     return seedProgrammeShowcase;
@@ -190,9 +189,8 @@ export async function getCmsJoinCtaCards(): Promise<JoinCtaCard[]> {
   if (!db) return seedJoinCtaCards;
   try {
     const doc = await db.collection(FIREBASE_COLLECTIONS.homepage).doc(DOC_ID).get();
-    const cards = getDocField<unknown[]>(getHomepageDocData(doc.data()), "joinCtaCards") ?? [];
-    if (!Array.isArray(cards)) return seedJoinCtaCards;
-    return cards as JoinCtaCard[];
+    const raw = getDocField<unknown[]>(getHomepageDocData(doc.data()), "joinCtaCards");
+    return resolveCmsArray<JoinCtaCard>(raw, seedJoinCtaCards);
   } catch (e) {
     console.error("Homepage joinCtaCards read failed.", e);
     return seedJoinCtaCards;

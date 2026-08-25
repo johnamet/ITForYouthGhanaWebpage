@@ -54,7 +54,7 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
             <Link
               key={article.slug}
               href={`/news-and-updates/${article.category}/${article.slug}`}
-              className="group overflow-hidden rounded-[28px] border border-brand-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
+              className="group overflow-hidden rounded-panel border border-brand-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
             >
               <div className="relative h-56 overflow-hidden bg-brand-mist">
                 {article.coverImage ? (

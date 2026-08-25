@@ -12,8 +12,8 @@ import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase
 import type { ChallengeSectionContent, MissionSectionContent, OverviewSectionContent } from "@/components/home/legacy-homepage-sections";
 import type { DonationCampaignContent } from "@/components/home/donation-campaign";
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";
-import type { JoinCtaCard } from "@/components/home/join-cta-block";
-import type { NewsletterSignupContent } from "@/components/home/newsletter-signup-section";
+import type { JoinCtaCard } from "@/types/content";
+import type { NewsletterSignupContent } from "@/types/content";
 import type { FloatingElementsContent } from "@/components/layout/floating-elements";
 import type { Testimonial }     from "@/components/home/testimonials-section";
 import type { Partner }         from "@/components/home/patrners-strip";

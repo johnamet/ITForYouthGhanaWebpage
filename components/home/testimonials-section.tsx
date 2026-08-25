@@ -73,7 +73,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   return (
     <section className="overflow-hidden bg-brand-deep px-6 py-20 lg:px-10">
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-10 rounded-[36px] border border-white/10 bg-white/[0.04] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-sm lg:grid-cols-[0.36fr_0.64fr] lg:p-10">
+        <div className="grid gap-10 rounded-panel border border-white/10 bg-white/[0.04] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-sm lg:grid-cols-[0.36fr_0.64fr] lg:p-10">
           <div className="space-y-6">
             <div>
               <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl">
@@ -87,8 +87,8 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
               </p>
             </div>
 
-            <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
-              <div className="relative h-64 overflow-hidden rounded-[24px] bg-white/10">
+            <div className="rounded-panel border border-white/10 bg-white/5 p-5">
+              <div className="relative h-64 overflow-hidden rounded-panel bg-white/10">
                 {t.avatar ? (
                   <Image src={t.avatar} alt={t.name} fill className="object-cover" />
                 ) : (

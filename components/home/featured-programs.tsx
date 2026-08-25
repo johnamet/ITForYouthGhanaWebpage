@@ -48,7 +48,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
           {hero && (
             <Link
               href={hero.href}
-              className="group relative col-span-1 overflow-hidden rounded-[24px] bg-brand-deep lg:col-span-2 lg:row-span-2"
+              className="group relative col-span-1 overflow-hidden rounded-panel bg-brand-deep lg:col-span-2 lg:row-span-2"
             >
               {hero.image && (
                 <Image
@@ -96,7 +96,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             <Link
               key={prog.id}
               href={prog.href}
-              className="group flex flex-col justify-between rounded-[24px] border border-brand-border bg-white p-7 transition duration-250 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.09)]"
+              className="group flex flex-col justify-between rounded-panel border border-brand-border bg-white p-7 transition duration-250 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.09)]"
             >
               <div>
                 {prog.tags && (
