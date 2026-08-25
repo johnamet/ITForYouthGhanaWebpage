@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { CapsuleActions, CapsuleContent, CapsuleMedia, CapsuleShell } from "@/components/capsule";
+import { CapsulePageHero } from "@/components/capsule";
 import { PanelList } from "@/components/content/panel-list";
 import { ProcessSequence } from "@/components/content/process-sequence";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
-import { SectionHeading } from "@/components/shared/section-heading";
+import { SectionIntro } from "@/components/content/section-intro";
 import { InitiativeGallery } from "@/components/what-we-do/initiative-gallery";
 import { safeCssColor } from "@/lib/utils/css-color";
 import type { InitiativePage } from "@/types/content";
@@ -98,59 +98,22 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
   return (
     <div className="bg-white">
-      {/* ── Capsule hero ─────────────────────────────────────────────────
-          The paper capsule needs a tinted ground to read against, which is
-          what separates this from the dark homepage stage. */}
-      <section className="border-b border-brand-border bg-brand-mist/40 px-[clamp(16px,4vw,56px)] py-[clamp(40px,7vh,88px)]">
-        <nav aria-label="Breadcrumb" className="mx-auto mb-8 max-w-[1180px]">
-          <p className="text-sm text-slate-500">
-            <Link href="/" className="transition hover:text-brand-ink">Home</Link>
-            <span aria-hidden="true" className="px-2 text-brand-border">/</span>
-            <Link href="/what-we-do" className="transition hover:text-brand-ink">What We Do</Link>
-            <span aria-hidden="true" className="px-2 text-brand-border">/</span>
-            <span className="font-semibold text-brand-ink">{page.title}</span>
-          </p>
-        </nav>
-
-        <CapsuleShell
-          tone="paper"
-          animateIn={false}
-          className="mx-auto max-w-[1180px]"
-          media={
-            <CapsuleMedia
-              images={[{ id: page.slug, src: page.heroImage, alt: page.title }]}
-              accent={accent}
-              priority
-            />
-          }
-        >
-          <CapsuleContent
-            as="h1"
-            tone="paper"
-            eyebrow={page.eyebrow}
-            heading={page.title}
-            body={hasText(page.tagline) ? page.tagline : page.description}
-            accent={accent}
-          >
-            {hasText(page.tagline) && hasText(page.description) ? (
-              <p
-                className="mt-5 border-l-2 pl-5 text-sm leading-7 text-slate-600 max-[820px]:border-l-0 max-[820px]:pl-0"
-                style={{ borderColor: accent }}
-              >
-                {page.description}
-              </p>
-            ) : null}
-
-            {primaryCta ? (
-              <CapsuleActions
-                tone="paper"
-                primary={primaryCta}
-                secondary={secondaryCta}
-              />
-            ) : null}
-          </CapsuleContent>
-        </CapsuleShell>
-      </section>
+      <CapsulePageHero
+        eyebrow={page.eyebrow}
+        title={page.title}
+        description={hasText(page.tagline) ? page.tagline : page.description}
+        supportingText={hasText(page.tagline) ? page.description : null}
+        imageSrc={page.heroImage}
+        imageAlt={page.title}
+        accent={accent}
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "What We Do", href: "/what-we-do" },
+          { label: page.title },
+        ]}
+        primaryAction={primaryCta}
+        secondaryAction={secondaryCta}
+      />
 
       {anchorLinks.length ? (
         <div className="sticky top-[72px] z-30 border-b border-brand-border bg-white/95 backdrop-blur">
@@ -175,7 +138,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
                 <div className="space-y-6">
                   {hasText(page.intro) ? (
-                    <SectionHeading
+                    <SectionIntro
+                      accent={accent}
                       eyebrow={section.overviewEyebrow}
                       title={section.overviewTitle}
                       description={page.intro}
@@ -205,7 +169,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
           {/* A strict sequence with no branching, so it gets a line. */}
           {howItWorks.length ? (
             <section id="how-it-works" className="scroll-mt-36">
-              <SectionHeading
+              <SectionIntro
+                accent={accent}
                 eyebrow={section.howItWorksEyebrow}
                 title={section.howItWorksTitle}
                 description={section.howItWorksDescription}
@@ -216,7 +181,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {impactStats.length ? (
             <section id="impact" className="scroll-mt-36">
-              <SectionHeading
+              <SectionIntro
+                accent={accent}
                 eyebrow={section.impactEyebrow}
                 title={section.impactTitle}
                 description={section.impactDescription}
@@ -293,7 +259,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {gallery.length ? (
             <section id="gallery" className="scroll-mt-36 space-y-8">
-              <SectionHeading
+              <SectionIntro
+                accent={accent}
                 eyebrow={section.galleryEyebrow}
                 title={section.galleryTitle}
                 description={section.galleryDescription}
@@ -304,7 +271,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {testimonials.length ? (
             <section id="testimonials" className="scroll-mt-36 space-y-8">
-              <SectionHeading
+              <SectionIntro
+                accent={accent}
                 eyebrow={section.testimonialsEyebrow}
                 title={section.testimonialsTitle}
                 description={section.testimonialsDescription}
@@ -359,7 +327,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {partners.length ? (
             <section className="space-y-8">
-              <SectionHeading
+              <SectionIntro
+                accent={accent}
                 eyebrow={section.partnersEyebrow}
                 title={section.partnersTitle}
                 description={section.partnersDescription}
@@ -410,7 +379,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {faqs.length ? (
             <section id="faqs" className="scroll-mt-36 space-y-8">
-              <SectionHeading
+              <SectionIntro
+                accent={accent}
                 eyebrow={section.faqsEyebrow}
                 title={section.faqsTitle}
                 description={section.faqsDescription}
@@ -489,7 +459,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {page.related.length ? (
             <section className="space-y-8">
-              <SectionHeading
+              <SectionIntro
+                accent={accent}
                 eyebrow={section.relatedEyebrow}
                 title={section.relatedTitle}
                 description={section.relatedDescription}

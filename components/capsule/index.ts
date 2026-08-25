@@ -8,6 +8,7 @@
  * is not a capsule at all.
  */
 export { CapsuleShell } from "@/components/capsule/capsule-shell";
+export { CapsulePageHero } from "@/components/capsule/capsule-page-hero";
 export { CapsuleMedia } from "@/components/capsule/capsule-media";
 export { CapsuleContent } from "@/components/capsule/capsule-content";
 export { CapsuleActions } from "@/components/capsule/capsule-actions";

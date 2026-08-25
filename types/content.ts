@@ -445,8 +445,14 @@ export interface TrainingProcessStep {
   number: string;
   title: string;
   description: string;
-  icon: string;
-  // Optional image URL alternative to icon
+
+  /**
+   * Retained so existing CMS documents and the admin editor keep working, but
+   * no longer rendered: the redesign carries weight through colour, shape,
+   * type and spacing rather than iconography. Optional so new code does not
+   * have to invent a value for a field nothing displays.
+   */
+  icon?: string;
   iconImage?: string;
 }
 

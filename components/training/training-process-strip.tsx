@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { emojiToIconImage } from "@/lib/utils/icon-map";
+import { ProcessSequence } from "@/components/content/process-sequence";
+import { SectionIntro } from "@/components/content/section-intro";
 import type { TrainingProcessStep } from "@/types/content";
 
 type TrainingProcessStripProps = {
@@ -9,6 +9,16 @@ type TrainingProcessStripProps = {
   steps: TrainingProcessStep[];
 };
 
+/**
+ * The apply process.
+ *
+ * Four steps that run in order and never branch, so they get a line rather
+ * than four detached cards. Previously each card led with an emoji-derived
+ * icon; the numeral, the spine and the accent nodes carry that weight now.
+ *
+ * Shared by the Apply hub, the course listing, and the How It Works page, so
+ * this one change covers three routes.
+ */
 export function TrainingProcessStrip({
   eyebrow,
   title,
@@ -19,43 +29,8 @@ export function TrainingProcessStrip({
 
   return (
     <section className="space-y-8">
-      <div className="max-w-3xl space-y-3">
-        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-          {eyebrow}
-        </p>
-        <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-          {title}
-        </h2>
-        <p className="text-base leading-8 text-slate-600">{description}</p>
-      </div>
-
-      <div className="grid gap-5 lg:grid-cols-4">
-        {steps.map((step) => (
-          <div
-            key={step.number}
-            className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
-          >
-            <div className="flex items-center justify-between">
-              {(() => step.iconImage ?? emojiToIconImage(step.icon))() ? (
-                <span className="inline-flex items-center justify-center" aria-hidden="true">
-                  <Image src={(step.iconImage ?? emojiToIconImage(step.icon)) as string} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
-                </span>
-              ) : (
-                <span className="text-3xl" aria-hidden="true">
-                  {step.icon}
-                </span>
-              )}
-              <span className="font-heading text-3xl font-bold text-brand-accent/70">
-                {step.number}
-              </span>
-            </div>
-            <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-              {step.title}
-            </h3>
-            <p className="mt-3 text-sm leading-7 text-slate-600">{step.description}</p>
-          </div>
-        ))}
-      </div>
+      <SectionIntro eyebrow={eyebrow} title={title} description={description} />
+      <ProcessSequence steps={steps} />
     </section>
   );
 }

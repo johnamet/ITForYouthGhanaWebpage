@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { CapsulePageHero } from "@/components/capsule";
+import { SectionIntro } from "@/components/content/section-intro";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { TrainingCohortTimeline } from "@/components/training/training-cohort-timeline";
 import { TrainingProcessStrip } from "@/components/training/training-process-strip";
@@ -32,19 +33,16 @@ export function ApplyForTrainingOverviewPage({
 
   return (
     <div className="bg-white">
-      <EditorialImageHero
-        imageSrc={page.heroImage ?? "/images/randomPictures/peterblackboard.jpg"}
-        imageAlt="Learners in an IT For Youth Ghana training session"
+      <CapsulePageHero
         eyebrow={page.eyebrow}
         title={page.title}
         description={page.description}
         supportingText={page.intro}
+        imageSrc={page.heroImage ?? "/images/randomPictures/peterblackboard.jpg"}
+        imageAlt="Learners in an IT For Youth Ghana training session"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Apply for Training" }]}
-        ctas={[
-          ...(primaryCta ? [{ ...primaryCta, variant: "primary" as const }] : []),
-          ...(secondaryCta ? [{ ...secondaryCta, variant: "secondary" as const }] : []),
-        ]}
-        priority
+        primaryAction={primaryCta}
+        secondaryAction={secondaryCta}
       />
 
       <div className="sticky top-[72px] z-30 border-y border-brand-border bg-white/95 backdrop-blur">
@@ -53,7 +51,7 @@ export function ApplyForTrainingOverviewPage({
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
+              className="whitespace-nowrap rounded-capsule border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -64,24 +62,18 @@ export function ApplyForTrainingOverviewPage({
       <section id="overview" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
           <div className="space-y-6">
-            <div className="max-w-3xl space-y-3">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-                Overview
-              </p>
-              <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-                {page.overviewTitle ?? "The training experience is built to turn interest into momentum"}
-              </h2>
-              <p className="text-base leading-8 text-slate-600">
-                {page.overviewDescription ??
+            <SectionIntro
+            eyebrow="Overview"
+            title={page.overviewTitle ?? "The training experience is built to turn interest into momentum"}
+            description={page.overviewDescription ??
                   "The public training routes should help learners answer three practical questions quickly: am I a fit, what can I study, and what happens next if I apply."}
-              </p>
-            </div>
+          />
 
             <div className="grid gap-4">
               {focusSections.slice(0, 3).map((area) => (
                 <div
                   key={area.title}
-                  className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
+                  className="rounded-panel border border-brand-border bg-white p-6 shadow-sm"
                 >
                   <h3 className="font-heading text-2xl font-bold text-brand-ink">
                     {area.title}
@@ -111,18 +103,12 @@ export function ApplyForTrainingOverviewPage({
         className="scroll-mt-36 bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8"
       >
         <div className="mx-auto max-w-7xl space-y-8">
-          <div className="max-w-3xl space-y-3">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-              {page.operatingEyebrow ?? "Pathways"}
-            </p>
-            <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-              {page.operatingTitle ?? "Start with the route that answers your biggest question first"}
-            </h2>
-            <p className="text-base leading-8 text-slate-600">
-              {page.operatingDescription ??
+          <SectionIntro
+            eyebrow={page.operatingEyebrow ?? "Pathways"}
+            title={page.operatingTitle ?? "Start with the route that answers your biggest question first"}
+            description={page.operatingDescription ??
                 "Some learners want to confirm fit before anything else. Others need the catalog or the application steps. The route structure is designed to support both."}
-            </p>
-          </div>
+          />
 
           <RouteCardGrid cards={page.related} />
         </div>
@@ -174,7 +160,7 @@ export function ApplyForTrainingOverviewPage({
               <Link
                 key={cta.href}
                 href={cta.href}
-                className="rounded-full bg-brand-accent px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="rounded-control bg-brand-accent px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
               >
                 {cta.label}
               </Link>

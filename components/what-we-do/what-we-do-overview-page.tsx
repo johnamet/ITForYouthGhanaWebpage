@@ -1,9 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 
-import { CapsuleActions, CapsuleContent, CapsuleMedia, CapsuleShell } from "@/components/capsule";
+import { CapsulePageHero } from "@/components/capsule";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
-import { SectionHeading } from "@/components/shared/section-heading";
+import { SectionIntro } from "@/components/content/section-intro";
 import { InitiativeOrbit } from "@/components/what-we-do/initiative-orbit";
 import { PathwayTree } from "@/components/what-we-do/pathway-tree";
 import { WhatWeDoGallery } from "@/components/what-we-do/what-we-do-gallery";
@@ -45,48 +44,19 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
 
   return (
     <div className="bg-white">
-      {/* ── Capsule hero ─────────────────────────────────────────────── */}
-      <section className="border-b border-brand-border bg-brand-mist/40 px-[clamp(16px,4vw,56px)] py-[clamp(40px,7vh,88px)]">
-        <nav aria-label="Breadcrumb" className="mx-auto mb-8 max-w-[1180px]">
-          <p className="text-sm text-slate-500">
-            <Link href="/" className="transition hover:text-brand-ink">{breadcrumbs.home}</Link>
-            <span aria-hidden="true" className="px-2 text-brand-border">/</span>
-            <span className="font-semibold text-brand-ink">{breadcrumbs.whatWeDo.root}</span>
-          </p>
-        </nav>
-
-        <CapsuleShell
-          tone="paper"
-          animateIn={false}
-          className="mx-auto max-w-[1180px]"
-          media={
-            <CapsuleMedia
-              images={[
-                {
-                  id: "what-we-do-hero",
-                  src: content.heroImage,
-                  alt: "IT For Youth Ghana initiatives in action",
-                },
-              ]}
-              priority
-            />
-          }
-        >
-          <CapsuleContent
-            as="h1"
-            tone="paper"
-            eyebrow={content.eyebrow}
-            heading={content.title}
-            body={content.description}
-          >
-            <CapsuleActions
-              tone="paper"
-              primary={{ label: "Apply for training", href: "/apply-for-training" }}
-              secondary={{ label: "Partner with us", href: "/partner-with-us" }}
-            />
-          </CapsuleContent>
-        </CapsuleShell>
-      </section>
+      <CapsulePageHero
+        eyebrow={content.eyebrow}
+        title={content.title}
+        description={content.description}
+        imageSrc={content.heroImage}
+        imageAlt="IT For Youth Ghana initiatives in action"
+        breadcrumbs={[
+          { label: breadcrumbs.home, href: "/" },
+          { label: breadcrumbs.whatWeDo.root },
+        ]}
+        primaryAction={{ label: "Apply for training", href: "/apply-for-training" }}
+        secondaryAction={{ label: "Partner with us", href: "/partner-with-us" }}
+      />
 
       <div className="sticky top-[72px] z-30 border-b border-brand-border bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-4 py-4 [scrollbar-width:none] sm:px-6 lg:px-8">
@@ -105,7 +75,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
       {/* ── Overview: three peers with no inherent order, so a grid ──── */}
       <section id="overview" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-8">
-          <SectionHeading
+          <SectionIntro
             eyebrow={content.overviewSectionEyebrow ?? "Overview"}
             title={content.overviewSectionTitle ?? "The work is designed as a connected system"}
             description={
@@ -148,7 +118,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
       {/* ── The orbit: the capsule at a small scale ──────────────────── */}
       <section id="initiatives" className="scroll-mt-36 bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-6">
-          <SectionHeading
+          <SectionIntro
             eyebrow={content.initiativesSectionEyebrow ?? "Initiatives"}
             title={content.initiativesSectionTitle ?? "Explore each initiative in more depth"}
             description={
@@ -176,7 +146,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
       {content.galleryItems.length > 0 ? (
         <section id="gallery" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
           <div className="space-y-10">
-            <SectionHeading
+            <SectionIntro
               eyebrow={content.gallerySectionEyebrow ?? "In action"}
               title={content.gallerySectionTitle ?? "See the work in action"}
               description={
@@ -192,7 +162,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
       {/* ── The pathway: genuinely branching, so a tree, kept uneven ─── */}
       <section id="pathways" className="mx-auto max-w-7xl scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-10">
-          <SectionHeading
+          <SectionIntro
             eyebrow={content.pathwaysSectionEyebrow ?? "Pathways"}
             title={content.pathwaysSectionTitle ?? "From first exposure to longer-term opportunity"}
             description={

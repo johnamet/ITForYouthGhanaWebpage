@@ -27,6 +27,18 @@ const REDESIGNED = [
   "components/what-we-do/what-we-do-overview-page.tsx",
   "components/what-we-do/initiative-orbit.tsx",
   "components/what-we-do/pathway-tree.tsx",
+  "components/capsule/capsule-page-hero.tsx",
+  "components/content/section-intro.tsx",
+  "components/content/label-pills.tsx",
+  "components/shared/route-card-grid.tsx",
+  "components/training/apply-for-training-overview-page.tsx",
+  "components/training/training-who-can-apply-page.tsx",
+  "components/training/training-how-it-works-page.tsx",
+  "components/training/training-course-listing-page.tsx",
+  "components/training/training-course-catalog.tsx",
+  "components/training/training-cohort-timeline.tsx",
+  "components/training/training-process-strip.tsx",
+  "components/programs/course-detail-card.tsx",
 ];
 
 const read = (path: string) => readFileSync(path, "utf8");

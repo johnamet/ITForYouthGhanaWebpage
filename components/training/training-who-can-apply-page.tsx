@@ -1,7 +1,8 @@
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
-import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { CapsulePageHero } from "@/components/capsule";
+import { SectionIntro } from "@/components/content/section-intro";
 import type { SitePage } from "@/types/content";
 
 type TrainingWhoCanApplyPageProps = {
@@ -12,24 +13,36 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
   const audienceSections = page.sections.slice(0, 3);
   const readinessSection = page.sections[3] ?? page.sections[0];
   const practiceSection = readinessSection;
+  /* Previously joined with " • ", which is a bullet list in disguise. These are
+     whole sentences, so they read as prose. */
+  const supportingText =
+    [page.intro, practiceSection?.body, ...(practiceSection?.bullets ?? [])]
+      .filter((value): value is string => Boolean(value?.trim()))
+      .join(" ") || null;
 
   return (
     <div className="bg-white">
-      <EditorialImageHero imageSrc={page.heroImage ?? "/images/randomPictures/studentsblueclothing.jpg"} imageAlt="Learners gathering for an ITFY training session" eyebrow={page.eyebrow} title={page.title} description={page.description} supportingText={[page.intro, practiceSection?.body, ...(practiceSection?.bullets ?? [])].filter((value): value is string => Boolean(value?.trim())).join(" • ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.apply.root, href: "/apply-for-training" }, { label: breadcrumbs.apply.whoCanApply }]} priority />
+      <CapsulePageHero
+        eyebrow={page.eyebrow}
+        title={page.title}
+        description={page.description}
+        supportingText={supportingText}
+        imageSrc={page.heroImage ?? "/images/randomPictures/studentsblueclothing.jpg"}
+        imageAlt="Learners gathering for an ITFY training session"
+        breadcrumbs={[
+          { label: breadcrumbs.home, href: "/" },
+          { label: breadcrumbs.apply.root, href: "/apply-for-training" },
+          { label: breadcrumbs.apply.whoCanApply },
+        ]}
+      />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="max-w-3xl space-y-3">
-          <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-            Overview
-          </p>
-          <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-            {page.overviewTitle ?? "Different routes suit different starting points"}
-          </h2>
-          <p className="text-base leading-8 text-slate-600">
-            {page.overviewDescription ??
+        <SectionIntro
+            eyebrow="Overview"
+            title={page.overviewTitle ?? "Different routes suit different starting points"}
+            description={page.overviewDescription ??
               "Eligibility is not only about what a learner already knows. It is also about timing, commitment, and whether the course level matches what they need right now."}
-          </p>
-        </div>
+          />
 
         <div className="mt-10 grid gap-x-10 gap-y-12 border-y border-brand-border py-10 lg:grid-cols-3">
           {audienceSections.map((card, index) => (
@@ -54,7 +67,7 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
 
       <section className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[32px] bg-brand-deep p-8 text-white">
+          <div className="rounded-panel bg-brand-deep p-8 text-white">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {page.operatingEyebrow ?? "What helps"}
             </p>
@@ -79,18 +92,12 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="space-y-8">
-          <div className="max-w-3xl space-y-3">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-              {page.exploreEyebrow ?? "Next steps"}
-            </p>
-            <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-              {page.exploreTitle ?? "Once the fit feels clearer, keep moving"}
-            </h2>
-            <p className="text-base leading-8 text-slate-600">
-              {page.exploreDescription ??
+          <SectionIntro
+            eyebrow={page.exploreEyebrow ?? "Next steps"}
+            title={page.exploreTitle ?? "Once the fit feels clearer, keep moving"}
+            description={page.exploreDescription ??
                 "The next best step is usually to browse the course catalog or understand the application sequence for Cohort 8."}
-            </p>
-          </div>
+          />
 
           <RouteCardGrid cards={page.related} />
         </div>

@@ -1,3 +1,4 @@
+import { SectionIntro } from "@/components/content/section-intro";
 import type { TrainingCohort } from "@/types/content";
 
 type TrainingCohortTimelineProps = {
@@ -41,23 +42,19 @@ export function TrainingCohortTimeline({
 
   return (
     <section className="space-y-8">
-      <div className="max-w-3xl space-y-3">
-        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-          {eyebrow}
-        </p>
-        <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-          {title}
-        </h2>
-        <p className="text-base leading-8 text-slate-600">{description}</p>
-      </div>
+      <SectionIntro
+            eyebrow={eyebrow}
+            title={title}
+            description={description}
+          />
 
       <div className="space-y-5">
         {cohorts.map((cohort) => (
           <div
             key={cohort.id}
-            className="grid gap-5 rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:grid-cols-[12rem_1fr]"
+            className="grid gap-5 rounded-panel border border-brand-border bg-white p-6 shadow-sm lg:grid-cols-[12rem_1fr]"
           >
-            <div className="space-y-3 rounded-[24px] bg-brand-mist/70 p-5">
+            <div className="space-y-3 rounded-panel bg-brand-mist/70 p-5">
               <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                 Starts
               </p>
@@ -81,7 +78,7 @@ export function TrainingCohortTimeline({
                 </div>
 
                 {cohort.applicationDeadline ? (
-                  <div className="rounded-[22px] border border-brand-border px-4 py-3 text-sm text-slate-600">
+                  <div className="rounded-panel border border-brand-border px-4 py-3 text-sm text-slate-600">
                     Deadline:{" "}
                     <span className="font-semibold text-brand-ink">
                       {formatDate(cohort.applicationDeadline)}
@@ -91,19 +88,19 @@ export function TrainingCohortTimeline({
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[22px] border border-brand-border px-4 py-4">
+                <div className="rounded-panel border border-brand-border px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                     Format
                   </p>
                   <p className="mt-2 text-sm font-semibold text-brand-ink">{cohort.format}</p>
                 </div>
-                <div className="rounded-[22px] border border-brand-border px-4 py-4">
+                <div className="rounded-panel border border-brand-border px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                     Duration
                   </p>
                   <p className="mt-2 text-sm font-semibold text-brand-ink">{cohort.duration}</p>
                 </div>
-                <div className="rounded-[22px] border border-brand-border px-4 py-4">
+                <div className="rounded-panel border border-brand-border px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                     Location
                   </p>

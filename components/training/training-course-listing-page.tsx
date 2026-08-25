@@ -1,6 +1,7 @@
 import { breadcrumbs } from "@/lib/content/site-config";
 
-import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { CapsulePageHero } from "@/components/capsule";
+import { SectionIntro } from "@/components/content/section-intro";
 import { EditorialGuidanceGrid } from "@/components/shared/editorial-guidance-grid";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { TrainingCourseCatalog } from "@/components/training/training-course-catalog";
@@ -25,19 +26,18 @@ export function TrainingCourseListingPage({
   );
   return (
     <div className="bg-white">
-      <EditorialImageHero
-        imageSrc={page.heroImage ?? trainingCatalogContent.heroImage}
-        imageAlt="Learners exploring training pathways"
+      <CapsulePageHero
         eyebrow={page.eyebrow}
         title={page.title}
         description={page.description}
         supportingText={page.intro}
+        imageSrc={page.heroImage ?? trainingCatalogContent.heroImage}
+        imageAlt="Learners exploring training pathways"
         breadcrumbs={[
           { label: breadcrumbs.home, href: "/" },
           { label: breadcrumbs.apply.root, href: "/apply-for-training" },
           { label: breadcrumbs.apply.courses },
         ]}
-        priority
       />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -88,18 +88,12 @@ export function TrainingCourseListingPage({
       {page.related.length ? (
         <section className="px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl space-y-8">
-            <div className="max-w-3xl space-y-3">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-                {page.exploreEyebrow ?? "Next steps"}
-              </p>
-              <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-                {page.exploreTitle ?? "Not sure which course is right yet?"}
-              </h2>
-              <p className="text-base leading-8 text-slate-600">
-                {page.exploreDescription ??
+            <SectionIntro
+            eyebrow={page.exploreEyebrow ?? "Next steps"}
+            title={page.exploreTitle ?? "Not sure which course is right yet?"}
+            description={page.exploreDescription ??
                   "Check eligibility guidance or review the full process before you apply. The team can also answer questions directly."}
-              </p>
-            </div>
+          />
             <RouteCardGrid cards={page.related} />
           </div>
         </section>

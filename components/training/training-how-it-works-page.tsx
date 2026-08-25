@@ -1,7 +1,8 @@
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
-import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { CapsulePageHero } from "@/components/capsule";
+import { SectionIntro } from "@/components/content/section-intro";
 import { TrainingProcessStrip } from "@/components/training/training-process-strip";
 import type { SitePage, TrainingProcessStep } from "@/types/content";
 
@@ -9,14 +10,13 @@ type TrainingHowItWorksPageProps = {
   page: SitePage;
 };
 
-const stepIcons = ["🧭", "📝", "✅", "🚀"];
-
+/* The four steps previously carried a hardcoded emoji each. Weight is carried
+   by the numeral and the accent node now, so no icon field is set. */
 function toProcessSteps(sections: SitePage["sections"]): TrainingProcessStep[] {
   return sections.slice(0, 4).map((section, index) => ({
     number: String(index + 1).padStart(2, "0"),
     title: section.title,
     description: section.body,
-    icon: stepIcons[index] ?? "•",
   }));
 }
 
@@ -27,7 +27,23 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
 
   return (
     <div className="bg-white">
-      <EditorialImageHero imageSrc={page.heroImage ?? "/images/randomPictures/studentslisteningfrontal.JPG"} imageAlt="Learners listening during orientation and onboarding" eyebrow={page.eyebrow} title={page.title} description={page.description} supportingText={[page.intro, page.principlesHeroTitle].filter((value): value is string => Boolean(value?.trim())).join(" ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.apply.root, href: "/apply-for-training" }, { label: breadcrumbs.apply.howItWorks }]} priority />
+      <CapsulePageHero
+        eyebrow={page.eyebrow}
+        title={page.title}
+        description={page.description}
+        supportingText={
+          [page.intro, page.principlesHeroTitle]
+            .filter((value): value is string => Boolean(value?.trim()))
+            .join(" ") || null
+        }
+        imageSrc={page.heroImage ?? "/images/randomPictures/studentslisteningfrontal.JPG"}
+        imageAlt="Learners listening during orientation and onboarding"
+        breadcrumbs={[
+          { label: breadcrumbs.home, href: "/" },
+          { label: breadcrumbs.apply.root, href: "/apply-for-training" },
+          { label: breadcrumbs.apply.howItWorks },
+        ]}
+      />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <TrainingProcessStrip
@@ -43,25 +59,19 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
 
       <section className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-8">
-          <div className="max-w-3xl space-y-3">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-              {page.operatingEyebrow ?? "Timeline"}
-            </p>
-            <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-              {page.operatingTitle ??
+          <SectionIntro
+            eyebrow={page.operatingEyebrow ?? "Timeline"}
+            title={page.operatingTitle ??
                 "What the process usually looks like in practice"}
-            </h2>
-            <p className="text-base leading-8 text-slate-600">
-              {page.operatingDescription ??
+            description={page.operatingDescription ??
                 "Exact dates shift by cohort, but the overall sequence stays consistent enough that learners can plan with confidence."}
-            </p>
-          </div>
+          />
 
           <div className="grid gap-5 lg:grid-cols-4">
             {timelineSections.map((item, index) => (
               <div
                 key={item.title}
-                className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
+                className="rounded-panel border border-brand-border bg-white p-6 shadow-sm"
               >
                 <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                   Step {String(index + 1).padStart(2, "0")}
@@ -78,7 +88,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[32px] bg-brand-deep p-8 text-white">
+          <div className="rounded-panel bg-brand-deep p-8 text-white">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {page.principlesEyebrow ?? "Prepare well"}
             </p>
@@ -95,7 +105,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
             {checklist.map((item) => (
               <div
                 key={item}
-                className="rounded-[26px] border border-brand-border bg-white px-5 py-5 shadow-sm"
+                className="rounded-panel border border-brand-border bg-white px-5 py-5 shadow-sm"
               >
                 <p className="text-sm leading-7 text-slate-700">{item}</p>
               </div>
@@ -106,18 +116,12 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
 
       <section className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-8">
-          <div className="max-w-3xl space-y-3">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
-              {page.exploreEyebrow ?? "Next steps"}
-            </p>
-            <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
-              {page.exploreTitle ?? "Keep moving while the decision is still fresh"}
-            </h2>
-            <p className="text-base leading-8 text-slate-600">
-              {page.exploreDescription ??
+          <SectionIntro
+            eyebrow={page.exploreEyebrow ?? "Next steps"}
+            title={page.exploreTitle ?? "Keep moving while the decision is still fresh"}
+            description={page.exploreDescription ??
                 "Once the process makes sense, the next useful move is either choosing a pathway or checking whether the fit is right before you apply."}
-            </p>
-          </div>
+          />
 
           <RouteCardGrid cards={page.related} />
         </div>

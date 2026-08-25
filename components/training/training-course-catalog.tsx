@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useDeferredValue, useEffect, useState } from "react";
-import { ArrowRight, CalendarDays, Clock3, Search } from "lucide-react";
 
 import type { Course } from "@/types/course";
 
@@ -141,16 +140,12 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
           <div className="grid gap-3 lg:grid-cols-[1.8fr_repeat(3,minmax(0,1fr))]">
             <label className="relative block">
               <span className="sr-only">Search courses</span>
-              <Search
-                className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-                aria-hidden="true"
-              />
               <input
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search courses, topics, or skills"
-                className="w-full rounded-full border border-brand-border bg-white py-3 pl-11 pr-4 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
+                className="w-full rounded-control border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
               />
             </label>
 
@@ -159,7 +154,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
               <select
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
-                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
+                className="w-full rounded-control border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
               >
                 <option value="all">All categories</option>
                 {categories.map((option) => (
@@ -175,7 +170,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
               <select
                 value={level}
                 onChange={(event) => setLevel(event.target.value)}
-                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
+                className="w-full rounded-control border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
               >
                 <option value="all">All levels</option>
                 {levels.map((option) => (
@@ -191,7 +186,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
               <select
                 value={price}
                 onChange={(event) => setPrice(event.target.value as PriceFilter)}
-                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
+                className="w-full rounded-control border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
               >
                 <option value="all">Free and paid</option>
                 <option value="free">Free only</option>
@@ -203,7 +198,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-4 rounded-[28px] border border-brand-border bg-brand-mist/45 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div className="flex flex-col gap-4 rounded-panel border border-brand-border bg-brand-mist/45 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div>
             <p className="text-sm font-semibold text-brand-ink">
               {filteredCourses.length} course{filteredCourses.length === 1 ? "" : "s"} found
@@ -222,7 +217,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                 setLevel("all");
                 setPrice("all");
               }}
-              className="inline-flex w-fit items-center rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-deep transition hover:border-brand-accent hover:text-brand-ink"
+              className="inline-flex w-fit items-center rounded-capsule border border-brand-border px-4 py-2 text-sm font-semibold text-brand-deep transition hover:border-brand-accent hover:text-brand-ink"
             >
               Clear filters
             </button>
@@ -236,7 +231,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
             {filteredCourses.map((course) => (
               <article
                 key={course.id}
-                className="overflow-hidden rounded-[30px] border border-brand-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
+                className="overflow-hidden rounded-panel border border-brand-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
               >
                 <div className="relative aspect-[4/3] bg-brand-mist">
                   <Image
@@ -251,10 +246,10 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
 
                 <div className="space-y-5 p-6">
                   <div className="flex flex-wrap gap-2">
-                    <span className="rounded-full bg-brand-warm px-3 py-1 text-xs font-semibold text-brand-ink">
+                    <span className="rounded-capsule bg-brand-warm px-3 py-1 text-xs font-semibold text-brand-ink">
                       {course.category}
                     </span>
-                    <span className="rounded-full border border-brand-border px-3 py-1 text-xs font-semibold text-slate-600">
+                    <span className="rounded-capsule border border-brand-border px-3 py-1 text-xs font-semibold text-slate-600">
                       {course.level}
                     </span>
                   </div>
@@ -269,16 +264,16 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-[22px] bg-brand-mist/55 px-4 py-4">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-brand-ink">
-                        <Clock3 className="h-4 w-4 text-brand-accent" aria-hidden="true" />
+                    <div className="rounded-panel bg-brand-mist/55 px-4 py-4">
+                      <div className="flex items-center gap-2.5 text-sm font-semibold text-brand-ink">
+                        <span aria-hidden="true" className="h-[2px] w-3.5 flex-none bg-brand-accent" />
                         Duration
                       </div>
                       <p className="mt-2 text-sm text-slate-600">{course.duration}</p>
                     </div>
-                    <div className="rounded-[22px] bg-brand-mist/55 px-4 py-4">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-brand-ink">
-                        <CalendarDays className="h-4 w-4 text-brand-accent" aria-hidden="true" />
+                    <div className="rounded-panel bg-brand-mist/55 px-4 py-4">
+                      <div className="flex items-center gap-2.5 text-sm font-semibold text-brand-ink">
+                        <span aria-hidden="true" className="h-[2px] w-3.5 flex-none bg-brand-accent" />
                         Next start
                       </div>
                       <p className="mt-2 text-sm text-slate-600">{formatDate(course.startDate)}</p>
@@ -310,10 +305,10 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                         }
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
+                        className="inline-flex items-center gap-2 rounded-control bg-brand-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
                       >
                         Apply now
-                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                        <span aria-hidden="true" className="size-1.5 flex-none rotate-45 border-r-[1.6px] border-t-[1.6px] border-current" />
                       </a>
                     </div>
                   </div>
@@ -322,7 +317,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
             ))}
           </div>
         ) : (
-          <div className="rounded-[32px] border border-dashed border-brand-border bg-white px-6 py-12 text-center shadow-sm">
+          <div className="rounded-panel border border-dashed border-brand-border bg-white px-6 py-12 text-center shadow-sm">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               No matches yet
             </p>
@@ -342,16 +337,16 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                   setLevel("all");
                   setPrice("all");
                 }}
-                className="rounded-full border border-brand-border px-5 py-3 text-sm font-semibold text-brand-deep transition hover:border-brand-accent hover:text-brand-ink"
+                className="rounded-control border border-brand-border px-5 py-3 text-sm font-semibold text-brand-deep transition hover:border-brand-accent hover:text-brand-ink"
               >
                 Reset filters
               </button>
               <a
                 href="#cohorts"
-                className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
+                className="inline-flex items-center gap-2 rounded-control bg-brand-accent px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
               >
                 See upcoming cohorts
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                <span aria-hidden="true" className="size-1.5 flex-none rotate-45 border-r-[1.6px] border-t-[1.6px] border-current" />
               </a>
             </div>
           </div>
