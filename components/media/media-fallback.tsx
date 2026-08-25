@@ -7,6 +7,11 @@ type MediaFallbackProps = {
    */
   label?: string | null;
   variant?: "wordmark" | "monogram";
+  /**
+   * Which ground the slot sits on. A hero panel puts white type over its media,
+   * so the stand-in there has to be dark or the panel becomes unreadable.
+   */
+  tone?: "light" | "dark";
   className?: string;
 };
 
@@ -42,24 +47,41 @@ function initials(value: string) {
  * Decorative by definition: there is no photograph, so there is nothing for a
  * screen reader to describe. The surrounding content carries the meaning.
  */
-export function MediaFallback({ label, variant = "wordmark", className }: MediaFallbackProps) {
+export function MediaFallback({
+  label,
+  variant = "wordmark",
+  tone = "light",
+  className,
+}: MediaFallbackProps) {
   const text = label?.trim() || ORGANISATION;
   const isMonogram = variant === "monogram";
+  const onDark = tone === "dark";
 
   return (
     <div
       aria-hidden="true"
       className={cn(
-        "absolute inset-0 flex flex-col items-center justify-center gap-4 bg-brand-mist px-6 text-center",
+        "absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center",
+        onDark ? "bg-brand-deep" : "bg-brand-mist",
         className,
       )}
     >
       {isMonogram ? (
-        <span className="font-heading text-[clamp(2.25rem,6vw,4.5rem)] font-bold leading-none tracking-tight text-brand-deep/70">
+        <span
+          className={cn(
+            "font-heading text-[clamp(2.25rem,6vw,4.5rem)] font-bold leading-none tracking-tight",
+            onDark ? "text-white/80" : "text-brand-deep/70",
+          )}
+        >
           {initials(text)}
         </span>
       ) : (
-        <span className="font-heading text-[clamp(1.0625rem,2.2vw,1.625rem)] font-bold leading-tight tracking-tight text-brand-deep/70">
+        <span
+          className={cn(
+            "font-heading text-[clamp(1.0625rem,2.2vw,1.625rem)] font-bold leading-tight tracking-tight",
+            onDark ? "text-white/80" : "text-brand-deep/70",
+          )}
+        >
           {text}
         </span>
       )}

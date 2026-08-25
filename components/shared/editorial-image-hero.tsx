@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { MediaFallback } from "@/components/media/media-fallback";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 
@@ -62,14 +63,7 @@ export function EditorialImageHero({
 
   return (
     <section className={cn("relative overflow-hidden bg-white", className)}>
-      <div
-        className={cn(
-          "relative",
-          visibleImage
-            ? "min-h-[34rem] sm:min-h-[40rem] lg:min-h-[46rem]"
-            : "min-h-[18rem] bg-brand-deep sm:min-h-[22rem]",
-        )}
-      >
+      <div className="relative min-h-[34rem] sm:min-h-[40rem] lg:min-h-[46rem]">
         {visibleImage ? (
           <Image
             src={visibleImage}
@@ -80,7 +74,17 @@ export function EditorialImageHero({
             className="object-cover"
             style={{ objectPosition: imagePosition }}
           />
-        ) : null}
+        ) : (
+          /**
+           * No photograph is still a designed hero, not a navy void.
+           *
+           * The empty state used to collapse to an 18rem block of brand-deep
+           * with the scrim laid over nothing, so a page whose heroImage had not
+           * been filled in shipped a shorter, emptier hero than every other
+           * page and nobody could tell it was unfinished.
+           */
+          <MediaFallback label={title ?? undefined} tone="dark" />
+        )}
         <div
           className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,20,39,0.38)_0%,rgba(7,20,39,0.08)_42%,rgba(7,20,39,0.58)_100%)]"
           aria-hidden="true"
