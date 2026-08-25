@@ -1,0 +1,5 @@
+{
+  "$comment": "Replacement map for externally sourced placeholder photography. Not an asset audit. Every external image URL that appears in application source must have an entry here, and lib/content/placeholder-registry.test.ts fails the build when one does not. Delete an entry when its slot receives final ITFYG media.",
+  "orientations": ["portrait", "square", "landscape", "wide", "panoramic"],
+  "placeholders": []
+}

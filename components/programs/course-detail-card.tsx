@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { LabelPills } from "@/components/content/label-pills";
 import { PanelList } from "@/components/content/panel-list";
+import { RemoteImage } from "@/components/media/remote-image";
 
 import type { Course } from "@/types/course";
 
@@ -10,17 +10,6 @@ type CourseDetailCardProps = {
   course: Course | null;
   fallbackTitle: string;
 };
-
-const allowedRemoteHosts = new Set([
-  "images.unsplash.com",
-  "firebasestorage.googleapis.com",
-  "storage.googleapis.com",
-  "images.pexels.com",
-  "tse2.mm.bing.net",
-  "imarticus.org",
-  "img.freepik.com",
-  "photos.fife.usercontent.google.com",
-]);
 
 function formatPrice(course: Course) {
   if (course.pricing.isFree || course.pricing.amount === 0) {
@@ -42,27 +31,6 @@ function formatDate(value: string | null) {
     month: "short",
     year: "numeric",
   }).format(new Date(value));
-}
-
-function resolveCourseImage(image: string | null) {
-  if (!image) {
-    return "/images/fallback/placeholder.svg";
-  }
-
-  if (image.startsWith("/")) {
-    return image;
-  }
-
-  try {
-    const url = new URL(image);
-    if (allowedRemoteHosts.has(url.hostname)) {
-      return image;
-    }
-  } catch {
-    return "/images/fallback/placeholder.svg";
-  }
-
-  return "/images/fallback/placeholder.svg";
 }
 
 export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProps) {
@@ -93,13 +61,12 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
   return (
     <article className="overflow-hidden rounded-panel border border-brand-border bg-white shadow-sm">
       <div className="relative min-h-[360px] bg-brand-mist">
-        <Image
-          src={resolveCourseImage(course.image)}
+        <RemoteImage
+          src={course.image}
           alt={course.title}
-          fill
-          priority
           sizes="(max-width: 1023px) 100vw, 1024px"
-          className="object-cover"
+          priority
+          fallbackLabel={course.title}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/80 via-brand-deep/30 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 lg:p-10">

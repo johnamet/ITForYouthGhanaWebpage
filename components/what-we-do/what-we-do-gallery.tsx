@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Play, X } from "lucide-react";
 
 import type { WhatWeDoGalleryItem } from "@/types/content";
+import { MediaFallback } from "@/components/media/media-fallback";
 
 function getEmbedUrl(url: string) {
   try {
@@ -46,7 +47,7 @@ export function WhatWeDoGallery({ items }: { items: WhatWeDoGalleryItem[] }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.type === "image" ? item.url : item.thumbnailUrl} alt={item.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
             ) : (
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,180,38,0.32),transparent_42%),linear-gradient(135deg,#174a82,#0c2d5a)]" />
+              <MediaFallback label={item.title} />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/15 to-transparent" />
             {item.type === "video" ? (

@@ -1,6 +1,13 @@
 # Addendum: Media-Paired Editorial Rule
 
-Status: **Current**
+Status: **Superseded** by `docs/redesign/media-policy.md`.
+
+The media-paired editorial rule itself still stands and is restated in the
+current policy. What is superseded is everything this document says about
+designing around the existing image library: the standing orientation
+constraint, the discovery and inventory pass, and the gap analysis. All site
+photography is now design-phase placeholder media and Unsplash fills any
+orientation the library lacks. Read the current policy instead.
 
 This is a follow-up to the ITFYG redesign brief. Apply it alongside that brief,
 not instead of it. Everything in the original brief still holds: the capsule

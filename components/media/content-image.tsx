@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { MediaFallback } from "@/components/media/media-fallback";
 import { cn } from "@/lib/utils/cn";
 
 type ContentImageProps = {
@@ -11,6 +12,9 @@ type ContentImageProps = {
   imageClassName?: string;
   overlay?: boolean;
   sizes?: string;
+  /** Stands in for the photograph when the content system has none yet. */
+  fallbackLabel?: string | null;
+  fallbackVariant?: "wordmark" | "monogram";
 };
 
 const aspectClasses = {
@@ -20,7 +24,13 @@ const aspectClasses = {
   wide: "aspect-[16/9]",
 };
 
-/** Consistent editorial media treatment, including a deliberate empty-media state. */
+/**
+ * Consistent editorial media treatment.
+ *
+ * With no src the slot renders a considered typographic composition at the same
+ * proportions rather than a gradient, so a missing photograph reads as an
+ * outstanding asset instead of a design decision nobody will revisit.
+ */
 export function ContentImage({
   src,
   alt,
@@ -30,6 +40,8 @@ export function ContentImage({
   imageClassName,
   overlay = false,
   sizes = "(min-width: 1024px) 50vw, 100vw",
+  fallbackLabel,
+  fallbackVariant = "wordmark",
 }: ContentImageProps) {
   return (
     <div className={cn("relative overflow-hidden rounded-media bg-brand-mist", aspectClasses[aspectRatio], className)}>
@@ -43,7 +55,7 @@ export function ContentImage({
           className={cn("object-cover transition duration-700", imageClassName)}
         />
       ) : (
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--color-primary-light),var(--color-bg-alt))]" aria-hidden="true" />
+        <MediaFallback label={fallbackLabel} variant={fallbackVariant} />
       )}
       {overlay ? <div className="absolute inset-0 bg-brand-deep/20" aria-hidden="true" /> : null}
     </div>

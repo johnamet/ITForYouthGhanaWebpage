@@ -16,6 +16,7 @@
  */
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, relative } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const ROOT = process.cwd();
 const read = (p) => (existsSync(join(ROOT, p)) ? readFileSync(join(ROOT, p), "utf8") : "");
@@ -64,7 +65,41 @@ const MEDIA_SIGNALS = [
   /<MediaBand/, /<WideFrame/, /<OffsetFrames/, /<PortraitFigure/, /<CircularFigure/,
   /<StorySection/,
 ];
-const PLACEHOLDER_SIGNALS = [/linear-gradient\(135deg,var\(--color-primary-light\)/, /bg-\[linear-gradient/];
+/**
+ * A gradient standing in for a photograph, which the media policy bans outright.
+ *
+ * The distinction that matters is scrim versus substitute, and colour alone
+ * cannot tell them apart. A scrim, a vignette or an accent wash sits over a
+ * real photograph to keep overlaid type legible, and is correct. A substitute
+ * fills a media slot that has no photograph in it, and must never ship: it
+ * looks like a design decision, so nobody ever replaces it.
+ *
+ * Both compile to an empty absolutely-positioned div, and both mix opaque and
+ * translucent stops, so stop colours are not the discriminator. Position in the
+ * JSX is. A substitute is what renders *instead of* the image, meaning it sits
+ * in the else branch of the conditional that would otherwise have rendered
+ * media. A scrim renders alongside the image, never in its place.
+ *
+ * So: a gradient-filled empty div whose immediately preceding tokens close a
+ * ternary and open its alternative is a substitute. Anything else is a wash.
+ */
+export function findPlaceholderGradients(source) {
+  const found = [];
+  for (const match of source.matchAll(/<div[^>]*?\/>/g)) {
+    const el = match[0];
+    if (!/(linear|radial)-gradient/.test(el)) continue;
+
+    const before = source
+      .slice(0, match.index)
+      .replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}\s*$/, "")
+      .replace(/\s+$/, "");
+    if (!/\)\s*:\s*\($/.test(before)) continue;
+
+    found.push(el.slice(0, 120));
+  }
+  return found;
+}
+
 const TEXT_SIGNALS = [/<p[\s>]/, /<h2[\s>]/, /<h3[\s>]/, /leading-\[?1?\.?[678]/];
 
 const SHELL = /(site-header|site-footer|announcement-bar|floating-elements|page-container)/;
@@ -120,7 +155,7 @@ const rows = pages.map((p) => {
       graphicForm: graphic,
       // A graphic form that encodes real structure satisfies the rule.
       paired: hasMedia || graphic,
-      hasPlaceholderGradient: PLACEHOLDER_SIGNALS.some((r) => r.test(text)),
+      hasPlaceholderGradient: findPlaceholderGradients(text).length > 0,
       hasSubstantiveText: TEXT_SIGNALS.filter((r) => r.test(text)).length >= 2,
     };
   });
@@ -147,30 +182,36 @@ const report = {
     paired: rows.reduce((n, r) => n + r.paired, 0),
     textOnly: rows.reduce((n, r) => n + r.textOnly.length, 0),
     routesFullyPaired: rows.filter((r) => r.textOnly.length === 0).length,
+    placeholderGradients: rows.reduce((n, r) => n + r.placeholders.length, 0),
   },
   rows,
 };
 
-if (process.argv.includes("--json")) {
-  console.log(JSON.stringify(report, null, 2));
-} else {
-  const t = report.totals;
-  console.log("\nMEDIA PAIRING GAP ANALYSIS\n");
-  console.log(`  public routes             ${t.routes}`);
-  console.log(`  components scanned        ${t.componentsScanned}`);
-  console.log(`  content sections          ${t.contentSections}   (structural and graphic-form excluded)`);
-  console.log(`  paired (media or graphic) ${t.paired}`);
-  console.log(`  unpaired text-only        ${t.textOnly}`);
-  console.log(`  routes fully paired       ${t.routesFullyPaired} of ${t.routes}`);
-  console.log("\n  UNPAIRED SECTIONS BY ROUTE");
-  for (const r of rows.filter((x) => x.textOnly.length)) {
-    console.log(`    ${r.route}`);
-    for (const s of r.textOnly) console.log(`        ${s}`);
+/* Importing this module must not print a report: the placeholder-gradient
+   detector above is imported by the gate test. */
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  if (process.argv.includes("--json")) {
+    console.log(JSON.stringify(report, null, 2));
+  } else {
+    const t = report.totals;
+    console.log("\nMEDIA PAIRING GAP ANALYSIS\n");
+    console.log(`  public routes             ${t.routes}`);
+    console.log(`  components scanned        ${t.componentsScanned}`);
+    console.log(`  content sections          ${t.contentSections}   (structural and graphic-form excluded)`);
+    console.log(`  paired (media or graphic) ${t.paired}`);
+    console.log(`  unpaired text-only        ${t.textOnly}`);
+    console.log(`  routes fully paired       ${t.routesFullyPaired} of ${t.routes}`);
+    console.log(`  placeholder gradients     ${t.placeholderGradients}`);
+    console.log("\n  UNPAIRED SECTIONS BY ROUTE");
+    for (const r of rows.filter((x) => x.textOnly.length)) {
+      console.log(`    ${r.route}`);
+      for (const s of r.textOnly) console.log(`        ${s}`);
+    }
+    const ph = rows.filter((r) => r.placeholders.length);
+    if (ph.length) {
+      console.log("\n  PLACEHOLDER GRADIENTS STILL IN USE");
+      for (const r of ph) console.log(`    ${r.route}  ${r.placeholders.join(", ")}`);
+    }
+    console.log("");
   }
-  const ph = rows.filter((r) => r.placeholders.length);
-  if (ph.length) {
-    console.log("\n  PLACEHOLDER GRADIENTS STILL IN USE");
-    for (const r of ph) console.log(`    ${r.route}  ${r.placeholders.join(", ")}`);
-  }
-  console.log("");
 }

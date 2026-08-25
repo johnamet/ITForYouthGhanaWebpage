@@ -1,28 +1,17 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useDeferredValue, useEffect, useState } from "react";
 
 import type { Course } from "@/types/course";
+import { RemoteImage } from "@/components/media/remote-image";
 
 type TrainingCourseCatalogProps = {
   courses: Course[];
 };
 
 type PriceFilter = "all" | "free" | "paid";
-
-const allowedRemoteHosts = new Set([
-  "images.unsplash.com",
-  "firebasestorage.googleapis.com",
-  "storage.googleapis.com",
-  "images.pexels.com",
-  "tse2.mm.bing.net",
-  "imarticus.org",
-  "img.freepik.com",
-  "photos.fife.usercontent.google.com",
-]);
 
 function formatPrice(course: Course) {
   if (course.pricing.isFree || course.pricing.amount === 0) {
@@ -44,27 +33,6 @@ function formatDate(value: string | null) {
     month: "short",
     year: "numeric",
   }).format(new Date(value));
-}
-
-function resolveCourseImage(image: string | null) {
-  if (!image) {
-    return "/images/fallback/placeholder.svg";
-  }
-
-  if (image.startsWith("/")) {
-    return image;
-  }
-
-  try {
-    const url = new URL(image);
-    if (allowedRemoteHosts.has(url.hostname)) {
-      return image;
-    }
-  } catch {
-    return "/images/fallback/placeholder.svg";
-  }
-
-  return "/images/fallback/placeholder.svg";
 }
 
 export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
@@ -234,12 +202,11 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                 className="overflow-hidden rounded-panel border border-brand-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
               >
                 <div className="relative aspect-[4/3] bg-brand-mist">
-                  <Image
-                    src={resolveCourseImage(course.image)}
+                  <RemoteImage
+                    src={course.image}
                     alt={course.title}
-                    fill
                     sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-                    className="object-cover"
+                    fallbackLabel={course.title}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/35 via-transparent to-transparent" />
                 </div>
