@@ -19,7 +19,7 @@ export function NewsletterSignupSection({ content }: NewsletterSignupSectionProp
   }
 
   return (
-    <section className="bg-brand-navy px-6 py-20 text-white lg:px-10">
+    <section className="bg-brand-deep px-6 py-20 text-white lg:px-10">
       <div className="mx-auto max-w-4xl text-center">
         <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl lg:text-7xl">
           {content.eyebrow}

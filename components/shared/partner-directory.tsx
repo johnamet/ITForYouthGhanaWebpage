@@ -26,7 +26,7 @@ export function PartnerDirectory({ partners }: PartnerDirectoryProps) {
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="space-y-8">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">Partner network</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">Partner network</p>
           <h2 className="mt-2 font-heading text-4xl font-semibold text-brand-ink">Organisations helping shape youth outcomes</h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
             These organisations support delivery, mentorship, placements, and ecosystem growth across IT For Youth Ghana programmes.

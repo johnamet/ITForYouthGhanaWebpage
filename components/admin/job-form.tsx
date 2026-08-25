@@ -46,10 +46,10 @@ type JobFormProps = {
 };
 
 const inputClassName =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 const textareaClassName =
-  "mt-2 min-h-32 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 min-h-32 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 function getInitialValues(job?: JobListing): JobFormValues {
   return {
@@ -209,7 +209,7 @@ export function JobForm({ mode, job }: JobFormProps) {
       <div className="grid gap-8 lg:grid-cols-[0.68fr_0.32fr]">
         <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
           <div className="mb-6">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">Role profile</p>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Role profile</p>
             <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Job details</h2>
           </div>
 
@@ -276,7 +276,7 @@ export function JobForm({ mode, job }: JobFormProps) {
 
         <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
           <div className="mb-6">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">Publication</p>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Publication</p>
             <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Status and CTA</h2>
           </div>
 

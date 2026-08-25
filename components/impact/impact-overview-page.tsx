@@ -42,7 +42,7 @@ export function ImpactOverviewPage({
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -94,7 +94,7 @@ export function ImpactOverviewPage({
                   <span className="text-3xl" aria-hidden="true">
                     {card.icon}
                   </span>
-                  <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
+                  <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-deep">
                     {content.measurementCardBadgeLabel ?? "Evidence lens"}
                   </span>
                 </div>

@@ -41,7 +41,7 @@ export default async function AdminUsersPage() {
             key: "email",
             label: "Email",
             render: (row) => (
-              <a href={`mailto:${(row as Row).email}`} className="text-brand-navy underline">
+              <a href={`mailto:${(row as Row).email}`} className="text-brand-deep underline">
                 {(row as Row).email}
               </a>
             ),
@@ -59,7 +59,7 @@ export default async function AdminUsersPage() {
             render: (row) => (
               <Link
                 href={`/admin/users/${(row as Row).id}`}
-                className="text-sm font-semibold text-brand-navy hover:text-brand-ink"
+                className="text-sm font-semibold text-brand-deep hover:text-brand-ink"
               >
                 Edit
               </Link>

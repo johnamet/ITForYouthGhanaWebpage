@@ -25,7 +25,7 @@ export function HubNodeSearch({ nodes }: { nodes: Node[] }) {
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder="Search pages in this hub…"
-        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold"
+        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent"
       />
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((node) => (
@@ -44,7 +44,7 @@ export function HubNodeSearch({ nodes }: { nodes: Node[] }) {
             </div>
             {node.previewHref ? (
               <div className="mt-2">
-                <Link href={node.previewHref} className="text-xs text-brand-navy hover:underline">
+                <Link href={node.previewHref} className="text-xs text-brand-deep hover:underline">
                   Preview: {node.previewHref}
                 </Link>
               </div>

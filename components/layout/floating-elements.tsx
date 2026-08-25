@@ -149,7 +149,7 @@ export function FloatingElements({ content }: FloatingElementsProps) {
         {donateVisible ? (
           <Link
             href={content.donateButton.href}
-            className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-3 text-sm font-bold text-brand-ink shadow-[0_12px_30px_rgba(245,197,24,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(245,197,24,0.45)]"
+            className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-brand-accent px-5 py-3 text-sm font-bold text-brand-ink shadow-[0_12px_30px_rgba(245,197,24,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(245,197,24,0.45)]"
           >
             <Heart className="h-4 w-4" />
             {content.donateButton.label}
@@ -161,7 +161,7 @@ export function FloatingElements({ content }: FloatingElementsProps) {
             type="button"
             onClick={scrollToTop}
             aria-label={content.scrollToTop.ariaLabel ?? "Scroll to top"}
-            className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-navy text-white shadow-[0_14px_30px_rgba(12,45,90,0.28)] transition hover:-translate-y-0.5 hover:bg-brand-ink"
+            className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-deep text-white shadow-[0_14px_30px_rgba(12,45,90,0.28)] transition hover:-translate-y-0.5 hover:bg-brand-ink"
           >
             <ArrowUp className="h-5 w-5" />
           </button>
@@ -170,7 +170,7 @@ export function FloatingElements({ content }: FloatingElementsProps) {
 
       {showPopup && content.exitIntent.active !== false ? (
         <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-brand-navy/70 px-4 py-6 backdrop-blur-sm"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-brand-deep/70 px-4 py-6 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label={content.exitIntent.headline}
@@ -202,11 +202,11 @@ export function FloatingElements({ content }: FloatingElementsProps) {
                 ) : (
                   <div className="h-full w-full bg-hero-grid" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-tr from-brand-navy/40 via-transparent to-brand-gold/10" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-brand-deep/40 via-transparent to-brand-accent/10" />
               </div>
 
               <div className="flex flex-col justify-center p-7 sm:p-10">
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                   {content.exitIntent.mode === "newsletter"
                     ? "Stay connected"
                     : content.exitIntent.mode === "donate"
@@ -231,7 +231,7 @@ export function FloatingElements({ content }: FloatingElementsProps) {
                     <Link
                       href={content.exitIntent.cta.href}
                       onClick={dismissPopup}
-                      className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+                      className="inline-flex items-center gap-2 rounded-full bg-brand-deep px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
                     >
                       {content.exitIntent.cta.label}
                     </Link>

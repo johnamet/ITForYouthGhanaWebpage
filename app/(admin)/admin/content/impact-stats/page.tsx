@@ -40,7 +40,7 @@ export default async function AdminImpactStatsPage() {
             name="stats-json"
             defaultValue={JSON.stringify(stats, null, 2)}
             spellCheck={false}
-            className="mt-3 h-72 w-full rounded-2xl border border-brand-border bg-white p-4 font-mono text-[12px] leading-5 text-brand-ink outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
+            className="mt-3 h-72 w-full rounded-2xl border border-brand-border bg-white p-4 font-mono text-[12px] leading-5 text-brand-ink outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20"
           />
           <div className="mt-4">
             <button type="submit" className="rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white">Save stats</button>

@@ -74,7 +74,7 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
         </p>
         <Link
           href="/apply-for-training/courses"
-          className="mt-6 inline-flex text-sm font-semibold text-brand-navy"
+          className="mt-6 inline-flex text-sm font-semibold text-brand-deep"
         >
           Back to courses
         </Link>
@@ -99,15 +99,15 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
           sizes="(max-width: 1023px) 100vw, 1024px"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/80 via-brand-deep/30 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 lg:p-10">
           <Link
             href="/apply-for-training/courses"
-            className="mb-6 inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-brand-navy transition hover:bg-white"
+            className="mb-6 inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-brand-deep transition hover:bg-white"
           >
             Back to courses
           </Link>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-gold">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-accent">
             {course.category}
           </p>
           <h1 className="mt-3 max-w-4xl font-heading text-4xl font-semibold leading-tight text-white sm:text-5xl">
@@ -163,7 +163,7 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
                     key={objective}
                     className="flex gap-3 rounded-[22px] border border-brand-border bg-brand-mist/40 p-4 text-sm leading-6 text-slate-600"
                   >
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-gold" />
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-accent" />
                     <span>{objective}</span>
                   </div>
                 ))}
@@ -177,14 +177,14 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
               Price
             </p>
-            <p className="mt-2 font-heading text-3xl font-bold text-brand-navy">
+            <p className="mt-2 font-heading text-3xl font-bold text-brand-deep">
               {formatPrice(course)}
             </p>
             <a
               href={course.applyUrl ?? "https://portal.itforyouthghana.org"}
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex w-full justify-center rounded-full bg-brand-gold px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
+              className="mt-5 inline-flex w-full justify-center rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
             >
               Continue to application
             </a>
@@ -193,14 +193,14 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
           <dl className="mt-5 grid gap-3 text-sm">
             <div className="rounded-[20px] bg-white px-4 py-4">
               <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                <Clock3 className="h-4 w-4 text-brand-gold" />
+                <Clock3 className="h-4 w-4 text-brand-accent" />
                 Duration
               </dt>
               <dd className="mt-2 text-slate-600">{course.duration}</dd>
             </div>
             <div className="rounded-[20px] bg-white px-4 py-4">
               <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                <CalendarDays className="h-4 w-4 text-brand-gold" />
+                <CalendarDays className="h-4 w-4 text-brand-accent" />
                 Starts
               </dt>
               <dd className="mt-2 text-slate-600">{formatDate(course.startDate)}</dd>
@@ -208,7 +208,7 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
             {course.endDate ? (
               <div className="rounded-[20px] bg-white px-4 py-4">
                 <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                  <CalendarDays className="h-4 w-4 text-brand-gold" />
+                  <CalendarDays className="h-4 w-4 text-brand-accent" />
                   Ends
                 </dt>
                 <dd className="mt-2 text-slate-600">{formatDate(course.endDate)}</dd>
@@ -216,14 +216,14 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
             ) : null}
             <div className="rounded-[20px] bg-white px-4 py-4">
               <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                <Tag className="h-4 w-4 text-brand-gold" />
+                <Tag className="h-4 w-4 text-brand-accent" />
                 Level
               </dt>
               <dd className="mt-2 text-slate-600">{course.level}</dd>
             </div>
             <div className="rounded-[20px] bg-white px-4 py-4">
               <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                <Globe2 className="h-4 w-4 text-brand-gold" />
+                <Globe2 className="h-4 w-4 text-brand-accent" />
                 Language
               </dt>
               <dd className="mt-2 text-slate-600">{course.language ?? "English"}</dd>
@@ -231,7 +231,7 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
             {course.provider ? (
               <div className="rounded-[20px] bg-white px-4 py-4">
                 <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                  <Users className="h-4 w-4 text-brand-gold" />
+                  <Users className="h-4 w-4 text-brand-accent" />
                   Provider
                 </dt>
                 <dd className="mt-2 text-slate-600">{course.provider}</dd>
@@ -240,7 +240,7 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
             {typeof course.enrollmentCount === "number" ? (
               <div className="rounded-[20px] bg-white px-4 py-4">
                 <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                  <Users className="h-4 w-4 text-brand-gold" />
+                  <Users className="h-4 w-4 text-brand-accent" />
                   Enrolled
                 </dt>
                 <dd className="mt-2 text-slate-600">{course.enrollmentCount}</dd>
@@ -253,7 +253,7 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
               href={course.previewVideoUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full border border-brand-border bg-white px-5 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-gold hover:text-brand-ink"
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full border border-brand-border bg-white px-5 py-3 text-sm font-semibold text-brand-deep transition hover:border-brand-accent hover:text-brand-ink"
             >
               <PlayCircle className="h-4 w-4" />
               Watch preview

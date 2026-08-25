@@ -52,7 +52,7 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -104,21 +104,21 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
                 >
                   <div className="flex flex-wrap items-start justify-between gap-5">
                     <div>
-                      <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                      <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                         {articleCategoryLabels[category]}
                       </p>
                       <h2 className="mt-3 font-heading text-3xl font-bold text-brand-ink">
                         {categoryContent.title}
                       </h2>
                     </div>
-                    <span className="rounded-full bg-brand-navy px-4 py-2 text-sm font-bold text-white">
+                    <span className="rounded-full bg-brand-deep px-4 py-2 text-sm font-bold text-white">
                       {categoryArticles.length} articles
                     </span>
                   </div>
                   <p className="mt-4 text-sm leading-7 text-slate-600">
                     {categoryContent.description}
                   </p>
-                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-brand-navy">
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-brand-deep">
                     Open {articleCategoryLabels[category].toLowerCase()}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </span>
@@ -168,10 +168,10 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
         </div>
       </section>
 
-      <section className="bg-brand-navy px-4 py-16 text-white sm:px-6 lg:px-8">
+      <section className="bg-brand-deep px-4 py-16 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-10">
           <div className="space-y-3">
-            <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-accent">
               {content.latestSectionEyebrow}
             </p>
             <h2 className="max-w-2xl font-heading text-3xl font-bold leading-snug text-white sm:text-4xl">
@@ -193,10 +193,10 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
       <section id="subscribe" className="scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 rounded-[34px] border border-brand-border bg-brand-warm p-8 shadow-sm lg:grid-cols-[0.75fr_0.25fr] lg:items-center lg:p-10">
           <div className="space-y-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
               <Mail className="h-5 w-5" />
             </div>
-            <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-navy">
+            <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-deep">
               {content.subscribeSectionEyebrow}
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -208,7 +208,7 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
           </div>
           <div className="flex flex-wrap gap-3 lg:justify-end">
             {content.subscribeCtas.filter((cta) => cta.label.trim() && cta.href.trim()).map((cta, index) => (
-              <Link key={`${cta.href}-${cta.label}`} href={cta.href} className={index === 0 ? "rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg" : "rounded-full border border-brand-navy/20 bg-white px-6 py-3.5 text-sm font-semibold text-brand-navy transition hover:border-brand-navy"}>
+              <Link key={`${cta.href}-${cta.label}`} href={cta.href} className={index === 0 ? "rounded-full bg-brand-deep px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg" : "rounded-full border border-brand-deep/20 bg-white px-6 py-3.5 text-sm font-semibold text-brand-deep transition hover:border-brand-deep"}>
                 {cta.label}
               </Link>
             ))}

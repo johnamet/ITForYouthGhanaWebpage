@@ -18,7 +18,7 @@ export function ContentHubPage({ hubKey }: ContentHubPageProps) {
         <AdminBreadcrumbs />
         <h1 className="text-xl font-bold">Unknown hub</h1>
         <p className="text-slate-600">This hub is not registered. Go back to the Content Explorer.</p>
-        <Link href="/admin/content" className="text-brand-navy hover:underline">
+        <Link href="/admin/content" className="text-brand-deep hover:underline">
           Back to Content
         </Link>
       </div>

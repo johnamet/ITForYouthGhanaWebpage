@@ -3,7 +3,7 @@ import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from "rea
 import { cn } from "@/lib/utils/cn";
 
 const controlClassName =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:opacity-70";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:opacity-70";
 
 type FormFieldProps = {
   label: string;
@@ -18,7 +18,7 @@ export function FormField({ label, htmlFor, error, required, children }: FormFie
     <div>
       <label htmlFor={htmlFor} className="text-sm font-bold text-brand-ink">
         {label}
-        {required ? <span aria-hidden="true" className="ml-1 text-brand-gold">*</span> : null}
+        {required ? <span aria-hidden="true" className="ml-1 text-brand-accent">*</span> : null}
       </label>
       {children}
       {error ? <p className="mt-2 text-sm font-medium text-rose-600">{error}</p> : null}

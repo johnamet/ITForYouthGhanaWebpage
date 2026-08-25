@@ -45,7 +45,7 @@ export function ContentImage({
       ) : (
         <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--color-primary-light),var(--color-bg-alt))]" aria-hidden="true" />
       )}
-      {overlay ? <div className="absolute inset-0 bg-brand-navy/20" aria-hidden="true" /> : null}
+      {overlay ? <div className="absolute inset-0 bg-brand-deep/20" aria-hidden="true" /> : null}
     </div>
   );
 }

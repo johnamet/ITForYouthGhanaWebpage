@@ -9,7 +9,7 @@ type TrainingCohortTimelineProps = {
 
 const cohortStatusStyles: Record<TrainingCohort["status"], string> = {
   open: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  upcoming: "border-brand-border bg-brand-mist/70 text-brand-navy",
+  upcoming: "border-brand-border bg-brand-mist/70 text-brand-deep",
   waitlist: "border-amber-200 bg-amber-50 text-amber-700",
 };
 
@@ -42,7 +42,7 @@ export function TrainingCohortTimeline({
   return (
     <section className="space-y-8">
       <div className="max-w-3xl space-y-3">
-        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
           {eyebrow}
         </p>
         <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -58,10 +58,10 @@ export function TrainingCohortTimeline({
             className="grid gap-5 rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:grid-cols-[12rem_1fr]"
           >
             <div className="space-y-3 rounded-[24px] bg-brand-mist/70 p-5">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                 Starts
               </p>
-              <p className="font-heading text-2xl font-bold text-brand-navy">
+              <p className="font-heading text-2xl font-bold text-brand-deep">
                 {formatDate(cohort.startDate)}
               </p>
               <span

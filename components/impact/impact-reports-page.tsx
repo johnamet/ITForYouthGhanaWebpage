@@ -29,7 +29,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -79,14 +79,14 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                    <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                       {resource.year}
                     </p>
                     <h2 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
                       {resource.title}
                     </h2>
                   </div>
-                  <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
+                  <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-deep">
                     {content.reportBadgeLabel ?? "Brief"}
                   </span>
                 </div>
@@ -107,7 +107,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
                 <a
                   href={resource.href}
                   download
-                  className="mt-6 inline-flex rounded-full bg-brand-gold px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
+                  className="mt-6 inline-flex rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
                 >
                   {resource.fileLabel}
                 </a>
@@ -155,7 +155,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
                     <span className="text-3xl" aria-hidden="true">
                       {card.icon}
                     </span>
-                    <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
+                    <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-deep">
                       {content.methodCardBadgeLabel ?? "Evidence theme"}
                     </span>
                   </div>
@@ -168,8 +168,8 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
             })}
           </div>
 
-          <div className="rounded-[32px] bg-brand-navy p-8 text-white">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+          <div className="rounded-[32px] bg-brand-deep p-8 text-white">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {content.methodBadgeEyebrow ?? "Method notes"}
             </p>
             {(() => {

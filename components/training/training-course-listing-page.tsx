@@ -89,7 +89,7 @@ export function TrainingCourseListingPage({
         <section className="px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl space-y-8">
             <div className="max-w-3xl space-y-3">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                 {page.exploreEyebrow ?? "Next steps"}
               </p>
               <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">

@@ -14,9 +14,9 @@ type CmsContactMessage = {
 };
 
 const inputClassName =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 const textareaClassName =
-  "mt-2 min-h-32 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 min-h-32 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 export function MessageForm({ message }: { message: CmsContactMessage }) {
   const router = useRouter();
@@ -108,11 +108,11 @@ export function MessageForm({ message }: { message: CmsContactMessage }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <button type="submit" disabled={isSubmitting} className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md disabled:opacity-60">
+        <button type="submit" disabled={isSubmitting} className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md disabled:opacity-60">
           {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Save changes
         </button>
-        <button type="button" onClick={handleDelete} disabled={isDeleting} className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-white px-5 py-3 text-sm font-semibold text-brand-navy transition hover:border-rose-400 hover:text-rose-700 disabled:opacity-60">
+        <button type="button" onClick={handleDelete} disabled={isDeleting} className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-white px-5 py-3 text-sm font-semibold text-brand-deep transition hover:border-rose-400 hover:text-rose-700 disabled:opacity-60">
           {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
           Delete
         </button>

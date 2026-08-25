@@ -67,7 +67,7 @@ export function EditorialImageHero({
           "relative",
           visibleImage
             ? "min-h-[34rem] sm:min-h-[40rem] lg:min-h-[46rem]"
-            : "min-h-[18rem] bg-brand-navy sm:min-h-[22rem]",
+            : "min-h-[18rem] bg-brand-deep sm:min-h-[22rem]",
         )}
       >
         {visibleImage ? (
@@ -118,9 +118,9 @@ export function EditorialImageHero({
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="pointer-events-auto w-full sm:max-w-xl">
                 {hasPanel ? (
-                  <div className="border-l-4 border-brand-gold bg-brand-navy/90 px-6 py-7 text-white shadow-editorial backdrop-blur-xl backdrop-saturate-150 sm:px-8 sm:py-9">
+                  <div className="border-l-4 border-brand-accent bg-brand-deep/90 px-6 py-7 text-white shadow-editorial backdrop-blur-xl backdrop-saturate-150 sm:px-8 sm:py-9">
                     {hasText(eyebrow) ? (
-                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
+                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-brand-accent">
                         {eyebrow}
                       </p>
                     ) : null}

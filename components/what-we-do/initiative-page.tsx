@@ -108,7 +108,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -194,7 +194,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                       {stat.icon}
                     </span>
                   ) : null}
-                  {hasText(stat.value) ? <p className="mt-4 font-heading text-4xl font-bold text-brand-navy">
+                  {hasText(stat.value) ? <p className="mt-4 font-heading text-4xl font-bold text-brand-deep">
                     {stat.value}
                   </p> : null}
                   {hasText(stat.label) ? <p className="mt-2 text-sm font-semibold uppercase tracking-[0.16em] text-brand-ink">
@@ -210,8 +210,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
 
           {hasAudience ? <section id="who-its-for" className="scroll-mt-36">
             <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-              {hasText(page.audience.summary) || audienceGroups.length ? <div className="rounded-[32px] bg-brand-navy p-8 text-white">
-                {hasText(section.audienceEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+              {hasText(page.audience.summary) || audienceGroups.length ? <div className="rounded-[32px] bg-brand-deep p-8 text-white">
+                {hasText(section.audienceEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">
                   {section.audienceEyebrow}
                 </p> : null}
                 {hasText(page.audience.summary) ? <p className="mt-5 text-lg leading-8 text-white/85">{page.audience.summary}</p> : null}
@@ -228,7 +228,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               </div> : null}
 
               {eligibility.length ? <div className="rounded-[32px] border border-brand-border bg-white p-8 shadow-sm">
-                {hasText(section.eligibilityEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+                {hasText(section.eligibilityEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">
                   {section.eligibilityEyebrow}
                 </p> : null}
                 <div className="mt-6 space-y-4">
@@ -266,7 +266,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   key={`${testimonial.name}-${testimonial.role}`}
                   className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
                 >
-                  <p className="font-heading text-4xl leading-none text-brand-gold/35">&ldquo;</p>
+                  <p className="font-heading text-4xl leading-none text-brand-accent/35">&ldquo;</p>
                   {hasText(testimonial.quote) ? <blockquote className="mt-3 text-sm leading-8 text-slate-700">
                     {testimonial.quote}
                   </blockquote> : null}
@@ -304,7 +304,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   key={partner.name}
                   className="flex gap-4 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
                 >
-                  {hasText(partner.logo) || hasText(partner.name) ? <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-mist text-sm font-bold text-brand-navy">
+                  {hasText(partner.logo) || hasText(partner.name) ? <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-mist text-sm font-bold text-brand-deep">
                     {hasText(partner.logo) ? (
                       <Image
                         src={partner.logo}
@@ -325,7 +325,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                     {hasText(partner.href) && hasText(section.partnerLinkLabel) ? (
                       <Link
                         href={partner.href}
-                        className="mt-3 inline-flex text-sm font-semibold text-brand-navy"
+                        className="mt-3 inline-flex text-sm font-semibold text-brand-deep"
                       >
                         {section.partnerLinkLabel}
                       </Link>
@@ -357,10 +357,10 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
             </div>
           </section> : null}
 
-          {hasApplyCta ? <section className="overflow-hidden rounded-[36px] bg-brand-navy px-8 py-10 text-white">
+          {hasApplyCta ? <section className="overflow-hidden rounded-[36px] bg-brand-deep px-8 py-10 text-white">
             <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
-                {hasText(section.applyCtaEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+                {hasText(section.applyCtaEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">
                   {section.applyCtaEyebrow}
                 </p> : null}
                 {hasText(page.applyCta.heading) ? <h2 className="mt-4 font-heading text-3xl font-bold leading-tight">
@@ -373,7 +373,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               <div className="flex flex-wrap gap-3">
                 {hasText(page.applyCta.primary.label) && hasText(page.applyCta.primary.href) ? <Link
                   href={page.applyCta.primary.href}
-                  className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
+                  className="rounded-full bg-brand-accent px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
                 >
                   {page.applyCta.primary.label}
                 </Link> : null}
@@ -402,7 +402,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
         <aside className="hidden lg:block">
           <div className="sticky top-36 space-y-6 rounded-[30px] border border-brand-border bg-brand-mist/35 p-6">
             <div>
-              {hasText(section.shareEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+              {hasText(section.shareEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">
                 {section.shareEyebrow}
               </p> : null}
               <div className="mt-4 flex flex-wrap gap-2">
@@ -412,7 +412,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-full border border-brand-border bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+                    className="rounded-full border border-brand-border bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
                   >
                     {link.label}
                   </a>
@@ -421,12 +421,12 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
             </div>
 
             {page.quickLinks.length ? <div>
-              {hasText(section.quickLinksEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
+              {hasText(section.quickLinksEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">
                 {section.quickLinksEyebrow}
               </p> : null}
               <div className="mt-4 space-y-3">
                 {page.quickLinks.filter((link) => hasText(link.label) && hasText(link.href)).map((link) => (
-                  <Link key={`${link.href}-${link.label}`} href={link.href} className="block text-sm font-medium text-brand-navy">
+                  <Link key={`${link.href}-${link.label}`} href={link.href} className="block text-sm font-medium text-brand-deep">
                     {link.label}
                   </Link>
                 ))}

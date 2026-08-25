@@ -20,7 +20,7 @@ type JsonEditorProps = {
 };
 
 const textareaClass =
-  "mt-3 h-72 w-full rounded-2xl border border-brand-border bg-white p-4 font-mono text-[12px] leading-5 text-brand-ink outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-3 h-72 w-full rounded-2xl border border-brand-border bg-white p-4 font-mono text-[12px] leading-5 text-brand-ink outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 export function HomepageJsonEditor({ title, description, payloadKey, initialValue, pretty = true }: JsonEditorProps) {
   const router = useRouter();

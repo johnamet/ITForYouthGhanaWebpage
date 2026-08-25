@@ -30,7 +30,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
         {/* Heading row */}
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="mb-2 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="mb-2 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               Events
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -39,7 +39,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
           </div>
           <Link
             href="/news-and-updates/news"
-            className="shrink-0 border-b-2 border-brand-gold pb-0.5 text-[0.78rem] font-bold text-brand-ink transition hover:text-brand-gold"
+            className="shrink-0 border-b-2 border-brand-accent pb-0.5 text-[0.78rem] font-bold text-brand-ink transition hover:text-brand-accent"
           >
             Latest updates →
           </Link>
@@ -52,12 +52,12 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
               key={event.id}
               href={event.href}
               className={`group flex items-center gap-5 rounded-2xl border bg-white p-5 transition duration-250 hover:-translate-y-0.5 hover:shadow-md ${
-                event.featured ? "border-brand-gold/40 ring-1 ring-brand-gold/20" : "border-brand-border"
+                event.featured ? "border-brand-accent/40 ring-1 ring-brand-accent/20" : "border-brand-border"
               }`}
             >
               {/* Date block */}
-              <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-navy text-white">
-                <span className="text-[0.6rem] font-semibold uppercase tracking-widest text-brand-gold">
+              <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-deep text-white">
+                <span className="text-[0.6rem] font-semibold uppercase tracking-widest text-brand-accent">
                   {event.month}
                 </span>
                 <span className="font-heading text-2xl font-bold leading-none">
@@ -75,7 +75,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
                 </div>
                 <span
                   className={`shrink-0 rounded-full px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.15em] ${
-                    typeColors[event.type] ?? "bg-brand-mist text-brand-navy"
+                    typeColors[event.type] ?? "bg-brand-mist text-brand-deep"
                   }`}
                 >
                   {event.type}
@@ -83,7 +83,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
               </div>
 
               {/* Arrow */}
-              <span className="shrink-0 text-slate-300 transition group-hover:translate-x-1 group-hover:text-brand-gold">
+              <span className="shrink-0 text-slate-300 transition group-hover:translate-x-1 group-hover:text-brand-accent">
                 →
               </span>
             </Link>

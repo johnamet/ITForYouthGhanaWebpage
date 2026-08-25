@@ -39,7 +39,7 @@ export function WhatWeDoGallery({ items }: { items: WhatWeDoGalleryItem[] }) {
             key={`${item.url}-${index}`}
             type="button"
             onClick={() => setActiveIndex(index)}
-            className={`group relative overflow-hidden rounded-[30px] bg-brand-navy text-left ${index % 4 === 0 ? "lg:col-span-7" : "lg:col-span-5"}`}
+            className={`group relative overflow-hidden rounded-[30px] bg-brand-deep text-left ${index % 4 === 0 ? "lg:col-span-7" : "lg:col-span-5"}`}
           >
             {item.type === "image" || item.thumbnailUrl ? (
               // A plain img intentionally permits any CMS-provided public URL.
@@ -48,9 +48,9 @@ export function WhatWeDoGallery({ items }: { items: WhatWeDoGalleryItem[] }) {
             ) : (
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,180,38,0.32),transparent_42%),linear-gradient(135deg,#174a82,#0c2d5a)]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/15 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/15 to-transparent" />
             {item.type === "video" ? (
-              <span className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-brand-gold text-brand-ink shadow-lg">
+              <span className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-brand-accent text-brand-ink shadow-lg">
                 <Play className="ml-0.5 h-5 w-5 fill-current" />
               </span>
             ) : null}

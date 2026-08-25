@@ -16,7 +16,7 @@ export function DepartmentsIndexPage({ departments }: DepartmentsIndexPageProps)
 
   return (
     <div className="bg-white">
-      <section className="relative overflow-hidden bg-brand-navy px-6 py-20 text-white lg:px-10">
+      <section className="relative overflow-hidden bg-brand-deep px-6 py-20 text-white lg:px-10">
         <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(1,82,190,0.94)_0%,rgba(30,114,186,0.78)_48%,rgba(215,11,82,0.28)_100%)]" />
         <div className="relative mx-auto max-w-6xl">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/80">
@@ -50,7 +50,7 @@ export function DepartmentsIndexPage({ departments }: DepartmentsIndexPageProps)
                     className="object-cover transition duration-700 group-hover:scale-105"
                   />
                 ) : null}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/65 via-brand-navy/15 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/65 via-brand-deep/15 to-transparent" />
                 <div
                   className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl text-xl text-white shadow-lg"
                   style={{ backgroundColor: department.color ?? "#1E72BA" }}
@@ -65,14 +65,14 @@ export function DepartmentsIndexPage({ departments }: DepartmentsIndexPageProps)
               </div>
 
               <div className="p-6">
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.24em] text-brand-gold">
+                <p className="text-[0.68rem] font-bold uppercase tracking-[0.24em] text-brand-accent">
                   {department.eyebrow}
                 </p>
-                <h2 className="mt-3 font-heading text-2xl font-bold text-brand-ink transition group-hover:text-brand-navy">
+                <h2 className="mt-3 font-heading text-2xl font-bold text-brand-ink transition group-hover:text-brand-deep">
                   {department.title}
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-slate-600">{department.summary}</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-navy">
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-deep">
                   View department
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>

@@ -36,11 +36,11 @@ export default function AdminOurImpactPage() {
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-navy text-brand-gold">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-deep text-brand-accent">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                       Impact page
                     </p>
                     <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">

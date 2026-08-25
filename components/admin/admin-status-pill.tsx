@@ -19,7 +19,7 @@ const statusStyles: Record<string, string> = {
   inactive: "bg-slate-100 text-slate-700",
   configured: "bg-emerald-100 text-emerald-700",
   missing: "bg-rose-100 text-rose-700",
-  "live-seed": "bg-brand-warm text-brand-navy",
+  "live-seed": "bg-brand-warm text-brand-deep",
   "cms-ready": "bg-sky-100 text-sky-700",
   "needs-firebase": "bg-amber-100 text-amber-700",
   protected: "bg-violet-100 text-violet-700",

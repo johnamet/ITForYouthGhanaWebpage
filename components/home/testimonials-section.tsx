@@ -71,7 +71,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   const t = visibleTestimonials[current];
 
   return (
-    <section className="overflow-hidden bg-brand-navy px-6 py-20 lg:px-10">
+    <section className="overflow-hidden bg-brand-deep px-6 py-20 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-10 rounded-[36px] border border-white/10 bg-white/[0.04] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-sm lg:grid-cols-[0.36fr_0.64fr] lg:p-10">
           <div className="space-y-6">
@@ -92,7 +92,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
                 {t.avatar ? (
                   <Image src={t.avatar} alt={t.name} fill className="object-cover" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-brand-gold/15 font-heading text-4xl font-bold text-brand-gold">
+                  <div className="flex h-full w-full items-center justify-center bg-brand-accent/15 font-heading text-4xl font-bold text-brand-accent">
                     {t.initials}
                   </div>
                 )}
@@ -101,7 +101,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
               <div className="mt-5 space-y-1">
                 <p className="font-semibold text-white">{t.name}</p>
                 <p className="text-sm text-white/65">{t.role}</p>
-                <p className="text-sm text-brand-gold/90">
+                <p className="text-sm text-brand-accent/90">
                   {[t.programme, t.year].filter(Boolean).join(" · ")}
                 </p>
               </div>
@@ -110,7 +110,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
 
           <div className="flex flex-col justify-between">
             <div key={t.id} className="animate-hero-in">
-              <span className="font-heading text-[5rem] leading-none text-brand-gold/20 select-none">
+              <span className="font-heading text-[5rem] leading-none text-brand-accent/20 select-none">
                 &ldquo;
               </span>
               <blockquote className="-mt-4 max-w-3xl font-heading text-2xl font-semibold leading-[1.6] text-white sm:text-[2rem]">
@@ -124,7 +124,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
                   type="button"
                   onClick={() => handleSelect(current - 1)}
                   aria-label="Previous testimonial"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition hover:border-brand-gold/50 hover:text-brand-gold"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition hover:border-brand-accent/50 hover:text-brand-accent"
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
@@ -132,7 +132,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
                   type="button"
                   onClick={() => handleSelect(current + 1)}
                   aria-label="Next testimonial"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition hover:border-brand-gold/50 hover:text-brand-gold"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition hover:border-brand-accent/50 hover:text-brand-accent"
                 >
                   <ChevronRight className="h-5 w-5" />
                 </button>
@@ -146,7 +146,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
                     aria-label={`Go to testimonial ${index + 1}`}
                     className={`h-[3px] rounded-full transition-all duration-300 ${
                       index === current
-                        ? "w-10 bg-brand-gold"
+                        ? "w-10 bg-brand-accent"
                         : "w-5 bg-white/20 hover:bg-white/40"
                     }`}
                   />

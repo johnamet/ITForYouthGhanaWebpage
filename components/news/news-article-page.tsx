@@ -66,7 +66,7 @@ export function NewsArticlePage({
         <aside className="space-y-6 lg:sticky lg:top-32 lg:self-start">
           {article.author ? (
             <div className="rounded-[30px] border border-brand-border bg-brand-mist/45 p-6">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                 Author
               </p>
               <div className="mt-5 flex items-center gap-4">
@@ -80,7 +80,7 @@ export function NewsArticlePage({
                       className="object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-brand-navy text-brand-gold">
+                    <div className="flex h-full w-full items-center justify-center bg-brand-deep text-brand-accent">
                       <UserRound className="h-5 w-5" />
                     </div>
                   )}
@@ -100,11 +100,11 @@ export function NewsArticlePage({
           {article.tags?.length ? (
             <div className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
                   <Tags className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                     Tags
                   </p>
                   <h2 className="font-heading text-2xl font-bold text-brand-ink">
@@ -126,7 +126,7 @@ export function NewsArticlePage({
           ) : null}
 
           <div className="rounded-[30px] border border-brand-border bg-brand-warm p-6">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
               <Mail className="h-4 w-4" />
             </div>
             <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
@@ -137,7 +137,7 @@ export function NewsArticlePage({
             </p>
             <Link
               href="/contact"
-              className="mt-5 inline-flex items-center justify-center rounded-full bg-brand-navy px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+              className="mt-5 inline-flex items-center justify-center rounded-full bg-brand-deep px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
             >
               Contact the team
             </Link>
@@ -150,7 +150,7 @@ export function NewsArticlePage({
           <div className="mx-auto max-w-7xl space-y-10">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
+                <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-accent">
                   Keep reading
                 </p>
                 <h2 className="mt-3 font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -159,7 +159,7 @@ export function NewsArticlePage({
               </div>
               <Link
                 href="/news-and-updates"
-                className="rounded-full border border-brand-border bg-white px-5 py-3 text-sm font-bold text-brand-navy transition hover:border-brand-gold"
+                className="rounded-full border border-brand-border bg-white px-5 py-3 text-sm font-bold text-brand-deep transition hover:border-brand-accent"
               >
                 View all updates
               </Link>

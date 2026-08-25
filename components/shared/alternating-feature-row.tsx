@@ -61,7 +61,7 @@ export function AlternatingFeatureRow({ items, className }: AlternatingFeatureRo
                 <div className="flex items-center justify-between">
                   <div className="h-7 w-7" aria-hidden="true" />
                   {item.number ? (
-                    <span className="font-heading text-3xl font-bold text-brand-gold/70">{item.number}</span>
+                    <span className="font-heading text-3xl font-bold text-brand-accent/70">{item.number}</span>
                   ) : null}
                 </div>
                 <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">{item.title}</h3>

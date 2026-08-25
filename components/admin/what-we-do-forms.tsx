@@ -36,7 +36,7 @@ type InitiativeFormProps = {
 };
 
 const inputClass =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 const panelClass = "rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8";
 const addButtonClass =
   "inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink transition hover:bg-brand-mist";
@@ -105,7 +105,7 @@ function Panel({
     <section className={panelClass}>
       <div className="mb-6">
         {eyebrow ? (
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
             {eyebrow}
           </p>
         ) : null}

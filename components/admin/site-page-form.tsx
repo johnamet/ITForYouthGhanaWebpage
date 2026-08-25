@@ -49,7 +49,7 @@ type SitePageFormProps = {
 };
 
 const inputClass =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 const panelClass = "rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8";
 
@@ -246,7 +246,7 @@ export function SitePageForm({
 
       <section className={panelClass}>
         <div className="mb-6">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
             Page identity
           </p>
           <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
@@ -392,7 +392,7 @@ export function SitePageForm({
       {values.cohorts !== undefined ? (
         <section className={panelClass}>
           <div className="mb-6 flex items-center justify-between gap-4">
-            <div><p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">Schedule</p><h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Cohorts</h2></div>
+            <div><p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Schedule</p><h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Cohorts</h2></div>
             <button type="button" onClick={() => update("cohorts", [...(values.cohorts ?? []), emptyCohort])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold"><Plus className="h-4 w-4" /> Add cohort</button>
           </div>
           <div className="space-y-4">{(values.cohorts ?? []).map((cohort, index) => (
@@ -408,14 +408,14 @@ export function SitePageForm({
 
       {values.process !== undefined ? (
         <section className={panelClass}>
-          <div className="mb-6 flex items-center justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">Journey</p><h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Process steps</h2></div><button type="button" onClick={() => update("process", [...(values.process ?? []), emptyProcessStep])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold"><Plus className="h-4 w-4" /> Add step</button></div>
+          <div className="mb-6 flex items-center justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Journey</p><h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Process steps</h2></div><button type="button" onClick={() => update("process", [...(values.process ?? []), emptyProcessStep])} className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold"><Plus className="h-4 w-4" /> Add step</button></div>
           <div className="space-y-4">{(values.process ?? []).map((step, index) => <div key={`${step.number}-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2"><div><label className="text-sm font-bold text-brand-ink">Number</label><input value={step.number} onChange={(event) => updateProcessStep(index, { number: event.target.value })} className={inputClass} /></div><div><label className="text-sm font-bold text-brand-ink">Title</label><input value={step.title} onChange={(event) => updateProcessStep(index, { title: event.target.value })} className={inputClass} /></div><div><label className="text-sm font-bold text-brand-ink">Icon</label><input value={step.icon} onChange={(event) => updateProcessStep(index, { icon: event.target.value })} className={inputClass} /></div><div><label className="text-sm font-bold text-brand-ink">Icon image URL</label><input value={step.iconImage ?? ""} onChange={(event) => updateProcessStep(index, { iconImage: event.target.value })} className={inputClass} /></div><div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Description</label><textarea value={step.description} onChange={(event) => updateProcessStep(index, { description: event.target.value })} className={`${inputClass} h-24`} /></div><button type="button" onClick={() => update("process", (values.process ?? []).filter((_, itemIndex) => itemIndex !== index))} className="justify-self-start rounded-xl border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-700"><Trash2 className="mr-1 inline h-4 w-4" /> Remove step</button></div>)}</div>
         </section>
       ) : null}
 
       <section className={panelClass}>
         <div className="mb-6">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
             Page sections
           </p>
           <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
@@ -608,7 +608,7 @@ export function SitePageForm({
       <section className={panelClass}>
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
               Proof
             </p>
             <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
@@ -687,7 +687,7 @@ export function SitePageForm({
       <section className={panelClass}>
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
               Story
             </p>
             <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
@@ -747,7 +747,7 @@ export function SitePageForm({
       <section className={panelClass}>
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
               Conversion
             </p>
             <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
@@ -799,7 +799,7 @@ export function SitePageForm({
       <section className={panelClass}>
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
               Navigation
             </p>
             <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">

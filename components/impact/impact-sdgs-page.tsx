@@ -30,7 +30,7 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -78,12 +78,12 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
                 key={goal.goal}
                 className="grid gap-6 rounded-[32px] border border-brand-border bg-white p-7 shadow-sm lg:grid-cols-[0.38fr_0.62fr]"
               >
-                <div className="space-y-4 rounded-[28px] bg-brand-navy p-6 text-white">
+                <div className="space-y-4 rounded-[28px] bg-brand-deep p-6 text-white">
                   <div className="flex items-center justify-between">
                     <span className="text-3xl" aria-hidden="true">
                       {goal.icon}
                     </span>
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-brand-gold">
+                    <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-brand-accent">
                       {goal.goal}
                     </span>
                   </div>
@@ -110,7 +110,7 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
                         href={route.href}
                         className="rounded-[24px] border border-brand-border bg-white p-5 transition hover:-translate-y-1 hover:shadow-sm"
                       >
-                        <p className="text-[0.62rem] font-bold uppercase tracking-[0.26em] text-brand-gold">
+                        <p className="text-[0.62rem] font-bold uppercase tracking-[0.26em] text-brand-accent">
                           {route.eyebrow}
                         </p>
                         <h3 className="mt-3 font-heading text-2xl font-bold text-brand-ink">

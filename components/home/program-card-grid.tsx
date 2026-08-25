@@ -17,13 +17,13 @@ type ProgramCardGridProps = {
 };
 
 const variantStyles: Record<ProgramCard["variant"], string> = {
-  navy: "bg-brand-navy text-white border-transparent",
-  gold: "bg-[#FFF8DC] border-brand-gold text-brand-ink",
+  navy: "bg-brand-deep text-white border-transparent",
+  gold: "bg-[#FFF8DC] border-brand-accent text-brand-ink",
   light: "bg-[#f8f9fc] border-[#e8eaf0] text-brand-ink",
 };
 
 const linkStyles: Record<ProgramCard["variant"], string> = {
-  navy: "text-brand-gold",
+  navy: "text-brand-accent",
   gold: "text-brand-ink",
   light: "text-brand-ink",
 };
@@ -43,7 +43,7 @@ export function ProgramCardGrid({ cards }: ProgramCardGridProps) {
             {card.number}
           </span>
 
-          <p className="mb-3 text-[0.6rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+          <p className="mb-3 text-[0.6rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
             {card.eyebrow}
           </p>
           <h3 className="font-heading text-[1.35rem] font-bold leading-snug">

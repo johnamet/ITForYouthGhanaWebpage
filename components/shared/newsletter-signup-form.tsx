@@ -118,7 +118,7 @@ export function NewsletterSignupForm({
           disabled={isSubmitting}
           variant={isCompact ? "outline" : "primary"}
           size={isCompact ? "sm" : "lg"}
-          className={clsx("shrink-0", isCompact && "border-brand-gold bg-white text-brand-gold hover:bg-brand-gold hover:text-white")}
+          className={clsx("shrink-0", isCompact && "border-brand-accent bg-white text-brand-accent hover:bg-brand-accent hover:text-white")}
         >
           {isSubmitting ? "Submitting..." : buttonLabel}
         </Button>

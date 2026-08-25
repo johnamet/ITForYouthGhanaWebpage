@@ -87,7 +87,7 @@ export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
     <>
       <section className="bg-white px-6 pb-20 lg:px-10">
         <div className="mx-auto max-w-6xl">
-          <div className="relative min-h-[34rem] overflow-hidden rounded-[36px] bg-brand-navy shadow-[0_20px_55px_rgba(12,45,90,0.2)]">
+          <div className="relative min-h-[34rem] overflow-hidden rounded-[36px] bg-brand-deep shadow-[0_20px_55px_rgba(12,45,90,0.2)]">
             <Image
               src={story.backgroundImage}
               alt={story.headline}
@@ -98,7 +98,7 @@ export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
             <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(12,45,90,0.88)_0%,rgba(12,45,90,0.52)_46%,rgba(12,45,90,0.16)_100%)]" />
 
             <div className="relative flex min-h-[34rem] items-end p-6 sm:p-10">
-              <div className="max-w-2xl rounded-[28px] bg-brand-navy/60 p-7 text-white backdrop-blur-md sm:p-9">
+              <div className="max-w-2xl rounded-[28px] bg-brand-deep/60 p-7 text-white backdrop-blur-md sm:p-9">
                 <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl">
                   {story.label}
                 </h2>
@@ -108,7 +108,7 @@ export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
                 <blockquote className="mt-5 text-base leading-8 text-white/82 sm:text-lg">
                   &ldquo;{story.quote}&rdquo;
                 </blockquote>
-                <div className="mt-6 border-l-2 border-brand-gold pl-4">
+                <div className="mt-6 border-l-2 border-brand-accent pl-4">
                   <p className="font-semibold text-white">{story.name}</p>
                   <p className="mt-1 text-sm text-white/70">
                     {story.role} · {story.programme}

@@ -22,11 +22,11 @@ export function VideoCard({ thumbnail, title, videoUrl, className }: VideoCardPr
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Watch ${title}`}
-      className={cn("group relative block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-4", className)}
+      className={cn("group relative block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-4", className)}
     >
       {media}
       <span className="absolute inset-0 flex items-center justify-center">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-brand-gold shadow-editorial transition duration-300 group-hover:scale-110">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-brand-accent shadow-editorial transition duration-300 group-hover:scale-110">
           <Play className="ml-1 h-6 w-6 fill-current" aria-hidden="true" />
         </span>
       </span>

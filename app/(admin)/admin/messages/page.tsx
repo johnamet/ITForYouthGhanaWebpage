@@ -36,7 +36,7 @@ const columns: AdminTableColumn<CmsContactMessage>[] = [
     render: (row) => (
       <a
         href={`/admin/messages/${row.id}`}
-        className="text-sm font-semibold text-brand-navy hover:text-brand-ink"
+        className="text-sm font-semibold text-brand-deep hover:text-brand-ink"
       >
         Review
       </a>

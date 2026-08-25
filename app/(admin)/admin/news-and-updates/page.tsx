@@ -33,10 +33,10 @@ export default function AdminNewsAndUpdatesPage() {
               key={slug}
               className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-navy text-brand-gold">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-deep text-brand-accent">
                 <Icon className="h-5 w-5" />
               </div>
-              <p className="mt-5 text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+              <p className="mt-5 text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                 News page
               </p>
               <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">

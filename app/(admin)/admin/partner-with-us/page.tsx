@@ -66,7 +66,7 @@ export default async function AdminPartnerWithUsPage() {
         <Link href="/admin/partner-with-us/new" className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink">
           <Plus className="h-4 w-4" /> Create partner track
         </Link>
-        <Link href="/admin/partner-with-us/overview" className="text-sm font-semibold text-brand-navy">Edit overview</Link>
+        <Link href="/admin/partner-with-us/overview" className="text-sm font-semibold text-brand-deep">Edit overview</Link>
       </div>
 
       <AdminDataTable columns={columns} rows={tracks} />

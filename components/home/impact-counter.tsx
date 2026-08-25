@@ -39,9 +39,9 @@ function ImpactCounterItem({ stat, start }: { stat: HighlightStat; start: boolea
           {stat.icon}
         </span>
       ) : null}
-      <p className="font-heading text-5xl font-bold leading-none text-brand-navy sm:text-6xl">
+      <p className="font-heading text-5xl font-bold leading-none text-brand-deep sm:text-6xl">
         {count.toLocaleString("en-US")}
-        {parsed.suffix ? <span className="text-brand-gold">{parsed.suffix}</span> : null}
+        {parsed.suffix ? <span className="text-brand-accent">{parsed.suffix}</span> : null}
       </p>
       <p className="mt-3 text-sm font-bold uppercase tracking-[0.14em] text-brand-ink">
         {stat.label}

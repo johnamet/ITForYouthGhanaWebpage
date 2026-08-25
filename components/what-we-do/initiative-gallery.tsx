@@ -38,7 +38,7 @@ export function InitiativeGallery({ images }: InitiativeGalleryProps) {
                 sizes="(max-width: 1023px) 100vw, 33vw"
                 className="object-cover transition duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/55 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/55 via-transparent to-transparent" />
               <span className="absolute bottom-4 left-4 right-4 text-sm font-medium text-white">
                 {image.alt}
               </span>

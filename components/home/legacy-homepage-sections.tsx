@@ -73,7 +73,7 @@ function Challenge({ content }: { content: ChallengeSectionContent }) {
   if (!content.title && !content.headline && !content.description && !content.stats.length && !content.problemItems.length && !content.solutionItems.length) return null;
 
   return (
-    <section className="bg-brand-navy px-6 py-20 text-white lg:px-10 lg:py-24">
+    <section className="bg-brand-deep px-6 py-20 text-white lg:px-10 lg:py-24">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
           <h2 className="font-heading text-5xl font-bold leading-none text-white sm:text-6xl lg:text-7xl">

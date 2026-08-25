@@ -76,7 +76,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                 sizes="40vw"
                 className="object-cover opacity-25"
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-brand-navy/15 via-brand-navy/35 to-brand-navy/70" />
+              <div className="absolute inset-0 bg-gradient-to-l from-brand-deep/15 via-brand-deep/35 to-brand-deep/70" />
             </div>
           ) : null}
 
@@ -131,14 +131,14 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
           <div className="space-y-8">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-gold">
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-accent">
                   Campaign progress
                 </p>
                 <p className="mt-3 font-heading text-4xl font-bold text-brand-ink">
                   {progress}%
                 </p>
               </div>
-              <div className="rounded-full bg-brand-primary-light px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-navy">
+              <div className="rounded-full bg-brand-primary-light px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-deep">
                 Active now
               </div>
             </div>
@@ -160,7 +160,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-brand-mist">
                 <div
-                  className="h-full rounded-full bg-brand-gold transition-[width] duration-700"
+                  className="h-full rounded-full bg-brand-accent transition-[width] duration-700"
                   style={{ width: `${progress}%` }}
                   aria-hidden="true"
                 />
@@ -170,7 +170,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-[24px] border border-brand-border bg-brand-mist/50 p-5">
                 <div className="flex items-center gap-3">
-                  <Users className="h-5 w-5 text-brand-gold" />
+                  <Users className="h-5 w-5 text-brand-accent" />
                   <div>
                     <p className="text-sm text-slate-500">Donors so far</p>
                     <p className="text-2xl font-bold text-brand-ink">{campaign.donorCount}</p>
@@ -179,7 +179,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
               </div>
               <div className="rounded-[24px] border border-brand-border bg-brand-mist/50 p-5">
                 <div className="flex items-center gap-3">
-                  <Clock3 className="h-5 w-5 text-brand-gold" />
+                  <Clock3 className="h-5 w-5 text-brand-accent" />
                   <div>
                     <p className="text-sm text-slate-500">Days remaining</p>
                     <p className="text-2xl font-bold text-brand-ink">{daysRemaining}</p>

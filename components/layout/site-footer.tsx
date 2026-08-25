@@ -42,14 +42,14 @@ type SiteFooterProps = {
 export async function SiteFooter({ settings: providedSettings }: SiteFooterProps = {}) {
   const settings = providedSettings ?? (await getCmsSettings());
   return (
-    <footer className="bg-brand-navy text-white">
+    <footer className="bg-brand-deep text-white">
       {/* Main footer grid */}
       <div className="mx-auto max-w-6xl px-6 pb-12 pt-16 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-5">
           {/* Brand column */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[0.72rem] font-bold tracking-wide text-brand-navy">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[0.72rem] font-bold tracking-wide text-brand-deep">
                 ITFY
               </span>
               <span className="font-heading text-[1.15rem] font-bold leading-tight text-white">

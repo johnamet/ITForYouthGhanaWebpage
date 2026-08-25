@@ -150,7 +150,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search courses, topics, or skills"
-                className="w-full rounded-full border border-brand-border bg-white py-3 pl-11 pr-4 text-sm text-brand-ink outline-none transition focus:border-brand-gold"
+                className="w-full rounded-full border border-brand-border bg-white py-3 pl-11 pr-4 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
               />
             </label>
 
@@ -159,7 +159,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
               <select
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
-                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-gold"
+                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
               >
                 <option value="all">All categories</option>
                 {categories.map((option) => (
@@ -175,7 +175,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
               <select
                 value={level}
                 onChange={(event) => setLevel(event.target.value)}
-                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-gold"
+                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
               >
                 <option value="all">All levels</option>
                 {levels.map((option) => (
@@ -191,7 +191,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
               <select
                 value={price}
                 onChange={(event) => setPrice(event.target.value as PriceFilter)}
-                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-gold"
+                className="w-full rounded-full border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent"
               >
                 <option value="all">Free and paid</option>
                 <option value="free">Free only</option>
@@ -222,7 +222,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                 setLevel("all");
                 setPrice("all");
               }}
-              className="inline-flex w-fit items-center rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-navy transition hover:border-brand-gold hover:text-brand-ink"
+              className="inline-flex w-fit items-center rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-deep transition hover:border-brand-accent hover:text-brand-ink"
             >
               Clear filters
             </button>
@@ -246,7 +246,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                     sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/35 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/35 via-transparent to-transparent" />
                 </div>
 
                 <div className="space-y-5 p-6">
@@ -271,14 +271,14 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="rounded-[22px] bg-brand-mist/55 px-4 py-4">
                       <div className="flex items-center gap-2 text-sm font-semibold text-brand-ink">
-                        <Clock3 className="h-4 w-4 text-brand-gold" aria-hidden="true" />
+                        <Clock3 className="h-4 w-4 text-brand-accent" aria-hidden="true" />
                         Duration
                       </div>
                       <p className="mt-2 text-sm text-slate-600">{course.duration}</p>
                     </div>
                     <div className="rounded-[22px] bg-brand-mist/55 px-4 py-4">
                       <div className="flex items-center gap-2 text-sm font-semibold text-brand-ink">
-                        <CalendarDays className="h-4 w-4 text-brand-gold" aria-hidden="true" />
+                        <CalendarDays className="h-4 w-4 text-brand-accent" aria-hidden="true" />
                         Next start
                       </div>
                       <p className="mt-2 text-sm text-slate-600">{formatDate(course.startDate)}</p>
@@ -290,7 +290,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                         Price
                       </p>
-                      <p className="mt-2 font-heading text-2xl font-bold text-brand-navy">
+                      <p className="mt-2 font-heading text-2xl font-bold text-brand-deep">
                         {formatPrice(course)}
                       </p>
                       <p className="mt-1 text-sm text-slate-500">{course.deliveryMode}</p>
@@ -299,7 +299,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                     <div className="flex flex-col items-end gap-3">
                       <Link
                         href={`/apply-for-training/courses/${course.slug}`}
-                        className="text-sm font-semibold text-brand-navy transition hover:text-brand-ink"
+                        className="text-sm font-semibold text-brand-deep transition hover:text-brand-ink"
                       >
                         View details
                       </Link>
@@ -310,7 +310,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                         }
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-4 py-2.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
+                        className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-4 py-2.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
                       >
                         Apply now
                         <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -323,7 +323,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
           </div>
         ) : (
           <div className="rounded-[32px] border border-dashed border-brand-border bg-white px-6 py-12 text-center shadow-sm">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               No matches yet
             </p>
             <h2 className="mt-3 font-heading text-3xl font-bold text-brand-ink">
@@ -342,13 +342,13 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                   setLevel("all");
                   setPrice("all");
                 }}
-                className="rounded-full border border-brand-border px-5 py-3 text-sm font-semibold text-brand-navy transition hover:border-brand-gold hover:text-brand-ink"
+                className="rounded-full border border-brand-border px-5 py-3 text-sm font-semibold text-brand-deep transition hover:border-brand-accent hover:text-brand-ink"
               >
                 Reset filters
               </button>
               <a
                 href="#cohorts"
-                className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
               >
                 See upcoming cohorts
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

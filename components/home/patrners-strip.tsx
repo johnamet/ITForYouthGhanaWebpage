@@ -52,7 +52,7 @@ export function PartnersStrip({
                     className="h-9 w-auto object-contain opacity-45 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0"
                   />
                 ) : (
-                  <span className="rounded-full border border-brand-border bg-white px-4 py-1.5 text-[0.72rem] font-semibold text-slate-400 transition hover:border-brand-gold/35 hover:text-brand-ink">
+                  <span className="rounded-full border border-brand-border bg-white px-4 py-1.5 text-[0.72rem] font-semibold text-slate-400 transition hover:border-brand-accent/35 hover:text-brand-ink">
                     {p.name}
                   </span>
                 )}

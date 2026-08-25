@@ -479,7 +479,7 @@ export function HeroSlideshow({
                 h-[380px]
                 w-[380px]
                 rounded-full
-                bg-brand-gold/10
+                bg-brand-accent/10
                 blur-[110px]
               "
             />
@@ -639,7 +639,7 @@ export function HeroSlideshow({
                   text-white/45
                 "
               >
-                <span className="text-brand-gold">
+                <span className="text-brand-accent">
                   {String(current + 1).padStart(2, "0")}
                 </span>
 
@@ -682,7 +682,7 @@ export function HeroSlideshow({
                 h-1.5
                 w-1.5
                 rounded-full
-                bg-brand-gold
+                bg-brand-accent
               "
             />
 
@@ -745,7 +745,7 @@ export function HeroSlideshow({
               h-[420px]
               w-[420px]
               rounded-full
-              bg-brand-gold/10
+              bg-brand-accent/10
               blur-[130px]
             "
           />
@@ -804,7 +804,7 @@ export function HeroSlideshow({
                       w-full
                       animate-ping
                       rounded-full
-                      bg-brand-gold
+                      bg-brand-accent
                       opacity-70
                     "
                   />
@@ -816,7 +816,7 @@ export function HeroSlideshow({
                       h-2
                       w-2
                       rounded-full
-                      bg-brand-gold
+                      bg-brand-accent
                     "
                   />
                 </span>
@@ -865,7 +865,7 @@ export function HeroSlideshow({
                 h-px
                 w-full
                 bg-gradient-to-r
-                from-brand-gold/70
+                from-brand-accent/70
                 via-white/15
                 to-transparent
                 sm:my-7
@@ -899,9 +899,9 @@ export function HeroSlideshow({
                       <span
                         className="
                           bg-gradient-to-r
-                          from-brand-gold
+                          from-brand-accent
                           via-yellow-200
-                          to-brand-gold
+                          to-brand-accent
                           bg-clip-text
                           text-transparent
                         "
@@ -1008,19 +1008,19 @@ export function HeroSlideshow({
                   justify-center
                   gap-2
                   rounded-xl
-                  bg-brand-gold
+                  bg-brand-accent
                   px-6
                   py-3.5
                   text-sm
                   font-bold
                   text-brand-ink
                   shadow-xl
-                  shadow-brand-gold/20
+                  shadow-brand-accent/20
                   transition-all
                   duration-300
                   hover:-translate-y-0.5
                   hover:shadow-2xl
-                  hover:shadow-brand-gold/30
+                  hover:shadow-brand-accent/30
                 "
               >
                 {slide.cta.primary.label}
@@ -1082,7 +1082,7 @@ export function HeroSlideshow({
                     absolute
                     -inset-2
                     rounded-3xl
-                    bg-brand-gold/10
+                    bg-brand-accent/10
                     blur-xl
                   "
                 />
@@ -1161,9 +1161,9 @@ export function HeroSlideshow({
                               inset-0
                               rounded-full
                               bg-gradient-to-r
-                              from-brand-gold
+                              from-brand-accent
                               via-yellow-200
-                              to-brand-gold
+                              to-brand-accent
                             "
                           />
                         )}
@@ -1220,15 +1220,15 @@ export function HeroSlideshow({
                     bg-white/[0.04]
                     transition-all
                     duration-300
-                    group-hover:border-brand-gold/50
-                    group-hover:bg-brand-gold/10
+                    group-hover:border-brand-accent/50
+                    group-hover:bg-brand-accent/10
                   "
                 >
                   <ArrowDown
                     className="
                       h-4
                       w-4
-                      text-brand-gold
+                      text-brand-accent
                       transition-transform
                       duration-300
                       group-hover:translate-y-0.5
@@ -1260,7 +1260,7 @@ export function HeroSlideshow({
         <div
           className="
             h-full
-            bg-brand-gold
+            bg-brand-accent
             transition-[width]
             duration-75
             ease-linear

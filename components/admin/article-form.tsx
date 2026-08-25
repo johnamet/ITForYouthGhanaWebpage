@@ -61,10 +61,10 @@ type ArticleFormProps = {
 };
 
 const inputClassName =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 const textareaClassName =
-  "mt-2 min-h-32 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 min-h-32 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 const categoryOptions: Array<{ value: ArticleCategory; label: string }> = [
   { value: "news", label: "News" },
@@ -300,7 +300,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
         <div className="space-y-8">
           <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
             <div className="mb-6">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                 Editorial
               </p>
               <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
@@ -373,7 +373,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
                   value={values.contentHtml}
                   onChange={(event) => updateValue("contentHtml", event.target.value)}
                   aria-invalid={Boolean(getFieldError("contentHtml"))}
-                  className="mt-2 min-h-[24rem] w-full rounded-2xl border border-brand-border bg-white px-4 py-3 font-mono text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
+                  className="mt-2 min-h-[24rem] w-full rounded-2xl border border-brand-border bg-white px-4 py-3 font-mono text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20"
                   placeholder="<p>Write the article body here.</p>"
                 />
                 <p className="mt-2 text-xs font-medium text-slate-500">
@@ -386,7 +386,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
 
           <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
             <div className="mb-6">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                 Search
               </p>
               <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
@@ -445,7 +445,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
 
         <aside className="space-y-6">
           <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
               Publishing
             </p>
             <div className="mt-5 grid gap-5">
@@ -530,7 +530,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
                   type="checkbox"
                   checked={values.featured}
                   onChange={(event) => updateValue("featured", event.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-navy focus:ring-brand-gold"
+                  className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-deep focus:ring-brand-accent"
                 />
                 <span>
                   <span className="block text-sm font-bold text-brand-ink">
@@ -545,7 +545,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
           </section>
 
           <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
               Media
             </p>
             <div className="mt-5 grid gap-5">
@@ -582,7 +582,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
           </section>
 
           <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
               Details
             </p>
             <div className="mt-5 grid gap-5">
@@ -621,7 +621,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
           </section>
 
           <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
               Author
             </p>
             <div className="mt-5 grid gap-5">
@@ -676,7 +676,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
               <button
                 type="submit"
                 disabled={isSubmitting || isDeleting}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-navy px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-deep px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -689,7 +689,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
               <button
                 type="button"
                 onClick={() => router.push("/admin/articles")}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-border px-5 py-3 text-sm font-bold text-brand-navy transition hover:border-brand-gold"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-border px-5 py-3 text-sm font-bold text-brand-deep transition hover:border-brand-accent"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to articles

@@ -232,8 +232,8 @@ export function ContactForm({
                 className={clsx(
                   "cursor-pointer rounded-2xl border p-4 transition",
                   isSelected
-                    ? "border-brand-gold bg-brand-warm shadow-sm"
-                    : "border-brand-border bg-white hover:border-brand-gold/60",
+                    ? "border-brand-accent bg-brand-warm shadow-sm"
+                    : "border-brand-border bg-white hover:border-brand-accent/60",
                 )}
               >
                 <input
@@ -271,8 +271,8 @@ export function ContactForm({
                 className={clsx(
                   "cursor-pointer rounded-full border px-4 py-2 text-sm font-bold transition",
                   isSelected
-                    ? "border-brand-navy bg-brand-navy text-white"
-                    : "border-brand-border bg-white text-slate-600 hover:border-brand-gold hover:text-brand-ink",
+                    ? "border-brand-deep bg-brand-deep text-white"
+                    : "border-brand-border bg-white text-slate-600 hover:border-brand-accent hover:text-brand-ink",
                 )}
               >
                 <input
@@ -317,7 +317,7 @@ export function ContactForm({
           name="consent"
           checked={values.consent}
           onChange={(event) => updateValue("consent", event.target.checked)}
-          className="mt-1 h-4 w-4 rounded border-brand-border text-brand-navy focus:ring-brand-gold"
+          className="mt-1 h-4 w-4 rounded border-brand-border text-brand-deep focus:ring-brand-accent"
         />
         <span>
           <span className="block text-sm font-bold text-brand-ink">

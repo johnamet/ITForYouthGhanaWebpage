@@ -12,7 +12,7 @@ type SubmitState = { type: "idle" | "success" | "error"; message: string };
 type Props = { initial: NewsletterSignupContent };
 
 const input =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 export function NewsletterForm({ initial }: Props) {
   const router = useRouter();
@@ -60,7 +60,7 @@ export function NewsletterForm({ initial }: Props) {
 
       <section className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8">
         <div className="mb-6">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">Homepage</p>
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Homepage</p>
           <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Newsletter signup</h2>
         </div>
 

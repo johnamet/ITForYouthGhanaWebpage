@@ -38,19 +38,19 @@ type ButtonLinkProps = SharedButtonProps & {
 };
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "border-brand-gold bg-brand-gold text-white hover:border-brand-gold hover:bg-white hover:text-brand-gold",
+  primary: "border-brand-accent bg-brand-accent text-white hover:border-brand-accent hover:bg-white hover:text-brand-accent",
   secondary: "border-brand-primary bg-brand-primary text-white hover:border-brand-primary hover:bg-white hover:text-brand-primary",
   outline: "border-brand-primary bg-white text-brand-primary hover:bg-brand-primary hover:text-white",
   ghost: "border-white/70 bg-transparent text-white hover:border-white hover:bg-white/10",
-  pink: "border-brand-gold bg-brand-gold text-white hover:border-brand-gold hover:bg-white hover:text-brand-gold",
+  pink: "border-brand-accent bg-brand-accent text-white hover:border-brand-accent hover:bg-white hover:text-brand-accent",
   blue: "border-brand-primary bg-brand-primary text-white hover:border-brand-primary hover:bg-white hover:text-brand-primary",
-  "solid-pink": "border-brand-gold bg-brand-gold text-white hover:border-brand-gold hover:bg-brand-gold hover:text-white",
+  "solid-pink": "border-brand-accent bg-brand-accent text-white hover:border-brand-accent hover:bg-brand-accent hover:text-white",
   "solid-blue": "border-brand-primary bg-brand-primary text-white hover:border-brand-primary hover:bg-brand-primary hover:text-white",
-  "pink-outline": "border-brand-gold bg-white text-brand-gold hover:bg-brand-gold hover:text-white",
+  "pink-outline": "border-brand-accent bg-white text-brand-accent hover:bg-brand-accent hover:text-white",
   "blue-outline": "border-brand-primary bg-white text-brand-primary hover:bg-brand-primary hover:text-white",
-  white: "border-white bg-white text-brand-navy hover:bg-transparent hover:text-white",
-  "white-outline": "border-white/80 bg-transparent text-white hover:border-white hover:bg-white hover:text-brand-navy",
-  dark: "border-brand-navy bg-brand-navy text-white hover:border-brand-navy hover:bg-white hover:text-brand-navy",
+  white: "border-white bg-white text-brand-deep hover:bg-transparent hover:text-white",
+  "white-outline": "border-white/80 bg-transparent text-white hover:border-white hover:bg-white hover:text-brand-deep",
+  dark: "border-brand-deep bg-brand-deep text-white hover:border-brand-deep hover:bg-white hover:text-brand-deep",
   danger: "border-rose-600 bg-rose-600 text-white hover:border-rose-600 hover:bg-white hover:text-rose-700",
 };
 
@@ -66,7 +66,7 @@ export function buttonClassName({
   className,
 }: Pick<SharedButtonProps, "variant" | "size" | "className"> = {}) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-control border font-bold transition duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60",
+    "inline-flex items-center justify-center gap-2 rounded-control border font-bold transition duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60",
     variantClasses[variant],
     sizeClasses[size],
     className,

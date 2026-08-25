@@ -68,8 +68,8 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
                 ) : (
                   <div className="h-full w-full bg-hero-grid" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/45 via-brand-navy/10 to-transparent" />
-                <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-brand-navy">
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/45 via-brand-deep/10 to-transparent" />
+                <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-brand-deep">
                   {getArticleLabel(article)}
                 </div>
               </div>
@@ -77,12 +77,12 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
               <div className="space-y-4 p-6">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   <span>{formatDate(article.publishedAt)}</span>
-                  <span className="h-1 w-1 rounded-full bg-brand-gold" />
+                  <span className="h-1 w-1 rounded-full bg-brand-accent" />
                   <span>{getArticleReadTime(article)} min read</span>
                 </div>
 
                 <div className="space-y-3">
-                  <h3 className="font-heading text-2xl font-bold leading-snug text-brand-ink transition group-hover:text-brand-navy">
+                  <h3 className="font-heading text-2xl font-bold leading-snug text-brand-ink transition group-hover:text-brand-deep">
                     {article.title}
                   </h3>
                   <p className="overflow-hidden text-sm leading-7 text-slate-600 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
@@ -90,7 +90,7 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
                   </p>
                 </div>
 
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand-navy">
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand-deep">
                   Read more
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>

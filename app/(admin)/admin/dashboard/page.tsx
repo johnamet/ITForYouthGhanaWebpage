@@ -92,7 +92,7 @@ export default async function AdminDashboardPage() {
         <section className="space-y-5">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                 Collections
               </p>
               <h2 className="mt-2 font-heading text-3xl font-bold text-slate-950">
@@ -107,11 +107,11 @@ export default async function AdminDashboardPage() {
         <aside className="space-y-6">
           <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-950 text-brand-gold">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-950 text-brand-accent">
                 <ShieldCheck className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
                   Roles
                 </p>
                 <h2 className="font-heading text-2xl font-bold text-slate-950">
@@ -131,7 +131,7 @@ export default async function AdminDashboardPage() {
           </div>
 
           <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
               Activity
             </p>
             <h2 className="mt-2 font-heading text-2xl font-bold text-slate-950">
@@ -142,7 +142,7 @@ export default async function AdminDashboardPage() {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className="block rounded-2xl border border-slate-100 p-4 transition hover:border-brand-gold hover:bg-brand-warm/40"
+                  className="block rounded-2xl border border-slate-100 p-4 transition hover:border-brand-accent hover:bg-brand-warm/40"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="font-bold text-slate-950">{item.title}</p>
@@ -158,7 +158,7 @@ export default async function AdminDashboardPage() {
           </div>
 
           <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
               Revalidation
             </p>
             <h2 className="mt-2 font-heading text-2xl font-bold text-slate-950">

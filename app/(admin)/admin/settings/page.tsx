@@ -53,11 +53,11 @@ export default async function AdminSettingsPage() {
           >
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-brand-gold">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-brand-accent">
                   <Settings className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
                     {group.id}
                   </p>
                   <h2 className="mt-2 font-heading text-2xl font-bold text-slate-950">
@@ -75,7 +75,7 @@ export default async function AdminSettingsPage() {
       {/* Editable public settings */}
       <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
         <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-brand-gold"><Wrench className="h-5 w-5" /></div>
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-brand-accent"><Wrench className="h-5 w-5" /></div>
           <div>
             <h3 className="font-heading text-xl font-semibold text-slate-950">Public settings</h3>
             <p className="text-sm leading-7 text-slate-600">Edit public contact details and social links used in the footer and contact page.</p>

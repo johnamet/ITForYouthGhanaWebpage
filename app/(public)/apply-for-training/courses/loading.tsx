@@ -1,7 +1,7 @@
 export default function CoursesLoading() {
   return (
     <div className="bg-white">
-      <section className="bg-brand-navy px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <section className="bg-brand-deep px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-7xl animate-pulse">
           <div className="h-5 w-32 rounded-full bg-white/15" />
           <div className="mt-6 h-14 max-w-3xl rounded-2xl bg-white/15" />

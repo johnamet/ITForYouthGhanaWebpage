@@ -13,7 +13,7 @@ type SubmitState = { type: "idle" | "success" | "error"; message: string };
 type Props = { initial: HeroSlide[] };
 
 const input =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 export function HeroSlidesForm({ initial }: Props) {
   const router = useRouter();

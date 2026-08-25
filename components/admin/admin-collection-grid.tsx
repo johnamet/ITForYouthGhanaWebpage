@@ -19,7 +19,7 @@ export function AdminCollectionGrid({ collections }: AdminCollectionGridProps) {
         >
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                 {collection.collection}
               </p>
               <h2 className="mt-3 font-heading text-2xl font-bold text-slate-950">
@@ -54,7 +54,7 @@ export function AdminCollectionGrid({ collections }: AdminCollectionGridProps) {
             </div>
           </div>
 
-          <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-navy">
+          <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-deep">
             Open collection
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </span>

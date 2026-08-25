@@ -44,7 +44,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
       <section className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-8">
           <div className="max-w-3xl space-y-3">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {page.operatingEyebrow ?? "Timeline"}
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -63,7 +63,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
                 key={item.title}
                 className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
               >
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                   Step {String(index + 1).padStart(2, "0")}
                 </p>
                 <h3 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
@@ -78,8 +78,8 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[32px] bg-brand-navy p-8 text-white">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+          <div className="rounded-[32px] bg-brand-deep p-8 text-white">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {page.principlesEyebrow ?? "Prepare well"}
             </p>
             <h2 className="mt-4 font-heading text-3xl font-bold">
@@ -107,7 +107,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
       <section className="bg-brand-mist/45 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-8">
           <div className="max-w-3xl space-y-3">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {page.exploreEyebrow ?? "Next steps"}
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">

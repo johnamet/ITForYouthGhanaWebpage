@@ -83,11 +83,11 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                 shadow-[0_18px_45px_rgba(1,82,190,0.10)]
                 transition-all duration-500 ease-out
                 hover:-translate-y-2
-                hover:border-brand-navy/20
+                hover:border-brand-deep/20
                 hover:shadow-[0_28px_60px_rgba(1,82,190,0.17)]
                 focus-visible:outline-none
                 focus-visible:ring-2
-                focus-visible:ring-brand-gold
+                focus-visible:ring-brand-accent
                 focus-visible:ring-offset-4
               "
             >
@@ -109,7 +109,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                 />
 
                 {/* Image tint */}
-                <div className="absolute inset-0 bg-brand-navy/10 transition-colors duration-500 group-hover:bg-brand-navy/5" />
+                <div className="absolute inset-0 bg-brand-deep/10 transition-colors duration-500 group-hover:bg-brand-deep/5" />
 
                 {/* Accent colour wash */}
                 <div
@@ -142,7 +142,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                       inline-flex rounded-control border border-white/35
                       bg-white/90 px-3 py-1.5
                       text-[0.62rem] font-bold uppercase
-                      tracking-[0.17em] text-brand-navy
+                      tracking-[0.17em] text-brand-deep
                       shadow-sm backdrop-blur-md
                     "
                   >
@@ -173,7 +173,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                       relative z-10 flex h-14 w-14
                       items-center justify-center
                       rounded-[1.15rem] border-4 border-white
-                      text-2xl text-brand-navy
+                      text-2xl text-brand-deep
                       shadow-[0_12px_30px_rgba(5,25,52,0.20)]
                       transition-all duration-500
                       group-hover:-translate-y-1
@@ -193,7 +193,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                       font-heading text-[1.55rem] font-bold
                       leading-[1.15] text-brand-ink
                       transition-colors duration-300
-                      group-hover:text-brand-navy
+                      group-hover:text-brand-deep
                     "
                   >
                     {item.title}
@@ -204,7 +204,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                   </p>
 
                   <div className="mt-auto flex items-end justify-between gap-4 pt-6">
-                    <span className="text-sm font-bold text-brand-navy">
+                    <span className="text-sm font-bold text-brand-deep">
                       Learn more
                     </span>
 
@@ -213,11 +213,11 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                         flex h-11 w-11 shrink-0 items-center
                         justify-center rounded-full
                         border border-brand-border bg-brand-mist
-                        text-brand-navy
+                        text-brand-deep
                         transition-all duration-300
                         group-hover:rotate-6
-                        group-hover:border-brand-gold
-                        group-hover:bg-brand-gold
+                        group-hover:border-brand-accent
+                        group-hover:bg-brand-accent
                       "
                     >
                       <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

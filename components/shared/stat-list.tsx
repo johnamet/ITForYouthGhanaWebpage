@@ -17,7 +17,7 @@ export function StatList({ stats, compact = false }: StatListProps) {
     <div className={`grid gap-4 ${compact ? "sm:grid-cols-3" : "md:grid-cols-3"}`}>
       {visibleStats.map((stat, index) => (
         <Card key={`${stat.label}-${index}`} className="rounded-3xl">
-          {stat.value?.trim() ? <p className="font-heading text-3xl font-semibold text-brand-navy">{stat.value}</p> : null}
+          {stat.value?.trim() ? <p className="font-heading text-3xl font-semibold text-brand-deep">{stat.value}</p> : null}
           {stat.label?.trim() ? <p className="mt-2 text-sm font-semibold text-brand-ink">{stat.label}</p> : null}
           {stat.description?.trim() ? <p className="mt-2 text-sm leading-7 text-slate-600">{stat.description}</p> : null}
         </Card>

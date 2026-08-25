@@ -81,11 +81,11 @@ export function NewsListingPage({
 
           <aside className="sticky top-32 rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
                 <Tags className="h-4 w-4" />
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                   {content.topicsSectionEyebrow}
                 </p>
                 <h2 className="font-heading text-2xl font-bold text-brand-ink">
@@ -116,10 +116,10 @@ export function NewsListingPage({
 
       {leadArticle ? (
         <section className="px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl rounded-[34px] border border-brand-border bg-brand-navy p-8 text-white lg:p-10">
+          <div className="mx-auto max-w-7xl rounded-[34px] border border-brand-border bg-brand-deep p-8 text-white lg:p-10">
             <div className="grid gap-8 lg:grid-cols-[0.72fr_0.28fr] lg:items-center">
               <div className="space-y-3">
-                <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
+                <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-accent">
                   {content.latestSignalEyebrow}
                 </p>
                 <h2 className="font-heading text-3xl font-bold sm:text-4xl">
@@ -132,7 +132,7 @@ export function NewsListingPage({
               </div>
               <Link
                 href={`/news-and-updates/${leadArticle.category}/${leadArticle.slug}`}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-bold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-accent px-6 py-3.5 text-sm font-bold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
               >
                 {content.latestSignalCtaLabel}
                 <ArrowRight className="h-4 w-4" />

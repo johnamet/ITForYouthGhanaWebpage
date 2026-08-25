@@ -8,7 +8,7 @@ export function AdminPlaceholder({ title, description, nextSteps }: AdminPlaceho
   return (
     <div className="space-y-8">
       <div className="rounded-[32px] bg-slate-950 p-8 text-white shadow-panel">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">CMS scaffold</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">CMS scaffold</p>
         <h1 className="mt-3 font-heading text-4xl font-semibold">{title}</h1>
         <p className="mt-4 max-w-3xl text-base leading-8 text-slate-300">{description}</p>
       </div>

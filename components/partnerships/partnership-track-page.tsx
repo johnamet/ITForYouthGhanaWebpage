@@ -50,7 +50,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -141,7 +141,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                       {step.icon}
                     </span>
                   )}
-                  <span className="font-heading text-3xl font-bold text-brand-gold/70">
+                  <span className="font-heading text-3xl font-bold text-brand-accent/70">
                     {step.number}
                   </span>
                 </div>
@@ -178,7 +178,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                 key={scenario.title}
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
               >
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                   {scenario.partnerType}
                 </p>
                 <h3 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
@@ -193,7 +193,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                   <p className="mt-2 text-sm leading-7 text-slate-700">{scenario.outcome}</p>
                 </div>
 
-                <p className="mt-5 text-sm font-medium leading-7 text-brand-navy">
+                <p className="mt-5 text-sm font-medium leading-7 text-brand-deep">
                   {scenario.highlight}
                 </p>
               </div>
@@ -234,11 +234,11 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
 
       <section
         id="contact"
-        className="scroll-mt-36 bg-brand-navy px-4 py-16 text-white sm:px-6 lg:px-8"
+        className="scroll-mt-36 bg-brand-deep px-4 py-16 text-white sm:px-6 lg:px-8"
       >
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div className="space-y-4">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {page.contactSectionEyebrow ?? "Contact CTA"}
             </p>
             <h2 className="font-heading text-3xl font-bold sm:text-4xl">
@@ -249,7 +249,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
             </p>
             <a
               href={`mailto:${page.contactCta.email}`}
-              className="inline-flex text-sm font-semibold text-brand-gold transition hover:text-white"
+              className="inline-flex text-sm font-semibold text-brand-accent transition hover:text-white"
             >
               {page.contactCta.email}
             </a>
@@ -258,7 +258,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
           <div className="flex flex-wrap gap-3">
             <Link
               href={page.contactCta.primary.href}
-              className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
+              className="rounded-full bg-brand-accent px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
             >
               {page.contactCta.primary.label}
             </Link>

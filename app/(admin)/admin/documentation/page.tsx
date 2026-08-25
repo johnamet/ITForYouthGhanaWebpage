@@ -392,7 +392,7 @@ export default function AdminDocumentationPage() {
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
                 Start here
               </p>
               <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
@@ -420,7 +420,7 @@ export default function AdminDocumentationPage() {
         </div>
 
         <div className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
             Page map
           </p>
           <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
@@ -448,7 +448,7 @@ export default function AdminDocumentationPage() {
             id="manual"
             className="scroll-mt-8 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
           >
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
               Deep reference
             </p>
             <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
@@ -503,7 +503,7 @@ function SummaryCard({
 function TableOfContents() {
   return (
     <div className="rounded-[28px] border border-brand-border bg-white p-5 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+      <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
         Table of contents
       </p>
       <nav className="mt-5 grid gap-2">
@@ -548,20 +548,20 @@ function HubCard({
   return (
     <Link
       href={`/admin/content/hubs/${hubKey}`}
-      className="group rounded-2xl border border-brand-border bg-white p-4 transition hover:-translate-y-0.5 hover:border-brand-gold hover:shadow-panel"
+      className="group rounded-2xl border border-brand-border bg-white p-4 transition hover:-translate-y-0.5 hover:border-brand-accent hover:shadow-panel"
     >
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="font-bold text-brand-ink">{label}</p>
           {description ? <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p> : null}
         </div>
-        <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-brand-navy transition group-hover:text-brand-gold" />
+        <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-brand-deep transition group-hover:text-brand-accent" />
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
-        <span className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-navy">
+        <span className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-deep">
           {nodes.length} {nodes.length === 1 ? "editor" : "editors"}
         </span>
-        <span className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-navy">
+        <span className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-deep">
           {previewCount} preview {previewCount === 1 ? "route" : "routes"}
         </span>
       </div>
@@ -578,7 +578,7 @@ function DocumentationSection({ section, open = false }: { section: DocSection; 
     >
       <summary className="flex cursor-pointer list-none flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
             CMS area
           </p>
           <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
@@ -631,7 +631,7 @@ function InfoBlock({ title, items }: { title: string; items: string[] }) {
       <ul className="mt-3 grid gap-2 text-sm leading-6 text-slate-600">
         {items.map((item) => (
           <li key={item} className="flex gap-2">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold" />
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent" />
             <span>{item}</span>
           </li>
         ))}
@@ -644,14 +644,14 @@ function RouteBlock({ title, routes, icon }: { title: string; routes: string[]; 
   return (
     <div className="rounded-2xl border border-brand-border bg-white p-4">
       <div className="flex items-center gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-mist text-brand-navy">
+        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-mist text-brand-deep">
           {icon}
         </span>
         <p className="font-bold text-brand-ink">{title}</p>
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         {routes.map((route) => (
-          <span key={route} className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-navy">
+          <span key={route} className="rounded-full bg-brand-mist px-3 py-1 text-xs font-semibold text-brand-deep">
             {route}
           </span>
         ))}
@@ -668,7 +668,7 @@ function PublishingWorkflow() {
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
             Publishing workflow
           </p>
           <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
@@ -716,7 +716,7 @@ function RevalidationMap() {
           <RefreshCw className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
             What updates what
           </p>
           <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
@@ -750,7 +750,7 @@ function ResearchNotes() {
       id="documentation-research"
       className="scroll-mt-8 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
     >
-      <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+      <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
         Research notes
       </p>
       <h2 className="mt-2 font-heading text-3xl font-bold text-brand-ink">
@@ -763,11 +763,11 @@ function ResearchNotes() {
             href={note.source}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-2xl border border-brand-border p-4 transition hover:-translate-y-0.5 hover:border-brand-gold hover:shadow-panel"
+            className="rounded-2xl border border-brand-border p-4 transition hover:-translate-y-0.5 hover:border-brand-accent hover:shadow-panel"
           >
             <p className="font-bold text-brand-ink">{note.title}</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">{note.body}</p>
-            <span className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-brand-navy">
+            <span className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-brand-deep">
               Source
               <ExternalLink className="h-3.5 w-3.5" />
             </span>

@@ -112,7 +112,7 @@ export function AdminLoginForm({ nextPath }: AdminLoginFormProps) {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className="mt-2 w-full rounded-2xl border border-brand-border px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
+          className="mt-2 w-full rounded-2xl border border-brand-border px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20"
           placeholder="admin@example.com"
         />
       </div>
@@ -128,7 +128,7 @@ export function AdminLoginForm({ nextPath }: AdminLoginFormProps) {
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="mt-2 w-full rounded-2xl border border-brand-border px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
+          className="mt-2 w-full rounded-2xl border border-brand-border px-4 py-3 text-sm text-brand-ink outline-none transition focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20"
           placeholder="Your Firebase password"
         />
       </div>
@@ -136,7 +136,7 @@ export function AdminLoginForm({ nextPath }: AdminLoginFormProps) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-navy px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-deep px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isSubmitting ? (
           <Loader2 className="h-4 w-4 animate-spin" />

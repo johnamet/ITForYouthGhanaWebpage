@@ -34,13 +34,13 @@ const variantStyles = {
     close: "text-white/45 hover:text-white",
   },
   urgent: {
-    wrap: "bg-brand-gold text-white",
+    wrap: "bg-brand-accent text-white",
     badge: "bg-white/15 text-white",
     cta: "itfy-button-outline-pink px-3.5 py-1 text-[0.72rem]",
     close: "text-white/55 hover:text-white",
   },
   alert: {
-    wrap: "bg-brand-gold text-white",
+    wrap: "bg-brand-accent text-white",
     badge: "bg-white/15 text-white",
     cta: "itfy-button-outline-pink px-3.5 py-1 text-[0.72rem]",
     close: "text-white/45 hover:text-white",

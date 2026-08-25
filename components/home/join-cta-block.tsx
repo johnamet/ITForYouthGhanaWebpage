@@ -57,12 +57,12 @@ export function JoinCtaBlock({ cards }: JoinCtaBlockProps) {
                 key={card.id}
                 className="flex h-full flex-col rounded-[30px] border border-brand-border bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-mist text-brand-navy">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-mist text-brand-deep">
                   <Icon className="h-7 w-7" />
                 </div>
 
                 <div className="mt-6 space-y-3">
-                  <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                  <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                     {card.eyebrow}
                   </p>
                   <h3 className="font-heading text-2xl font-bold text-brand-ink">
@@ -73,7 +73,7 @@ export function JoinCtaBlock({ cards }: JoinCtaBlockProps) {
 
                 <Link
                   href={card.href}
-                  className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-navy"
+                  className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-deep"
                 >
                   {card.buttonLabel}
                   <ArrowRight className="h-4 w-4" />

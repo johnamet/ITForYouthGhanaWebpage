@@ -26,7 +26,7 @@ export function CareersList({ jobs }: CareersListProps) {
   return (
     <section className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:px-8">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">Open opportunities</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">Open opportunities</p>
         <h2 className="mt-2 font-heading text-4xl font-semibold text-brand-ink">Join the team</h2>
       </div>
 

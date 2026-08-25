@@ -12,7 +12,7 @@ export default function ContentExplorerPage() {
     <div className="space-y-10">
       <header className="space-y-2">
         <AdminBreadcrumbs />
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-gold">Admin</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-accent">Admin</p>
         <h1 className="text-2xl font-bold">Content Explorer</h1>
         <p className="text-slate-600">Browse hubs and jump into the right editor without guessing routes.</p>
       </header>
@@ -53,7 +53,7 @@ export default function ContentExplorerPage() {
                     </div>
                     {node.previewHref ? (
                       <div className="mt-2">
-                        <Link href={node.previewHref} className="text-xs text-brand-navy hover:underline">
+                        <Link href={node.previewHref} className="text-xs text-brand-deep hover:underline">
                           Preview: {node.previewHref}
                         </Link>
                       </div>

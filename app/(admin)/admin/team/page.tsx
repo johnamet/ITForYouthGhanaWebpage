@@ -21,7 +21,7 @@ const teamColumns: AdminTableColumn<TeamMemberProfile>[] = [
           {member.departmentSlug ? (
             <Link
               href={`/departments/${member.departmentSlug}`}
-              className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:bg-brand-primary-light hover:text-brand-navy"
+              className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:bg-brand-primary-light hover:text-brand-deep"
             >
               {member.department}
             </Link>

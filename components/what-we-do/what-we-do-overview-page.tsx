@@ -48,7 +48,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -78,7 +78,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
                   </div>
                 ) : null}
                 <div className="p-7">
-                  <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                  <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                     {card.eyebrow}
                   </p>
                   <h2 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
@@ -125,18 +125,18 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
                       sizes="(max-width: 767px) 100vw, 35vw"
                       className="object-cover transition duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/45 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/45 via-transparent to-transparent" />
                   </div>
 
                   <div className="flex flex-col justify-between p-7">
                     <div className="space-y-3">
-                      <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                      <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                         {initiative.eyebrow}
                       </p>
                       <h3 className="font-heading text-3xl font-bold text-brand-ink">
                         {initiative.title}
                       </h3>
-                      <p className="text-sm font-medium leading-7 text-brand-navy">
+                      <p className="text-sm font-medium leading-7 text-brand-deep">
                         {initiative.tagline}
                       </p>
                       <p className="text-sm leading-7 text-slate-600">
@@ -151,7 +151,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
                             key={stat.label}
                             className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4"
                           >
-                            <p className="font-heading text-2xl font-bold text-brand-navy">
+                            <p className="font-heading text-2xl font-bold text-brand-deep">
                               {stat.value}
                             </p>
                             <p className="mt-1 text-sm font-semibold text-brand-ink">
@@ -161,7 +161,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
                         ))}
                       </div>
 
-                      <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand-navy">
+                      <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand-deep">
                         Explore initiative
                         <span className="transition-transform group-hover:translate-x-1">
                           →
@@ -209,7 +209,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
                 key={card.title}
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
               >
-                <p className="font-heading text-4xl font-bold text-brand-gold/70">
+                <p className="font-heading text-4xl font-bold text-brand-accent/70">
                   {String(index + 1).padStart(2, "0")}
                 </p>
                 <h3 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
@@ -222,10 +222,10 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
         </div>
       </section>
 
-      <section id="next-steps" className="scroll-mt-36 bg-brand-navy px-4 py-16 text-white sm:px-6 lg:px-8">
+      <section id="next-steps" className="scroll-mt-36 bg-brand-deep px-4 py-16 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-10">
           <div className="space-y-3">
-            <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {content.nextStepsSectionEyebrow ?? "Next steps"}
             </p>
             <h2 className="max-w-3xl font-heading text-3xl font-bold leading-snug text-white sm:text-4xl">

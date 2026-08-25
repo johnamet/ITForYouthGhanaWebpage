@@ -22,7 +22,7 @@ export function AdminPageHeader({
   primaryAction,
 }: AdminPageHeaderProps) {
   return (
-    <div className="rounded-[32px] bg-brand-navy p-8 text-white shadow-panel">
+    <div className="rounded-[32px] bg-brand-deep p-8 text-white shadow-panel">
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="flex gap-4">
           {icon ? (

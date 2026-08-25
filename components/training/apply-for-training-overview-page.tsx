@@ -53,7 +53,7 @@ export function ApplyForTrainingOverviewPage({
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -65,7 +65,7 @@ export function ApplyForTrainingOverviewPage({
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
           <div className="space-y-6">
             <div className="max-w-3xl space-y-3">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                 Overview
               </p>
               <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -92,8 +92,8 @@ export function ApplyForTrainingOverviewPage({
             </div>
           </div>
 
-          <aside className="border-l-2 border-brand-gold py-2 pl-6 sm:pl-8">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+          <aside className="border-l-2 border-brand-accent py-2 pl-6 sm:pl-8">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               Learner support
             </p>
             <h3 className="mt-4 font-heading text-3xl font-bold leading-tight text-brand-ink">
@@ -112,7 +112,7 @@ export function ApplyForTrainingOverviewPage({
       >
         <div className="mx-auto max-w-7xl space-y-8">
           <div className="max-w-3xl space-y-3">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {page.operatingEyebrow ?? "Pathways"}
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -154,10 +154,10 @@ export function ApplyForTrainingOverviewPage({
         </div>
       </div> : null}
 
-      <section className="bg-brand-navy px-4 py-16 text-white sm:px-6 lg:px-8">
+      <section className="bg-brand-deep px-4 py-16 text-white sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div className="space-y-4">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               {page.exploreEyebrow ?? "Ready to begin"}
             </p>
             <h2 className="font-heading text-3xl font-bold sm:text-4xl">
@@ -174,7 +174,7 @@ export function ApplyForTrainingOverviewPage({
               <Link
                 key={cta.href}
                 href={cta.href}
-                className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="rounded-full bg-brand-accent px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
               >
                 {cta.label}
               </Link>

@@ -83,18 +83,18 @@ main :where([class*="text-white"]) :where(p):not([class*="text-"]) {
   color: var(--color-on-dark-muted);
 }
 
-main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-brand-navy"], [class*="via-brand-navy"])
+main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-brand-deep"], [class*="via-brand-deep"])
   :where(p, li, small):is([class*="text-slate-"], [class*="text-gray-"], [class*="text-zinc-"], [class*="text-neutral-"]):not([class*="bg-white"] *) {
   color: var(--color-on-dark-muted);
 }
 
-main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-brand-navy"], [class*="via-brand-navy"])
-  :where(.text-brand-gold, .text-brand-navy, .text-brand-primary, .text-brand-primary-light):not([class*="bg-white"] *) {
+main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-brand-deep"], [class*="via-brand-deep"])
+  :where(.text-brand-accent, .text-brand-deep, .text-brand-primary, .text-brand-primary-light):not([class*="bg-white"] *) {
   color: #ffffff;
 }
 
-main :where([class*="bg-brand-navy"], [class*="from-brand-navy"], [class*="to-brand-navy"], [class*="via-brand-navy"])
-  :where(.bg-brand-gold):not([class*="bg-white"] *) {
+main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-brand-deep"], [class*="via-brand-deep"])
+  :where(.bg-brand-accent):not([class*="bg-white"] *) {
   color: #ffffff;
 }
 

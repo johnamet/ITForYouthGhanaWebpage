@@ -55,11 +55,11 @@ export default function AdminMediaPage() {
           >
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-brand-gold">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-brand-accent">
                   <FolderOpen className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-gold">
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
                     /{folder.storagePath}
                   </p>
                   <h2 className="mt-2 font-heading text-2xl font-bold text-slate-950">

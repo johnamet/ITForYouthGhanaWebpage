@@ -37,7 +37,7 @@ export function OrganisationContentForm({ kind, initial }: Props) {
       Every public section is represented below. Remove an item from an array to remove its card; use an empty array to hide the entire section. Images accept URL or public-path strings only—there is no upload field.
     </div>
     {status ? <div className={`flex gap-3 rounded-[22px] border p-4 text-sm ${status.ok ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-rose-200 bg-rose-50 text-rose-700"}`}>{status.ok ? <CheckCircle2 className="h-5 w-5" /> : <AlertCircle className="h-5 w-5" />}{status.message}</div> : null}
-    <textarea aria-label="Complete page content JSON" spellCheck={false} value={json} onChange={(event) => setJson(event.target.value)} className="min-h-[70vh] w-full rounded-[28px] border border-brand-border bg-slate-950 p-6 font-mono text-sm leading-6 text-slate-100 outline-none focus:border-brand-gold" />
+    <textarea aria-label="Complete page content JSON" spellCheck={false} value={json} onChange={(event) => setJson(event.target.value)} className="min-h-[70vh] w-full rounded-[28px] border border-brand-border bg-slate-950 p-6 font-mono text-sm leading-6 text-slate-100 outline-none focus:border-brand-accent" />
     <button disabled={saving} className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-bold text-white disabled:opacity-60">{saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}Save complete page</button>
   </form>;
 }

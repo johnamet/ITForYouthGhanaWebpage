@@ -12,7 +12,7 @@ type ImpactTestimonialsPageProps = {
 };
 
 const formatBadgeStyles = {
-  written: "border-brand-border bg-brand-mist/70 text-brand-navy",
+  written: "border-brand-border bg-brand-mist/70 text-brand-deep",
   video: "border-rose-200 bg-rose-50 text-rose-700",
   partner: "border-emerald-200 bg-emerald-50 text-emerald-700",
 } as const;
@@ -92,10 +92,10 @@ export function ImpactTestimonialsPage({
                       &ldquo;{story.quote}&rdquo;
                     </blockquote>
 
-                    <div className="mt-6 border-l-2 border-brand-gold pl-4">
+                    <div className="mt-6 border-l-2 border-brand-accent pl-4">
                       <p className="font-semibold text-brand-ink">{story.name}</p>
                       <p className="mt-1 text-sm text-slate-500">{story.role}</p>
-                      <p className="mt-1 text-sm text-brand-navy">
+                      <p className="mt-1 text-sm text-brand-deep">
                         {story.programme} · {story.year}
                       </p>
                     </div>

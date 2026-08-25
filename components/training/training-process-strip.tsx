@@ -20,7 +20,7 @@ export function TrainingProcessStrip({
   return (
     <section className="space-y-8">
       <div className="max-w-3xl space-y-3">
-        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
           {eyebrow}
         </p>
         <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -45,7 +45,7 @@ export function TrainingProcessStrip({
                   {step.icon}
                 </span>
               )}
-              <span className="font-heading text-3xl font-bold text-brand-gold/70">
+              <span className="font-heading text-3xl font-bold text-brand-accent/70">
                 {step.number}
               </span>
             </div>

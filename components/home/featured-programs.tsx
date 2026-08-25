@@ -27,7 +27,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         {/* Heading row */}
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="mb-2 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            <p className="mb-2 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
               Featured programs
             </p>
             <h2 className="font-heading text-3xl font-bold text-brand-ink sm:text-4xl">
@@ -36,7 +36,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
           </div>
           <Link
             href="/programs"
-            className="shrink-0 border-b-2 border-brand-gold pb-0.5 text-[0.78rem] font-bold text-brand-ink transition hover:text-brand-gold"
+            className="shrink-0 border-b-2 border-brand-accent pb-0.5 text-[0.78rem] font-bold text-brand-ink transition hover:text-brand-accent"
           >
             View all programs →
           </Link>
@@ -48,7 +48,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
           {hero && (
             <Link
               href={hero.href}
-              className="group relative col-span-1 overflow-hidden rounded-[24px] bg-brand-navy lg:col-span-2 lg:row-span-2"
+              className="group relative col-span-1 overflow-hidden rounded-[24px] bg-brand-deep lg:col-span-2 lg:row-span-2"
             >
               {hero.image && (
                 <Image
@@ -59,7 +59,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                 />
               )}
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/60 to-transparent" />
 
               <div className="relative flex h-full min-h-[380px] flex-col justify-end p-8 lg:min-h-[480px]">
                 {/* Tags */}
@@ -68,14 +68,14 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                     {hero.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-brand-gold/30 bg-brand-gold/10 px-3 py-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-brand-gold"
+                        className="rounded-full border border-brand-accent/30 bg-brand-accent/10 px-3 py-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-brand-accent"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                 )}
-                <p className="mb-2 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+                <p className="mb-2 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-accent">
                   {hero.eyebrow}
                 </p>
                 <h3 className="font-heading text-2xl font-bold leading-snug text-white lg:text-3xl">
@@ -84,7 +84,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                 <p className="mt-3 max-w-md text-[0.85rem] leading-[1.75] text-white/70">
                   {hero.description}
                 </p>
-                <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-brand-gold px-5 py-2.5 text-[0.78rem] font-bold text-brand-ink transition group-hover:-translate-y-0.5">
+                <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-brand-accent px-5 py-2.5 text-[0.78rem] font-bold text-brand-ink transition group-hover:-translate-y-0.5">
                   {hero.cta} →
                 </span>
               </div>
@@ -104,14 +104,14 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                     {prog.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full bg-brand-mist px-2.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-brand-navy"
+                        className="rounded-full bg-brand-mist px-2.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-brand-deep"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                 )}
-                <p className="mb-1.5 text-[0.62rem] font-bold uppercase tracking-[0.24em] text-brand-gold">
+                <p className="mb-1.5 text-[0.62rem] font-bold uppercase tracking-[0.24em] text-brand-accent">
                   {prog.eyebrow}
                 </p>
                 <h3 className="font-heading text-xl font-bold leading-snug text-brand-ink">
@@ -121,7 +121,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                   {prog.description}
                 </p>
               </div>
-              <p className="mt-5 flex items-center gap-1.5 text-[0.75rem] font-bold text-brand-navy transition-[gap] group-hover:gap-2.5">
+              <p className="mt-5 flex items-center gap-1.5 text-[0.75rem] font-bold text-brand-deep transition-[gap] group-hover:gap-2.5">
                 {prog.cta} →
               </p>
             </Link>

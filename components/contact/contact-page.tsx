@@ -65,7 +65,7 @@ export function ContactPage({ content }: ContactPageProps) {
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-gold hover:text-brand-ink"
+              className="whitespace-nowrap rounded-full border border-brand-border px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-accent hover:text-brand-ink"
             >
               {link.label}
             </a>
@@ -96,10 +96,10 @@ export function ContactPage({ content }: ContactPageProps) {
                   rel={isExternal ? "noreferrer" : undefined}
                   className="group rounded-[30px] border border-brand-border bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
                     <ChannelIcon channel={channel} />
                   </div>
-                  <p className="mt-5 text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                  <p className="mt-5 text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                     {channel.label}
                   </p>
                   <h2 className="mt-2 break-words font-heading text-2xl font-bold text-brand-ink">
@@ -108,7 +108,7 @@ export function ContactPage({ content }: ContactPageProps) {
                   <p className="mt-3 text-sm leading-7 text-slate-600">
                     {channel.description}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-navy">
+                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-deep">
                     Open channel
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </span>
@@ -135,7 +135,7 @@ export function ContactPage({ content }: ContactPageProps) {
                   className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
                 >
                   <div className="flex items-start gap-4">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-navy text-sm font-bold text-brand-gold">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-deep text-sm font-bold text-brand-accent">
                       {step.number}
                     </span>
                     <div>
@@ -153,7 +153,7 @@ export function ContactPage({ content }: ContactPageProps) {
 
             {content.privacyNote ? <div className="rounded-[28px] border border-brand-border bg-brand-warm p-6">
               <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
@@ -170,11 +170,11 @@ export function ContactPage({ content }: ContactPageProps) {
 
           <div className="rounded-[34px] border border-brand-border bg-white p-6 shadow-sm sm:p-8">
             <div className="mb-8 flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-deep text-brand-accent">
                 <MessageSquareText className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">
                   {content.messageEyebrow}
                 </p>
                 <h2 className="font-heading text-3xl font-bold text-brand-ink">

@@ -44,7 +44,7 @@ export function SpotlightCard({
 
       <div className="p-6">
         {categoryLabel ? (
-          <span className="inline-flex rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
+          <span className="inline-flex rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-deep">
             {categoryLabel}
           </span>
         ) : null}

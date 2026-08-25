@@ -60,7 +60,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                       <h3 className="font-heading text-xl font-bold text-brand-ink">{service.title}</h3>
                       <p className="mt-3 text-sm leading-7 text-slate-600">{service.body}</p>
                       {service.bullets?.length ? (
-                        <ul className="mt-4 grid gap-2 text-sm font-medium text-brand-navy">
+                        <ul className="mt-4 grid gap-2 text-sm font-medium text-brand-deep">
                           {service.bullets.map((bullet) => (
                             <li key={bullet}>{bullet}</li>
                           ))}
@@ -78,7 +78,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                   {selectedMembers.map((member) => (
                     <article key={member.id} className="rounded-[24px] border border-brand-border bg-white p-5">
                       <h3 className="font-heading text-xl font-bold text-brand-ink">{member.name}</h3>
-                      <p className="mt-1 text-sm font-semibold text-brand-navy">{member.role}</p>
+                      <p className="mt-1 text-sm font-semibold text-brand-deep">{member.role}</p>
                       <p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">{member.bio}</p>
                     </article>
                   ))}
@@ -94,7 +94,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                 <div className="mt-5 grid gap-4">
                   {department.stats.map((stat) => (
                     <div key={`${stat.value}-${stat.label}`} className="rounded-2xl bg-white p-4">
-                      <p className="font-heading text-3xl font-bold text-brand-navy">{stat.value}</p>
+                      <p className="font-heading text-3xl font-bold text-brand-deep">{stat.value}</p>
                       <p className="mt-1 text-sm font-semibold text-brand-ink">{stat.label}</p>
                       {stat.description ? (
                         <p className="mt-2 text-sm leading-6 text-slate-600">{stat.description}</p>
@@ -111,7 +111,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                 <div className="mt-5 grid gap-4">
                   {department.workflows.map((step, index) => (
                     <div key={step.title} className="flex gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-navy text-sm font-bold text-white">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-deep text-sm font-bold text-white">
                         {index + 1}
                       </span>
                       <div>
@@ -129,7 +129,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                 <h2 className="font-heading text-xl font-bold text-brand-ink">Current priorities</h2>
                 <ul className="mt-5 grid gap-3 text-sm leading-7 text-slate-600">
                   {department.priorities.map((priority) => (
-                    <li key={priority} className="border-l-2 border-brand-gold pl-3">
+                    <li key={priority} className="border-l-2 border-brand-accent pl-3">
                       {priority}
                     </li>
                   ))}
@@ -145,9 +145,9 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                     <Link
                       key={`${resource.href}-${resource.label}`}
                       href={resource.href}
-                      className="rounded-2xl border border-brand-border p-4 transition hover:border-brand-gold"
+                      className="rounded-2xl border border-brand-border p-4 transition hover:border-brand-accent"
                     >
-                      <span className="font-semibold text-brand-navy">{resource.label}</span>
+                      <span className="font-semibold text-brand-deep">{resource.label}</span>
                       {resource.description ? (
                         <span className="mt-1 block text-sm leading-6 text-slate-600">{resource.description}</span>
                       ) : null}

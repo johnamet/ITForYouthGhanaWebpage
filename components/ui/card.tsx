@@ -18,7 +18,7 @@ const paddingClasses = {
 const toneClasses = {
   default: "border-brand-border bg-white text-brand-ink shadow-sm",
   muted: "border-brand-border bg-brand-mist/45 text-brand-ink",
-  dark: "border-brand-navy bg-brand-navy text-white shadow-panel",
+  dark: "border-brand-deep bg-brand-deep text-white shadow-panel",
 };
 
 const variantClasses = {

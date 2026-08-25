@@ -14,7 +14,7 @@ type ApiResponse = { success?: boolean; message?: string };
 type SubmitState = { type: "idle" | "success" | "error"; message: string };
 
 const input =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
+  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20";
 
 function Notice({ state }: { state: SubmitState }) {
   if (state.type === "idle") return null;
@@ -71,7 +71,7 @@ export function ChallengeSectionForm({ initial }: { initial: ChallengeSectionCon
         <Field label="Description (optional)" value={values.description} onChange={(value) => update("description", value)} textarea wide />
         {values.stats.map((stat, index) => (
           <div key={index} className="rounded-2xl border border-brand-border bg-brand-mist/40 p-4 md:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-gold">Statistic {index + 1}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-accent">Statistic {index + 1}</p>
             <div className="mt-3 grid gap-4 md:grid-cols-3">
               {(["value", "label", "description"] as const).map((key) => (
                 <Field key={key} label={key[0].toUpperCase() + key.slice(1)} value={stat[key]} onChange={(value) => update("stats", values.stats.map((item, itemIndex) => itemIndex === index ? { ...item, [key]: value } : item))} />
