@@ -25,14 +25,35 @@ const check = (name, ok, detail = "") => {
 /* ---------------------------------------------------------------- geometry */
 
 /**
- * CSS border-radius corner scaling: when two radii on the same edge exceed the
- * edge length, the browser scales every radius by the same factor f so no pair
- * overflows (CSS Backgrounds 3, section 5.5).
+ * CSS border-radius corner scaling, per CSS Backgrounds 3 section 5.5.
+ *
+ * This function previously scaled each corner independently, which is NOT what
+ * browsers do and is why a broken shape passed these checks. The spec computes
+ * ONE factor f = min(Li / Si) across all four sides, where Li is a side's length
+ * and Si the sum of its two radii, and if f < 1 every radius is multiplied by f.
+ *
+ * The consequence in practice: putting 999px on the trailing corners of a
+ * 1180x460 shell drove f to 0.23, which shrank the 230px leading corners to
+ * 53px and left only the trailing end round. The capsule rendered mirrored.
  */
-function resolvedRadius(requested, edgeA, edgeB) {
-  const f = Math.min(1, edgeA / (requested * 2), edgeB / (requested * 2));
-  return requested * f;
+function resolveRadii({ w, h, tl, tr, br, bl }) {
+  const sides = [
+    [w, tl + tr], // top
+    [h, tr + br], // right
+    [w, br + bl], // bottom
+    [h, tl + bl], // left
+  ];
+
+  let f = 1;
+  for (const [length, sum] of sides) {
+    if (sum > 0) f = Math.min(f, length / sum);
+  }
+
+  if (f >= 1) return { tl, tr, br, bl, scaled: false };
+  return { tl: tl * f, tr: tr * f, br: br * f, bl: bl * f, scaled: true };
 }
+
+const PANEL = 24; // --radius-panel, 1.5rem
 
 const BREAKPOINTS = [
   // label,            capsuleH, capsuleW, layout
@@ -45,45 +66,114 @@ const BREAKPOINTS = [
 
 for (const [label, capsuleH, capsuleW, layout] of BREAKPOINTS) {
   if (layout === "row") {
-    // Lens: width = height = --capsule-h, align-self:center -> always square.
+    // Declared: calc(H/2) PANEL PANEL calc(H/2). The lens is a centred square
+    // of side H, so its radius is H/2 and it must equal the LEADING corners.
     const lensRadius = capsuleH / 2;
-    // Left end: border-radius is declared as calc(--capsule-h / 2), and the
-    // left edge (height) is at least --capsule-h, so it never scales down.
-    const endRadius = resolvedRadius(capsuleH / 2, capsuleH, capsuleW);
+    const r = resolveRadii({
+      w: capsuleW,
+      h: capsuleH,
+      tl: capsuleH / 2,
+      tr: PANEL,
+      br: PANEL,
+      bl: capsuleH / 2,
+    });
+
     check(
-      `[${label}] lens arc == capsule end arc`,
-      Math.abs(lensRadius - endRadius) < 0.01,
-      `lens r=${lensRadius}  end r=${endRadius}`,
+      `[${label}] nothing scaled down`,
+      !r.scaled,
+      r.scaled ? "a side overflowed, so every radius shrank" : "f = 1",
     );
     check(
-      `[${label}] lens fits inside capsule height`,
-      capsuleH <= capsuleH,
-      `lens ${capsuleH}px in ${capsuleH}px`,
+      `[${label}] leading arc == lens arc`,
+      Math.abs(r.tl - lensRadius) < 0.01 && Math.abs(r.bl - lensRadius) < 0.01,
+      `lens r=${lensRadius}  tl=${r.tl.toFixed(1)}  bl=${r.bl.toFixed(1)}`,
     );
-    // The content column must still have usable width after the lens.
+    check(
+      `[${label}] the ROUND end is the LEADING end`,
+      r.tl > r.tr && r.bl > r.br,
+      `leading ${r.tl.toFixed(1)} vs trailing ${r.tr.toFixed(1)}`,
+    );
+    check(
+      `[${label}] trailing corners keep the panel radius`,
+      Math.abs(r.tr - PANEL) < 0.01,
+      `tr=${r.tr.toFixed(1)}`,
+    );
+
     const contentW = capsuleW - capsuleH;
     check(
-      `[${label}] content column >= 360px`,
-      contentW >= 360,
+      `[${label}] text column >= 460px`,
+      contentW >= 460,
       `${contentW}px available`,
     );
   } else {
-    // Stacked: lens is width:100% + aspect-ratio 1/1 -> square at capsule width.
+    // Stacked: the lens is the leading lobe at the top, full capsule width.
+    // Declared: calc(W/2) calc(W/2) PANEL PANEL.
     const lensRadius = capsuleW / 2;
-    // Top corners declared 999px; both scale to width/2.
-    const endRadius = resolvedRadius(999, capsuleW, capsuleH);
+    const r = resolveRadii({
+      w: capsuleW,
+      h: capsuleH,
+      tl: capsuleW / 2,
+      tr: capsuleW / 2,
+      br: PANEL,
+      bl: PANEL,
+    });
+
+    check(`[${label}] nothing scaled down`, !r.scaled);
     check(
-      `[${label}] lens arc == capsule top arc`,
-      Math.abs(lensRadius - endRadius) < 0.01,
-      `lens r=${lensRadius}  top r=${endRadius}`,
+      `[${label}] leading arc == lens arc`,
+      Math.abs(r.tl - lensRadius) < 0.01,
+      `lens r=${lensRadius}  tl=${r.tl.toFixed(1)}`,
+    );
+    check(
+      `[${label}] trailing corners keep the panel radius`,
+      Math.abs(r.br - PANEL) < 0.01,
+      `br=${r.br.toFixed(1)}`,
     );
   }
+}
+
+/* ------------------------------------------- the shipped hero, sized for real */
+
+// --capsule-h = min(100svh - 2i, 100vw - 2i - 460)
+function heroCapsuleH(vw, vh) {
+  const inset = Math.min(24, Math.max(10, vw * 0.016));
+  return { h: Math.min(vh - 2 * inset, vw - 2 * inset - 460), inset };
+}
+
+for (const [label, vw, vh] of [
+  ["1920x1080", 1920, 1080],
+  ["1680x1050", 1680, 1050],
+  ["1440x900", 1440, 900],
+  ["1366x768", 1366, 768],
+  ["1280x800", 1280, 800],
+  ["1280x1024", 1280, 1024],
+  ["1024x768", 1024, 768],
+]) {
+  const { h, inset } = heroCapsuleH(vw, vh);
+  const w = vw - 2 * inset;
+  const r = resolveRadii({ w, h, tl: h / 2, tr: PANEL, br: PANEL, bl: h / 2 });
+
+  check(
+    `[hero ${label}] leading arc == lens arc, unscaled`,
+    !r.scaled && Math.abs(r.tl - h / 2) < 0.01,
+    `capsule ${Math.round(w)}x${Math.round(h)}, leading r=${r.tl.toFixed(0)}`,
+  );
+  check(
+    `[hero ${label}] text column >= 460px`,
+    w - h >= 459.9,
+    `${Math.round(w - h)}px`,
+  );
+  check(
+    `[hero ${label}] capsule fills the hero when height-bound`,
+    h <= vh - 2 * inset + 0.01,
+    h === vh - 2 * inset ? "height-bound, fills" : `width-bound, ${Math.round(vh - 2 * inset - h)}px slack`,
+  );
 }
 
 /* ------------------------------------------------------------ declarations */
 
 check(
-  "left end radius is derived from --capsule-h, not hardcoded",
+  "leading end radius is derived from --capsule-h",
   /border-radius:\s*calc\(var\(--capsule-h[^)]*\)\s*\/\s*2\)/.test(html),
 );
 check(

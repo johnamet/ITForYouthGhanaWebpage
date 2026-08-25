@@ -190,10 +190,15 @@ button{font:inherit;color:inherit;}
      capsule taller than --capsule-h. In that case the left end degrades to a
      rounded end whose corner radius still matches the lens, rather than
      silently desynchronising. The right end stays a true round cap. */
+  /* Trailing corners take the panel radius, NOT 999px. When the radii on any
+     edge sum to more than that edge, CSS scales EVERY radius by one global
+     factor; 999px here drove that factor to 0.23, shrinking the leading corners
+     to ~53px and rounding the trailing end instead, so the shape came out
+     mirrored. */
   border-radius:
     calc(var(--capsule-h,460px) / 2)
-    var(--radius-capsule)
-    var(--radius-capsule)
+    var(--radius-panel)
+    var(--radius-panel)
     calc(var(--capsule-h,460px) / 2);
   background:
     linear-gradient(118deg,
@@ -472,7 +477,8 @@ button{font:inherit;color:inherit;}
     /* Stacked: the lens is the TOP lobe at full capsule width. Two 999px top
        radii overflow the width, so CSS scales both to exactly width/2, which
        is exactly the lens radius. Coincident at every viewport width. */
-    border-radius:var(--radius-capsule) var(--radius-capsule) var(--radius-panel) var(--radius-panel);
+    --capsule-w:min(440px,calc(100vw - 32px));
+    border-radius:calc(var(--capsule-w) / 2) calc(var(--capsule-w) / 2) var(--radius-panel) var(--radius-panel);
     animation-name:capsule-in-stacked;
   }
   .capsule__media{
