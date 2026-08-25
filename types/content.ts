@@ -796,6 +796,16 @@ export interface EcosystemCardContent {
 export interface PathwayCardContent {
   title: string;
   description: string;
+
+  /**
+   * Slugs of the initiatives this stage holds.
+   *
+   * The grouping previously existed only inside the description prose, which
+   * meant the page could describe the pathway but never show its structure.
+   * Optional so existing documents keep working; a stage with no slugs simply
+   * renders without branches.
+   */
+  initiativeSlugs?: string[];
 }
 
 export interface WhatWeDoGalleryItem {

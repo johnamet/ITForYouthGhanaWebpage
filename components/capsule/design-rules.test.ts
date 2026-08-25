@@ -24,6 +24,9 @@ const REDESIGNED = [
   "components/content/process-sequence.tsx",
   "components/home/hero-capsule-slideshow.tsx",
   "components/what-we-do/initiative-page.tsx",
+  "components/what-we-do/what-we-do-overview-page.tsx",
+  "components/what-we-do/initiative-orbit.tsx",
+  "components/what-we-do/pathway-tree.tsx",
 ];
 
 const read = (path: string) => readFileSync(path, "utf8");
@@ -106,9 +109,35 @@ describe("redesign design rules", () => {
     const globals = read("app/globals.css");
     assert.match(globals, /border-radius:\s*\n?\s*calc\(var\(--capsule-h\)\s*\/\s*2\)/);
     assert.ok(
-      /\.itfy-capsule__media\s*\{[^}]*align-self:\s*center/s.test(globals),
+      // [^}] already spans newlines, so the dotAll flag was never needed
+      // (and it requires an ES2018 target, which this tsconfig does not set).
+      /\.itfy-capsule__media\s*\{[^}]*align-self:\s*center/.test(globals),
       "the lens must be centred, never stretched, or it stops being square",
     );
+  });
+
+  it("keeps the pathway column weights out of an inline style", () => {
+    // An inline grid-template-columns outranks every utility class, so the
+    // stacked layout below 1024px could never override it.
+    const source = read("components/what-we-do/pathway-tree.tsx");
+    assert.ok(
+      !/gridTemplateColumns:/.test(source),
+      "column weights must arrive as --pathway-columns, not an inline grid declaration",
+    );
+    assert.match(source, /--pathway-columns/);
+
+    const globals = read("app/globals.css");
+    assert.match(globals, /\.itfy-pathway\s*\{[^}]*grid-template-columns:\s*var\(--pathway-columns/);
+    assert.match(globals, /@media \(max-width: 1023px\)[\s\S]{0,200}grid-template-columns:\s*1fr/);
+  });
+
+  it("gates the orbit's proximity behaviour on a hover-capable pointer", () => {
+    const source = read("components/what-we-do/initiative-orbit.tsx");
+    assert.match(source, /\(min-width: 821px\) and \(hover: hover\)/);
+    assert.match(source, /prefersReducedMotion/);
+    // Click and focus must work regardless of pointer capability.
+    assert.match(source, /onFocus=/);
+    assert.match(source, /href=\{`\/what-we-do\//);
   });
 
   it("keeps var() out of SVG presentation attributes", () => {

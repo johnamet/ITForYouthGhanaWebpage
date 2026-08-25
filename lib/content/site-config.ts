@@ -3124,21 +3124,25 @@ export const whatWeDoOverviewContent: WhatWeDoOverviewContent = {
       title: "Discover",
       description:
         "Community Outreach, Rural Tech Connect, and Tech Clubs bring more learners into the ecosystem early and repeatedly — especially in schools and underserved communities.",
+      initiativeSlugs: ["community-outreach", "rural-tech-connect", "tech-clubs"],
     },
     {
       title: "Develop",
       description:
         "Girls in Tech and Youth Tech Academy create the confidence, discipline, and practical skills needed for deeper progress and 85% progression outcomes.",
+      initiativeSlugs: ["girls-in-tech", "youth-academy"],
     },
     {
       title: "Apply",
       description:
         "Code Impact Challenge and Entrepreneurship Hub help learners test their skills in public, collaborative, and venture-facing formats with real stakes.",
+      initiativeSlugs: ["code-impact-challenge", "entrepreneurship-hub"],
     },
     {
       title: "Amplify",
       description:
         "Advocacy and partner-facing work ensure the wider ecosystem keeps making youth digital opportunity more possible at scale.",
+      initiativeSlugs: ["advocacy"],
     },
   ],
   nextStepsSectionEyebrow: "Next steps",

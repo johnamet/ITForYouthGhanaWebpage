@@ -423,6 +423,20 @@ export function WhatWeDoOverviewForm({ initial, endpoint }: WhatWeDoOverviewForm
               <div key={`pathway-${index}`} className="grid gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-2">
                 <Field label="Title" value={card.title} onChange={(value) => update("pathwayCards", values.pathwayCards.map((item, itemIndex) => (itemIndex === index ? { ...item, title: value } : item)))} />
                 <Field label="Description" value={card.description} multiline onChange={(value) => update("pathwayCards", values.pathwayCards.map((item, itemIndex) => (itemIndex === index ? { ...item, description: value } : item)))} />
+                <Field
+                  label="Initiative slugs (comma separated, e.g. girls-in-tech, youth-academy)"
+                  value={(card.initiativeSlugs ?? []).join(", ")}
+                  onChange={(value) =>
+                    update(
+                      "pathwayCards",
+                      values.pathwayCards.map((item, itemIndex) =>
+                        itemIndex === index
+                          ? { ...item, initiativeSlugs: value.split(",").map((slug) => slug.trim()).filter(Boolean) }
+                          : item,
+                      ),
+                    )
+                  }
+                />
                 <RemoveButton onClick={() => update("pathwayCards", values.pathwayCards.filter((_, itemIndex) => itemIndex !== index))} />
               </div>
             ))}
