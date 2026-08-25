@@ -36,8 +36,8 @@ type HeroCapsuleSlideshowProps = {
  * clicking: a re-forming shell strobes, and a morphing shell gets interrupted
  * mid-transition and parks in states nobody designed. A stable stadium also
  * keeps the action buttons from moving under the pointer. Slide identity is
- * carried instead by things that change without moving geometry: the stage
- * wash, the bloom, the eyebrow rule, the active pager bar and the ring.
+ * carried instead by things that change without moving geometry: the blurred
+ * shell background, the eyebrow rule, the active pager bar and the ring.
  */
 export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSlideshowProps) {
   const {
@@ -88,7 +88,7 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
               progress={canAutoplay && !isPaused ? progress : undefined}
               accent={accent}
               caption={slide.mediaCaption}
-              sizes="(max-width: 820px) 100vw, min(100svh, 100vw - 460px)"
+              sizes="(max-width: 440px) calc(100vw - 80px), (max-width: 820px) 392px, (max-width: 1280px) 42vw, 540px"
               priority
             />
           }
@@ -117,10 +117,8 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
           slideLabels={slides.map((item) => item.eyebrow)}
         />
 
-        {/* The scroll cue is gone, not silently. It sat bottom-centre, which is
-            now the middle of the lens, and a capsule that fills the hero leaves
-            no dead space to put it in. The controls already sit at the bottom
-            and read as interactive. */}
+        {/* The controls use the stage's reserved lower band, separate from the
+            media, text and CTA pair in the capsule. */}
       </SlideshowStage>
 
       {/* Announces the change without duplicating the heading on screen. */}

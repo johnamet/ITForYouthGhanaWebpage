@@ -15,6 +15,7 @@ import { describe, it } from "node:test";
  */
 const REDESIGNED = [
   "components/capsule/capsule-shell.tsx",
+  "components/capsule/capsule-ground.tsx",
   "components/capsule/capsule-media.tsx",
   "components/capsule/capsule-content.tsx",
   "components/capsule/capsule-actions.tsx",
@@ -123,6 +124,13 @@ describe("redesign design rules", () => {
     assert.match(source, /aria-label=\{`Slide \$\{slide \+ 1\}/);
   });
 
+  it("keeps slideshow controls usable on narrow phones", () => {
+    const source = read("components/capsule/slideshow-controls.tsx");
+    assert.match(source, /inline-flex size-11/);
+    assert.match(source, /gap-2 px-2 min-\[431px\]:gap-/);
+    assert.match(source, /hidden items-center gap-\[7px\] min-\[431px\]:flex/);
+  });
+
   it("puts the round end on the LEADING side, where the lens is", () => {
     // The bug this exists to prevent: CSS Backgrounds 3 section 5.5 scales
     // EVERY corner radius by one global factor f = min(Li / Si) when any side's
@@ -185,6 +193,47 @@ describe("redesign design rules", () => {
       /\.itfy-capsule__media\s*\{[^}]*align-self:\s*center/.test(globals),
       "the lens must be centred, never stretched, or it stops being square",
     );
+  });
+
+  it("keeps the homepage media inside a rounded rectangular shell", () => {
+    const globals = read("app/globals.css");
+    const heroShell = globals.match(/\.itfy-capsule\.itfy-capsule--hero\s*\{[^}]+\}/)?.[0];
+    const heroMedia = globals.match(/\.itfy-capsule--hero \.itfy-capsule__media\s*\{[^}]+\}/)?.[0];
+    const heroLens = globals.match(/\.itfy-capsule--hero \.itfy-lens\s*\{[^}]+\}/)?.[0];
+
+    assert.ok(heroShell, "missing hero capsule geometry");
+    assert.match(heroShell, /--capsule-h:\s*var\(--hero-capsule-h\)/);
+    assert.match(heroShell, /grid-template-columns:/);
+    assert.match(heroShell, /overflow:\s*hidden/);
+    assert.match(heroShell, /border-radius:\s*var\(--radius-panel\)/);
+    assert.ok(!/calc\(var\(--capsule-h\)\s*\/\s*2\)/.test(heroShell));
+
+    assert.ok(heroMedia, "missing contained media geometry");
+    assert.match(heroMedia, /padding:\s*var\(--hero-media-inset\)/);
+    assert.ok(heroLens, "missing contained lens geometry");
+    assert.match(heroLens, /position:\s*relative/);
+    assert.match(heroLens, /aspect-ratio:\s*1\s*\/\s*1/);
+  });
+
+  it("keeps the blurred duplicate inside the capsule, never on the stage", () => {
+    const hero = read("components/home/hero-capsule-slideshow.tsx");
+    const shell = read("components/capsule/capsule-shell.tsx");
+    const stage = read("components/capsule/slideshow-stage.tsx");
+    const ground = read("components/capsule/capsule-ground.tsx");
+
+    assert.match(hero, /background=\{\s*<CapsuleGround/);
+    assert.match(shell, /\{background\}/);
+    assert.match(ground, /itfy-capsule__ground-shot/);
+    assert.ok(!stage.includes('from "next/image"'), "the quiet stage must not render slide images");
+    assert.ok(!stage.includes("overlayFrom"), "the quiet stage must not own the slide wash");
+  });
+
+  it("removes the merge mask from the contained hero lens", () => {
+    const globals = read("app/globals.css");
+    const override = globals.match(/\.itfy-capsule--hero \.itfy-lens__frame\s*\{[^}]+\}/)?.[0];
+    assert.ok(override, "missing hero lens mask override");
+    assert.match(override, /-webkit-mask-image:\s*none/);
+    assert.match(override, /mask-image:\s*none/);
   });
 
   it("keeps the pathway column weights out of an inline style", () => {

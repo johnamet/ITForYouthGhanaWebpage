@@ -31,8 +31,8 @@ type CapsuleMediaProps = {
  *
  * The photograph is cropped to a circle with object-cover, because a contained
  * photograph inside a circle reads as a mistake where a circular crop reads as
- * deliberate portraiture. The complete uncropped frame stays visible on the
- * stage layer behind the capsule, so nothing is lost.
+ * deliberate portraiture. The active photograph is also present as the
+ * capsule-owned blurred background, so the crop remains visually grounded.
  */
 export function CapsuleMedia({
   images,

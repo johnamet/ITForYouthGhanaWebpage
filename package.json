@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "test": "node --no-warnings=MODULE_TYPELESS_PACKAGE_JSON --test \"**/*.test.ts\""
+    "test": "node --no-warnings=MODULE_TYPELESS_PACKAGE_JSON --test \"**/*.test.ts\"",
+    "eval:capsule": "node docs/design_iu_examples/hero-capsule-concept.eval.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

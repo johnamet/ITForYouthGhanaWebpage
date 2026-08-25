@@ -47,11 +47,9 @@ export function SlideshowControls({
   return (
     <div
       className={cn(
-        "absolute inset-x-0 bottom-[clamp(22px,4.5vh,44px)] z-20 flex items-center justify-center gap-[clamp(10px,2vw,22px)] px-4",
-        /* Offset by the lens diameter on desktop so the controls sit under the
-           text rather than on top of the photograph. --capsule-h is the lens
-           size, so this tracks the capsule automatically. */
-        "min-[821px]:pl-[calc(var(--capsule-h,0px)+2rem)]",
+        /* The stage reserves --hero-controls-h of extra bottom padding, so these
+           sit below the capsule rather than over the photograph. */
+        "absolute inset-x-0 bottom-[clamp(14px,2vh,26px)] z-20 flex items-center justify-center gap-2 px-2 min-[431px]:gap-[clamp(10px,2vw,22px)] min-[431px]:px-4",
         className,
       )}
     >
@@ -62,13 +60,13 @@ export function SlideshowControls({
         />
       </button>
 
-      <div className="flex items-center gap-3.5 rounded-capsule border border-white/20 bg-black/40 px-[18px] py-2.5 backdrop-blur-md">
+      <div className="flex items-center gap-3.5 rounded-capsule border border-white/20 bg-black/40 px-3 py-2.5 backdrop-blur-md min-[431px]:px-[18px]">
         <p className="whitespace-nowrap font-heading text-[13px] font-bold tracking-[0.06em] text-white">
           {String(index + 1).padStart(2, "0")}
           <span className="text-white/50"> / {String(count).padStart(2, "0")}</span>
         </p>
 
-        <div className="flex items-center gap-[7px]">
+        <div className="hidden items-center gap-[7px] min-[431px]:flex">
           {slideLabels.map((label, slide) => {
             const isCurrent = slide === index;
 

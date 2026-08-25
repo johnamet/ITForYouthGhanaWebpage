@@ -3,17 +3,14 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils/cn";
 
 type CapsuleShellProps = {
-  /** The circular lens. Becomes the shell's leading lobe. */
+  /** The circular lens. */
   media: ReactNode;
   /** The text side. */
   children: ReactNode;
-  /**
-   * Optional fill rendered behind the media and text and clipped to the shell's
-   * own radius. The hero passes a blurred copy of the slide photograph here.
-   */
+  /** Optional fill clipped to the shell, used by the homepage hero. */
   background?: ReactNode;
   tone?: "dark" | "paper";
-  /** "hero" fills the viewport; "inline" sits in the page flow. */
+  /** "hero" uses the contained homepage layout; "inline" uses the leading lobe. */
   variant?: "inline" | "hero";
   /** Set false for a shell that is already on screen, e.g. a static page. */
   animateIn?: boolean;
@@ -21,13 +18,12 @@ type CapsuleShellProps = {
 };
 
 /**
- * The capsule silhouette: one continuous shape in which the media is not placed
- * inside the shell, it IS the shell's leading lobe.
+ * The shared capsule silhouette.
  *
- * The leading (left) end is a semicircle whose radius equals half the lens
- * diameter, so the two arcs are the same arc and the outline has no seam. Both
- * come from a single --capsule-h custom property; see app/globals.css, which
- * also explains why the trailing corners must not be 999px.
+ * Inline capsules keep the established leading-lobe treatment. The homepage
+ * hero uses a contained-lens variant from the approved concept sketch: the
+ * media sits inside a rounded rectangular shell whose background is supplied
+ * through `background`.
  *
  * Deliberately knows nothing about slideshows. Give it static content and it is
  * a static capsule.
