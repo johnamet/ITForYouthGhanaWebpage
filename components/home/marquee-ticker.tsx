@@ -82,7 +82,10 @@ export function MarqueeTicker({ ticker }: MarqueeTickerProps) {
   const loopItems = [...baseItems, ...baseItems];
 
   return (
-    <section className="relative flex items-stretch border-t border-white/10 bg-gray-950">
+    <section
+      aria-label={`${modeLabel[ticker.mode]} ticker`}
+      className="relative flex items-stretch border-t border-white/10 bg-gray-950"
+    >
 
       {/* Fixed left label — no fill, just text + divider */}
       <div className="relative z-10 flex shrink-0 items-center gap-2.5 border-r border-white/10 px-5 py-0">
@@ -96,11 +99,12 @@ export function MarqueeTicker({ ticker }: MarqueeTickerProps) {
       </div>
 
       {/* Scrolling track */}
-      <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] motion-reduce:overflow-x-auto motion-reduce:[mask-image:none]">
         <div
           className={[
             "flex w-max items-center gap-8 whitespace-nowrap py-3",
             "animate-marquee",
+            "motion-reduce:animate-none motion-reduce:pr-8",
             speedStyles[ticker.speed ?? "medium"],
             ticker.pauseOnHover ? "hover:[animation-play-state:paused]" : "",
           ]
@@ -108,6 +112,7 @@ export function MarqueeTicker({ ticker }: MarqueeTickerProps) {
             .join(" ")}
         >
           {loopItems.map((item, index) => {
+            const isDuplicate = index >= effective.length;
             const inner = (
               <span className={`inline-flex items-center ${itemStyle(ticker.mode)}`}>
                 <ItemPrefix mode={ticker.mode} />
@@ -116,13 +121,19 @@ export function MarqueeTicker({ ticker }: MarqueeTickerProps) {
             );
 
             const content = item.href ? (
-              <Link href={item.href}>{inner}</Link>
+              <Link href={item.href} tabIndex={isDuplicate ? -1 : undefined}>
+                {inner}
+              </Link>
             ) : (
               inner
             );
 
             return (
-              <div key={`${item.label}-${index}`} className="inline-flex items-center gap-8">
+              <div
+                key={`${item.label}-${index}`}
+                aria-hidden={isDuplicate || undefined}
+                className={`inline-flex items-center gap-8 ${isDuplicate ? "motion-reduce:hidden" : ""}`}
+              >
                 {content}
                 <Separator />
               </div>
@@ -133,4 +144,3 @@ export function MarqueeTicker({ ticker }: MarqueeTickerProps) {
     </section>
   );
 }
-

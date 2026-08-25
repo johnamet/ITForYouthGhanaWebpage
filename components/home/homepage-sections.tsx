@@ -1,5 +1,6 @@
 import {
   getCmsHeroSlides,
+  getCmsHomepageTicker,
   getCmsProgrammeShowcase,
   getCmsOverviewSection,
   getCmsChallengeSection,
@@ -15,6 +16,7 @@ import { getCmsTestimonials } from "@/lib/cms/testimonials";
 import { getCmsImpactStats } from "@/lib/cms/impact-stats";
 
 import { HeroCapsuleSlideshow } from "@/components/home/hero-capsule-slideshow";
+import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { ImpactCounter } from "@/components/home/impact-counter";
 import { LegacyHomepageSections } from "@/components/home/legacy-homepage-sections";
 import { ProgrammeShowcase } from "@/components/home/programme-showcase";
@@ -28,12 +30,11 @@ import { ClosingBlock } from "@/components/home/closing-block";
 /**
  * The homepage composition.
  *
- * Three redundancies were removed rather than restyled:
+ * The marquee sits directly under the hero again. Its content remains CMS-owned
+ * and can carry announcements, news or partner names as well as statistics, so
+ * it is a distinct live-information layer rather than part of the hero copy.
  *
- *   The marquee ticker restated the impact counter's figures a few hundred
- *   pixels above it, so the page opened by making the same claim twice. The
- *   component, its CMS data and its admin editor all remain (the editor renders
- *   a live preview of it); it is only off the public page.
+ * Two redundancies remain folded together:
  *
  *   The overview section answered "what we do", which the programme showcase
  *   answered again further down. Its copy now drives the showcase heading,
@@ -43,7 +44,7 @@ import { ClosingBlock } from "@/components/home/closing-block";
  *   sections both asking the reader to act, splitting one decision across two
  *   screens. They are one closing block now.
  *
- * Fourteen rendered sections became eleven.
+ * Fourteen original sections became twelve.
  */
 export async function HomepageSections() {
   const [
@@ -52,6 +53,7 @@ export async function HomepageSections() {
     partners,
     impactStats,
     slides,
+    ticker,
     showcase,
     campaign,
     story,
@@ -66,6 +68,7 @@ export async function HomepageSections() {
     getCmsPartners(),
     getCmsImpactStats(),
     getCmsHeroSlides(),
+    getCmsHomepageTicker(),
     getCmsProgrammeShowcase(),
     getCmsDonationCampaign(),
     getCmsFeaturedStory(),
@@ -81,13 +84,16 @@ export async function HomepageSections() {
       {/* 1 ── Hero capsule slideshow */}
       <HeroCapsuleSlideshow slides={slides} interval={6000} />
 
-      {/* 2 ── Why this work exists, and what it aims at */}
+      {/* 2 ── CMS-controlled live information immediately under the hero */}
+      <MarqueeTicker ticker={ticker} />
+
+      {/* 3 ── Why this work exists, and what it aims at */}
       <LegacyHomepageSections challenge={challenge} mission={mission} />
 
-      {/* 3 ── Impact counter: the page's single figures moment */}
+      {/* 4 ── Impact counter */}
       <ImpactCounter stats={impactStats} />
 
-      {/* 4 ── What we do, led by the folded-in overview copy */}
+      {/* 5 ── What we do, led by the folded-in overview copy */}
       <ProgrammeShowcase
         items={showcase}
         intro={{
@@ -97,22 +103,22 @@ export async function HomepageSections() {
         }}
       />
 
-      {/* 5 ── Donation campaign */}
+      {/* 6 ── Donation campaign */}
       <DonationCampaign campaign={campaign} />
 
-      {/* 6 ── Featured story / video */}
+      {/* 7 ── Featured story / video */}
       <FeaturedStoryVideo story={story} />
 
-      {/* 7 ── Latest news & blog */}
+      {/* 8 ── Latest news & blog */}
       <LatestNewsGrid articles={articles} />
 
-      {/* 8 ── Student testimonials */}
+      {/* 9 ── Student testimonials */}
       <TestimonialsSection testimonials={testimonials} />
 
-      {/* 9 ── Partner strip */}
+      {/* 10 ── Partner strip */}
       <PartnersStrip partners={partners} />
 
-      {/* 10 ── One closing moment: pick a route, or stay in touch */}
+      {/* 11 ── One closing moment: pick a route, or stay in touch */}
       <ClosingBlock cards={joinCards} newsletter={newsletter} />
     </div>
   );
