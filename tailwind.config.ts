@@ -45,6 +45,8 @@ const config: Config = {
       borderRadius: {
         control: "0.375rem",
         media: "0.75rem",
+        panel: "1.5rem",
+        capsule: "999px",
       },
 
       spacing: {

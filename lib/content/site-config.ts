@@ -5,7 +5,7 @@
  * Replace your existing site-config.ts with this file entirely.
  */
 
-import type { HeroSlide }       from "@/components/home/hero-slideshow";
+import type { HeroSlide }       from "@/types/content";
 import type { MarqueeTickerContent } from "@/components/home/marquee-ticker";
 import type { FeaturedProgram } from "@/components/home/featured-programs";
 import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
@@ -2100,6 +2100,8 @@ export const heroSlides: HeroSlide[] = [
     image: "/images/randomPictures/maingraduationpic.jpg",
     overlayFrom: "rgba(10,15,40,0.88)",
     overlayTo: "rgba(10,15,40,0.35)",
+    accent: "#1E72BA",
+    mediaCaption: "Graduation day, Accra",
     cta: {
       primary:   { label: "Apply for Cohort 8", href: "/apply-for-training/courses" },
       secondary: { label: "See who can apply",  href: "/apply-for-training/who-can-apply" },
@@ -2113,6 +2115,8 @@ export const heroSlides: HeroSlide[] = [
     image: "/images/randomPictures/groupworkstudents.jpg",
     overlayFrom: "rgba(5,25,15,0.88)",
     overlayTo: "rgba(5,25,15,0.40)",
+    accent: "#D70B52",
+    mediaCaption: "Practical session, group work",
     cta: {
       primary:   { label: "Donate to Cohort 8", href: "/donate" },
       secondary: { label: "See our impact",     href: "/our-impact/reports" },
@@ -2126,6 +2130,8 @@ export const heroSlides: HeroSlide[] = [
     image: "/images/randomPictures/studentsBackcoding.jpg",
     overlayFrom: "rgba(30,15,5,0.88)",
     overlayTo: "rgba(30,15,5,0.40)",
+    accent: "#0152BE",
+    mediaCaption: "Cohort workstations, Accra",
     cta: {
       primary:   { label: "Work with us",        href: "/for-organisations" },
       secondary: { label: "Hire our graduates",  href: "/for-organisations/hire-graduates" },

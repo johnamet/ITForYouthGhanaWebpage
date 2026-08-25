@@ -185,6 +185,43 @@ export interface DepartmentProfile {
   order: number;
 }
 
+/**
+ * A single hero slide.
+ *
+ * Lives here rather than beside the hero component because lib/content and
+ * lib/cms both consume it: a data contract owned by presentation code is a
+ * dependency inversion, not a convenience.
+ */
+export interface HeroSlide {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  body: string;
+  image: string;
+
+  /**
+   * Per-slide panel colours, giving each slide its own identity.
+   * Example: overlayFrom "rgba(10,15,40,0.88)", overlayTo "rgba(10,15,40,0.35)".
+   */
+  overlayFrom: string;
+  overlayTo: string;
+
+  /**
+   * Optional per-slide identity colour, used for the lens progress ring, the
+   * eyebrow rule, the stage bloom and the active pager bar. Falls back to the
+   * brand primary when unset, so existing CMS documents keep working.
+   */
+  accent?: string;
+
+  /** Optional short caption shown on the lens. */
+  mediaCaption?: string;
+
+  cta: {
+    primary: { label: string; href: string };
+    secondary?: { label: string; href: string };
+  };
+}
+
 export interface HomepageSection {
   id: string;
   title: string;

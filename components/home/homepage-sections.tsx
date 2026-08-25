@@ -15,7 +15,7 @@ import { getCmsPartners } from "@/lib/cms/partners";
 import { getCmsTestimonials } from "@/lib/cms/testimonials";
 import { getCmsImpactStats } from "@/lib/cms/impact-stats";
 
-import { HeroSlideshow } from "@/components/home/hero-slideshow";
+import { HeroCapsuleSlideshow } from "@/components/home/hero-capsule-slideshow";
 import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { ImpactCounter } from "@/components/home/impact-counter";
 import { LegacyHomepageSections } from "@/components/home/legacy-homepage-sections";
@@ -64,7 +64,7 @@ export async function HomepageSections() {
   return (
     <div className="bg-white">
       {/* 1 ── Hero slideshow */}
-      <HeroSlideshow slides={slides} interval={6000} />
+      <HeroCapsuleSlideshow slides={slides} interval={6000} />
 
       {/* 2 ── Marquee ticker */}
       <MarqueeTicker ticker={ticker} />

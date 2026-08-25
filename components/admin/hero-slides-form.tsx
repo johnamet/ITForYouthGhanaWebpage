@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, ArrowDown, ArrowUp, CheckCircle2, Loader2, Plus, Save, Trash2 } from "lucide-react";
 
-import type { HeroSlide } from "@/components/home/hero-slideshow";
+import type { HeroSlide } from "@/types/content";
 
 type ApiResponse = { success?: boolean; message?: string };
 
@@ -53,6 +53,8 @@ export function HeroSlidesForm({ initial }: Props) {
       image: "",
       overlayFrom: "rgba(10,15,40,0.88)",
       overlayTo: "rgba(10,15,40,0.35)",
+      accent: "#1E72BA",
+      mediaCaption: "",
       cta: { primary: { label: "Learn more", href: "/" } },
     };
     setSlides((arr) => [...arr, newSlide]);
@@ -154,6 +156,37 @@ export function HeroSlidesForm({ initial }: Props) {
               <div>
                 <label className="text-sm font-bold text-brand-ink">Overlay to (rgba)</label>
                 <input className={input} value={s.overlayTo} onChange={(e) => update(i, "overlayTo", e.target.value)} />
+              </div>
+              <div>
+                <label className="text-sm font-bold text-brand-ink" htmlFor={`slide-accent-${i}`}>
+                  Accent colour (hex)
+                </label>
+                <input
+                  id={`slide-accent-${i}`}
+                  className={input}
+                  value={s.accent ?? ""}
+                  placeholder="#1E72BA"
+                  onChange={(e) => update(i, "accent", e.target.value)}
+                />
+                <p className="mt-1.5 text-xs text-brand-muted">
+                  Drives the progress ring, the eyebrow rule and the stage glow for this slide.
+                  Leave blank to use the brand primary.
+                </p>
+              </div>
+              <div>
+                <label className="text-sm font-bold text-brand-ink" htmlFor={`slide-caption-${i}`}>
+                  Media caption (optional)
+                </label>
+                <input
+                  id={`slide-caption-${i}`}
+                  className={input}
+                  value={s.mediaCaption ?? ""}
+                  placeholder="Graduation day, Accra"
+                  onChange={(e) => update(i, "mediaCaption", e.target.value)}
+                />
+                <p className="mt-1.5 text-xs text-brand-muted">
+                  Short label shown across the circular image. Hidden on small screens.
+                </p>
               </div>
               <div>
                 <label className="text-sm font-bold text-brand-ink">Primary CTA label</label>
