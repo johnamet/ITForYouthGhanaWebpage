@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback } from "react";
-
 import {
   CapsuleActions,
   CapsuleContent,
+  CapsuleGround,
   CapsuleMedia,
   CapsuleShell,
   SlideshowControls,
@@ -53,14 +52,6 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
     containerProps,
   } = useSlideshow({ count: slides.length, interval });
 
-  const scrollPastHero = useCallback(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({
-      top: window.innerHeight - 80,
-      behavior: prefersReducedMotion ? "auto" : "smooth",
-    });
-  }, []);
-
   if (!slides.length) return null;
 
   const slide = slides[index] ?? slides[0]!;
@@ -75,15 +66,17 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
       className="relative"
       {...containerProps}
     >
-      <SlideshowStage
-        images={slides.map((item) => ({ id: item.id, src: item.image }))}
-        activeIndex={index}
-        overlayFrom={overlayFrom}
-        overlayTo={overlayTo}
-        accent={accent}
-      >
+      <SlideshowStage>
         <CapsuleShell
-          className="max-w-[1180px]"
+          variant="hero"
+          background={
+            <CapsuleGround
+              images={slides.map((item) => ({ id: item.id, src: item.image }))}
+              activeIndex={index}
+              overlayFrom={overlayFrom}
+              overlayTo={overlayTo}
+            />
+          }
           media={
             <CapsuleMedia
               images={slides.map((item) => ({
@@ -95,6 +88,7 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
               progress={canAutoplay && !isPaused ? progress : undefined}
               accent={accent}
               caption={slide.mediaCaption}
+              sizes="(max-width: 820px) 100vw, min(100svh, 100vw - 460px)"
               priority
             />
           }
@@ -123,21 +117,10 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
           slideLabels={slides.map((item) => item.eyebrow)}
         />
 
-        <button
-          type="button"
-          onClick={scrollPastHero}
-          className="
-            absolute bottom-0 left-1/2 z-20 hidden -translate-x-1/2 flex-col
-            items-center gap-2 pb-2.5 text-[10px] font-bold uppercase
-            tracking-[0.22em] text-white/55 transition hover:text-white
-            focus-visible:text-white focus-visible:outline-none xl:flex
-          "
-        >
-          <span aria-hidden="true" className="relative h-11 w-px overflow-hidden bg-white/20">
-            <span className="itfy-animate-cue absolute left-0 top-0 block h-4 w-px bg-white" />
-          </span>
-          Scroll
-        </button>
+        {/* The scroll cue is gone, not silently. It sat bottom-centre, which is
+            now the middle of the lens, and a capsule that fills the hero leaves
+            no dead space to put it in. The controls already sit at the bottom
+            and read as interactive. */}
       </SlideshowStage>
 
       {/* Announces the change without duplicating the heading on screen. */}

@@ -271,10 +271,21 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
   align-items: stretch;
   width: 100%;
   min-height: var(--capsule-h);
+  /* Order is top-left, top-right, bottom-right, bottom-left. The LEADING (left)
+     end is a true semicircle matching the lens; the trailing end takes the
+     panel radius.
+
+     The right corners must NOT be 999px. When the radii on any edge sum to more
+     than that edge's length, CSS multiplies EVERY radius by one global factor
+     (Backgrounds 3, section 5.5). With 999px on the right, that factor was
+     0.23, which shrank the left corners to ~53px and left the right end round:
+     the capsule rendered mirrored. The two left radii now sum to exactly the
+     left edge length and no other edge overflows, so the factor stays at 1 and
+     these values render as written. */
   border-radius:
     calc(var(--capsule-h) / 2)
-    var(--radius-capsule)
-    var(--radius-capsule)
+    var(--radius-panel)
+    var(--radius-panel)
     calc(var(--capsule-h) / 2);
 }
 
@@ -284,6 +295,102 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
 
 @media (min-width: 1280px) {
   .itfy-capsule { --capsule-h: 460px; }
+}
+
+/* The hero capsule fills the hero rather than floating inside it.
+
+   --capsule-h drives the height, the lens diameter and the leading arc at once,
+   so all three stay locked together. It is height-bound on a normal landscape
+   monitor, which is the case that fills the hero; on an unusually tall or narrow
+   window it becomes width-bound instead, so the text column never collapses
+   below --hero-text-min. When that happens the capsule is shorter than the hero
+   and sits centred, because a coincident arc is the whole idea and is worth more
+   than the last few pixels of height.
+
+   The variables live on the STAGE, not the capsule, because custom properties
+   inherit: the slideshow controls are siblings of the capsule and need the same
+   --capsule-h to clear the lens. Defining it here means there is one value and
+   nothing to keep in sync. */
+.itfy-hero-stage {
+  --hero-inset: clamp(10px, 1.6vw, 24px);
+  --hero-text-min: 460px;
+  --capsule-h: min(
+    calc(100svh - 2 * var(--hero-inset)),
+    calc(100vw - 2 * var(--hero-inset) - var(--hero-text-min))
+  );
+  padding: var(--hero-inset);
+}
+
+/* Doubled class so this beats the width breakpoints above regardless of order. */
+.itfy-capsule.itfy-capsule--hero {
+  height: var(--capsule-h);
+  min-height: 0;
+}
+
+/* The dark tone is a glass panel: a translucent white gradient over whatever is
+   behind it, plus a backdrop blur. That was right for a capsule floating on a
+   photographic stage. It is wrong here twice over: the gradient would wash out
+   the photograph the capsule now carries itself, and the backdrop blur would be
+   sampling a flat dark ground, which costs compositing work for no visible
+   result. The border and shadow stay, because they are what separates the shell
+   from the inset frame. */
+.itfy-capsule--hero.itfy-capsule--dark {
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* The capsule's own fill: the slide photograph, blurred, clipped to the shell.
+   This is where the blurred duplicate lives now. It used to sit on the stage
+   behind the capsule, which is invisible once the capsule fills the hero. Same
+   image as the lens, two treatments: soft as the ground, sharp in the circle. */
+.itfy-capsule__ground {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.itfy-capsule__ground-shot {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 900ms ease-out;
+}
+
+.itfy-capsule__ground-shot[data-active="true"] {
+  opacity: 1;
+}
+
+.itfy-capsule__ground-shot img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  /* Generous blur and a slight overscale so no soft edge creeps inside the
+     shell's rounded corners. */
+  filter: blur(46px) saturate(115%);
+  transform: scale(1.16);
+  transition: transform 10s ease-out;
+}
+
+.itfy-capsule__ground-shot[data-active="true"] img {
+  transform: scale(1.06);
+}
+
+/* Per-slide wash over the blur, from the existing overlayFrom / overlayTo
+   contract, so text stays legible and each slide keeps its own identity. */
+.itfy-capsule__wash {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transition: background 900ms ease-out;
+}
+
+/* The media and the text sit above the ground. */
+.itfy-capsule__media,
+.itfy-capsule__content {
+  z-index: 2;
 }
 
 /* Tone: dark. Sits on a photographic stage and lets it read through. */
@@ -442,9 +549,14 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
     min-height: 0;
     max-width: 440px;
     margin-inline: auto;
+    /* Stacked, so the lens is the LEADING lobe at the top and the top radii
+       must be half the capsule WIDTH. Written as calc rather than 999px for the
+       same reason as above: 999px would drag the global scaling factor down and
+       crush the bottom corners from 24px to about 4px. */
+    --capsule-w: min(440px, calc(100vw - 32px));
     border-radius:
-      var(--radius-capsule)
-      var(--radius-capsule)
+      calc(var(--capsule-w) / 2)
+      calc(var(--capsule-w) / 2)
       var(--radius-panel)
       var(--radius-panel);
   }
@@ -486,45 +598,6 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
   }
 }
 
-/* --- Stage --------------------------------------------------------------- */
-
-.itfy-stage__layer {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 1s ease-out;
-}
-
-.itfy-stage__layer[data-active="true"] {
-  opacity: 1;
-}
-
-.itfy-stage__layer img {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  /* Kept from the previous hero, where it filled the dead space left by
-     object-contain. Here it is the atmospheric ground the capsule floats on
-     AND the layer that still shows every photograph in full. */
-  opacity: 0.5;
-  filter: blur(58px);
-  transform: scale(1.18);
-  transition: transform 10s ease-out;
-}
-
-.itfy-stage__layer[data-active="true"] img {
-  transform: scale(1.06);
-}
-
-.itfy-stage__grid {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
-
 /* --- Motion -------------------------------------------------------------- */
 
 @keyframes itfy-capsule-in {
@@ -532,35 +605,13 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
   to   { opacity: 1; transform: none; }
 }
 
-@keyframes itfy-bloom-drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(24px, -22px) scale(1.06); }
-}
-
-@keyframes itfy-bloom-drift-reverse {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(-22px, 20px) scale(1.06); }
-}
-
-@keyframes itfy-cue-fall {
-  0%   { transform: translateY(-18px); opacity: 0; }
-  45%  { opacity: 1; }
-  100% { transform: translateY(44px); opacity: 0; }
-}
-
 .itfy-animate-capsule-in { animation: itfy-capsule-in 1s cubic-bezier(0.16, 0.84, 0.44, 1) 0.1s both; }
-.itfy-animate-bloom      { animation: itfy-bloom-drift 9s ease-in-out infinite; }
-.itfy-animate-bloom-rev  { animation: itfy-bloom-drift-reverse 11s ease-in-out infinite; }
-.itfy-animate-cue        { animation: itfy-cue-fall 2.1s ease-in-out infinite; }
 
 /* Resting, fully-visible state. Autoplay itself is disabled in the
    controller, not here, because an auto-advancing carousel is the motion
    being opted out of. */
 @media (prefers-reduced-motion: reduce) {
-  .itfy-animate-capsule-in,
-  .itfy-animate-bloom,
-  .itfy-animate-bloom-rev,
-  .itfy-animate-cue {
+  .itfy-animate-capsule-in {
     animation: none !important;
   }
 
@@ -569,15 +620,16 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
     transform: none !important;
   }
 
-  .itfy-stage__layer,
-  .itfy-stage__layer img,
   .itfy-lens__shot,
-  .itfy-lens__shot img {
+  .itfy-lens__shot img,
+  .itfy-capsule__ground-shot,
+  .itfy-capsule__ground-shot img,
+  .itfy-capsule__wash {
     transition: none !important;
   }
 
-  .itfy-stage__layer img,
-  .itfy-lens__shot img {
+  .itfy-lens__shot img,
+  .itfy-capsule__ground-shot img {
     transform: none !important;
   }
 }

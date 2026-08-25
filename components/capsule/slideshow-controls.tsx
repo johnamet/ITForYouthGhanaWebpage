@@ -48,6 +48,10 @@ export function SlideshowControls({
     <div
       className={cn(
         "absolute inset-x-0 bottom-[clamp(22px,4.5vh,44px)] z-20 flex items-center justify-center gap-[clamp(10px,2vw,22px)] px-4",
+        /* Offset by the lens diameter on desktop so the controls sit under the
+           text rather than on top of the photograph. --capsule-h is the lens
+           size, so this tracks the capsule automatically. */
+        "min-[821px]:pl-[calc(var(--capsule-h,0px)+2rem)]",
         className,
       )}
     >

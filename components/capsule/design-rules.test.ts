@@ -98,8 +98,12 @@ describe("redesign design rules", () => {
   it("keeps every animation behind a reduced-motion fallback", () => {
     const globals = read("app/globals.css");
     const reduced = globals.slice(globals.indexOf("@media (prefers-reduced-motion: reduce)"));
-    for (const cls of ["itfy-animate-capsule-in", "itfy-animate-bloom", "itfy-animate-bloom-rev", "itfy-animate-cue"]) {
-      assert.ok(globals.includes(`.${cls}`), `${cls} is not defined`);
+    // The bloom and cue animations were removed with the stage they belonged to.
+    // Derived from the stylesheet rather than hardcoded, so the list cannot go
+    // stale again: every itfy-animate-* utility must have a fallback.
+    const defined = [...globals.matchAll(/\.(itfy-animate-[a-z-]+)\s*\{/g)].map((m) => m[1]);
+    assert.ok(defined.length > 0, "no itfy-animate-* utilities found");
+    for (const cls of defined) {
       assert.ok(reduced.includes(cls), `${cls} has no reduced-motion fallback`);
     }
   });
@@ -117,6 +121,59 @@ describe("redesign design rules", () => {
     }
     // Pager buttons build their label from the slide, so check the template.
     assert.match(source, /aria-label=\{`Slide \$\{slide \+ 1\}/);
+  });
+
+  it("puts the round end on the LEADING side, where the lens is", () => {
+    // The bug this exists to prevent: CSS Backgrounds 3 section 5.5 scales
+    // EVERY corner radius by one global factor f = min(Li / Si) when any side's
+    // radii overflow it. Declaring 999px on the trailing corners of a 1180x460
+    // shell drove f to 0.23, shrinking the 230px leading corners to 53px and
+    // leaving only the trailing end round: the capsule rendered mirrored.
+    const resolve = (w: number, h: number, tl: number, tr: number, br: number, bl: number) => {
+      const sides: Array<[number, number]> = [
+        [w, tl + tr],
+        [h, tr + br],
+        [w, br + bl],
+        [h, tl + bl],
+      ];
+      let f = 1;
+      for (const [length, sum] of sides) if (sum > 0) f = Math.min(f, length / sum);
+      return { tl: tl * f, tr: tr * f, br: br * f, bl: bl * f, f };
+    };
+
+    const PANEL = 24;
+
+    for (const [w, h] of [
+      [1180, 460],
+      [1872, 1032],
+      [1394, 854],
+      [991, 531],
+    ]) {
+      const r = resolve(w, h, h / 2, PANEL, PANEL, h / 2);
+      assert.equal(r.f, 1, `${w}x${h}: a side overflowed, so every radius shrank`);
+      assert.ok(
+        Math.abs(r.tl - h / 2) < 0.01 && Math.abs(r.bl - h / 2) < 0.01,
+        `${w}x${h}: leading arc ${r.tl} does not match the lens radius ${h / 2}`,
+      );
+      assert.ok(r.tl > r.tr, `${w}x${h}: the round end is on the trailing side`);
+    }
+
+    // And the regression itself must still be detectable by this model.
+    const broken = resolve(1180, 460, 230, 999, 999, 230);
+    assert.ok(broken.tl < broken.tr, "the model no longer reproduces the original bug");
+  });
+
+  it("never declares --radius-capsule on the capsule's trailing corners", () => {
+    const globals = read("app/globals.css");
+    const decl = globals
+      .slice(globals.indexOf(".itfy-capsule {"))
+      .match(/border-radius:[^;]+;/);
+    assert.ok(decl, "no border-radius found on .itfy-capsule");
+    assert.ok(
+      !/--radius-capsule/.test(decl[0]),
+      `999px on any corner drags the global scaling factor down: ${decl[0]}`,
+    );
+    assert.match(decl[0], /calc\(var\(--capsule-h\)\s*\/\s*2\)/);
   });
 
   it("derives the capsule end radius from the lens size", () => {
