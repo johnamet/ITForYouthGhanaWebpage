@@ -313,6 +313,14 @@ export interface InitiativeSectionContent {
 
 export interface InitiativePage extends SitePage {
   tagline: string;
+
+  /**
+   * The initiative's identity colour, used for the capsule rim, the eyebrow
+   * rule, section markers and the pathway node. Optional so existing Firestore
+   * documents keep working; falls back to the brand primary.
+   */
+  accent?: string;
+
   heroImage: string;
   overviewImage: string;
   mission: string;

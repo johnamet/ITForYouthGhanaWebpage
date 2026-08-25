@@ -498,6 +498,7 @@ export function InitiativeForm({ initial, endpoint }: InitiativeFormProps) {
           </div>
           <Field label="Hero image" value={values.heroImage} onChange={(value) => update("heroImage", value)} />
           <Field label="Overview image" value={values.overviewImage} onChange={(value) => update("overviewImage", value)} />
+          <Field label="Accent colour (hex, e.g. #D70B52)" value={values.accent ?? ""} onChange={(value) => update("accent", value)} />
           <div className="md:col-span-2">
             <Field label="Overview image alt text" value={values.sectionContent.overviewImageAlt} onChange={(value) => updateSectionContent("overviewImageAlt", value)} />
           </div>

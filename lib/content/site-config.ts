@@ -286,6 +286,7 @@ type InitiativeSeedConfig = {
   description: string;
   intro: string;
   tagline: string;
+  accent: string;
   heroImage: string;
   overviewImage: string;
   stats: InitiativePage["stats"];
@@ -326,6 +327,7 @@ function buildInitiativePage(config: InitiativeSeedConfig): InitiativePage {
     related: config.related,
     stats: config.stats,
     tagline: config.tagline,
+    accent: config.accent,
     heroImage: config.heroImage,
     overviewImage: config.overviewImage,
     mission: config.mission,
@@ -395,6 +397,7 @@ export const initiatives: InitiativePage[] = [
       "Girls in Tech is IT For Youth Ghana's flagship programme for gender inclusion. It combines rigorous technical training with confidence-building, female mentorship, and structured pathways that help young women persist and advance in technology careers.",
     tagline:
       "Building the next generation of confident, skilled young women in technology.",
+    accent: "#D70B52",
     heroImage: "/images/randomPictures/group_girls.jpg",
     overviewImage: "/images/randomPictures/groupofgirlsentrance.jpg",
     stats: [
@@ -473,6 +476,7 @@ export const initiatives: InitiativePage[] = [
       "The Youth Tech Academy is IT For Youth Ghana's flagship training pathway. It combines hands-on instruction in software development, design, and digital tools with real project work, mentorship, and structured transition support.",
     tagline:
       "From curiosity to capability — a disciplined pathway into Ghana's digital workforce.",
+    accent: "#1E72BA",
     heroImage: "/images/randomPictures/studentsBackcoding.jpg",
     overviewImage: "/images/randomPictures/groupworkstudents.jpg",
     stats: [
@@ -551,6 +555,7 @@ export const initiatives: InitiativePage[] = [
       "The Entrepreneurship Hub bridges technical capability and business execution. It gives learners and early founders the tools, feedback, and networks they need to move from concept to customer, prototype to product, and idea to income.",
     tagline:
       "Where digital skills become ventures — disciplined entrepreneurship for Ghana's next generation of founders.",
+    accent: "#0152BE",
     heroImage: "/images/randomPictures/studentpresenting.jpg",
     overviewImage: "/images/randomPictures/peterTalking.jpg",
     stats: [
@@ -629,6 +634,7 @@ export const initiatives: InitiativePage[] = [
       "The Code Impact Challenge gives learners a public, mission-focused format to apply their skills, collaborate under pressure, and deliver solutions to meaningful local problems. It transforms classroom learning into visible, community-relevant impact.",
     tagline:
       "Where technical skills meet real constraints — building, presenting, and delivering under pressure.",
+    accent: "#C44900",
     heroImage: "/images/randomPictures/redstudentgrouplesson.jpg",
     overviewImage: "/images/randomPictures/studentsblueclothing.jpg",
     stats: [
@@ -707,6 +713,7 @@ export const initiatives: InitiativePage[] = [
       "Rural Tech Connect closes the geography gap in digital opportunity. It brings exposure, practical training, and partnership-driven support to communities beyond major urban centres, creating visible pathways into ITFY's core programmes.",
     tagline:
       "Digital inclusion that begins with access, trust, and locally relevant delivery.",
+    accent: "#2A6F97",
     heroImage: "/images/randomPictures/children_holding_sign_in_streets.jpg",
     overviewImage: "/images/randomPictures/studentslisteningfrontal.JPG",
     stats: [
@@ -785,6 +792,7 @@ export const initiatives: InitiativePage[] = [
       "Community Outreach is ITFY's front door. It meets young people, families, schools, and communities before they are ready to apply or commit, building the awareness, trust, and understanding that make future participation possible.",
     tagline:
       "Where visibility, access, and community presence turn possibility into participation.",
+    accent: "#8B5E34",
     heroImage: "/images/randomPictures/studentslistening.jpg",
     overviewImage: "/images/randomPictures/peterblackboard.jpg",
     stats: [
@@ -863,6 +871,7 @@ export const initiatives: InitiativePage[] = [
       "Advocacy gives ITFY a voice beyond direct programme delivery. It turns field experience from cohorts, clubs, and outreach into public-facing influence, evidence-based dialogue, and stronger alignment across the youth digital opportunity ecosystem.",
     tagline:
       "Shaping the wider conditions that make youth digital opportunity more possible and more equitable.",
+    accent: "#A63D40",
     heroImage: "/images/randomPictures/graduationspeaking.jpg",
     overviewImage: "/images/randomPictures/mireiotalking.jpg",
     stats: [
@@ -941,6 +950,7 @@ export const initiatives: InitiativePage[] = [
       "Tech Clubs embed digital learning inside schools as a regular, peer-supported activity. Instead of isolated workshops, students gain consistent practice, build confidence together, and discover routes into deeper training and opportunity.",
     tagline:
       "Where weekly practice and peer community turn interest into lasting capability and visible next steps.",
+    accent: "#1F7A8C",
     heroImage: "/images/randomPictures/studentgroupguys.jpg",
     overviewImage: "/images/randomPictures/studentsblueclothing.jpg",
     stats: [
