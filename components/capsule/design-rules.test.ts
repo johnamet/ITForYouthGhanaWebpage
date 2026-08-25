@@ -15,7 +15,6 @@ import { describe, it } from "node:test";
  */
 const REDESIGNED = [
   "components/capsule/capsule-shell.tsx",
-  "components/capsule/capsule-ground.tsx",
   "components/capsule/capsule-media.tsx",
   "components/capsule/capsule-content.tsx",
   "components/capsule/capsule-actions.tsx",
@@ -215,17 +214,41 @@ describe("redesign design rules", () => {
     assert.match(heroLens, /aspect-ratio:\s*1\s*\/\s*1/);
   });
 
-  it("keeps the blurred duplicate inside the capsule, never on the stage", () => {
+  it("puts the blurred duplicate on the HERO, not inside the capsule", () => {
+    // The concept sketch labels the blur "blurred media as bg" with the arrow
+    // pointing at the hero behind the shell. It has to be visible AROUND the
+    // capsule for that to mean anything: sharp in the lens, soft everywhere
+    // else. Clipping it inside the shell left the hero a flat navy field, and
+    // an earlier version of this test asserted exactly that wrong arrangement.
     const hero = read("components/home/hero-capsule-slideshow.tsx");
     const shell = read("components/capsule/capsule-shell.tsx");
     const stage = read("components/capsule/slideshow-stage.tsx");
-    const ground = read("components/capsule/capsule-ground.tsx");
 
-    assert.match(hero, /background=\{\s*<CapsuleGround/);
-    assert.match(shell, /\{background\}/);
-    assert.match(ground, /itfy-capsule__ground-shot/);
-    assert.ok(!stage.includes('from "next/image"'), "the quiet stage must not render slide images");
-    assert.ok(!stage.includes("overlayFrom"), "the quiet stage must not own the slide wash");
+    assert.match(stage, /from "next\/image"/, "the stage must render the slide images");
+    assert.match(stage, /itfy-stage__shot/);
+    assert.match(stage, /overlayFrom/, "the stage owns the per-slide wash");
+    assert.match(hero, /<SlideshowStage[\s\S]{0,200}images=\{slides\.map/);
+
+    assert.ok(
+      !shell.includes("{background}"),
+      "the shell must not carry a background slot once the blur lives on the stage",
+    );
+    assert.ok(
+      !hero.includes("CapsuleGround"),
+      "CapsuleGround was removed; its job is the stage's now",
+    );
+  });
+
+  it("keeps the hero shell translucent so the blur reads through it", () => {
+    const globals = read("app/globals.css");
+    const block = globals
+      .slice(globals.indexOf(".itfy-capsule--hero.itfy-capsule--dark"))
+      .slice(0, 400);
+    assert.match(block, /backdrop-filter:\s*blur/, "a glass shell over a photograph needs the blur");
+    assert.ok(
+      !/backdrop-filter:\s*none/.test(block),
+      "the shell had backdrop-filter disabled while the photo sat inside it; there is a photo behind it now",
+    );
   });
 
   it("removes the merge mask from the contained hero lens", () => {

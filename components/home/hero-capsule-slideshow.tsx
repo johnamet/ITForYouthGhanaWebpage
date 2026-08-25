@@ -3,7 +3,6 @@
 import {
   CapsuleActions,
   CapsuleContent,
-  CapsuleGround,
   CapsuleMedia,
   CapsuleShell,
   SlideshowControls,
@@ -66,17 +65,14 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
       className="relative"
       {...containerProps}
     >
-      <SlideshowStage>
+      <SlideshowStage
+        images={slides.map((item) => ({ id: item.id, src: item.image }))}
+        activeIndex={index}
+        overlayFrom={overlayFrom}
+        overlayTo={overlayTo}
+      >
         <CapsuleShell
           variant="hero"
-          background={
-            <CapsuleGround
-              images={slides.map((item) => ({ id: item.id, src: item.image }))}
-              activeIndex={index}
-              overlayFrom={overlayFrom}
-              overlayTo={overlayTo}
-            />
-          }
           media={
             <CapsuleMedia
               images={slides.map((item) => ({

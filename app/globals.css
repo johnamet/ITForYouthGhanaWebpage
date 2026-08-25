@@ -340,43 +340,56 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
   border-radius: var(--radius-panel);
 }
 
-/* THE CAPSULE BACKGROUND: the active lens photograph, blurred and clipped to
-   the 24px shell. The surrounding hero stage stays the quiet deep navy shown in
-   the sketch. */
-.itfy-capsule__ground {
+/* THE HERO BACKGROUND
+   ---------------------------------------------------------------------------
+   The blurred photograph belongs to the HERO, not to the capsule. The sketch
+   labels it "blurred media as bg" with the arrow pointing at the hero behind
+   the shell, and it has to be visible around the capsule for that to mean
+   anything: the same image reads sharp inside the circular lens and soft
+   everywhere else, which is what ties the shell to its ground.
+
+   It was previously clipped inside the capsule, which put it entirely behind
+   the shell and left the hero a flat navy field.
+
+   This is also what preserves the guarantee the original object-contain hero
+   made: the lens crops to a circle, but the complete uncropped frame is still
+   on screen, here. */
+.itfy-stage__bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  border-radius: inherit;
-  background: var(--color-primary-dark);
+  background: #05070f;
 }
 
-.itfy-capsule__ground-shot {
+.itfy-stage__shot {
+  /* Bleeds past the edges so the blur never feathers into a visible seam. */
   position: absolute;
-  inset: -42px;
+  inset: -60px;
   opacity: 0;
   transition: opacity 900ms ease-out;
 }
 
-.itfy-capsule__ground-shot[data-active="true"] {
+.itfy-stage__shot[data-active="true"] {
   opacity: 1;
 }
 
-.itfy-capsule__ground-shot img {
+.itfy-stage__shot img {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  filter: blur(38px) saturate(115%) brightness(0.46);
-  transform: scale(1.14);
+  filter: blur(52px) saturate(115%) brightness(0.52);
+  transform: scale(1.12);
   transition: transform 10s ease-out;
 }
 
-.itfy-capsule__ground-shot[data-active="true"] img {
-  transform: scale(1.06);
+.itfy-stage__shot[data-active="true"] img {
+  transform: scale(1.04);
 }
 
-.itfy-capsule__wash {
+/* Per-slide wash over the blur, from the existing overlayFrom / overlayTo
+   contract, so the capsule stays legible and each slide keeps its identity. */
+.itfy-stage__wash {
   position: absolute;
   inset: 0;
   transition: background 900ms ease-out;
@@ -405,13 +418,19 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
   -webkit-backdrop-filter: blur(26px) saturate(125%);
 }
 
-/* The hero already carries a deliberately darkened photograph. A second glass
-   fill would wash it out, and backdrop-filter would sample only the flat stage
-   behind the shell. */
+/* The shell is translucent glass over the hero's blurred photograph, which is
+   what a backdrop blur is actually for. It was a flat navy fill while the
+   photograph sat inside the capsule and there was nothing behind the shell to
+   sample. Now there is. */
 .itfy-capsule--hero.itfy-capsule--dark {
-  background: var(--color-primary-dark);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: linear-gradient(
+    118deg,
+    rgba(4, 10, 24, 0.62) 0%,
+    rgba(4, 10, 24, 0.48) 45%,
+    rgba(4, 10, 24, 0.38) 100%
+  );
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
 }
 
 /* Tone: paper. For the same form on a light editorial page. */
@@ -691,14 +710,14 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
 
   .itfy-lens__shot,
   .itfy-lens__shot img,
-  .itfy-capsule__ground-shot,
-  .itfy-capsule__ground-shot img,
-  .itfy-capsule__wash {
+  .itfy-stage__shot,
+  .itfy-stage__shot img,
+  .itfy-stage__wash {
     transition: none !important;
   }
 
   .itfy-lens__shot img,
-  .itfy-capsule__ground-shot img {
+  .itfy-stage__shot img {
     transform: none !important;
   }
 }

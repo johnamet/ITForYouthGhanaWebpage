@@ -8,7 +8,6 @@ type CapsuleShellProps = {
   /** The text side. */
   children: ReactNode;
   /** Optional fill clipped to the shell, used by the homepage hero. */
-  background?: ReactNode;
   tone?: "dark" | "paper";
   /** "hero" uses the contained homepage layout; "inline" uses the leading lobe. */
   variant?: "inline" | "hero";
@@ -21,9 +20,9 @@ type CapsuleShellProps = {
  * The shared capsule silhouette.
  *
  * Inline capsules keep the established leading-lobe treatment. The homepage
- * hero uses a contained-lens variant from the approved concept sketch: the
- * media sits inside a rounded rectangular shell whose background is supplied
- * through `background`.
+ * hero uses the contained-lens variant from the concept sketch: the circular
+ * media sits inside a rounded rectangular shell, and the shell is translucent
+ * glass over the hero's own blurred photograph, which SlideshowStage owns.
  *
  * Deliberately knows nothing about slideshows. Give it static content and it is
  * a static capsule.
@@ -31,7 +30,6 @@ type CapsuleShellProps = {
 export function CapsuleShell({
   media,
   children,
-  background,
   tone = "dark",
   variant = "inline",
   animateIn = true,
@@ -47,7 +45,6 @@ export function CapsuleShell({
         className,
       )}
     >
-      {background}
       <div className="itfy-capsule__media">{media}</div>
       <div className="itfy-capsule__content">{children}</div>
     </div>

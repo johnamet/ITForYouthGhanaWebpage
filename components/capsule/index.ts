@@ -10,7 +10,6 @@
 export { CapsuleShell } from "@/components/capsule/capsule-shell";
 export { CapsulePageHero } from "@/components/capsule/capsule-page-hero";
 export { CapsuleMedia } from "@/components/capsule/capsule-media";
-export { CapsuleGround } from "@/components/capsule/capsule-ground";
 export { CapsuleContent } from "@/components/capsule/capsule-content";
 export { CapsuleActions } from "@/components/capsule/capsule-actions";
 export { SlideshowStage } from "@/components/capsule/slideshow-stage";
