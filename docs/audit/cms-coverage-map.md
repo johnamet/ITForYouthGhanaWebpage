@@ -11,9 +11,9 @@ One row per public route, with the sections it renders and the content path behi
 | Measure | Count |
 | --- | --- |
 | public routes | 32 |
-| full coverage | 18 |
+| full coverage | 19 |
 | partial coverage | 9 |
-| no coverage | 5 |
+| no coverage | 4 |
 | readers discovered | 60 |
 
 ## Coverage by route
@@ -23,30 +23,30 @@ One row per public route, with the sections it renders and the content path behi
 | `/` | getCmsChallengeSection<br>getCmsDonationCampaign<br>getCmsFeaturedArticles<br>getCmsFeaturedStory<br>getCmsHeroSlides<br>getCmsHomepageTicker<br>getCmsImpactStats<br>getCmsJoinCtaCards<br>getCmsMissionSection<br>getCmsNewsletterSignup<br>getCmsOverviewSection<br>getCmsPartners<br>getCmsProgrammeShowcase<br>getCmsTestimonials | homepage, impactStats, partners, testimonials | `/admin/content/homepage`<br>`/admin/content/banner`<br>`/admin/content/hero-slides`<br>`/admin/content/impact-stats` | yes | full |
 | `/apply-for-training` | getCmsApplyForTrainingPage | _none_ | `/admin/content/apply-for-training` | yes | full |
 | `/apply-for-training/courses` | getCmsTrainingCoursesPage | _none_ | `/admin/content/apply-for-training-courses` | yes | full |
-| `/apply-for-training/courses/[slug]` | getCmsTrainingCoursesPage | _none_ | **missing** | **no** | **partial** |
+| `/apply-for-training/courses/[slug]` | getCmsTrainingCoursesPage | _none_ | **missing** | yes | **partial** |
 | `/apply-for-training/how-it-works` | getCmsTrainingHowItWorksPage | _none_ | `/admin/content/apply-for-training-how-it-works` | yes | full |
 | `/apply-for-training/who-can-apply` | getCmsTrainingWhoCanApplyPage | _none_ | `/admin/content/apply-for-training-who-can-apply` | yes | full |
 | `/contact` | getCmsContactPage | siteContent | `/admin/content/contact` | yes | full |
 | `/departments` | getCmsDepartments | departments | **missing** | yes | **partial** |
-| `/departments/[slug]` | getCmsDepartmentBySlug<br>getCmsDepartments<br>getCmsTeamMembers | departments, team | **missing** | **no** | **partial** |
-| `/donate` | _none_ | _none_ | `/admin/content/donation-campaign` | **no** | **none** |
+| `/departments/[slug]` | getCmsDepartmentBySlug<br>getCmsDepartments<br>getCmsTeamMembers | departments, team | **missing** | yes | **partial** |
+| `/donate` | getCmsDonationCampaign | homepage | `/admin/content/donation-campaign` | yes | full |
 | `/for-organisations` | getCmsOrganisationOverview<br>getCmsOrganisationServices | forOrganisations | `/admin/programmes/for-organisations/overview` | yes | full |
-| `/for-organisations/[slug]` | getCmsOrganisationService | forOrganisations | **missing** | **no** | **partial** |
+| `/for-organisations/[slug]` | getCmsOrganisationService | forOrganisations | **missing** | yes | **partial** |
 | `/news-and-updates` | getCmsNewsPage<br>getCmsPublishedArticles | _none_ | `/admin/news-and-updates/hub` | yes | full |
 | `/news-and-updates/[category]` | getCmsArticleCategoryContent<br>getCmsArticleTags<br>getCmsArticlesByCategory | _none_ | `/admin/news-and-updates` | yes | full |
-| `/news-and-updates/[category]/[slug]` | getCmsArticleBySlug<br>getCmsPublishedArticles<br>getCmsRelatedArticles | _none_ | **missing** | **no** | **partial** |
+| `/news-and-updates/[category]/[slug]` | getCmsArticleBySlug<br>getCmsPublishedArticles<br>getCmsRelatedArticles | _none_ | **missing** | yes | **partial** |
 | `/our-impact` | getCmsImpactPage<br>getCmsPartners | partners | `/admin/our-impact` | yes | full |
 | `/our-impact/reports` | getCmsImpactPage | _none_ | `/admin/our-impact` | yes | full |
 | `/our-impact/sdgs` | getCmsImpactPage | _none_ | `/admin/our-impact` | yes | full |
 | `/our-impact/testimonials` | getCmsImpactPage | _none_ | `/admin/content/featured-story`<br>`/admin/testimonials` | yes | full |
 | `/partner-with-us` | getCmsPartnershipOverview<br>getCmsPartnershipTracks | partnerships | `/admin/partner-with-us/overview` | yes | full |
-| `/partner-with-us/[slug]` | getCmsPartnershipTrackBySlug | partnerships | **missing** | **no** | **partial** |
-| `/programs` | _none_ | _none_ | **missing** | **no** | **none** |
-| `/programs/[category]` | _none_ | _none_ | **missing** | **no** | **none** |
-| `/programs/[category]/[courseId]` | _none_ | _none_ | **missing** | **no** | **none** |
-| `/programs/course/[courseSlug]` | _none_ | _none_ | **missing** | **no** | **none** |
+| `/partner-with-us/[slug]` | getCmsPartnershipTrackBySlug | partnerships | **missing** | yes | **partial** |
+| `/programs` | _none_ | _none_ | **missing** | yes | **none** |
+| `/programs/[category]` | _none_ | _none_ | **missing** | yes | **none** |
+| `/programs/[category]/[courseId]` | _none_ | _none_ | **missing** | yes | **none** |
+| `/programs/course/[courseSlug]` | _none_ | _none_ | **missing** | yes | **none** |
 | `/what-we-do` | getCmsInitiatives<br>getCmsWhatWeDoOverview | initiatives, siteContent | `/admin/programmes`<br>`/admin/what-we-do-pages` | yes | full |
-| `/what-we-do/[slug]` | getCmsInitiativeBySlug<br>getCmsInitiatives<br>getCmsWhatWeDoDynamicPageBySlug<br>getCmsWhatWeDoDynamicPages | initiatives, siteContent | **missing** | **no** | **partial** |
+| `/what-we-do/[slug]` | getCmsInitiativeBySlug<br>getCmsInitiatives<br>getCmsWhatWeDoDynamicPageBySlug<br>getCmsWhatWeDoDynamicPages | initiatives, siteContent | **missing** | yes | **partial** |
 | `/who-we-are` | getCmsWhoWeArePage | _none_ | **missing** | yes | **partial** |
 | `/who-we-are/[slug]` | getCmsWhoWeAreDynamicPageBySlug<br>getCmsWhoWeAreDynamicPages | siteContent | `/admin/team`<br>`/admin/partners` | yes | full |
 | `/who-we-are/careers` | getCmsJobs<br>getCmsSitePage | jobListings, siteContent | **missing** | yes | **partial** |

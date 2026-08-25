@@ -1,5 +1,9 @@
 export const revalidationMap: Record<string, string[]> = {
   homepage: ["/"],
+  /* The donation campaign appears in the homepage block AND on /donate, and had
+     no entry at all, so saving it revalidated nothing and edits stayed
+     invisible until the next deploy. */
+  donationCampaign: ["/", "/donate"],
   initiative: ["/what-we-do"],
   organisation: ["/for-organisations"],
   partnership: ["/partner-with-us"],

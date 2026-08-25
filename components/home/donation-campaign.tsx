@@ -5,22 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock3, HeartHandshake, Users } from "lucide-react";
 
-export type DonationCampaignContent = {
-  id: string;
-  eyebrow: string;
-  headline: string;
-  description: string;
-  image?: string;
-  currency?: string;
-  goalAmount: number;
-  raisedAmount: number;
-  donorCount: number;
-  deadline: string;
-  supportPoints?: string[];
-  primaryCta: { label: string; href: string };
-  secondaryCta?: { label: string; href: string };
-  active?: boolean;
-};
+/* Re-exported so existing importers of this module keep working; the contract
+   itself lives in types/content.ts. */
+import type { DonationCampaignContent } from "@/types/content";
+
+export type { DonationCampaignContent };
 
 type DonationCampaignProps = {
   campaign: DonationCampaignContent;

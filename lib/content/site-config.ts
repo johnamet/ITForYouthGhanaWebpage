@@ -10,7 +10,7 @@ import type { MarqueeTickerContent } from "@/components/home/marquee-ticker";
 import type { FeaturedProgram } from "@/components/home/featured-programs";
 import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
 import type { ChallengeSectionContent, MissionSectionContent, OverviewSectionContent } from "@/components/home/legacy-homepage-sections";
-import type { DonationCampaignContent } from "@/components/home/donation-campaign";
+import type { DonationCampaignContent } from "@/types/content";
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";
 import type { JoinCtaCard } from "@/types/content";
 import type { NewsletterSignupContent } from "@/types/content";

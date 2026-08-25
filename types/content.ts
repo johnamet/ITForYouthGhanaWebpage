@@ -228,6 +228,30 @@ export interface HeroSlide {
  * Lives here rather than beside a component because lib/content and lib/cms
  * both consume it.
  */
+/**
+ * The active donation campaign.
+ *
+ * Lives here rather than beside the component because lib/content, lib/cms, the
+ * admin editor and two public routes all consume it: a data contract owned by
+ * presentation code is a dependency inversion, not a convenience.
+ */
+export type DonationCampaignContent = {
+  id: string;
+  eyebrow: string;
+  headline: string;
+  description: string;
+  image?: string;
+  currency?: string;
+  goalAmount: number;
+  raisedAmount: number;
+  donorCount: number;
+  deadline: string;
+  supportPoints?: string[];
+  primaryCta: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  active?: boolean;
+};
+
 export interface JoinCtaCard {
   id: string;
   eyebrow: string;

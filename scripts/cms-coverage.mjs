@@ -94,9 +94,30 @@ function editorsFor(route) {
 /* -------------------------------------------------------------- revalidation */
 
 const revalidateSrc = read("lib/utils/revalidate.ts");
+
+/* Static entries in revalidationMap. */
 const revalidatedPaths = new Set(
   [...revalidateSrc.matchAll(/"(\/[^"]*)"/g)].map((m) => m[1]),
 );
+
+/* getRevalidationPaths also appends slug paths at runtime, e.g.
+   paths.add(`/what-we-do/${slug}`). Reading only the static map reported every
+   dynamic route as unrevalidated, which was a false-positive class of its own.
+   Those templates are collected here and treated as covering the matching
+   dynamic route. */
+for (const m of revalidateSrc.matchAll(/paths\.add\(`([^`]+)`\)/g)) {
+  revalidatedPaths.add(m[1].replace(/\$\{slug\}/g, "[slug]"));
+}
+
+/* Rendered on demand from the live course API, so there is no cached page to
+   revalidate. Recorded as a deliberate exception rather than a gap. */
+const DYNAMIC_BY_DESIGN = new Set([
+  "/programs",
+  "/programs/[category]",
+  "/programs/[category]/[courseId]",
+  "/programs/course/[courseSlug]",
+  "/apply-for-training/courses/[slug]",
+]);
 
 /* ------------------------------------------ component tree -> readers per page */
 
@@ -162,7 +183,10 @@ const rows = publicPages.map((p) => {
     collections,
     readersWithoutFallback: noFallback,
     adminEditors: admin,
-    revalidated: [...revalidatedPaths].some((path) => routeMatches(p.route, path)),
+    revalidated:
+      DYNAMIC_BY_DESIGN.has(p.route) ||
+      [...revalidatedPaths].some((path) => routeMatches(p.route, path)),
+    dynamicByDesign: DYNAMIC_BY_DESIGN.has(p.route),
     scaffold,
     verdict,
   };
@@ -205,7 +229,12 @@ if (process.argv.includes("--json")) {
   }
 
   console.log("\n  ROUTES NOT IN THE REVALIDATION MAP");
-  for (const r of rows.filter((x) => !x.revalidated)) console.log(`    ${r.route}`);
+  const unrev = rows.filter((x) => !x.revalidated);
+  if (!unrev.length) console.log("    none");
+  for (const r of unrev) console.log(`    ${r.route}`);
+
+  console.log("\n  RENDERED ON DEMAND BY DESIGN (no cached page to revalidate)");
+  for (const r of rows.filter((x) => x.dynamicByDesign)) console.log(`    ${r.route}`);
 
   const nf = [...readers.values()].filter((r) => !r.hasFallback && !r.operational);
   if (nf.length) {

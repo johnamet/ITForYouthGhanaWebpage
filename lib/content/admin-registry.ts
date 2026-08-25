@@ -1,6 +1,7 @@
 // lib/content/admin-registry.ts
 // Central registry for Admin Content Explorer (hubs -> pages/collections)
 
+import { initiatives } from "@/lib/content/site-config";
 import { organisationServices } from "@/lib/content/organisation-config";
 import { partnershipTracks } from "@/lib/content/partnership-config";
 
@@ -58,6 +59,20 @@ export const adminNodes: AdminNode[] = [
   // What We Do
   { key: "what.initiatives", hub: "what-we-do", label: "Initiatives", type: "collection", adminPath: "/admin/programmes", previewHref: "/what-we-do" },
   { key: "what.custom-pages", hub: "what-we-do", label: "Custom Pages", type: "collection", adminPath: "/admin/what-we-do-pages", previewHref: "/what-we-do" },
+  /* The two nodes above both preview the /what-we-do hub, so the eight
+     initiative detail pages were not discoverable in the Content Explorer and
+     their preview links landed on the hub instead of the page being edited.
+     Generated from the seed so the list cannot drift from the initiatives that
+     actually exist. */
+  ...initiatives.map((initiative) => ({
+    key: `what.initiative.${initiative.slug}`,
+    hub: "what-we-do",
+    label: initiative.title,
+    type: "singleton" as const,
+    adminPath: `/admin/programmes/${initiative.slug}`,
+    previewHref: `/what-we-do/${initiative.slug}`,
+    revalidateTag: "initiative",
+  })),
 
   // Apply for Training
   { key: "apply.landing",   hub: "apply-for-training", label: "Landing",       type: "singleton",  adminPath: "/admin/content/apply-for-training", previewHref: "/apply-for-training" },
