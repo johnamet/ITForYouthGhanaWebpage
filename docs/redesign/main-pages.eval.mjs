@@ -7,6 +7,7 @@ const homepage = read("components/home/homepage-sections.tsx");
 const renderer = read("components/page-sections/page-section-renderer.tsx");
 const schema = read("lib/page-sections/schema.ts");
 const contract = read("types/page-sections.ts");
+const hero = read("components/page-sections/editorial-hero.tsx");
 
 const pages = [
   { route: "/", template: "01-homepage.html", component: "components/home/homepage-sections.tsx", ids: ["home-hero", "home-manifesto", "home-programmes", "home-impact", "home-story", "home-involve", "home-news", "home-closing"] },
@@ -52,7 +53,9 @@ for (const type of types) {
 }
 check("registry: exhaustive fallback", renderer.includes("assertNever(section)"), "compile-time exhaustiveness");
 check("accessibility: no placeholder links", !renderer.includes('href={item.action?.href ?? "#"}'), "non-links render as semantic articles");
-check("accessibility: reduced motion", read("components/page-sections/editorial-hero.tsx").includes("prefers-reduced-motion: reduce"), "autoplay disabled");
+check("accessibility: reduced motion", hero.includes("prefers-reduced-motion: reduce"), "autoplay disabled");
+check("hero: desktop image left, copy right", hero.includes("lg:left-5") && hero.includes("lg:ml-auto"), "mirrored editorial composition");
+check("hero: laptop viewport fit", hero.includes("lg:min-h-[clamp(560px,calc(100svh-10rem),640px)]") && hero.includes("lg:py-5"), "viewport-aware height from 560px to 640px");
 
 const passed = checks.filter((item) => item.pass).length;
 const score = Math.round((passed / checks.length) * 100);

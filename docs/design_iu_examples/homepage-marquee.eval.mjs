@@ -10,8 +10,10 @@ const evidence = {
   cmsFetch: /getCmsHomepageTicker\(\)/.test(homepage),
   publicRender: /<MarqueeTicker ticker=\{ticker\} \/>/.test(homepage),
   followsHero:
-    homepage.indexOf("<MarqueeTicker") > homepage.indexOf("<HeroCapsuleSlideshow") &&
-    homepage.indexOf("<MarqueeTicker") < homepage.indexOf("<LegacyHomepageSections"),
+    homepage.indexOf("<MarqueeTicker ticker={ticker} />") >
+      homepage.indexOf("<PageSectionRenderer sections={sections.slice(0, 1)}") &&
+    homepage.indexOf("<MarqueeTicker ticker={ticker} />") <
+      homepage.indexOf("<SectionNavigation sections={sections} />"),
   namedRegion: /aria-label=\{`\$\{modeLabel\[ticker\.mode\]\} ticker`\}/.test(marquee),
   reducedMotion: /motion-reduce:animate-none/.test(marquee),
   visualCopiesMarkedDuplicate: /const isDuplicate = index >= effective\.length/.test(marquee),

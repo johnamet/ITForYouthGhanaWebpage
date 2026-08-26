@@ -1,10 +1,12 @@
 import { PageSectionRenderer, SectionNavigation } from "@/components/page-sections";
+import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { getCmsFeaturedArticles } from "@/lib/cms/articles";
 import {
   getCmsChallengeSection,
   getCmsDonationCampaign,
   getCmsFeaturedStory,
   getCmsHeroSlides,
+  getCmsHomepageTicker,
   getCmsJoinCtaCards,
   getCmsMissionSection,
   getCmsNewsletterSignup,
@@ -21,6 +23,7 @@ function formatCount(value: number) {
 export async function HomepageSections() {
   const [
     slides,
+    ticker,
     challenge,
     mission,
     overview,
@@ -33,6 +36,7 @@ export async function HomepageSections() {
     newsletter,
   ] = await Promise.all([
     getCmsHeroSlides(),
+    getCmsHomepageTicker(),
     getCmsChallengeSection(),
     getCmsMissionSection(),
     getCmsOverviewSection(),
@@ -150,6 +154,7 @@ export async function HomepageSections() {
   return (
     <div className="overflow-hidden bg-white">
       <PageSectionRenderer sections={sections.slice(0, 1)} />
+      <MarqueeTicker ticker={ticker} />
       <SectionNavigation sections={sections} />
       <PageSectionRenderer sections={sections.slice(1)} />
     </div>

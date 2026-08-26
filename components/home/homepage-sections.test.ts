@@ -56,4 +56,40 @@ describe("homepage editorial composition", () => {
     assert.match(source, /media\.matches/);
     assert.match(source, /motion-reduce:transition-none/);
   });
+
+  it("places the hero image left and the copy right on desktop", () => {
+    const source = read("components/page-sections/editorial-hero.tsx");
+    assert.match(source, /lg:ml-auto lg:min-h-\[clamp/);
+    assert.match(source, /lg:absolute lg:bottom-5 lg:left-5 lg:top-5/);
+    assert.doesNotMatch(source, /lg:absolute lg:bottom-8 lg:right-8 lg:top-8/);
+  });
+
+  it("keeps the desktop hero within a laptop viewport", () => {
+    const source = read("components/page-sections/editorial-hero.tsx");
+    assert.match(source, /lg:min-h-\[clamp\(560px,calc\(100svh-10rem\),640px\)\]/);
+    assert.match(source, /lg:py-5/);
+    assert.match(source, /text-\[clamp\(2\.8rem,4\.3vw,4\.75rem\)\]/);
+  });
+
+  it("loads the CMS marquee and renders it directly after the homepage hero", () => {
+    const source = read("components/home/homepage-sections.tsx");
+    assert.match(source, /getCmsHomepageTicker\(\)/);
+    assert.match(source, /<MarqueeTicker ticker=\{ticker\} \/>/);
+
+    const hero = source.indexOf("<PageSectionRenderer sections={sections.slice(0, 1)}");
+    const marquee = source.indexOf("<MarqueeTicker ticker={ticker} />");
+    const navigation = source.indexOf("<SectionNavigation sections={sections} />");
+
+    assert.ok(hero >= 0, "homepage hero is missing");
+    assert.ok(marquee > hero, "marquee must follow the homepage hero");
+    assert.ok(navigation > marquee, "marquee must stay at the hero boundary");
+  });
+
+  it("stops the marquee for reduced motion and hides duplicate links", () => {
+    const source = read("components/home/marquee-ticker.tsx");
+    assert.match(source, /motion-reduce:animate-none/);
+    assert.match(source, /const isDuplicate = index >= effective\.length/);
+    assert.match(source, /aria-hidden=\{isDuplicate \|\| undefined\}/);
+    assert.match(source, /tabIndex=\{isDuplicate \? -1 : undefined\}/);
+  });
 });

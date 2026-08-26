@@ -41,6 +41,14 @@ for (const route of routes) {
     expect(hasPageOverflow).toBe(false);
     expect(runtimeErrors).toEqual([]);
 
+    if (route === "/" && testInfo.project.name === "chromium-desktop") {
+      const heroPanel = await page.locator('[data-section-id="home-hero"] > div').boundingBox();
+      const viewport = page.viewportSize();
+      expect(heroPanel, "homepage hero panel is missing").not.toBeNull();
+      expect(viewport, "desktop viewport is missing").not.toBeNull();
+      expect(heroPanel!.y + heroPanel!.height).toBeLessThanOrEqual(viewport!.height);
+    }
+
     if (testInfo.project.name === "chromium-mobile") {
       const menuButton = page.getByRole("button", { name: "Open menu" });
       await expect(menuButton).toBeVisible();
