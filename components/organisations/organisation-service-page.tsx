@@ -7,6 +7,7 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { OrganisationServicePage as OrganisationServicePageType } from "@/types/content";
+import { composeProse } from "@/lib/utils/prose";
 
 type OrganisationServicePageProps = {
   page: OrganisationServicePageType;
@@ -84,12 +85,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
 
           <div className="grid gap-5 md:grid-cols-2">
             {page.overviewCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => {
-              const bulletParagraph = (card.bullets || [])
-                .map((b) => (b || "").trim())
-                .filter(Boolean)
-                .map((b) => (/[.!?]$/.test(b) ? b : `${b}.`))
-                .join(" ");
-              const description = [card.description, bulletParagraph].filter(Boolean).join(" ");
+              const description = composeProse(card.description, card.bullets);
               return (
                 <div
                   key={card.title}

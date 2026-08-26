@@ -6,6 +6,7 @@ import { VideoCard } from "@/components/media/video-card";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatsSection } from "@/components/content/stats-section";
 import type { ImpactReportsContent } from "@/types/content";
+import { composeProse, pointsToParagraph } from "@/lib/utils/prose";
 
 type ImpactReportsPageProps = {
   content: ImpactReportsContent;
@@ -140,12 +141,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
 
           <div className="grid gap-5 md:grid-cols-2">
             {content.evidenceCards.map((card) => {
-              const bulletParagraph = (card.bullets || [])
-                .map((b) => (b || "").trim())
-                .filter(Boolean)
-                .map((b) => (/[.!?]$/.test(b) ? b : `${b}.`))
-                .join(" ");
-              const description = [card.description, bulletParagraph].filter(Boolean).join(" ");
+              const description = composeProse(card.description, card.bullets);
               return (
                 <div
                   key={card.title}
@@ -172,18 +168,9 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
               {content.methodBadgeEyebrow ?? "Method notes"}
             </p>
-            {(() => {
-              const notesParagraph = (content.methodologyPoints || [])
-                .map((p) => (p || "").trim())
-                .filter(Boolean)
-                .map((p) => (/[.!?]$/.test(p) ? p : `${p}.`))
-                .join(" ");
-              return (
-                <p className="mt-6 text-base leading-8 text-white/82">
-                  {notesParagraph}
-                </p>
-              );
-            })()}
+            <p className="mt-6 text-base leading-8 text-white/82">
+              {pointsToParagraph(content.methodologyPoints)}
+            </p>
           </div>
         </div>
       </section>

@@ -1,4 +1,5 @@
 import type { ContentBlock } from "@/types/content";
+import { pointsToParagraph } from "@/lib/utils/prose";
 
 type EditorialGuidanceGridProps = {
   eyebrow?: string | null;
@@ -20,7 +21,7 @@ export function EditorialGuidanceGrid({ eyebrow, sections }: EditorialGuidanceGr
   return (
     <div className="grid overflow-hidden border-y border-brand-border lg:grid-cols-2">
       {visibleSections.map((section, index) => {
-        const supportingParagraph = section.bullets?.filter(hasText).join(" ");
+        const supportingParagraph = pointsToParagraph(section.bullets);
 
         return (
           <article

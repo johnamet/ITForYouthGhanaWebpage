@@ -6,6 +6,7 @@ import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StorySection } from "@/components/content/story-section";
+import { composeProse } from "@/lib/utils/prose";
 
 type ContentPageProps = {
   page: SitePage;
@@ -18,14 +19,6 @@ export function ContentPage({ page }: ContentPageProps) {
   );
   const ctas = page.ctas.filter((cta) => cta.label.trim() && cta.href.trim());
   const related = page.related.filter((card) => card.title.trim() && card.href.trim());
-  const bulletsToParagraph = (bullets?: string[]) => {
-    if (!bullets || bullets.length === 0) return "";
-    const cleaned = bullets
-      .map((b) => (b || "").trim())
-      .filter(Boolean)
-      .map((b) => (/[.!?]$/.test(b) ? b : `${b}.`));
-    return cleaned.join(" ");
-  };
 
   return (
     <div className="bg-brand-mist">
@@ -45,8 +38,7 @@ export function ContentPage({ page }: ContentPageProps) {
       {sections.length ? (
         <PageContainer as="section" className="space-y-10 py-4 lg:py-6">
           {sections.map((section, idx) => {
-            const bulletParagraph = bulletsToParagraph(section.bullets);
-            const description = [section.body, bulletParagraph].filter(Boolean).join(" ");
+            const description = composeProse(section.body, section.bullets);
             const hasMedia = Boolean(section.image || section.videoUrl);
             if (hasMedia) {
               return (

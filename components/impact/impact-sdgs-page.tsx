@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { StatsSection } from "@/components/content/stats-section";
 import { VideoCard } from "@/components/media/video-card";
 import type { ImpactSdgsContent } from "@/types/content";
+import { pointsToParagraph } from "@/lib/utils/prose";
 
 type ImpactSdgsPageProps = {
   content: ImpactSdgsContent;
@@ -92,16 +93,9 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
                 </div>
 
                 <div className="space-y-5">
-                  {(() => {
-                    const contributionsParagraph = (goal.contributions || [])
-                      .map((c) => (c || "").trim())
-                      .filter(Boolean)
-                      .map((c) => (/[.!?]$/.test(c) ? c : `${c}.`))
-                      .join(" ");
-                    return (
-                      <p className="text-sm leading-7 text-slate-700">{contributionsParagraph}</p>
-                    );
-                  })()}
+                  <p className="text-sm leading-7 text-slate-700">
+                    {pointsToParagraph(goal.contributions)}
+                  </p>
 
                   <div className="grid gap-4 md:grid-cols-2">
                     {goal.linkedRoutes.map((route) => (
@@ -151,16 +145,9 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
             />
           </div>
 
-          {(() => {
-            const principlesParagraph = (content.alignmentPrinciples || [])
-              .map((p) => (p || "").trim())
-              .filter(Boolean)
-              .map((p) => (/[.!?]$/.test(p) ? p : `${p}.`))
-              .join(" ");
-            return (
-              <p className="rounded-[26px] border border-brand-border bg-white px-5 py-5 text-sm leading-7 text-slate-700 shadow-sm">{principlesParagraph}</p>
-            );
-          })()}
+          <p className="rounded-[26px] border border-brand-border bg-white px-5 py-5 text-sm leading-7 text-slate-700 shadow-sm">
+            {pointsToParagraph(content.alignmentPrinciples)}
+          </p>
         </div>
       </section>
 

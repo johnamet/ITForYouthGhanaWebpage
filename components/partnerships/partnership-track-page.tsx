@@ -9,6 +9,7 @@ import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { VideoCard } from "@/components/media/video-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { PartnershipTrackPage as PartnershipTrackPageType } from "@/types/content";
+import { composeProse } from "@/lib/utils/prose";
 
 type PartnershipTrackPageProps = {
   page: PartnershipTrackPageType;
@@ -84,12 +85,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
             {page.focusCards
               .filter((card) => card.title?.trim() || card.description?.trim())
               .map((card) => {
-                const bulletParagraph = (card.bullets || [])
-                  .map((b) => (b || "").trim())
-                  .filter(Boolean)
-                  .map((b) => (/[.!?]$/.test(b) ? b : `${b}.`))
-                  .join(" ");
-                const description = [card.description, bulletParagraph].filter(Boolean).join(" ");
+                const description = composeProse(card.description, card.bullets);
                 const image = (card.image || card.iconImage || (emojiToIconImage(card.icon) as string | undefined)) as string | undefined;
                 return (
                   <SpotlightCard
