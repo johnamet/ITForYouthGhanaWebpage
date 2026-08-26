@@ -6,7 +6,7 @@ import { PanelList } from "@/components/content/panel-list";
 import { ProcessSequence } from "@/components/content/process-sequence";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionIntro } from "@/components/content/section-intro";
-import { InitiativeGallery } from "@/components/what-we-do/initiative-gallery";
+import { Filmstrip } from "@/components/media/filmstrip";
 import { safeCssColor } from "@/lib/utils/css-color";
 import type { InitiativePage } from "@/types/content";
 
@@ -63,7 +63,11 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
   );
   const audienceGroups = page.audience.groups.filter(hasText);
   const eligibility = page.audience.eligibility.filter(hasText);
-  const gallery = page.gallery.filter((image) => hasText(image.src));
+  /* Alt text has been required at the save boundary since
+     lib/utils/validators.ts:568, so an entry without it is legacy data. It is
+     dropped rather than shown, because a photograph nobody can hear described
+     is not published content. */
+  const gallery = page.gallery.filter((image) => hasText(image.src) && hasText(image.alt));
   const testimonials = page.testimonials.filter(
     (testimonial) =>
       hasText(testimonial.quote) || hasText(testimonial.name) || hasText(testimonial.role),
@@ -265,7 +269,17 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                 title={section.galleryTitle}
                 description={section.galleryDescription}
               />
-              <InitiativeGallery images={gallery} />
+              {/* A scroll-snap strip, not a contact sheet with a lightbox. The
+                  photographs are peers, so nothing here should claim one of
+                  them matters more, and the modal this replaces trapped nobody:
+                  it closed on a click outside and had no Escape key and no
+                  focus trap, which fails the accessibility rules the rest of
+                  the site is held to. Native scroll has no controller to get
+                  wrong. */}
+              <Filmstrip
+                frames={gallery.map((image) => ({ src: image.src, alt: image.alt }))}
+                label={hasText(section.galleryTitle) ? section.galleryTitle : `${page.title} photographs`}
+              />
             </section>
           ) : null}
 

@@ -41,6 +41,8 @@ const REDESIGNED = [
   "components/training/training-cohort-timeline.tsx",
   "components/training/training-process-strip.tsx",
   "components/programs/course-detail-card.tsx",
+  "components/media/filmstrip.tsx",
+  "components/media/overlap-composition.tsx",
 ];
 
 const read = (path: string) => readFileSync(path, "utf8");

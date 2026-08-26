@@ -12,6 +12,7 @@ import {
   articleCategoryLabels,
   isArticleCategory,
 } from "@/lib/content/news-config";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 type ArticleCategoryPageProps = {
   params: { category: string };
@@ -24,18 +25,25 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: ArticleCategoryPageProps): Promise<Metadata> {
+  // An unknown category 404s below. Canonicalise it to the hub and keep it
+  // out of the index rather than describing a listing that does not exist.
   if (!isArticleCategory(params.category)) {
-    return {
-      title: "News & Updates",
-    };
+    return pageMetadata({
+      title: "Category not found",
+      description: "This news category does not exist.",
+      path: "/news-and-updates",
+      noIndex: true,
+    });
   }
 
   const content = await getCmsArticleCategoryContent(params.category);
 
-  return {
+  return pageMetadata({
     title: articleCategoryLabels[params.category],
     description: content.description,
-  };
+    path: `/news-and-updates/${params.category}`,
+    image: content.heroImage,
+  });
 }
 
 export default async function ArticleCategoryPage({

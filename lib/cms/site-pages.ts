@@ -52,8 +52,19 @@ const WHAT_WE_DO_DYNAMIC_PARENT = "what-we-do";
 const WHAT_WE_DO_DYNAMIC_TYPE = "whatWeDoDynamicPage";
 const RESERVED_WHAT_WE_DO_SLUGS = new Set(initiatives.map((initiative) => initiative.slug));
 
+/**
+ * Every optional string on SitePage that mergeSitePage copies out of Firestore.
+ *
+ * A field missing from this list is dropped on read even when Firestore holds a
+ * value, which is how heroImageAlt, heroVideoUrl and heroVideoThumbnail became
+ * write-only. lib/cms/site-pages-contract.test.ts fails when this list and the
+ * string fields of sitePageSchema drift apart in either direction.
+ */
 const optionalStringFields = [
   "heroImage",
+  "heroImageAlt",
+  "heroVideoUrl",
+  "heroVideoThumbnail",
   "overviewTitle",
   "overviewDescription",
   "operatingEyebrow",

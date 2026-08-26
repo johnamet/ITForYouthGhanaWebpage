@@ -1,11 +1,78 @@
 import { z } from "zod";
 
+// One media-URL verdict for the whole application. This module is the save
+// boundary; components/admin/media-fields.tsx shows the same sentence under the
+// input while the editor types. Both import it rather than re-deriving it, so
+// the admin can never accept a URL the save rejects, or the reverse.
+import { MISSING_ALT_MESSAGE, describeMediaUrlProblem } from "../cms/media-url.ts";
+import { MEDIA_TREATMENTS } from "../../types/content.ts";
+
 const optionalTrimmedString = z.preprocess(
   (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
   z.string().trim().optional(),
 );
 
 const editableCmsString = z.string().trim().optional();
+
+export { describeMediaUrlProblem };
+
+/**
+ * An optional image URL that must actually be renderable.
+ *
+ * Use this for every field whose value reaches next/image. An empty string
+ * clears the field, as with every other optional CMS string.
+ */
+const mediaImageString = z.preprocess(
+  (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+  z
+    .string()
+    .trim()
+    .optional()
+    .superRefine((value, ctx) => {
+      const problem = describeMediaUrlProblem(value);
+      if (problem) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: problem });
+      }
+    }),
+);
+
+/**
+ * The closed list of editorial layouts, taken from types/content.ts so the
+ * type, the admin select and this schema cannot drift into three lists.
+ */
+const mediaTreatmentEnum = z
+  .enum(
+    MEDIA_TREATMENTS.map((option) => option.value) as [string, ...string[]],
+    { errorMap: () => ({ message: "Choose one of the listed section layouts." }) },
+  )
+  .optional();
+
+/**
+ * Alt text is required the moment a media field carries a value.
+ *
+ * Zod validates one field at a time, so the pairing has to be asserted on the
+ * object that holds both. `mediaField` is the image key, `altField` the key
+ * that describes it.
+ */
+function requireAltForMedia<Shape extends z.ZodRawShape>(
+  schema: z.ZodObject<Shape>,
+  mediaField: keyof Shape & string,
+  altField: keyof Shape & string,
+) {
+  return schema.superRefine((value, ctx) => {
+    const record = value as Record<string, unknown>;
+    const media = typeof record[mediaField] === "string" ? (record[mediaField] as string).trim() : "";
+    const alt = typeof record[altField] === "string" ? (record[altField] as string).trim() : "";
+
+    if (media && !alt) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [altField],
+        message: MISSING_ALT_MESSAGE,
+      });
+    }
+  });
+}
 
 const consentBoolean = z.preprocess(
   (value) => value === true || value === "true" || value === "on",
@@ -300,23 +367,46 @@ const sitePageHighlightStatSchema = z.object({
   iconImage: optionalTrimmedString,
 });
 
-const sitePageSectionSchema = z.object({
-  title: z.string().trim().min(2, "Please add a section title."),
-  body: z.string().trim().min(12, "Please add useful section body copy."),
-  bullets: z.array(z.string().trim().min(1)).optional().default([]),
-});
+/**
+ * ContentBlock, the editorial body of every page built on this schema.
+ *
+ * image / imageAlt / videoUrl / videoTitle already existed on the type and
+ * components/shared/content-page.tsx already rendered them, but they were absent
+ * here, so z.object stripped all four at the API boundary. The template built to
+ * pair every text block with media could not receive media.
+ */
+const sitePageSectionSchema = requireAltForMedia(
+  z.object({
+    title: z.string().trim().min(2, "Please add a section title."),
+    body: z.string().trim().min(12, "Please add useful section body copy."),
+    bullets: z.array(z.string().trim().min(1)).optional().default([]),
+    image: mediaImageString,
+    imageAlt: optionalTrimmedString,
+    videoUrl: optionalTrimmedString,
+    videoTitle: optionalTrimmedString,
+    treatment: mediaTreatmentEnum,
+  }),
+  "image",
+  "imageAlt",
+);
 
 const sitePageActionLinkSchema = z.object({
   label: z.string().trim().min(2, "Please add a link label."),
   href: z.string().trim().min(1, "Please add a link destination."),
 });
 
-const sitePageRouteCardSchema = z.object({
-  href: z.string().trim().min(1, "Please add a card destination."),
-  eyebrow: optionalTrimmedString,
-  title: z.string().trim().min(2, "Please add a card title."),
-  description: z.string().trim().min(12, "Please add a useful card description."),
-});
+const sitePageRouteCardSchema = requireAltForMedia(
+  z.object({
+    href: z.string().trim().min(1, "Please add a card destination."),
+    eyebrow: optionalTrimmedString,
+    title: z.string().trim().min(2, "Please add a card title."),
+    description: z.string().trim().min(12, "Please add a useful card description."),
+    image: mediaImageString,
+    imageAlt: optionalTrimmedString,
+  }),
+  "image",
+  "imageAlt",
+);
 
 const sitePageCourseSchema = z.object({
   id: z.string().trim().min(1, "Please add a course ID."),
@@ -375,9 +465,17 @@ export const sitePageSchema = z.object({
   title: z.string().trim().min(2, "Please add a page title."),
   description: z.string().trim().default(""),
   intro: z.string().trim().default(""),
-  heroImage: optionalTrimmedString,
+  heroImage: mediaImageString,
+  /**
+   * Absent from this schema until now, so z.object stripped it on every save.
+   * The admin has had a hero-alt input since site-page-form.tsx:366, an editor
+   * typed a photo description, the API answered "saved", and the value never
+   * left the browser. lib/cms/site-pages-contract.test.ts now fails when a
+   * string field in this schema has no matching read in mergeSitePage.
+   */
+  heroImageAlt: editableCmsString,
   heroVideoUrl: optionalTrimmedString,
-  heroVideoThumbnail: optionalTrimmedString,
+  heroVideoThumbnail: mediaImageString,
   stats: z.array(sitePageHighlightStatSchema).default([]),
   sections: z.array(sitePageSectionSchema).default([]),
   ctas: z.array(sitePageActionLinkSchema).default([]),
@@ -395,7 +493,7 @@ export const sitePageSchema = z.object({
   principlesDescription: editableCmsString,
   principlesHeroEyebrow: editableCmsString,
   principlesHeroTitle: editableCmsString,
-  principlesImage: editableCmsString,
+  principlesImage: mediaImageString,
   principlesImageAlt: editableCmsString,
   highlightsEyebrow: editableCmsString,
   exploreEyebrow: editableCmsString,
@@ -466,7 +564,18 @@ const initiativeAudienceSchema = z.object({
 });
 
 const initiativeGalleryImageSchema = z.object({
-  src: z.string().trim().min(1, "Please add an image URL."),
+  // Required, and renderable. The strip that displays these runs every src
+  // through next/image, which throws on an unlisted host at request time.
+  src: z
+    .string()
+    .trim()
+    .min(1, "Please add an image URL.")
+    .superRefine((value, ctx) => {
+      const problem = describeMediaUrlProblem(value);
+      if (problem) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: problem });
+      }
+    }),
   alt: z.string().trim().min(1, "Please add image alt text."),
 });
 

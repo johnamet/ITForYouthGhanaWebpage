@@ -10,6 +10,7 @@ import {
 import {
   isArticleCategory,
 } from "@/lib/content/news-config";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 type ArticleDetailPageProps = {
   params: { category: string; slug: string };
@@ -25,33 +26,34 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: ArticleDetailPageProps): Promise<Metadata> {
+  const path = `/news-and-updates/${params.category}/${params.slug}`;
+  const missing = {
+    title: "Article not found",
+    description: "This article does not exist.",
+    path,
+    noIndex: true,
+  };
+
   if (!isArticleCategory(params.category)) {
-    return {
-      title: "Article",
-    };
+    return pageMetadata(missing);
   }
 
   const article = await getCmsArticleBySlug(params.category, params.slug);
 
   if (!article) {
-    return {
-      title: "Article",
-    };
+    return pageMetadata(missing);
   }
 
-  return {
+  return pageMetadata({
     title: article.seo?.title ?? article.title,
     description: article.seo?.description ?? article.excerpt,
-    openGraph: {
-      title: article.seo?.title ?? article.title,
-      description: article.seo?.description ?? article.excerpt,
-      images: article.seo?.ogImage ?? article.coverImage,
-      type: "article",
-      publishedTime: article.publishedAt,
-      modifiedTime: article.updatedAt,
-      authors: article.author ? [article.author.name] : undefined,
-    },
-  };
+    path,
+    image: article.seo?.ogImage ?? article.coverImage,
+    type: "article",
+    publishedTime: article.publishedAt,
+    modifiedTime: article.updatedAt,
+    authors: article.author ? [article.author.name] : undefined,
+  });
 }
 
 export default async function ArticleDetailPage({

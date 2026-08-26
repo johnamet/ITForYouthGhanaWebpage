@@ -36,6 +36,50 @@ export type NavItem = {
   items?: { label: string; href: string }[];
 };
 
+/**
+ * How an editorial block pairs its text with its media.
+ *
+ * Layout used to be derived from array position: components/shared/content-page.tsx
+ * ran `index % 3`, so dragging a section up one slot silently changed its
+ * photograph from a cinema frame to a circular crop, and no editor could say
+ * "this one is the wide one".
+ *
+ * Absent means "let the template decide", which keeps the index rotation as the
+ * default and leaves every document written before this field existed rendering
+ * exactly as it does today. A set value pins the treatment.
+ *
+ * This list is deliberately short and closed. Every value maps to a primitive
+ * that already exists in components/media/ and needs nothing from the record
+ * beyond `image` and `imageAlt`. It is a set of strong editorial variants, not a
+ * page builder: an editor picks one, and cannot invent a layout.
+ */
+export type MediaTreatment =
+  /** WideFrame, a contained cinema plate above the text column. */
+  | "wide-frame"
+  /** MediaBand, edge to edge across the viewport. */
+  | "full-bleed"
+  /** StorySection with the media on the left. */
+  | "media-left"
+  /** StorySection with the media on the right. */
+  | "media-right"
+  /** CircularFigure beside the text. Crops cleanly from any source. */
+  | "circular"
+  /** PortraitFigure. For people: profiles, named testimonials, graduates. */
+  | "portrait";
+
+/**
+ * The treatment list in editor order, with the labels the admin `<select>`
+ * shows. One declaration so the type, the form and the gate test cannot drift.
+ */
+export const MEDIA_TREATMENTS: readonly { value: MediaTreatment; label: string }[] = [
+  { value: "wide-frame", label: "Wide frame above the text" },
+  { value: "full-bleed", label: "Full-bleed band" },
+  { value: "media-left", label: "Media left, text right" },
+  { value: "media-right", label: "Text left, media right" },
+  { value: "circular", label: "Circular figure beside the text" },
+  { value: "portrait", label: "Portrait frame (people)" },
+] as const;
+
 export interface ContentBlock {
   title: string;
   body: string;
@@ -45,6 +89,11 @@ export interface ContentBlock {
   imageAlt?: string;
   videoUrl?: string;
   videoTitle?: string;
+  /**
+   * Pins the layout of this block. Omit to keep the template's automatic
+   * rotation, which is what every pre-existing document does.
+   */
+  treatment?: MediaTreatment;
 }
 
 

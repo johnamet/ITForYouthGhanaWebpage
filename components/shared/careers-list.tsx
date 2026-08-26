@@ -1,15 +1,90 @@
 import type { JobListing } from "@/types/content";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { DataTable, type DataTableColumn, type DataTableRow } from "@/components/content/data-table";
+import { OverlapComposition } from "@/components/media/overlap-composition";
 import { StateMessage } from "@/components/ui/state-message";
-import { WideFrame } from "@/components/media/wide-frame";
+import { formatDate } from "@/lib/utils/formatters";
 
 type CareersListProps = {
   jobs: JobListing[];
 };
 
-function formatType(value: JobListing["type"]) {
-  return value.replace("-", " ");
+const typeLabels: Record<JobListing["type"], string> = {
+  "full-time": "Full time",
+  "part-time": "Part time",
+  contract: "Contract",
+  volunteer: "Volunteer",
+};
+
+/**
+ * Six roles that share five attributes are a comparison, so they are a table.
+ *
+ * They used to be a stack of cards. Comparing the closing dates of six roles
+ * meant scrolling the page up and down re-finding the label each time, because
+ * a card grid takes aligned attributes and un-aligns them. The table keeps
+ * Team, Location, Type and Closes in four columns a reader scans down, and the
+ * role column sticks to the leading edge so a scrolled-to date never loses the
+ * role it belongs to.
+ */
+const columns: DataTableColumn[] = [
+  { key: "role", header: "Role" },
+  { key: "focus", header: "What the role covers" },
+  { key: "team", header: "Team", width: "narrow" },
+  { key: "location", header: "Location", width: "narrow" },
+  { key: "type", header: "Type", width: "narrow" },
+  { key: "closes", header: "Closes", width: "narrow", numeric: true },
+  { key: "apply", header: "Apply", width: "narrow" },
+];
+
+const applyLinkClass =
+  "font-semibold text-brand-primary-dark underline decoration-brand-border underline-offset-4 transition-colors hover:decoration-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary motion-reduce:transition-none";
+
+/**
+ * A closing date is only readable once. Firestore stores YYYY-MM-DD, which is
+ * sortable and unreadable, so it is formatted here and carried in a <time>
+ * element that keeps the machine-readable value beside it.
+ */
+function closingCell(closingDate?: string) {
+  if (!closingDate) {
+    return <span className="text-brand-muted">Open until filled</span>;
+  }
+
+  const parsed = new Date(closingDate);
+  if (Number.isNaN(parsed.getTime())) {
+    return closingDate;
+  }
+
+  return <time dateTime={closingDate}>{formatDate(closingDate)}</time>;
+}
+
+function applyCell(job: JobListing) {
+  if (job.applyUrl) {
+    return (
+      <a href={job.applyUrl} target="_blank" rel="noreferrer noopener" className={applyLinkClass}>
+        Apply<span className="sr-only"> for {job.title}, opens in a new tab</span>
+      </a>
+    );
+  }
+
+  return (
+    <a href="/contact" className={applyLinkClass}>
+      Contact us<span className="sr-only"> about {job.title}</span>
+    </a>
+  );
+}
+
+function toRow(job: JobListing): DataTableRow {
+  return {
+    id: job.id,
+    cells: {
+      role: job.title,
+      focus: job.summary,
+      team: job.team,
+      location: job.location,
+      type: typeLabels[job.type],
+      closes: closingCell(job.closingDate),
+      apply: applyCell(job),
+    },
+  };
 }
 
 export function CareersList({ jobs }: CareersListProps) {
@@ -25,66 +100,39 @@ export function CareersList({ jobs }: CareersListProps) {
   }
 
   return (
-    <section className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6 lg:px-8">
-      {/* A wide plate, not a portrait. These are roles rather than people, so
-          the honest subject is the work itself, and the work photography is
-          landscape. Portraits on this page would imply the openings are already
-          filled. See docs/addendum-media-pairing.md. */}
-      <WideFrame
-        src="/images/randomPictures/happystudentscasual.jpg"
-        alt="Facilitators and learners talking together between sessions"
-        ratio="cinema"
+    <section className="mx-auto max-w-7xl space-y-10 px-4 py-16 sm:px-6 lg:px-8">
+      {/* The room and someone working in it, as one figure. A wide plate alone
+          says where the work happens and nothing about who does it; a portrait
+          alone on a careers page reads as an opening already filled. The plate's
+          lower-leading corner is furniture, which is the corner the portrait
+          covers. */}
+      <OverlapComposition
+        plate={{
+          src: "/images/randomPictures/happystudentscasual.jpg",
+          alt: "A room full of secondary-school students cheering at the end of a session, standing between desks in a school library",
+        }}
+        portrait={{
+          src: "/images/randomPictures/UXteacher_opt.jpg",
+          alt: "A facilitator standing at a projector screen, walking a class through the five stages of the UX process",
+        }}
         caption="The team runs cohorts, clubs and outreach across Greater Accra and partner regions."
       />
 
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">Open opportunities</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-accent">
+          Open opportunities
+        </p>
         <h2 className="mt-2 font-heading text-4xl font-semibold text-brand-ink">Join the team</h2>
       </div>
 
-      <div className="grid gap-5">
-        {jobs.map((job) => (
-          <Card key={job.id} className="rounded-panel">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <h3 className="font-heading text-2xl font-semibold text-brand-ink">{job.title}</h3>
-                <p className="mt-2 text-sm font-medium text-slate-600">
-                  {job.team} · {job.location} · <span className="capitalize">{formatType(job.type)}</span>
-                </p>
-              </div>
-
-              {job.closingDate ? (
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                  Closes {job.closingDate}
-                </span>
-              ) : null}
-            </div>
-
-            <p className="mt-4 text-sm leading-7 text-slate-600">{job.summary}</p>
-
-            <div className="mt-5">
-              {job.applyUrl ? (
-                <Button
-                  href={job.applyUrl}
-                  external
-                  variant="secondary"
-                  size="sm"
-                >
-                  Apply now
-                </Button>
-              ) : (
-                <Button
-                  href="/contact"
-                  variant="outline"
-                  size="sm"
-                >
-                  Contact us
-                </Button>
-              )}
-            </div>
-          </Card>
-        ))}
-      </div>
+      <DataTable
+        // The heading above already names the section, so the caption is the
+        // table's own name for anyone navigating by table rather than by sight.
+        caption={`${jobs.length} open ${jobs.length === 1 ? "role" : "roles"} at IT For Youth Ghana`}
+        captionVisible={false}
+        columns={columns}
+        rows={jobs.map(toRow)}
+      />
     </section>
   );
 }

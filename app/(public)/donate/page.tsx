@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 
 import { DonationCampaign } from "@/components/home/donation-campaign";
 import { getCmsDonationCampaign } from "@/lib/cms/homepage";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Donate",
   description:
     "Support scholarships, devices, mentorship, and measurable pathways into work and enterprise for young Ghanaians.",
-};
+  path: "/donate",
+});
 
 /**
  * The donate page.

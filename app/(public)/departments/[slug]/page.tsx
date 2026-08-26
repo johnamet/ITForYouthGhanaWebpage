@@ -7,6 +7,7 @@ import {
   getCmsDepartments,
 } from "@/lib/cms/departments";
 import { getCmsTeamMembers } from "@/lib/cms/team";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 type DepartmentPageProps = {
   params: { slug: string };
@@ -20,21 +21,23 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: DepartmentPageProps): Promise<Metadata> {
   const department = await getCmsDepartmentBySlug(params.slug);
 
+  const path = `/departments/${params.slug}`;
+
   if (!department) {
-    return {
+    return pageMetadata({
       title: "Department not found",
-    };
+      description: "This department does not exist.",
+      path,
+      noIndex: true,
+    });
   }
 
-  return {
+  return pageMetadata({
     title: department.title,
     description: department.summary || department.description,
-    openGraph: {
-      title: department.title,
-      description: department.summary || department.description,
-      images: department.heroImage ? [department.heroImage] : undefined,
-    },
-  };
+    path,
+    image: department.heroImage,
+  });
 }
 
 export default async function DepartmentPage({ params }: DepartmentPageProps) {

@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { CourseDetailCard } from "@/components/programs/course-detail-card";
 import { getCmsTrainingCoursesPage } from "@/lib/cms/site-pages";
 import { getCourseBySlugMixed } from "@/lib/api/training";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 type TrainingCourseDetailPageProps = {
   params: { slug: string };
@@ -30,22 +31,27 @@ export async function generateMetadata({
 }: TrainingCourseDetailPageProps): Promise<Metadata> {
   const course = await resolveCourse(params.slug);
 
+  const path = `/apply-for-training/courses/${params.slug}`;
+
   if (!course) {
     // The page below returns a real 404 for this slug, so the metadata must not
     // invent a title from it. It previously title-cased the URL segment, which
     // gave every mistyped slug a plausible-looking page.
-    return { title: "Course not found", robots: { index: false, follow: false } };
+    return pageMetadata({
+      title: "Course not found",
+      description: "This course is not in the catalogue.",
+      path,
+      noIndex: true,
+    });
   }
 
-  return {
+  return pageMetadata({
     title: course.title,
     description: course.shortDescription,
-    openGraph: {
-      title: course.title,
-      description: course.shortDescription,
-      images: course.image ? [{ url: course.image, alt: course.title }] : undefined,
-    },
-  };
+    path,
+    image: course.image,
+    imageAlt: `Course artwork for ${course.title}`,
+  });
 }
 
 export default async function TrainingCourseDetailPage({ params }: TrainingCourseDetailPageProps) {

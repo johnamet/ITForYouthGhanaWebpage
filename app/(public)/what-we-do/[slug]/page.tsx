@@ -8,6 +8,7 @@ import {
   getCmsWhatWeDoDynamicPageBySlug,
   getCmsWhatWeDoDynamicPages,
 } from "@/lib/cms/site-pages";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 type InitiativePageProps = {
   params: { slug: string };
@@ -30,21 +31,24 @@ export async function generateMetadata({ params }: InitiativePageProps): Promise
     (await getCmsInitiativeBySlug(params.slug)) ??
     (await getCmsWhatWeDoDynamicPageBySlug(params.slug));
 
+  const path = `/what-we-do/${params.slug}`;
+
   if (!page) {
-    return {
-      title: "What We Do",
-    };
+    return pageMetadata({
+      title: "Initiative not found",
+      description: "This initiative does not exist.",
+      path,
+      noIndex: true,
+    });
   }
 
-  return {
+  return pageMetadata({
     title: page.title,
     description: page.description,
-    openGraph: {
-      title: `${page.title} | IT For Youth Ghana`,
-      description: page.description,
-      images: page.heroImage ? [page.heroImage] : undefined,
-    },
-  };
+    path,
+    image: page.heroImage,
+    imageAlt: page.heroImageAlt,
+  });
 }
 
 export default async function InitiativePage({ params }: InitiativePageProps) {

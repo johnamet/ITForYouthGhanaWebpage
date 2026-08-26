@@ -13,6 +13,7 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { MediaFields } from "@/components/admin/media-fields";
 import type {
   ActionLink,
   ContentBlock,
@@ -350,46 +351,18 @@ export function SitePageForm({
               className={`${inputClass} h-32`}
             />
           </div>
-          <div className="md:col-span-2">
-            <label htmlFor="heroImage" className="text-sm font-bold text-brand-ink">
-              Hero image path
-            </label>
-            <input
-              id="heroImage"
-              value={values.heroImage ?? ""}
-              onChange={(event) => update("heroImage", event.target.value)}
-              className={inputClass}
-              placeholder="/images/randomPictures/groupworkstudents.jpg"
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="heroImageAlt" className="text-sm font-bold text-brand-ink">
-              Hero image alt text
-            </label>
-            <input
-              id="heroImageAlt"
-              value={values.heroImageAlt ?? ""}
-              onChange={(event) => update("heroImageAlt", event.target.value)}
-              className={inputClass}
-              placeholder="Learners working through a practical exercise together"
-            />
-            <p className="mt-1.5 text-xs text-brand-muted">
-              Describe what is happening in the photograph. Do not repeat the page title:
-              a screen-reader user has already heard it.
-            </p>
-          </div>
-          <div>
-            <label htmlFor="heroVideoUrl" className="text-sm font-bold text-brand-ink">
-              Hero video URL (optional)
-            </label>
-            <input
-              id="heroVideoUrl"
-              value={values.heroVideoUrl ?? ""}
-              onChange={(event) => update("heroVideoUrl", event.target.value)}
-              className={inputClass}
-              placeholder="https://www.youtube.com/watch?v=… or https://vimeo.com/…"
-            />
-          </div>
+          <MediaFields
+            className="md:col-span-2"
+            idPrefix="hero"
+            label="Hero image"
+            image={values.heroImage}
+            imageAlt={values.heroImageAlt}
+            onImageChange={(value) => update("heroImage", value)}
+            onImageAltChange={(value) => update("heroImageAlt", value)}
+            videoUrl={values.heroVideoUrl}
+            onVideoUrlChange={(value) => update("heroVideoUrl", value)}
+            imagePlaceholder="/images/randomPictures/groupworkstudents.jpg"
+          />
           <div>
             <label htmlFor="heroVideoThumbnail" className="text-sm font-bold text-brand-ink">
               Hero video thumbnail (optional)
@@ -554,14 +527,14 @@ export function SitePageForm({
               className={inputClass}
             />
           </div>
-          <div>
-            <label htmlFor="principlesImage" className="text-sm font-bold text-brand-ink">Feature image URL</label>
-            <input id="principlesImage" value={values.principlesImage ?? ""} onChange={(event) => update("principlesImage", event.target.value)} className={inputClass} placeholder="https://… or /images/…" />
-          </div>
-          <div>
-            <label htmlFor="principlesImageAlt" className="text-sm font-bold text-brand-ink">Feature image alt text</label>
-            <input id="principlesImageAlt" value={values.principlesImageAlt ?? ""} onChange={(event) => update("principlesImageAlt", event.target.value)} className={inputClass} />
-          </div>
+          <MediaFields
+            idPrefix="principles"
+            label="Feature image"
+            image={values.principlesImage}
+            imageAlt={values.principlesImageAlt}
+            onImageChange={(value) => update("principlesImage", value)}
+            onImageAltChange={(value) => update("principlesImageAlt", value)}
+          />
           <div>
             <label htmlFor="highlightsEyebrow" className="text-sm font-bold text-brand-ink">
               Highlights label
@@ -754,6 +727,22 @@ export function SitePageForm({
                 value={toLines(section.bullets)}
                 onChange={(event) => updateSection(index, "bullets", fromLines(event.target.value))}
                 className={`${inputClass} h-24`}
+              />
+              {/* The public template has always read these three fields off the
+                  section. Until this group existed the only way to set them was
+                  to edit Firestore by hand. */}
+              <MediaFields
+                className="mt-6 border-t border-brand-border pt-5"
+                idPrefix={`section-${index}`}
+                label="Section image"
+                image={section.image}
+                imageAlt={section.imageAlt}
+                onImageChange={(value) => updateSection(index, "image", value)}
+                onImageAltChange={(value) => updateSection(index, "imageAlt", value)}
+                videoUrl={section.videoUrl}
+                onVideoUrlChange={(value) => updateSection(index, "videoUrl", value)}
+                treatment={section.treatment}
+                onTreatmentChange={(value) => updateSection(index, "treatment", value)}
               />
             </div>
           ))}

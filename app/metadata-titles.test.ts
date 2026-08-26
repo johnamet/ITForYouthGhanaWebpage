@@ -93,3 +93,82 @@ describe("metadata titles", () => {
     );
   });
 });
+
+/**
+ * Every public route carries metadata, and it is built by one function.
+ *
+ * The gap this closes: eight public routes exported no metadata at all and
+ * twenty-two had no openGraph block, so a shared link rendered as a bare URL
+ * with the layout's default description, and no route declared a canonical
+ * URL on a site carrying 27 permanent redirects. None of that fails a build.
+ * The only way it stays fixed is a test that reads the routes.
+ */
+describe("public metadata coverage", () => {
+  const PUBLIC_PAGES = pageFiles("app/(public)").filter((file) => file.endsWith("page.tsx"));
+
+  /** app/(public)/who-we-are/team/page.tsx -> /who-we-are/team */
+  function routeOf(file: string) {
+    const path = file
+      .replace(/^app\//, "")
+      .replace(/\/page\.tsx$/, "")
+      .replace(/\(public\)\/?/, "");
+    return `/${path}`.replace(/\/$/, "") || "/";
+  }
+
+  it("finds pages to check, so a broken glob cannot pass silently", () => {
+    assert.ok(PUBLIC_PAGES.length >= 25, `expected the public routes, found ${PUBLIC_PAGES.length}`);
+  });
+
+  it("declares metadata on every public route", () => {
+    const missing = PUBLIC_PAGES.filter((file) => {
+      const source = readFileSync(file, "utf8");
+      return !/export const metadata|export (async )?function generateMetadata/.test(source);
+    });
+
+    assert.deepEqual(missing, [], "these routes render with the layout's default title and description");
+  });
+
+  it("builds it through the shared contract rather than by hand", () => {
+    const handRolled = PUBLIC_PAGES.filter(
+      (file) => !readFileSync(file, "utf8").includes('from "@/lib/seo/page-metadata"'),
+    );
+
+    assert.deepEqual(
+      handRolled,
+      [],
+      "pageMetadata() is what supplies the canonical URL and the openGraph block",
+    );
+  });
+
+  it("gives every static route its own canonical path", () => {
+    const wrong: string[] = [];
+
+    for (const file of PUBLIC_PAGES) {
+      const route = routeOf(file);
+      // Dynamic routes build the path from their params, so there is no
+      // literal to compare against.
+      if (route.includes("[")) continue;
+
+      const source = readFileSync(file, "utf8");
+      if (!new RegExp(`path: "${route}"`).test(source)) {
+        wrong.push(`${file} does not declare path: "${route}"`);
+      }
+    }
+
+    // A copied generateMetadata block that keeps the path it was copied from
+    // points two routes at one canonical URL, which is how a page disappears
+    // from search results.
+    assert.deepEqual(wrong, [], wrong.join("\n  "));
+  });
+
+  it("passes a path to every dynamic route too", () => {
+    const missing = PUBLIC_PAGES.filter((file) => {
+      if (!routeOf(file).includes("[")) return false;
+      // Either an inline `path: "/x"` or the `path,` shorthand these routes
+      // use after building the string from their params.
+      return !/\bpath[,:]/.test(readFileSync(file, "utf8"));
+    });
+
+    assert.deepEqual(missing, [], "a dynamic route must still canonicalise itself");
+  });
+});

@@ -42,8 +42,37 @@ No asset audit is being performed. See `media-policy.md` for why.
 | Titles render the org name once | done | `app/metadata-titles.test.ts` |
 | Redirect integrity gate | done | `app/routes.test.ts` |
 | Sitemap: courses, real lastModified | done | `app/routes.test.ts` sitemap coverage |
-| 8 routes with no metadata, 22 with no OG image | not started | `routing-decisions.md` §5 |
+| Metadata, canonical and OG on every public route | done | `lib/seo/page-metadata.ts`, coverage suite in `app/metadata-titles.test.ts` |
 | `discover-routes.mjs` is wrong four ways | not started | route floor is 60, not 53 |
+
+Every route under `app/(public)` now builds its metadata through
+`pageMetadata()`, which supplies the canonical URL, the openGraph block and a
+share image, and falls back to the logo when a page has no photograph. Four
+assertions keep it that way: every public page declares metadata, every one
+imports the shared contract, every static route declares its own path, and
+every dynamic route canonicalises itself. The path assertion is the one that
+matters most, because a copied `generateMetadata` block that keeps the path it
+was copied from points two routes at one canonical URL.
+
+## Phase 2 — editor control and primitive placement
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Sections carry their own layout, not their array index | done | `types/content.ts` `MediaTreatment`, `components/shared/content-page.tsx` |
+| One media-URL verdict for form and save | done | `lib/cms/media-url.ts`, `lib/cms/media-url.test.ts` |
+| Admin can set a section's image, alt, video and layout | done | `components/admin/media-fields.tsx`, `components/admin/media-fields.test.ts` |
+| Open roles render as a table, not a card stack | done | `components/shared/careers-list.tsx`, `careers-list.test.ts` |
+| Initiative gallery is a scroll strip, no lightbox | done | `components/what-we-do/initiative-page.tsx` |
+| Every primitive has a call site | done | `components/primitive-consumers.test.ts` |
+
+`components/content/quote-block.tsx` is the one primitive with no consumer. It
+is recorded in the UNPLACED map in `primitive-consumers.test.ts` with the
+reason, so the debt is named rather than discovered later by a dependency
+graph.
+
+The initiative gallery's lightbox was removed with the component. It closed on
+an outside click, had no Escape handler and no focus trap, so it failed §24 of
+the constitution; native scroll has no controller to get wrong.
 
 ## Design references
 
@@ -97,6 +126,12 @@ rather than a hairline. See `design-system.md` §2.3.
 
 `scripts/discover-routes.mjs` is wrong four ways and reports 53 routes where the
 floor is 60. See `routing-decisions.md`.
+
+`npm run build` can fail with "Static page generation for /news-and-updates is
+still timing out after 3 attempts" when Firestore is unreachable: the read hangs
+past the 60-second per-page limit instead of failing fast to seed content. It is
+an offline-environment flake, not a code fault, and the same commit builds green
+on a retry. A read timeout on the CMS client would remove it.
 
 ## Verification baseline
 
