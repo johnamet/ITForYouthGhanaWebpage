@@ -212,7 +212,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                       </p>
                     ) : null}
                     {stat.description ? (
-                      <p className="mt-2.5 text-sm leading-7 text-slate-600">{stat.description}</p>
+                      <p className="mt-2.5 text-base leading-7 text-slate-600">{stat.description}</p>
                     ) : null}
                   </div>
                 ))}
@@ -303,7 +303,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                       style={{ backgroundColor: accent }}
                     />
                     {hasText(testimonial.quote) ? (
-                      <blockquote className="mt-5 text-sm leading-8 text-slate-700">
+                      <blockquote className="mt-5 text-base leading-8 text-slate-700">
                         {testimonial.quote}
                       </blockquote>
                     ) : null}
@@ -328,7 +328,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                             <p className="font-semibold text-brand-ink">{testimonial.name}</p>
                           ) : null}
                           {hasText(testimonial.role) ? (
-                            <p className="text-sm text-slate-500">{testimonial.role}</p>
+                            <p className="text-base text-slate-500">{testimonial.role}</p>
                           ) : null}
                         </div>
                       </figcaption>
@@ -373,7 +373,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                         <p className="font-semibold text-brand-ink">{partner.name}</p>
                       ) : null}
                       {hasText(partner.description) ? (
-                        <p className="mt-2 text-sm leading-7 text-slate-600">{partner.description}</p>
+                        <p className="mt-2 text-base leading-7 text-slate-600">{partner.description}</p>
                       ) : null}
                       {hasText(partner.href) && hasText(section.partnerLinkLabel) ? (
                         <Link
@@ -416,7 +416,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                       </summary>
                     ) : null}
                     {hasText(faq.answer) ? (
-                      <p className="mt-4 text-sm leading-7 text-slate-600">{faq.answer}</p>
+                      <p className="mt-4 text-base leading-7 text-slate-600">{faq.answer}</p>
                     ) : null}
                   </details>
                 ))}

@@ -72,7 +72,7 @@ function FieldError({ message }: { message?: string }) {
   }
 
   return (
-    <p className="mt-2 flex items-center gap-2 text-sm font-medium text-rose-600">
+    <p className="mt-2 flex items-center gap-2 text-base font-medium text-rose-600">
       <AlertCircle className="h-4 w-4" />
       {message}
     </p>
@@ -353,7 +353,7 @@ export function ContactForm({
       <p
         aria-live="polite"
         className={clsx(
-          "flex items-start gap-2 rounded-2xl px-4 py-3 text-sm font-medium",
+          "flex items-start gap-2 rounded-2xl px-4 py-3 text-base font-medium",
           submitState.type === "idle" && "hidden",
           submitState.type === "success" && "bg-emerald-50 text-emerald-700",
           submitState.type === "error" && "bg-rose-50 text-rose-700",

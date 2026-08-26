@@ -77,7 +77,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
               <p className="font-heading text-2xl font-bold leading-tight text-white sm:text-3xl">
                 {campaign.headline}
               </p>
-              {campaign.description.trim() ? <p className="max-w-xl text-[0.98rem] leading-8 text-white/85">
+              {campaign.description.trim() ? <p className="max-w-xl text-base leading-8 text-white/85">
                 {campaign.description}
               </p> : null}
             </div>
@@ -135,13 +135,13 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
             <div className="space-y-3">
               <div className="flex items-end justify-between gap-4">
                 <div>
-                  <p className="text-sm text-slate-500">Raised</p>
+                  <p className="text-base text-slate-500">Raised</p>
                   <p className="font-heading text-3xl font-bold text-brand-ink">
                     {formatCurrency(campaign.raisedAmount, currency)}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-slate-500">Goal</p>
+                  <p className="text-base text-slate-500">Goal</p>
                   <p className="text-lg font-semibold text-brand-ink">
                     {formatCurrency(campaign.goalAmount, currency)}
                   </p>
@@ -161,7 +161,7 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                 <div className="flex items-center gap-3">
                   <Users className="h-5 w-5 text-brand-accent" />
                   <div>
-                    <p className="text-sm text-slate-500">Donors so far</p>
+                    <p className="text-base text-slate-500">Donors so far</p>
                     <p className="text-2xl font-bold text-brand-ink">{campaign.donorCount}</p>
                   </div>
                 </div>
@@ -170,14 +170,14 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                 <div className="flex items-center gap-3">
                   <Clock3 className="h-5 w-5 text-brand-accent" />
                   <div>
-                    <p className="text-sm text-slate-500">Days remaining</p>
+                    <p className="text-base text-slate-500">Days remaining</p>
                     <p className="text-2xl font-bold text-brand-ink">{daysRemaining}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <p className="text-sm leading-7 text-slate-500">
+            <p className="text-base leading-7 text-slate-500">
               Every contribution helps us cover tuition support, devices, mentorship,
               and transition-to-work opportunities for young people who are ready to
               build a future in tech.

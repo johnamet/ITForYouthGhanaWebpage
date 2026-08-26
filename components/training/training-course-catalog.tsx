@@ -168,10 +168,10 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 rounded-panel border border-brand-border bg-brand-mist/45 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div>
-            <p className="text-sm font-semibold text-brand-ink">
+            <p className="text-base font-semibold text-brand-ink">
               {filteredCourses.length} course{filteredCourses.length === 1 ? "" : "s"} found
             </p>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-base text-slate-500">
               Filter by category, level, and pricing to narrow the strongest fit.
             </p>
           </div>
@@ -225,7 +225,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                     <h2 className="font-heading text-2xl font-bold text-brand-ink">
                       {course.title}
                     </h2>
-                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                    <p className="mt-3 text-base leading-7 text-slate-600">
                       {course.shortDescription}
                     </p>
                   </div>
@@ -236,14 +236,14 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                         <span aria-hidden="true" className="h-[2px] w-3.5 flex-none bg-brand-accent" />
                         Duration
                       </div>
-                      <p className="mt-2 text-sm text-slate-600">{course.duration}</p>
+                      <p className="mt-2 text-base text-slate-600">{course.duration}</p>
                     </div>
                     <div className="rounded-panel bg-brand-mist/55 px-4 py-4">
                       <div className="flex items-center gap-2.5 text-sm font-semibold text-brand-ink">
                         <span aria-hidden="true" className="h-[2px] w-3.5 flex-none bg-brand-accent" />
                         Next start
                       </div>
-                      <p className="mt-2 text-sm text-slate-600">{formatDate(course.startDate)}</p>
+                      <p className="mt-2 text-base text-slate-600">{formatDate(course.startDate)}</p>
                     </div>
                   </div>
 
@@ -255,7 +255,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
                       <p className="mt-2 font-heading text-2xl font-bold text-brand-deep">
                         {formatPrice(course)}
                       </p>
-                      <p className="mt-1 text-sm text-slate-500">{course.deliveryMode}</p>
+                      <p className="mt-1 text-base text-slate-500">{course.deliveryMode}</p>
                     </div>
 
                     <div className="flex flex-col items-end gap-3">
@@ -291,7 +291,7 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
             <h2 className="mt-3 font-heading text-3xl font-bold text-brand-ink">
               No courses match your current filters
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600">
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">
               Try broadening the search or jump to the upcoming cohorts below if timing is the
               main thing you need to decide first.
             </p>

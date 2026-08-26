@@ -70,7 +70,7 @@ export function ClosingBlock({ cards, newsletter }: ClosingBlockProps) {
                       {card.eyebrow}
                     </p>
                     <h3 className="font-heading text-2xl font-bold text-white">{card.title}</h3>
-                    <p className="text-sm leading-7 text-white/75">{card.description}</p>
+                    <p className="text-base leading-7 text-white/75">{card.description}</p>
                   </div>
 
                   <Link
@@ -113,7 +113,7 @@ export function ClosingBlock({ cards, newsletter }: ClosingBlockProps) {
                   buttonLabel="Join the mailing list"
                   placeholder="Enter your email address"
                 />
-                <p className="mt-4 text-sm text-white/55">{newsletter.privacyNote}</p>
+                <p className="mt-4 text-base text-white/55">{newsletter.privacyNote}</p>
               </div>
             </div>
           </div>

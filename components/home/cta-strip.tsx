@@ -14,7 +14,7 @@ export function CtaStrip({ heading, subtext, cta }: CtaStripProps) {
           <h2 className="font-heading text-[1.8rem] font-bold text-brand-ink leading-snug">
             {heading}
           </h2>
-          <p className="mt-1.5 text-sm text-brand-ink/60">{subtext}</p>
+          <p className="mt-1.5 text-base text-brand-ink/60">{subtext}</p>
         </div>
         <Link
           href={cta.href}

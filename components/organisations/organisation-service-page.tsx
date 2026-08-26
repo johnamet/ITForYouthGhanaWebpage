@@ -112,7 +112,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                   <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
                     {card.title}
                   </h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
+                  <p className="mt-3 text-base leading-7 text-slate-600">{description}</p>
                 </div>
               );
             })}
@@ -160,7 +160,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                 <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
                   {step.title}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{step.description}</p>
+                <p className="mt-3 text-base leading-7 text-slate-600">{step.description}</p>
               </div>
             ))}
           </div>
@@ -196,16 +196,16 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                 <h3 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
                   {study.title}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{study.summary}</p>
+                <p className="mt-3 text-base leading-7 text-slate-600">{study.summary}</p>
 
                 <div className="mt-5 rounded-[24px] bg-brand-mist/55 p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                     Outcome
                   </p>
-                  <p className="mt-2 text-sm leading-7 text-slate-700">{study.outcome}</p>
+                  <p className="mt-2 text-base leading-7 text-slate-700">{study.outcome}</p>
                 </div>
 
-                <p className="mt-5 text-sm font-medium leading-7 text-brand-deep">
+                <p className="mt-5 text-base font-medium leading-7 text-brand-deep">
                   {study.highlight}
                 </p>
               </div>
@@ -240,7 +240,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                       <h3 className="font-heading text-2xl font-bold text-brand-ink">
                         {item.name}
                       </h3>
-                      <p className="mt-3 text-sm leading-7 text-slate-600">
+                      <p className="mt-3 text-base leading-7 text-slate-600">
                         {item.description}
                       </p>
                     </div>
@@ -265,7 +265,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                   </div>
 
                   {item.note ? (
-                    <p className="mt-5 text-sm leading-7 text-slate-500">{item.note}</p>
+                    <p className="mt-5 text-base leading-7 text-slate-500">{item.note}</p>
                   ) : null}
                 </div>
               ))}
@@ -297,7 +297,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                 <summary className="cursor-pointer list-none font-heading text-2xl font-bold text-brand-ink">
                   {faq.question}
                 </summary>
-                <p className="mt-4 text-sm leading-7 text-slate-600">{faq.answer}</p>
+                <p className="mt-4 text-base leading-7 text-slate-600">{faq.answer}</p>
               </details>
             ))}
           </div>

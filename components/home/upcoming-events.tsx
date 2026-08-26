@@ -71,7 +71,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
                   <p className="font-heading text-[1rem] font-bold text-brand-ink leading-snug">
                     {event.title}
                   </p>
-                  <p className="mt-0.5 text-[0.78rem] text-slate-400">{event.location}</p>
+                  <p className="mt-0.5 text-sm text-slate-400">{event.location}</p>
                 </div>
                 <span
                   className={`shrink-0 rounded-full px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.15em] ${

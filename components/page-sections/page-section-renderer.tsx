@@ -159,7 +159,7 @@ function ItemCopy({ item, onDark = false }: { item: SectionItemContent; onDark?:
     <div>
       {item.eyebrow ? <Eyebrow onDark={onDark}>{item.eyebrow}</Eyebrow> : null}
       <h3 className={cn("mt-3 font-heading text-3xl font-bold leading-tight", onDark ? "text-white" : "text-brand-deep")}>{item.title}</h3>
-      {item.body ? <p className={cn("mt-4 text-sm leading-7", onDark ? "text-white/75" : "text-brand-muted")}>{item.body}</p> : null}
+      {item.body ? <p className={cn("mt-4 text-base leading-7", onDark ? "text-white/75" : "text-brand-muted")}>{item.body}</p> : null}
       {item.bullets?.length ? (
         <ul className="mt-5 grid list-none gap-2 p-0">
           {item.bullets.map((bullet) => (
@@ -250,7 +250,7 @@ function Manifesto({ section }: { section: EditorialIntroSection }) {
                     {metric.value}
                   </dd>
                   {metric.explanation ? (
-                    <p className={cn("mt-2 text-sm leading-6", onDark ? "text-white/65" : "text-brand-muted")}>{metric.explanation}</p>
+                    <p className={cn("mt-2 text-base leading-6", onDark ? "text-white/65" : "text-brand-muted")}>{metric.explanation}</p>
                   ) : null}
                 </div>
               ))}
@@ -397,7 +397,7 @@ function OverlayCluster({ section }: { section: FeatureCollectionSection }) {
           {item.title}
         </h3>
         {item.body ? (
-          <p className={cn("mt-3 leading-7 text-white/70", tall ? "max-w-[46ch] text-base" : "max-w-[40ch] text-sm")}>{item.body}</p>
+          <p className={cn("mt-3 leading-7 text-white/70", tall ? "max-w-[46ch] text-lg" : "max-w-[40ch] text-base")}>{item.body}</p>
         ) : null}
         {item.action ? (
           <Link href={item.action.href} className="mt-5 inline-flex font-bold text-white underline decoration-brand-accent-on-dark decoration-2 underline-offset-4">
@@ -463,7 +463,7 @@ function VenturePath({ section }: { section: ProcessPathSection }) {
           <h2 className="mt-4 font-heading text-[clamp(1.9rem,2.6vw,2.6rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
             <AccentedTitle title={section.heading.title} titleAccent={section.heading.titleAccent} onDark />
           </h2>
-          {section.heading.body ? <p className="mt-4 text-sm leading-7 text-white/70">{section.heading.body}</p> : null}
+          {section.heading.body ? <p className="mt-4 text-base leading-7 text-white/70">{section.heading.body}</p> : null}
           <ol className="mt-7 grid list-none gap-0 p-0">
             {section.items.map((item, index) => (
               <li key={item.id} className="grid grid-cols-[auto_1fr] gap-5 border-b border-white/15 py-5 first:border-t first:border-white/15">
@@ -472,7 +472,7 @@ function VenturePath({ section }: { section: ProcessPathSection }) {
                 </span>
                 <div>
                   <h3 className="font-heading text-2xl font-bold leading-tight text-white">{item.title}</h3>
-                  {item.body ? <p className="mt-1.5 text-sm leading-6 text-white/65">{item.body}</p> : null}
+                  {item.body ? <p className="mt-1.5 text-base leading-6 text-white/65">{item.body}</p> : null}
                 </div>
               </li>
             ))}
@@ -532,7 +532,7 @@ function MetricStory({ section }: { section: MetricStorySection }) {
             <div key={metric.id} className={cn("border-t py-7 sm:px-6", onDark ? "border-white/20" : "border-brand-border", !section.media && !headline && index === 0 && "sm:pl-0")}>
               <dt className={cn("text-sm font-bold", onDark ? "text-white/75" : "text-brand-muted")}>{metric.label}</dt>
               <dd className={cn("mt-2 font-heading font-bold tracking-[-0.04em]", headline && index === 0 ? "text-[clamp(5rem,14vw,11rem)] leading-none" : "text-5xl", onDark ? "text-white" : "text-brand-deep")}>{metric.value}</dd>
-              {metric.explanation ? <p className={cn("mt-3 text-sm leading-7", onDark ? "text-white/70" : "text-brand-muted")}>{metric.explanation}</p> : null}
+              {metric.explanation ? <p className={cn("mt-3 text-base leading-7", onDark ? "text-white/70" : "text-brand-muted")}>{metric.explanation}</p> : null}
               {metric.source ? <small className={cn("mt-3 block text-xs", onDark ? "text-white/55" : "text-brand-muted")}>{metric.source}</small> : null}
             </div>
           ))}
@@ -554,7 +554,7 @@ function StoryQuote({ section }: { section: StoryQuoteSection }) {
           <blockquote className={cn("mt-8 border-l-4 border-brand-accent pl-6 font-heading text-2xl italic leading-relaxed", onDark ? "text-white/90" : "text-brand-deep")}>
             “{section.quote}”
           </blockquote>
-          {section.attribution ? <p className={cn("mt-5 text-sm font-bold", onDark ? "text-white" : "text-brand-deep")}>{section.attribution}{section.attributionRole ? <span className={cn("font-normal", onDark ? "text-white/65" : "text-brand-muted")}> · {section.attributionRole}</span> : null}</p> : null}
+          {section.attribution ? <p className={cn("mt-5 text-base font-bold", onDark ? "text-white" : "text-brand-deep")}>{section.attribution}{section.attributionRole ? <span className={cn("font-normal", onDark ? "text-white/65" : "text-brand-muted")}> · {section.attributionRole}</span> : null}</p> : null}
           {section.verification && section.verification !== "verified" ? <small className={cn("mt-3", onDark ? "text-white/55" : "text-brand-muted")}>Story pending editorial verification.</small> : null}
           <Actions actions={section.actions} />
         </div>

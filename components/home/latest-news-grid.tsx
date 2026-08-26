@@ -35,7 +35,7 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
             <p className="mt-5 max-w-2xl font-heading text-2xl font-bold leading-tight text-brand-ink sm:text-3xl">
               Fresh updates from the people and programmes shaping our work
             </p>
-            <p className="mt-4 max-w-2xl text-[0.95rem] leading-[1.8] text-slate-500">
+            <p className="mt-4 max-w-2xl text-base leading-[1.8] text-slate-500">
               Follow new opportunities, learner stories, programme milestones, and ideas
               from across the IT For Youth Ghana community.
             </p>
@@ -85,7 +85,7 @@ export function LatestNewsGrid({ articles }: LatestNewsGridProps) {
                   <h3 className="font-heading text-2xl font-bold leading-snug text-brand-ink transition group-hover:text-brand-deep">
                     {article.title}
                   </h3>
-                  <p className="overflow-hidden text-sm leading-7 text-slate-600 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                  <p className="overflow-hidden text-base leading-7 text-slate-600 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
                     {article.excerpt}
                   </p>
                 </div>

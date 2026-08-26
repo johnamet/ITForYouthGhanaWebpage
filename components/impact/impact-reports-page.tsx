@@ -91,7 +91,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
                   </span>
                 </div>
 
-                <p className="mt-4 text-sm leading-7 text-slate-600">{resource.summary}</p>
+                <p className="mt-4 text-base leading-7 text-slate-600">{resource.summary}</p>
 
                 <div className="mt-5 space-y-3">
                   {resource.highlights.map((highlight) => (
@@ -162,7 +162,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
                   <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
                     {card.title}
                   </h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
+                  <p className="mt-3 text-base leading-7 text-slate-600">{description}</p>
                 </div>
               );
             })}

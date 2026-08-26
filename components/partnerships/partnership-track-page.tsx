@@ -148,7 +148,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                 <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
                   {step.title}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{step.description}</p>
+                <p className="mt-3 text-base leading-7 text-slate-600">{step.description}</p>
               </div>
             ))}
           </div>
@@ -184,16 +184,16 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                 <h3 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
                   {scenario.title}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{scenario.summary}</p>
+                <p className="mt-3 text-base leading-7 text-slate-600">{scenario.summary}</p>
 
                 <div className="mt-5 rounded-[24px] bg-brand-mist/55 p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                     Outcome
                   </p>
-                  <p className="mt-2 text-sm leading-7 text-slate-700">{scenario.outcome}</p>
+                  <p className="mt-2 text-base leading-7 text-slate-700">{scenario.outcome}</p>
                 </div>
 
-                <p className="mt-5 text-sm font-medium leading-7 text-brand-deep">
+                <p className="mt-5 text-base font-medium leading-7 text-brand-deep">
                   {scenario.highlight}
                 </p>
               </div>
@@ -225,7 +225,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                 <summary className="cursor-pointer list-none font-heading text-2xl font-bold text-brand-ink">
                   {faq.question}
                 </summary>
-                <p className="mt-4 text-sm leading-7 text-slate-600">{faq.answer}</p>
+                <p className="mt-4 text-base leading-7 text-slate-600">{faq.answer}</p>
               </details>
             ))}
           </div>

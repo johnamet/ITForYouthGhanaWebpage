@@ -89,7 +89,7 @@ export function CapsulePageHero({
     >
       {breadcrumbs?.length ? (
         <nav aria-label="Breadcrumb" className="itfy-stage__crumbs">
-          <p className="text-sm text-white/65">
+          <p className="text-base text-white/65">
             {breadcrumbs.map((crumb, index) => (
               <span key={`${crumb.label}-${index}`}>
                 {index > 0 ? (
@@ -130,7 +130,7 @@ export function CapsulePageHero({
         >
           {supportingText?.trim() ? (
             <p
-              className="mt-5 max-w-[56ch] border-l-2 pl-5 text-sm leading-7 text-white/70 max-[820px]:mx-auto max-[820px]:border-l-0 max-[820px]:pl-0"
+              className="mt-5 max-w-[56ch] border-l-2 pl-5 text-base leading-7 text-white/70 max-[820px]:mx-auto max-[820px]:border-l-0 max-[820px]:pl-0"
               style={{ borderColor: resolvedAccent }}
             >
               {supportingText}

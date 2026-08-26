@@ -216,7 +216,7 @@ export function FloatingElements({ content }: FloatingElementsProps) {
                 <h2 className="mt-4 font-heading text-3xl font-bold leading-tight text-brand-ink">
                   {content.exitIntent.headline}
                 </h2>
-                <p className="mt-4 text-[0.98rem] leading-8 text-slate-600">
+                <p className="mt-4 text-base leading-8 text-slate-600">
                   {content.exitIntent.description}
                 </p>
 

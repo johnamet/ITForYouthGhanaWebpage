@@ -142,7 +142,7 @@ export function EditorialImageHero({
                     ) : null}
 
                     {hasText(supportingText) ? (
-                      <p className="mt-3 text-sm leading-6 text-white/75">{supportingText}</p>
+                      <p className="mt-3 text-base leading-6 text-white/75">{supportingText}</p>
                     ) : null}
                   </div>
                 ) : null}

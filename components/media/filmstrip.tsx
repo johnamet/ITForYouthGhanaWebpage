@@ -104,7 +104,7 @@ export function Filmstrip({ frames, label, priorityFirst = false, className }: F
               </div>
             </Frame>
             {frame.caption ? (
-              <figcaption className="mt-3 text-[0.8125rem] leading-6 text-brand-muted">
+              <figcaption className="mt-3 text-xs leading-6 text-brand-muted">
                 {frame.caption}
               </figcaption>
             ) : null}

@@ -110,7 +110,7 @@ export function OverlapComposition({
       {caption ? (
         <figcaption
           className={cn(
-            "mt-6 max-w-[52ch] text-[0.8125rem] leading-6 text-brand-muted",
+            "mt-6 max-w-[52ch] text-xs leading-6 text-brand-muted",
             hasPortrait && "lg:ms-[18%]",
           )}
         >

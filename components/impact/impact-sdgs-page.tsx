@@ -88,7 +88,7 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
                     </span>
                   </div>
                   <h2 className="font-heading text-3xl font-bold">{goal.title}</h2>
-                  <p className="text-sm leading-7 text-white/78">{goal.summary}</p>
+                  <p className="text-base leading-7 text-white/78">{goal.summary}</p>
                 </div>
 
                 <div className="space-y-5">
@@ -99,7 +99,7 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
                       .map((c) => (/[.!?]$/.test(c) ? c : `${c}.`))
                       .join(" ");
                     return (
-                      <p className="text-sm leading-7 text-slate-700">{contributionsParagraph}</p>
+                      <p className="text-base leading-7 text-slate-700">{contributionsParagraph}</p>
                     );
                   })()}
 
@@ -116,7 +116,7 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
                         <h3 className="mt-3 font-heading text-2xl font-bold text-brand-ink">
                           {route.title}
                         </h3>
-                        <p className="mt-3 text-sm leading-7 text-slate-600">
+                        <p className="mt-3 text-base leading-7 text-slate-600">
                           {route.description}
                         </p>
                       </Link>
@@ -158,7 +158,7 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
               .map((p) => (/[.!?]$/.test(p) ? p : `${p}.`))
               .join(" ");
             return (
-              <p className="rounded-[26px] border border-brand-border bg-white px-5 py-5 text-sm leading-7 text-slate-700 shadow-sm">{principlesParagraph}</p>
+              <p className="rounded-[26px] border border-brand-border bg-white px-5 py-5 text-base leading-7 text-slate-700 shadow-sm">{principlesParagraph}</p>
             );
           })()}
         </div>

@@ -81,7 +81,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                 <h3 className="font-heading text-2xl font-bold leading-snug text-white lg:text-3xl">
                   {hero.title}
                 </h3>
-                <p className="mt-3 max-w-md text-[0.85rem] leading-[1.75] text-white/70">
+                <p className="mt-3 max-w-md text-base leading-[1.75] text-white/70">
                   {hero.description}
                 </p>
                 <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-brand-accent px-5 py-2.5 text-[0.78rem] font-bold text-white transition group-hover:-translate-y-0.5">
@@ -117,11 +117,11 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                 <h3 className="font-heading text-xl font-bold leading-snug text-brand-ink">
                   {prog.title}
                 </h3>
-                <p className="mt-2.5 text-[0.8rem] leading-[1.7] text-slate-500">
+                <p className="mt-2.5 text-base leading-[1.7] text-slate-500">
                   {prog.description}
                 </p>
               </div>
-              <p className="mt-5 flex items-center gap-1.5 text-[0.75rem] font-bold text-brand-deep transition-[gap] group-hover:gap-2.5">
+              <p className="mt-5 flex items-center gap-1.5 text-sm font-bold text-brand-deep transition-[gap] group-hover:gap-2.5">
                 {prog.cta} →
               </p>
             </Link>

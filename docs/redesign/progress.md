@@ -64,6 +64,7 @@ was copied from points two routes at one canonical URL.
 | Open roles render as a table, not a card stack | done | `components/shared/careers-list.tsx`, `careers-list.test.ts` |
 | Initiative gallery is a scroll strip, no lightbox | done | `components/what-we-do/initiative-page.tsx` |
 | Every primitive has a call site | done | `components/primitive-consumers.test.ts` |
+| Prose renders at the documented body size | done | `tailwind.config.ts` fontSize, `app/type-scale.test.ts` |
 
 `components/content/quote-block.tsx` is the one primitive with no consumer. It
 is recorded in the UNPLACED map in `primitive-consumers.test.ts` with the

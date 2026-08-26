@@ -110,7 +110,7 @@ export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
                 </blockquote>
                 <div className="mt-6 border-l-2 border-brand-accent pl-4">
                   <p className="font-semibold text-white">{story.name}</p>
-                  <p className="mt-1 text-sm text-white/70">
+                  <p className="mt-1 text-base text-white/70">
                     {story.role} · {story.programme}
                   </p>
                 </div>

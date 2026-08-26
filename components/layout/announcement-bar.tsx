@@ -145,7 +145,7 @@ export function AnnouncementBar({ announcement }: AnnouncementBarProps) {
           {announcement.label}
         </span>
 
-        <p className="text-center text-[0.78rem] font-medium leading-snug sm:text-left">
+        <p className="text-center text-sm font-medium leading-snug sm:text-left">
           {announcement.message}
         </p>
 

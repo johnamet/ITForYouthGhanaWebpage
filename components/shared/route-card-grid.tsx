@@ -47,10 +47,10 @@ export function RouteCardGrid({ cards }: RouteCardGridProps) {
           ) : null}
 
           {card.description?.trim() ? (
-            <p className="mt-2.5 text-[0.8rem] leading-[1.65] text-slate-500">{card.description}</p>
+            <p className="mt-2.5 text-base leading-[1.65] text-slate-500">{card.description}</p>
           ) : null}
 
-          <p className="mt-5 flex items-center gap-2 text-[0.75rem] font-bold text-brand-deep transition-[gap] duration-200 group-hover:gap-3">
+          <p className="mt-5 flex items-center gap-2 text-sm font-bold text-brand-deep transition-[gap] duration-200 group-hover:gap-3">
             Open route
             <span
               aria-hidden="true"

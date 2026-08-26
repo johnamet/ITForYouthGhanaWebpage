@@ -88,11 +88,11 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
                   />
                   <div>
                     <h3 className="font-heading text-xl font-semibold text-brand-ink">{member.name}</h3>
-                    <p className="text-sm font-medium text-slate-600">{member.role}</p>
+                    <p className="text-base font-medium text-slate-600">{member.role}</p>
                   </div>
                 </div>
 
-                <p className="text-sm leading-7 text-slate-600">{member.bio}</p>
+                <p className="text-base leading-7 text-slate-600">{member.bio}</p>
 
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   {member.featured ? (

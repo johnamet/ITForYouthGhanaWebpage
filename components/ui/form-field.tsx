@@ -21,7 +21,7 @@ export function FormField({ label, htmlFor, error, required, children }: FormFie
         {required ? <span aria-hidden="true" className="ml-1 text-brand-accent">*</span> : null}
       </label>
       {children}
-      {error ? <p className="mt-2 text-sm font-medium text-rose-600">{error}</p> : null}
+      {error ? <p className="mt-2 text-base font-medium text-rose-600">{error}</p> : null}
     </div>
   );
 }

@@ -83,7 +83,7 @@ export function ArticleCard({
               </h2>
               <p
                 className={`leading-7 text-slate-600 ${
-                  isFeatured ? "text-base" : "text-sm"
+                  isFeatured ? "text-lg" : "text-base"
                 }`}
               >
                 {article.excerpt}

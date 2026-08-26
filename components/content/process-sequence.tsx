@@ -80,7 +80,7 @@ export function ProcessSequence({
             {step.description?.trim() ? (
               <p
                 className={cn(
-                  "mt-2 text-sm leading-7",
+                  "mt-2 text-base leading-7",
                   isDark ? "text-white/75" : "text-slate-600",
                 )}
               >

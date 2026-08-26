@@ -24,7 +24,7 @@ export function FeatureCard({ image, imageAlt, category, title, description, hre
           <p className="text-[0.68rem] font-bold uppercase tracking-[0.22em] text-brand-accent">{category}</p>
         ) : null}
         <h3 className="mt-2 font-heading text-[1.4rem] font-bold leading-tight text-brand-ink">{title}</h3>
-        {description ? <p className="mt-3 text-[0.92rem] leading-7 text-slate-700">{description}</p> : null}
+        {description ? <p className="mt-3 text-base leading-7 text-slate-700">{description}</p> : null}
         <Link href={href} className="mt-5 inline-flex items-center gap-1 text-[0.9rem] font-bold text-brand-deep transition hover:gap-2">
           {ctaLabel} →
         </Link>

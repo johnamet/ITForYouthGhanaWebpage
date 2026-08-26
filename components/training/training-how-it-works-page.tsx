@@ -80,7 +80,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
                 <h3 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{item.body}</p>
+                <p className="mt-3 text-base leading-7 text-slate-600">{item.body}</p>
               </div>
             ))}
           </div>
@@ -120,7 +120,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
                 key={item}
                 className="rounded-panel border border-brand-border bg-white px-5 py-5 shadow-sm"
               >
-                <p className="text-sm leading-7 text-slate-700">{item}</p>
+                <p className="text-base leading-7 text-slate-700">{item}</p>
               </div>
             ))}
           </div>

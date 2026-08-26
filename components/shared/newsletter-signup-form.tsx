@@ -127,7 +127,7 @@ export function NewsletterSignupForm({
       <p
         aria-live="polite"
         className={clsx(
-          "mt-3 text-sm",
+          "mt-3 text-base",
           isCompact ? "text-white/55" : "text-center text-white/70",
           submitState.type === "success" &&
             (isCompact ? "text-emerald-300" : "text-emerald-200"),

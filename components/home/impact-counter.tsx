@@ -47,7 +47,7 @@ function ImpactCounterItem({ stat, start }: { stat: HighlightStat; start: boolea
         {stat.label}
       </p>
       {stat.description ? (
-        <p className="mt-3 text-sm leading-6 text-slate-600">{stat.description}</p>
+        <p className="mt-3 text-base leading-6 text-slate-600">{stat.description}</p>
       ) : null}
     </div>
   );

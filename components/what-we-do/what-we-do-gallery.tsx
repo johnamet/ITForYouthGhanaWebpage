@@ -57,7 +57,7 @@ export function WhatWeDoGallery({ items }: { items: WhatWeDoGalleryItem[] }) {
             ) : null}
             <div className="absolute inset-x-0 bottom-0 p-6 text-white">
               <p className="font-heading text-xl font-bold">{item.title}</p>
-              {item.description ? <p className="mt-2 max-w-xl text-sm leading-6 text-white/75">{item.description}</p> : null}
+              {item.description ? <p className="mt-2 max-w-xl text-base leading-6 text-white/75">{item.description}</p> : null}
             </div>
           </button>
         ))}

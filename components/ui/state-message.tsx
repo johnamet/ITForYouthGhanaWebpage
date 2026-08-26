@@ -20,7 +20,7 @@ export function StateMessage({ title, description, action, tone = "empty", class
   return (
     <section className={cn("rounded-[28px] border p-8 text-center shadow-sm", toneClasses[tone], className)}>
       <h2 className="font-heading text-2xl font-semibold">{title}</h2>
-      {description ? <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">{description}</p> : null}
+      {description ? <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-slate-600">{description}</p> : null}
       {action ? <div className="mt-5">{action}</div> : null}
     </section>
   );

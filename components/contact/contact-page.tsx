@@ -106,7 +106,7 @@ export function ContactPage({ content }: ContactPageProps) {
                   <h2 className="mt-2 break-words font-heading text-2xl font-bold text-brand-ink">
                     {channel.value}
                   </h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                  <p className="mt-3 text-base leading-7 text-slate-600">
                     {channel.description}
                   </p>
                   <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-deep">
@@ -156,7 +156,7 @@ export function ContactPage({ content }: ContactPageProps) {
                       <h2 className="font-heading text-2xl font-bold text-brand-ink">
                         {step.title}
                       </h2>
-                      <p className="mt-2 text-sm leading-7 text-slate-600">
+                      <p className="mt-2 text-base leading-7 text-slate-600">
                         {step.description}
                       </p>
                     </div>
@@ -174,7 +174,7 @@ export function ContactPage({ content }: ContactPageProps) {
                   <h2 className="font-heading text-2xl font-bold text-brand-ink">
                     {content.privacyTitle}
                   </h2>
-                  <p className="mt-2 text-sm leading-7 text-slate-700">
+                  <p className="mt-2 text-base leading-7 text-slate-700">
                     {content.privacyNote}
                   </p>
                 </div>
@@ -194,7 +194,7 @@ export function ContactPage({ content }: ContactPageProps) {
                 <h2 className="font-heading text-3xl font-bold text-brand-ink">
                   {content.messageTitle}
                 </h2>
-                <p className="mt-2 text-sm leading-7 text-slate-600">
+                <p className="mt-2 text-base leading-7 text-slate-600">
                   {content.messageDescription}
                 </p>
               </div>

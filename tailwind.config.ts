@@ -16,6 +16,27 @@ const config: Config = {
         sans: ["var(--font-body)"],
       },
 
+      /**
+       * The reading sizes, brought up to the scale docs/redesign/design-system.md
+       * already specifies.
+       *
+       * The document sets body at 1.0625rem/1.70 and long-form body at
+       * 1.125rem/1.85, and app/globals.css sets `body { font-size: 1.0625rem }`
+       * to match. The components never did: Tailwind's `text-sm` is 0.875rem in
+       * absolute rem, so 784 paragraphs rendered at 14px inside a 17px document
+       * and the site read three points smaller than it was designed to.
+       *
+       * Each size carries its own line height so a paragraph cannot pick up a
+       * larger size and keep its old leading. `app/type-scale.test.ts` holds the
+       * floor.
+       */
+      fontSize: {
+        xs: ["0.8125rem", { lineHeight: "1.5" }],
+        sm: ["0.9375rem", { lineHeight: "1.6" }],
+        base: ["1.0625rem", { lineHeight: "1.7" }],
+        lg: ["1.125rem", { lineHeight: "1.85" }],
+      },
+
 
       colors: {
         brand: {

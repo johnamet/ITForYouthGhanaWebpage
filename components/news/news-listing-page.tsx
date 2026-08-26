@@ -58,7 +58,7 @@ export function NewsListingPage({
           </div>
         ) : (
           <div className="rounded-[32px] border border-brand-border bg-brand-mist/45 p-10 text-center">
-            <p className="text-sm font-semibold text-slate-600">{content.emptyState}</p>
+            <p className="text-base font-semibold text-slate-600">{content.emptyState}</p>
           </div>
         )}
       </section>
@@ -106,7 +106,7 @@ export function NewsListingPage({
             </div>
 
             <div className="mt-7 border-t border-brand-border pt-6">
-              <p className="text-sm leading-7 text-slate-600">
+              <p className="text-base leading-7 text-slate-600">
                 {content.topicsSectionDescription}
               </p>
             </div>
@@ -125,7 +125,7 @@ export function NewsListingPage({
                 <h2 className="font-heading text-3xl font-bold sm:text-4xl">
                   {leadArticle.title}
                 </h2>
-                <p className="max-w-3xl text-sm leading-7 text-white/72">
+                <p className="max-w-3xl text-base leading-7 text-white/72">
                   {getArticleLabel(leadArticle)} published on {formatDate(leadArticle.publishedAt)}. Estimated reading time:{" "}
                   {getArticleReadTime(leadArticle)} minutes.
                 </p>

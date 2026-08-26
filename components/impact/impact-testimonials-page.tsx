@@ -88,14 +88,14 @@ export function ImpactTestimonialsPage({
                     <h2 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
                       {story.title}
                     </h2>
-                    <blockquote className="mt-4 text-sm leading-8 text-slate-700">
+                    <blockquote className="mt-4 text-base leading-8 text-slate-700">
                       &ldquo;{story.quote}&rdquo;
                     </blockquote>
 
                     <div className="mt-6 border-l-2 border-brand-accent pl-4">
                       <p className="font-semibold text-brand-ink">{story.name}</p>
-                      <p className="mt-1 text-sm text-slate-500">{story.role}</p>
-                      <p className="mt-1 text-sm text-brand-deep">
+                      <p className="mt-1 text-base text-slate-500">{story.role}</p>
+                      <p className="mt-1 text-base text-brand-deep">
                         {story.programme} · {story.year}
                       </p>
                     </div>

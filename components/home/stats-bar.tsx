@@ -17,7 +17,7 @@ export function StatsBar({ stats }: StatsBarProps) {
               {stat.label}
             </p>
             {stat.description && (
-              <p className="mt-1 text-[0.72rem] text-white/30">{stat.description}</p>
+              <p className="mt-1 text-sm text-white/30">{stat.description}</p>
             )}
           </div>
         ))}

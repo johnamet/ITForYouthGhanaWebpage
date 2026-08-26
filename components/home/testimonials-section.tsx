@@ -82,7 +82,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
               <p className="mt-5 font-heading text-2xl font-bold leading-tight text-white sm:text-3xl">
                 The human proof behind the numbers
               </p>
-              <p className="mt-4 max-w-sm text-sm leading-7 text-white/70">
+              <p className="mt-4 max-w-sm text-base leading-7 text-white/70">
                 One strong story can do what a long paragraph cannot. This carousel keeps the homepage grounded in lived experience.
               </p>
             </div>
@@ -100,8 +100,8 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
 
               <div className="mt-5 space-y-1">
                 <p className="font-semibold text-white">{t.name}</p>
-                <p className="text-sm text-white/65">{t.role}</p>
-                <p className="text-sm text-brand-accent/90">
+                <p className="text-base text-white/65">{t.role}</p>
+                <p className="text-base text-brand-accent/90">
                   {[t.programme, t.year].filter(Boolean).join(" · ")}
                 </p>
               </div>

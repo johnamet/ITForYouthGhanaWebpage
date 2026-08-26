@@ -57,7 +57,7 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
               <h3 className="mt-2 font-heading text-2xl font-bold text-brand-ink">{card.title}</h3>
               <p className="mt-4 text-base leading-8 text-slate-600">{card.body}</p>
               {(card.bullets ?? []).length ? (
-                <p className="mt-5 border-l-2 border-brand-accent pl-5 text-sm leading-8 text-slate-700">
+                <p className="mt-5 border-l-2 border-brand-accent pl-5 text-base leading-8 text-slate-700">
                   {(card.bullets ?? []).join(" ")}
                 </p>
               ) : null}

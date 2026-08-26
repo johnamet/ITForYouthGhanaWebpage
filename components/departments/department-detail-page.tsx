@@ -59,7 +59,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                   {department.services.map((service) => (
                     <article key={service.title} className="rounded-panel border border-brand-border p-5">
                       <h3 className="font-heading text-xl font-bold text-brand-ink">{service.title}</h3>
-                      <p className="mt-3 text-sm leading-7 text-slate-600">{service.body}</p>
+                      <p className="mt-3 text-base leading-7 text-slate-600">{service.body}</p>
                       {service.bullets?.length ? (
                         <ul className="mt-4 grid gap-2 text-sm font-medium text-brand-deep">
                           {service.bullets.map((bullet) => (
@@ -91,8 +91,8 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                         />
                       ) : null}
                       <h3 className="font-heading text-xl font-bold text-brand-ink">{member.name}</h3>
-                      <p className="mt-1 text-sm font-semibold text-brand-deep">{member.role}</p>
-                      <p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">{member.bio}</p>
+                      <p className="mt-1 text-base font-semibold text-brand-deep">{member.role}</p>
+                      <p className="mt-3 line-clamp-3 text-base leading-7 text-slate-600">{member.bio}</p>
                     </article>
                   ))}
                 </div>
@@ -108,9 +108,9 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                   {department.stats.map((stat) => (
                     <div key={`${stat.value}-${stat.label}`} className="rounded-2xl bg-white p-4">
                       <p className="font-heading text-3xl font-bold text-brand-deep">{stat.value}</p>
-                      <p className="mt-1 text-sm font-semibold text-brand-ink">{stat.label}</p>
+                      <p className="mt-1 text-base font-semibold text-brand-ink">{stat.label}</p>
                       {stat.description ? (
-                        <p className="mt-2 text-sm leading-6 text-slate-600">{stat.description}</p>
+                        <p className="mt-2 text-base leading-6 text-slate-600">{stat.description}</p>
                       ) : null}
                     </div>
                   ))}
@@ -129,7 +129,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                       </span>
                       <div>
                         <p className="font-semibold text-brand-ink">{step.title}</p>
-                        <p className="mt-1 text-sm leading-6 text-slate-600">{step.description}</p>
+                        <p className="mt-1 text-base leading-6 text-slate-600">{step.description}</p>
                       </div>
                     </div>
                   ))}

@@ -46,7 +46,7 @@ export function PortraitFigure({
         <figcaption className="mt-4">
           <span aria-hidden="true" className="block h-[3px] w-9 rounded-capsule" style={{ backgroundColor: accent }} />
           {name ? <p className="mt-3 font-heading text-lg font-bold text-brand-ink">{name}</p> : null}
-          {role ? <p className="mt-1 text-sm text-brand-muted">{role}</p> : null}
+          {role ? <p className="mt-1 text-base text-brand-muted">{role}</p> : null}
         </figcaption>
       ) : null}
     </figure>

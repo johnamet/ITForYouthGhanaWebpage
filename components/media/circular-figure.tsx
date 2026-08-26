@@ -53,7 +53,7 @@ export function CircularFigure({
         />
       </div>
       {caption ? (
-        <figcaption className="mt-3 text-sm leading-6 text-brand-muted">{caption}</figcaption>
+        <figcaption className="mt-3 text-xs leading-6 text-brand-muted">{caption}</figcaption>
       ) : null}
     </figure>
   );

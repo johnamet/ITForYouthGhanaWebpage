@@ -89,7 +89,7 @@ export function NewsArticlePage({
                   <h2 className="font-heading text-xl font-bold text-brand-ink">
                     {article.author.name}
                   </h2>
-                  <p className="text-sm font-medium text-slate-600">
+                  <p className="text-base font-medium text-slate-600">
                     {article.author.role}
                   </p>
                 </div>
@@ -132,7 +132,7 @@ export function NewsArticlePage({
             <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
               Stay close to the next update
             </h2>
-            <p className="mt-3 text-sm leading-7 text-slate-700">
+            <p className="mt-3 text-base leading-7 text-slate-700">
               The newsletter route is already scaffolded across the site, ready to connect programme openings, stories, and partner news.
             </p>
             <Link

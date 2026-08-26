@@ -74,7 +74,7 @@ export function TrainingCohortTimeline({
                   <h3 className="font-heading text-2xl font-bold text-brand-ink">
                     {cohort.name}
                   </h3>
-                  <p className="mt-2 text-sm leading-7 text-slate-600">{cohort.summary}</p>
+                  <p className="mt-2 text-base leading-7 text-slate-600">{cohort.summary}</p>
                 </div>
 
                 {cohort.applicationDeadline ? (
@@ -92,19 +92,19 @@ export function TrainingCohortTimeline({
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                     Format
                   </p>
-                  <p className="mt-2 text-sm font-semibold text-brand-ink">{cohort.format}</p>
+                  <p className="mt-2 text-base font-semibold text-brand-ink">{cohort.format}</p>
                 </div>
                 <div className="rounded-panel border border-brand-border px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                     Duration
                   </p>
-                  <p className="mt-2 text-sm font-semibold text-brand-ink">{cohort.duration}</p>
+                  <p className="mt-2 text-base font-semibold text-brand-ink">{cohort.duration}</p>
                 </div>
                 <div className="rounded-panel border border-brand-border px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                     Location
                   </p>
-                  <p className="mt-2 text-sm font-semibold text-brand-ink">{cohort.location}</p>
+                  <p className="mt-2 text-base font-semibold text-brand-ink">{cohort.location}</p>
                 </div>
               </div>
             </div>

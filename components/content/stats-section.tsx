@@ -25,7 +25,7 @@ export function StatsSection({ stats, eyebrow, title, tone = "mist" }: StatsSect
             <div key={`${stat.value}-${stat.label}`} className="px-4 py-7 sm:px-7">
               <p className={`font-heading text-5xl font-bold leading-none sm:text-6xl ${isDark ? "text-white" : "text-brand-deep"}`}>{stat.value}</p>
               <p className={`mt-3 text-base font-bold ${isDark ? "text-white" : "text-brand-ink"}`}>{stat.label}</p>
-              {stat.description ? <p className={`mt-2 text-sm leading-6 ${isDark ? "text-white/70" : "text-slate-600"}`}>{stat.description}</p> : null}
+              {stat.description ? <p className={`mt-2 text-base leading-6 ${isDark ? "text-white/70" : "text-slate-600"}`}>{stat.description}</p> : null}
             </div>
           ))}
         </div>

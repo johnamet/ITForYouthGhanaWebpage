@@ -201,7 +201,7 @@ export function ProgrammeShowcase({ items, intro }: ProgrammeShowcaseProps) {
                     {item.title}
                   </h3>
 
-                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-brand-ink/70">
+                  <p className="mt-3 line-clamp-3 text-base leading-6 text-brand-ink/70">
                     {item.description}
                   </p>
 

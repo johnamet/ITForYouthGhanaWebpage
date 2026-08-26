@@ -56,7 +56,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
                 IT For Youth<br />Ghana
               </span>
             </Link>
-            <p className="mt-4 text-[0.92rem] leading-[1.75] text-white/85">
+            <p className="mt-4 text-base leading-[1.75] text-white/85">
               Empowering Ghanaian youth with the digital skills, confidence, and pathways needed to shape tomorrow&apos;s economy.
             </p>
 
@@ -113,8 +113,8 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
       <div className="border-t border-white/8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6 lg:px-10">
           <div>
-            <p className="text-[0.95rem] font-semibold text-white">{newsletterSignupContent.heading}</p>
-            <p className="text-[0.85rem] text-white/85">{newsletterSignupContent.description}</p>
+            <p className="text-base font-semibold text-white">{newsletterSignupContent.heading}</p>
+            <p className="text-base text-white/85">{newsletterSignupContent.description}</p>
           </div>
           <NewsletterSignupForm
             variant="compact"
@@ -127,7 +127,7 @@ export async function SiteFooter({ settings: providedSettings }: SiteFooterProps
       {/* Legal strip */}
       <div className="border-t border-white/8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-4 lg:px-10">
-          <p className="text-[0.8rem] text-white/80">
+          <p className="text-base text-white/80">
             © {new Date().getFullYear()} IT For Youth Ghana. Registered NGO. All rights reserved.
           </p>
           <div className="flex gap-4">

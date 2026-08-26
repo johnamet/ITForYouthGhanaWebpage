@@ -49,7 +49,7 @@ export function ProgramCardGrid({ cards }: ProgramCardGridProps) {
           <h3 className="font-heading text-[1.35rem] font-bold leading-snug">
             {card.title}
           </h3>
-          <p className="mt-3 text-[0.82rem] leading-[1.75] opacity-75">
+          <p className="mt-3 text-base leading-[1.75] opacity-75">
             {card.description}
           </p>
           <Link

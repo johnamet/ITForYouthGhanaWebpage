@@ -74,7 +74,7 @@ export function EditorialGuidanceGrid({ eyebrow, sections }: EditorialGuidanceGr
 
             {supportingParagraph ? (
               <div className="relative mt-7 max-w-xl border-l-2 border-brand-accent pl-5 sm:pl-6">
-                <p className="text-[0.95rem] leading-8 text-slate-600">{supportingParagraph}</p>
+                <p className="text-base leading-8 text-slate-600">{supportingParagraph}</p>
               </div>
             ) : null}
 
