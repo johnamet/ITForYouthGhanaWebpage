@@ -17,8 +17,14 @@ type CapsuleMediaProps = {
    * a static lens or a reduced-motion viewer should get.
    */
   progress?: number;
-  /** Identity colour for the progress ring. A literal colour, never a var(). */
+  /** Identity colour for the ring. A literal colour, never a var(). */
   accent?: string;
+  /**
+   * Draws the ring as a complete circle in the accent colour. For a lens with
+   * no autoplay to report, which would otherwise lose the accent entirely and
+   * with it the page's identity colour on the hero.
+   */
+  accentRing?: boolean;
   /** Short caption shown across the lens. */
   caption?: string;
   priority?: boolean;
@@ -31,13 +37,15 @@ type CapsuleMediaProps = {
  *
  * The photograph is cropped to a circle with object-cover, because a contained
  * photograph inside a circle reads as a mistake where a circular crop reads as
- * deliberate portraiture. The active photograph is also present as the
- * capsule-owned blurred background, so the crop remains visually grounded.
+ * deliberate portraiture. On a hero the same photograph is also on screen
+ * uncropped, blurred across the stage behind the shell, so the crop stays
+ * visually grounded and nothing in the frame is lost to it.
  */
 export function CapsuleMedia({
   images,
   activeIndex = 0,
   progress,
+  accentRing = false,
   accent = "#1E72BA",
   caption,
   priority = false,
@@ -46,7 +54,11 @@ export function CapsuleMedia({
 }: CapsuleMediaProps) {
   if (!images.length) return null;
 
-  const showRing = typeof progress === "number" && images.length > 1;
+  /* One ring, two readings: an arc that tracks autoplay, or a closed circle
+     that just carries the accent. */
+  const showProgress = typeof progress === "number" && images.length > 1;
+  const showRing = showProgress || accentRing;
+  const ringOffset = typeof progress === "number" && showProgress ? 100 - progress : 0;
 
   return (
     <div className={cn("itfy-lens", className)}>
@@ -99,7 +111,7 @@ export function CapsuleMedia({
             strokeLinecap="round"
             pathLength="100"
             strokeDasharray="100"
-            strokeDashoffset={100 - progress}
+            strokeDashoffset={ringOffset}
           />
         </svg>
       ) : null}

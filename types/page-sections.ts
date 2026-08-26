@@ -27,6 +27,15 @@ export type PageSectionTheme = "paper" | "warm" | "mist" | "navy" | "teal" | "go
 export interface SectionHeadingContent {
   eyebrow?: string;
   title: string;
+  /**
+   * The phrase inside `title` that renders in italic and the accent colour.
+   * Must be a substring of `title`; an accent that no longer matches is ignored
+   * rather than rendered, so editing the title can never break the headline.
+   * Omit it and the section derives an accent from the title's own punctuation.
+   * Kept separate from `title` so the title string stays clean for page
+   * metadata, breadcrumbs and anything else that needs it flat.
+   */
+  titleAccent?: string;
   body?: string;
 }
 
@@ -106,15 +115,20 @@ export interface MediaNarrativeSection
 export interface FeatureCollectionSection
   extends PageSectionBase<
     "featureCollection",
-    "featuredPair" | "chapters" | "mosaic" | "filmstrip"
+    "featuredPair" | "chapters" | "mosaic" | "filmstrip" | "overlay"
   > {
   heading?: SectionHeadingContent;
   items: SectionItemContent[];
 }
 
 export interface ProcessPathSection
-  extends PageSectionBase<"processPath", "bridge" | "arc" | "numbered"> {
+  extends PageSectionBase<"processPath", "bridge" | "arc" | "numbered" | "venture"> {
   heading: SectionHeadingContent;
+  /**
+   * Only the `venture` variant reads this: the path runs as a dark panel beside
+   * a single photograph. The other variants ignore it.
+   */
+  media?: SectionMediaContent;
   items: SectionItemContent[];
 }
 

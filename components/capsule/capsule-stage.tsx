@@ -7,18 +7,26 @@ type StageImage = {
   src: string;
 };
 
-type SlideshowStageProps = {
+type CapsuleStageProps = {
   images: StageImage[];
   activeIndex?: number;
-  /** Per-slide wash, from the slide's overlayFrom and overlayTo values. */
+  /** The wash over the blur. Per-slide on the homepage, fixed on a page hero. */
   overlayFrom: string;
   overlayTo: string;
+  /**
+   * "viewport" fills the first screen and reserves the lower controls band:
+   * the homepage slideshow. "page" is the same ground at interior-page height,
+   * with no controls band to reserve and no viewport minimum to fill, so the
+   * hero introduces the page instead of replacing the first screen of it.
+   */
+  variant?: "viewport" | "page";
   className?: string;
   children: React.ReactNode;
 };
 
 /**
- * The hero: a blurred photograph, with the capsule inset on top of it.
+ * The ground a capsule sits on: a blurred photograph, with the shell inset on
+ * top of it.
  *
  * The blurred duplicate belongs here rather than inside the capsule. The
  * concept sketch labels it as the hero's background, and it has to be visible
@@ -27,21 +35,25 @@ type SlideshowStageProps = {
  *
  * Sizing for the whole hero, the capsule included, comes from the custom
  * properties on .itfy-hero-stage in app/globals.css. They are defined there so
- * the capsule and the controls inherit one --capsule-h and cannot drift.
+ * the capsule, the breadcrumbs and the controls inherit one --hero-capsule-h
+ * and cannot drift.
  */
-export function SlideshowStage({
+export function CapsuleStage({
   images,
   activeIndex = 0,
   overlayFrom,
   overlayTo,
+  variant = "viewport",
   className,
   children,
-}: SlideshowStageProps) {
+}: CapsuleStageProps) {
   return (
     <div
       className={cn(
         "itfy-hero-stage",
-        "relative isolate grid min-h-[calc(100svh-65px)] place-items-center overflow-x-hidden bg-[#05070f]",
+        variant === "page" && "itfy-hero-stage--page",
+        "relative isolate grid place-items-center overflow-x-hidden bg-[#05070f]",
+        variant === "viewport" && "min-h-[calc(100svh-65px)]",
         className,
       )}
     >

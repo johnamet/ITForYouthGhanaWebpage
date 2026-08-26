@@ -12,7 +12,7 @@ export { CapsulePageHero } from "@/components/capsule/capsule-page-hero";
 export { CapsuleMedia } from "@/components/capsule/capsule-media";
 export { CapsuleContent } from "@/components/capsule/capsule-content";
 export { CapsuleActions } from "@/components/capsule/capsule-actions";
-export { SlideshowStage } from "@/components/capsule/slideshow-stage";
+export { CapsuleStage } from "@/components/capsule/capsule-stage";
 export { SlideshowControls } from "@/components/capsule/slideshow-controls";
 export { useSlideshow, type SlideshowState } from "@/components/capsule/use-slideshow";
 export { splitHeading } from "@/components/capsule/split-heading";

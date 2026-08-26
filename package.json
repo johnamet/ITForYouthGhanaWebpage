@@ -9,7 +9,9 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "test": "node --no-warnings=MODULE_TYPELESS_PACKAGE_JSON --test \"**/*.test.ts\"",
-    "eval:capsule": "node docs/design_iu_examples/hero-capsule-concept.eval.mjs"
+    "test:e2e": "playwright test",
+    "eval:capsule": "node docs/design_iu_examples/hero-capsule-concept.eval.mjs",
+    "eval:main-pages": "node docs/redesign/main-pages.eval.mjs"
   },
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.3.0",
@@ -29,6 +31,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/node": "^22.10.5",
     "@types/nodemailer": "^8.0.1",
     "@types/react": "^18.3.18",

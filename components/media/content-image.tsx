@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils/cn";
 type ContentImageProps = {
   src?: string | null;
   alt: string;
-  aspectRatio?: "landscape" | "portrait" | "square" | "wide";
+  /** `fill` keeps no ratio of its own; the parent must give the slot a height. */
+  aspectRatio?: "landscape" | "portrait" | "square" | "wide" | "fill";
   priority?: boolean;
   className?: string;
   imageClassName?: string;
@@ -22,6 +23,7 @@ const aspectClasses = {
   portrait: "aspect-[4/5]",
   square: "aspect-square",
   wide: "aspect-[16/9]",
+  fill: "h-full",
 };
 
 /**

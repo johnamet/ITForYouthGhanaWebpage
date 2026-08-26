@@ -25,6 +25,12 @@ const config: Config = {
           secondary: "#0152BE",
           accent: "#D70B52",
           "accent-dark": "#B00944",
+          // The logo crimson reaches only 2.8:1 on brand-deep, so it cannot carry
+          // text on a navy panel. This tint is the on-dark voice of the same hue
+          // and clears 4.5:1 over the panel and over the hero's crimson glow.
+          // `lib/utils/contrast.test.ts` holds that floor, including against the
+          // composite the hero's 22% crimson glow makes over the navy.
+          "accent-on-dark": "#FF5C86",
           background: "#FFFFFF",
           muted: "#5C6672",
           card: "#FFFFFF",
@@ -79,6 +85,9 @@ const config: Config = {
 
       backgroundImage: {
         "hero-grid": "radial-gradient(ellipse at 60% 50%, rgba(30,114,186,0.15) 0%, rgba(20,40,80,0.95) 100%)",
+        // The hero copy panel: crimson bleeding into the navy behind the headline,
+        // the way docs/design_templates/02-who-we-are.html blends gold into navy.
+        "hero-copy": "radial-gradient(circle at 16% 20%, rgba(215,11,82,0.22), transparent 30%)",
       },
     },
   },

@@ -4,28 +4,56 @@ import { describe, it } from "node:test";
 
 const read = (path: string) => readFileSync(path, "utf8");
 
-describe("homepage marquee composition", () => {
-  it("loads CMS ticker content and renders it immediately after the hero", () => {
+describe("homepage editorial composition", () => {
+  it("adopts the template chapter order through typed section blocks", () => {
     const source = read("components/home/homepage-sections.tsx");
+    const ids = [
+      "home-hero",
+      "home-manifesto",
+      "home-programmes",
+      "home-impact",
+      "home-story",
+      "home-involve",
+      "home-news",
+      "home-closing",
+    ];
 
-    assert.match(source, /getCmsHomepageTicker/);
-    assert.match(source, /<MarqueeTicker ticker=\{ticker\} \/>/);
+    let previous = -1;
+    for (const id of ids) {
+      const position = source.indexOf(`id: "${id}"`);
+      assert.ok(position > previous, `${id} must follow the preceding template chapter`);
+      previous = position;
+    }
 
-    const hero = source.indexOf("<HeroCapsuleSlideshow");
-    const marquee = source.indexOf("<MarqueeTicker");
-    const followingSection = source.indexOf("<LegacyHomepageSections");
-
-    assert.ok(hero >= 0, "homepage hero is missing");
-    assert.ok(marquee > hero, "marquee must follow the hero");
-    assert.ok(followingSection > marquee, "marquee must stay at the hero boundary");
+    assert.match(source, /const sections: PageSection\[\]/);
+    assert.match(source, /<PageSectionRenderer/);
+    assert.match(source, /<SectionNavigation/);
+    assert.doesNotMatch(source, /<LegacyHomepageSections|<HeroCapsuleSlideshow|<TestimonialsSection/);
   });
 
-  it("stops the ticker for reduced motion and hides duplicate links from assistive technology", () => {
-    const source = read("components/home/marquee-ticker.tsx");
+  it("keeps every adopted homepage chapter connected to CMS-backed data", () => {
+    const source = read("components/home/homepage-sections.tsx");
+    for (const reader of [
+      "getCmsHeroSlides",
+      "getCmsChallengeSection",
+      "getCmsMissionSection",
+      "getCmsOverviewSection",
+      "getCmsProgrammeShowcase",
+      "getCmsImpactStats",
+      "getCmsDonationCampaign",
+      "getCmsFeaturedStory",
+      "getCmsJoinCtaCards",
+      "getCmsFeaturedArticles",
+      "getCmsNewsletterSignup",
+    ]) {
+      assert.match(source, new RegExp(reader), `${reader} must remain in the homepage data flow`);
+    }
+  });
 
-    assert.match(source, /motion-reduce:animate-none/);
-    assert.match(source, /const isDuplicate = index >= effective\.length/);
-    assert.match(source, /aria-hidden=\{isDuplicate \|\| undefined\}/);
-    assert.match(source, /tabIndex=\{isDuplicate \? -1 : undefined\}/);
+  it("disables automatic hero movement when reduced motion is requested", () => {
+    const source = read("components/page-sections/editorial-hero.tsx");
+    assert.match(source, /prefers-reduced-motion: reduce/);
+    assert.match(source, /media\.matches/);
+    assert.match(source, /motion-reduce:transition-none/);
   });
 });

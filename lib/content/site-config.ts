@@ -293,7 +293,10 @@ type InitiativeSeedConfig = {
   tagline: string;
   accent: string;
   heroImage: string;
+  /** What the photograph actually shows. Design-phase media, so it must not claim to depict a specific ITFYG cohort or event. */
+  heroImageAlt?: string;
   overviewImage: string;
+  overviewImageAlt?: string;
   stats: InitiativePage["stats"];
   mission: string;
   objectives: string[];
@@ -334,6 +337,7 @@ function buildInitiativePage(config: InitiativeSeedConfig): InitiativePage {
     tagline: config.tagline,
     accent: config.accent,
     heroImage: config.heroImage,
+    heroImageAlt: config.heroImageAlt ?? `${config.title} programme activity`,
     overviewImage: config.overviewImage,
     mission: config.mission,
     objectives: config.objectives,
@@ -354,7 +358,7 @@ function buildInitiativePage(config: InitiativeSeedConfig): InitiativePage {
     sectionContent: {
       overviewEyebrow: "Overview",
       overviewTitle: "A focused pathway with clear outcomes",
-      overviewImageAlt: `${config.title} participants and programme activity`,
+      overviewImageAlt: config.overviewImageAlt ?? `${config.title} participants and programme activity`,
       howItWorksEyebrow: "How it works",
       howItWorksTitle: "A programme journey that moves from access to confidence",
       howItWorksDescription: "Each initiative uses a clear process so participants and partners know what to expect from first contact to measurable outcomes.",
@@ -403,8 +407,10 @@ export const initiatives: InitiativePage[] = [
     tagline:
       "Building the next generation of confident, skilled young women in technology.",
     accent: "#D70B52",
-    heroImage: "/images/randomPictures/group_girls.jpg",
-    overviewImage: "/images/randomPictures/groupofgirlsentrance.jpg",
+    heroImage: "https://images.unsplash.com/photo-1744809495173-217ca4faa8bc?auto=format&fit=crop&w=1600&q=85",
+    heroImageAlt: "A schoolgirl in Accra working carefully on a classroom exercise",
+    overviewImage: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=85",
+    overviewImageAlt: "A Ghanaian student concentrating on a classroom task",
     stats: [
       { value: "1,400+", label: "Young women reached", description: "Through training, mentorship, and leadership development programmes." },
       { value: "52%", label: "Female participation", description: "Across all ITFY training cohorts, reflecting our commitment to inclusion." },
@@ -446,10 +452,10 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/group_girls.jpg", alt: "Girls in Tech participants gathered during a learning session." },
-      { src: "/images/randomPictures/girlstaslkingUX.jpg", alt: "Learners discussing design ideas in a collaborative workshop." },
-      { src: "/images/randomPictures/uXstudents.jpg", alt: "Participants presenting their work during a skills showcase." },
-      { src: "/images/randomPictures/UXteacher.png", alt: "Facilitator guiding students through practical digital exercises." },
+      { src: "https://images.unsplash.com/photo-1744809495173-217ca4faa8bc?auto=format&fit=crop&w=1400&q=85", alt: "A schoolgirl in Accra working carefully on a classroom exercise." },
+      { src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1400&q=85", alt: "A Ghanaian student concentrating on a classroom task." },
+      { src: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=85", alt: "Students working together in a classroom setting." },
+      { src: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=85", alt: "A group of students learning together in an informal collaborative setting." },
     ],
     testimonials: [
       { quote: "Before this programme, tech felt like something other people did. Now I can build, present, and apply with confidence.", name: "Benedicta O.", role: "Girls in Tech participant", avatar: "/images/people/benedicta.jpg" },
@@ -482,8 +488,10 @@ export const initiatives: InitiativePage[] = [
     tagline:
       "From curiosity to capability — a disciplined pathway into Ghana's digital workforce.",
     accent: "#1E72BA",
-    heroImage: "/images/randomPictures/studentsBackcoding.jpg",
-    overviewImage: "/images/randomPictures/groupworkstudents.jpg",
+    heroImage: "https://images.unsplash.com/photo-1528901166007-3784c7dd3653?auto=format&fit=crop&w=1600&q=85",
+    heroImageAlt: "Young African developers collaborating around computers during a coding session",
+    overviewImage: "https://images.unsplash.com/photo-1526253038957-bce54e05968e?auto=format&fit=crop&w=1600&q=85",
+    overviewImageAlt: "Two learners working together while reviewing code on laptop screens",
     stats: [
       { value: "1,800+", label: "Youth trained", description: "Graduates of the structured academy pathway since launch." },
       { value: "12", label: "Weeks per cohort", description: "Intensive, project-driven training with weekly deliverables." },
@@ -525,10 +533,10 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/studentsBackcoding.jpg", alt: "Youth Tech Academy participants working during a coding session." },
-      { src: "/images/randomPictures/UXcours.jpg", alt: "Learners reviewing ideas and course exercises together." },
-      { src: "/images/randomPictures/studentpresenting.jpg", alt: "A participant presenting project work to peers and facilitators." },
-      { src: "/images/randomPictures/studentsblueclothing.jpg", alt: "Academy learners gathered in a collaborative classroom setting." },
+      { src: "https://images.unsplash.com/photo-1526253038957-bce54e05968e?auto=format&fit=crop&w=1400&q=85", alt: "Two learners working together while reviewing code on laptop screens." },
+      { src: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=85", alt: "Programming code displayed on a laptop screen." },
+      { src: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1400&q=85", alt: "Learners collaborating around laptops during a software development session." },
+      { src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85", alt: "Young adults gathered around a laptop while learning and discussing together." },
     ],
     testimonials: [
       { quote: "The academy changed how I approach learning. I stopped waiting to feel ready and started building real things.", name: "Mlan K.", role: "Youth Tech Academy graduate", avatar: "/images/people/Mlan.jpg" },
@@ -561,8 +569,10 @@ export const initiatives: InitiativePage[] = [
     tagline:
       "Where digital skills become ventures — disciplined entrepreneurship for Ghana's next generation of founders.",
     accent: "#0152BE",
-    heroImage: "/images/randomPictures/studentpresenting.jpg",
-    overviewImage: "/images/randomPictures/peterTalking.jpg",
+    heroImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=85",
+    heroImageAlt: "A young team discussing ideas together around a work table",
+    overviewImage: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1600&q=85",
+    overviewImageAlt: "A small team discussing ideas around a table",
     stats: [
       { value: "320+", label: "Founders supported", description: "Young people who have explored or launched ventures through the hub." },
       { value: "85+", label: "Pitches delivered", description: "Public presentations to mentors, investors, and partners." },
@@ -604,10 +614,10 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/studentpresenting.jpg", alt: "Founder presenting an idea during an entrepreneurship session." },
-      { src: "/images/randomPictures/peterTalking.jpg", alt: "Facilitator speaking with learners during a venture workshop." },
-      { src: "/images/randomPictures/studentpresentin.jpg", alt: "Participants sharing project concepts in a guided feedback environment." },
-      { src: "/images/randomPictures/petertalkingtostudentscoloful.jpg", alt: "Collaborative learning session focused on pitching and business ideas." },
+      { src: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=85", alt: "A young team discussing ideas together around a work table." },
+      { src: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=85", alt: "A small team discussing ideas around a table." },
+      { src: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1400&q=85", alt: "Colleagues working together during a collaborative planning session." },
+      { src: "https://images.unsplash.com/photo-1553484771-047a44eee27b?auto=format&fit=crop&w=1400&q=85", alt: "People discussing communications material together around a table." },
     ],
     testimonials: [
       { quote: "This was the first place where my idea stopped feeling vague and started feeling buildable.", name: "Konadu A.", role: "Entrepreneurship Hub participant", avatar: "/images/people/konadu.jpg" },
@@ -640,8 +650,10 @@ export const initiatives: InitiativePage[] = [
     tagline:
       "Where technical skills meet real constraints — building, presenting, and delivering under pressure.",
     accent: "#C44900",
-    heroImage: "/images/randomPictures/redstudentgrouplesson.jpg",
-    overviewImage: "/images/randomPictures/studentsblueclothing.jpg",
+    heroImage: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1600&q=85",
+    heroImageAlt: "Programming code displayed on a laptop screen",
+    overviewImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=85",
+    overviewImageAlt: "Young adults gathered around a laptop while learning and discussing together",
     stats: [
       { value: "14", label: "Challenge teams", description: "Learner groups building solutions around shared problem statements." },
       { value: "6", label: "Partner briefs", description: "Real-world themes and community-facing challenge prompts." },
@@ -683,10 +695,10 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/redstudentgrouplesson.jpg", alt: "Learners working intensely during a challenge session." },
-      { src: "/images/randomPictures/studentsblueclothing.jpg", alt: "A team collaborating during project development." },
-      { src: "/images/randomPictures/studentgroupguys.jpg", alt: "Participants preparing together for a showcase moment." },
-      { src: "/images/randomPictures/studentpresenting.jpg", alt: "A final demo presentation during the challenge format." },
+      { src: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=85", alt: "Programming code displayed on a laptop screen." },
+      { src: "https://images.unsplash.com/photo-1528901166007-3784c7dd3653?auto=format&fit=crop&w=1400&q=85", alt: "Young African developers collaborating around computers during a coding session." },
+      { src: "https://images.unsplash.com/photo-1526253038957-bce54e05968e?auto=format&fit=crop&w=1400&q=85", alt: "Two learners working together while reviewing code on laptop screens." },
+      { src: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1400&q=85", alt: "A designer working with digital interface layouts on a computer." },
     ],
     testimonials: [
       { quote: "The challenge forced us to think clearly, move faster, and explain our decisions in a way we never had before.", name: "Saah J.", role: "Challenge participant", avatar: "/images/people/saah.jpg" },
@@ -719,8 +731,10 @@ export const initiatives: InitiativePage[] = [
     tagline:
       "Digital inclusion that begins with access, trust, and locally relevant delivery.",
     accent: "#2A6F97",
-    heroImage: "/images/randomPictures/children_holding_sign_in_streets.jpg",
-    overviewImage: "/images/randomPictures/studentslisteningfrontal.JPG",
+    heroImage: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=85",
+    heroImageAlt: "Young learners gathered together in a community learning environment",
+    overviewImage: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1600&q=85",
+    overviewImageAlt: "Young learners gathered during an educational community session",
     stats: [
       { value: "9", label: "Community hubs", description: "Local partnership points anchoring delivery in underserved regions." },
       { value: "1,500+", label: "Learners reached", description: "Young people gaining first digital exposure beyond city centres." },
@@ -762,10 +776,10 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/children_holding_sign_in_streets.jpg", alt: "Community-based outreach moment during Rural Tech Connect." },
-      { src: "/images/randomPictures/studentslisteningfrontal.JPG", alt: "Learners listening during a regional activation session." },
-      { src: "/images/randomPictures/redclothingStudents.jpg", alt: "A local group of students gathered for a digital exposure session." },
-      { src: "/images/randomPictures/studentslistening.jpg", alt: "Community learners participating in a practical outreach event." },
+      { src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1400&q=85", alt: "Young learners gathered together in a community learning environment." },
+      { src: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1400&q=85", alt: "Young learners gathered during an educational community session." },
+      { src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85", alt: "Young people smiling and standing together outdoors." },
+      { src: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=85", alt: "Students working together in a classroom setting." },
     ],
     testimonials: [
       { quote: "Bringing the programme to us changed everything. It made technology feel close enough to belong to us too.", name: "Awartey L.", role: "Regional participant", avatar: "/images/people/awartey.jpg" },
@@ -798,8 +812,10 @@ export const initiatives: InitiativePage[] = [
     tagline:
       "Where visibility, access, and community presence turn possibility into participation.",
     accent: "#8B5E34",
-    heroImage: "/images/randomPictures/studentslistening.jpg",
-    overviewImage: "/images/randomPictures/peterblackboard.jpg",
+    heroImage: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1600&q=85",
+    heroImageAlt: "Students working together in a classroom setting",
+    overviewImage: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1600&q=85",
+    overviewImageAlt: "A facilitator leading a learning session in front of a group",
     stats: [
       { value: "80+", label: "Outreach events", description: "Public activations creating first contact, awareness, and trust." },
       { value: "3,000+", label: "People reached", description: "Students, parents, schools, and communities engaged through visibility work." },
@@ -841,10 +857,10 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/studentslistening.jpg", alt: "Community learners listening during an outreach activation." },
-      { src: "/images/randomPictures/peterblackboard.jpg", alt: "Facilitator explaining concepts during a school outreach session." },
-      { src: "/images/randomPictures/maingraduationpic.jpg", alt: "A visible community moment showing the scale of ITFY engagement." },
-      { src: "/images/randomPictures/frontalgraduation.jpg", alt: "Audience participation during a community-facing ITFY event." },
+      { src: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1400&q=85", alt: "Young learners gathered during an educational community session." },
+      { src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1400&q=85", alt: "Young learners gathered together in a community learning environment." },
+      { src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=85", alt: "A facilitator leading a learning session in front of a group." },
+      { src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85", alt: "Young people smiling and standing together outdoors." },
     ],
     testimonials: [
       { quote: "The outreach event made the whole idea of digital skills feel concrete, not distant.", name: "White Lady A.", role: "Community participant", avatar: "/images/people/white lady-Cover.jpg" },
@@ -877,8 +893,10 @@ export const initiatives: InitiativePage[] = [
     tagline:
       "Shaping the wider conditions that make youth digital opportunity more possible and more equitable.",
     accent: "#A63D40",
-    heroImage: "/images/randomPictures/graduationspeaking.jpg",
-    overviewImage: "/images/randomPictures/mireiotalking.jpg",
+    heroImage: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1600&q=85",
+    heroImageAlt: "Government and public-sector professionals gathered for an institutional meeting",
+    overviewImage: "https://images.unsplash.com/photo-1553484771-047a44eee27b?auto=format&fit=crop&w=1600&q=85",
+    overviewImageAlt: "People discussing communications material together around a table",
     stats: [
       { value: "14", label: "Public engagements", description: "Talks, panels, and ecosystem-facing conversation spaces." },
       { value: "9", label: "Coalition touchpoints", description: "Moments where ITFY voice contributes to broader influence work." },
@@ -920,10 +938,10 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/graduationspeaking.jpg", alt: "Public speaking moment connected to advocacy and influence work." },
-      { src: "/images/randomPictures/mireiotalking.jpg", alt: "Conversation-led engagement with partners and public audiences." },
-      { src: "/images/randomPictures/peterTalking.jpg", alt: "Facilitator or speaker addressing a group around shared opportunity themes." },
-      { src: "/images/randomPictures/whiteLady.jpg", alt: "An audience-facing programme moment that signals broader ecosystem engagement." },
+      { src: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1400&q=85", alt: "Government and public-sector professionals gathered for an institutional meeting." },
+      { src: "https://images.unsplash.com/photo-1553484771-047a44eee27b?auto=format&fit=crop&w=1400&q=85", alt: "People discussing communications material together around a table." },
+      { src: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1400&q=85", alt: "A team reviewing information together during an organisational planning meeting." },
+      { src: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1400&q=85", alt: "A newsroom style workspace with people producing media content." },
     ],
     testimonials: [
       { quote: "What matters here is that the message comes from lived programme experience, not from a distance.", name: "Agboku S.", role: "Ecosystem collaborator", avatar: "/images/people/agboku1.png" },
@@ -956,8 +974,10 @@ export const initiatives: InitiativePage[] = [
     tagline:
       "Where weekly practice and peer community turn interest into lasting capability and visible next steps.",
     accent: "#1F7A8C",
-    heroImage: "/images/randomPictures/studentgroupguys.jpg",
-    overviewImage: "/images/randomPictures/studentsblueclothing.jpg",
+    heroImage: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=85",
+    heroImageAlt: "A group of students learning together in an informal collaborative setting",
+    overviewImage: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=85",
+    overviewImageAlt: "People working together around a laptop in a collaborative environment",
     stats: [
       { value: "18", label: "School clubs", description: "Active or seeded club programmes operating across partner schools." },
       { value: "800+", label: "Students engaged", description: "Young people participating in recurring digital learning activities." },
@@ -999,10 +1019,10 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/studentgroupguys.jpg", alt: "Students working together in a school-based tech club session." },
-      { src: "/images/randomPictures/studentsblueclothing.jpg", alt: "Club participants gathered for recurring digital learning activities." },
-      { src: "/images/randomPictures/groupworkstudents.jpg", alt: "Learners collaborating on a practical classroom challenge." },
-      { src: "/images/randomPictures/studentpresentin.jpg", alt: "Students sharing what they have learned with peers." },
+      { src: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=85", alt: "A group of students learning together in an informal collaborative setting." },
+      { src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=85", alt: "People working together around a laptop in a collaborative environment." },
+      { src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85", alt: "Young adults gathered around a laptop while learning and discussing together." },
+      { src: "https://images.unsplash.com/photo-1620829813573-7c9e1877706f?auto=format&fit=crop&w=1400&q=85", alt: "A young Ghanaian university student concentrating on work at a laptop." },
     ],
     testimonials: [
       { quote: "The club gave us somewhere to keep going after the first workshop. That consistency changed everything for me.", name: "Emmanuel D.", role: "Tech Club member", avatar: "/images/people/emmanuel.jpg" },
@@ -3085,7 +3105,7 @@ export const whatWeDoOverviewContent: WhatWeDoOverviewContent = {
   title: "Eight connected initiatives expanding youth digital opportunity in Ghana",
   description:
     "IT For Youth Ghana runs a deliberate ecosystem: access, training, and transition work that moves young Ghanaians — especially young women and learners from underserved communities — from first exposure to measurable progression. 3,000+ trained. 85% progress into work, study, or enterprise within six months.",
-  heroImage: "/images/randomPictures/groupworkstudents.jpg",
+  heroImage: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1600&q=85",
   heroStats: [
     {
       label: "Live initiative routes",
@@ -3139,15 +3159,27 @@ export const whatWeDoOverviewContent: WhatWeDoOverviewContent = {
   galleryItems: [
     {
       type: "image",
-      url: "/images/randomPictures/groupworkstudents.jpg",
-      title: "Learning through collaboration",
-      description: "Participants work through practical challenges together during a training session.",
+      url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=85",
+      title: "Peer learning",
+      description: "Young adults gathered around a laptop, working a problem through together rather than alone.",
     },
     {
       type: "image",
-      url: "/images/randomPictures/redstudentgrouplesson.jpg",
-      title: "Skills built by doing",
-      description: "Hands-on lessons create space to practise, ask questions, and learn from peers.",
+      url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=85",
+      title: "Mentorship",
+      description: "A mentor and a learner reviewing work side by side, at the point where feedback is most useful.",
+    },
+    {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1528901166007-3784c7dd3653?auto=format&fit=crop&w=1600&q=85",
+      title: "Building in teams",
+      description: "Developers collaborating around computers, splitting a build between them.",
+    },
+    {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1600&q=85",
+      title: "Facilitated practice",
+      description: "A facilitator leading a session in front of a group, holding the room through an exercise.",
     },
   ],
   pathwaysSectionEyebrow: "Pathways",

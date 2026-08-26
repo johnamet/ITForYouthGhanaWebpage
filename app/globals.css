@@ -340,6 +340,52 @@ main :where([class*="bg-brand-deep"], [class*="from-brand-deep"], [class*="to-br
   border-radius: var(--radius-panel);
 }
 
+/* INTERIOR PAGE SIZING
+   ---------------------------------------------------------------------------
+   The same contained-lens shell, at rest on an interior page: no controls band
+   to reserve, no viewport minimum to fill, and a wider, shallower shell.
+
+   Wider because an interior hero carries a lead paragraph AND a supporting
+   paragraph the homepage slide does not, so the text column needs the measure.
+   Shallower because a hero that introduces a page must not consume the whole
+   first screen of it, the way a homepage hero legitimately does.
+
+   --page-capsule-ratio is a variable rather than a literal because the
+   breadcrumb row above the shell has to be exactly as wide as the shell to
+   align with it, and the shell's width is height x ratio. One value, two
+   consumers, so they cannot drift apart. */
+.itfy-hero-stage.itfy-hero-stage--page {
+  --hero-controls-h: 0px;
+  --capsule-max-w: 1180px;
+  --page-capsule-ratio: 2.1;
+  --hero-capsule-h: min(
+    max(
+      calc(78svh - 65px - 2 * var(--hero-pad-y)),
+      400px
+    ),
+    560px
+  );
+}
+
+.itfy-capsule--hero.itfy-capsule--page {
+  aspect-ratio: var(--page-capsule-ratio) / 1;
+}
+
+/* Tracks the shell's computed width: min(available, cap, height x ratio). The
+   stacked layout below 820px resets the shell to auto height, so this falls
+   back to the stage's own width there, which is what a breadcrumb row on a
+   phone should be anyway. */
+.itfy-stage__crumbs {
+  position: relative;
+  z-index: 2;
+  width: min(
+    100%,
+    var(--capsule-max-w),
+    calc(var(--hero-capsule-h) * var(--page-capsule-ratio))
+  );
+  margin-bottom: clamp(16px, 2.4vh, 30px);
+}
+
 /* THE HERO BACKGROUND
    ---------------------------------------------------------------------------
    The blurred photograph belongs to the HERO, not to the capsule. The sketch

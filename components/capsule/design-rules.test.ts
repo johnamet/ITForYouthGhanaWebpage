@@ -18,7 +18,7 @@ const REDESIGNED = [
   "components/capsule/capsule-media.tsx",
   "components/capsule/capsule-content.tsx",
   "components/capsule/capsule-actions.tsx",
-  "components/capsule/slideshow-stage.tsx",
+  "components/capsule/capsule-stage.tsx",
   "components/capsule/slideshow-controls.tsx",
   "components/content/panel-list.tsx",
   "components/content/process-sequence.tsx",
@@ -224,12 +224,12 @@ describe("redesign design rules", () => {
     // an earlier version of this test asserted exactly that wrong arrangement.
     const hero = read("components/home/hero-capsule-slideshow.tsx");
     const shell = read("components/capsule/capsule-shell.tsx");
-    const stage = read("components/capsule/slideshow-stage.tsx");
+    const stage = read("components/capsule/capsule-stage.tsx");
 
     assert.match(stage, /from "next\/image"/, "the stage must render the slide images");
     assert.match(stage, /itfy-stage__shot/);
     assert.match(stage, /overlayFrom/, "the stage owns the per-slide wash");
-    assert.match(hero, /<SlideshowStage[\s\S]{0,200}images=\{slides\.map/);
+    assert.match(hero, /<CapsuleStage[\s\S]{0,200}images=\{slides\.map/);
 
     assert.ok(
       !shell.includes("{background}"),
@@ -283,6 +283,68 @@ describe("redesign design rules", () => {
     // Click and focus must work regardless of pointer capability.
     assert.match(source, /onFocus=/);
     assert.match(source, /href=\{`\/what-we-do\//);
+  });
+
+  it("gives an interior page hero the contained lens, not the leading lobe", () => {
+    // The leading-lobe pill's whole purpose is the merge mask that dissolves
+    // the photograph into the shell's fill. On a hero that mask faded a ghost
+    // of the photograph across the headline and left a seam where it ended, so
+    // the page hero takes the homepage's contained-lens shell instead.
+    const source = read("components/capsule/capsule-page-hero.tsx");
+    assert.match(source, /<CapsuleShell\s+variant="pageHero"/);
+    assert.match(source, /<CapsuleStage[\s\S]{0,120}variant="page"/);
+    assert.ok(!/tone="paper"/.test(source), "the page hero is glass on a photograph, not paper");
+
+    const shell = read("components/capsule/capsule-shell.tsx");
+    assert.match(shell, /variant !== "inline" && "itfy-capsule--hero"/);
+    assert.match(shell, /variant === "pageHero" && "itfy-capsule--page"/);
+  });
+
+  it("keeps the interior hero shell shallower than the homepage's", () => {
+    const globals = read("app/globals.css");
+    const stage = globals.match(/\.itfy-hero-stage\.itfy-hero-stage--page\s*\{[^}]+\}/)?.[0];
+    assert.ok(stage, "missing interior page stage geometry");
+    // No slideshow, so no controls band to reserve below the shell.
+    assert.match(stage, /--hero-controls-h:\s*0px/);
+    assert.match(stage, /--page-capsule-ratio:\s*2\.1/);
+    assert.match(stage, /560px/, "the interior shell must stay below the homepage's 680px cap");
+
+    const shell = globals.match(/\.itfy-capsule--hero\.itfy-capsule--page\s*\{[^}]+\}/)?.[0];
+    assert.ok(shell, "missing interior shell ratio");
+    assert.match(shell, /aspect-ratio:\s*var\(--page-capsule-ratio\)\s*\/\s*1/);
+  });
+
+  it("aligns the breadcrumb row with the shell it sits above", () => {
+    // The row and the shell are siblings in a centred grid, so the only way
+    // their left edges meet is for the row to compute the same width the shell
+    // does: min(available, cap, height x ratio). Same variables, no literals.
+    const globals = read("app/globals.css");
+    const crumbs = globals.match(/\.itfy-stage__crumbs\s*\{[^}]+\}/)?.[0];
+    assert.ok(crumbs, "missing breadcrumb row geometry");
+    assert.match(crumbs, /var\(--capsule-max-w\)/);
+    assert.match(crumbs, /calc\(var\(--hero-capsule-h\)\s*\*\s*var\(--page-capsule-ratio\)\)/);
+  });
+
+  it("puts breadcrumbs on the dark ground in light ink", () => {
+    // They used to sit on a light band. Moving the hero onto a photograph
+    // without moving the ink would have left slate-500 on near-black.
+    const source = read("components/capsule/capsule-page-hero.tsx");
+    const crumbs = source.slice(source.indexOf('aria-label="Breadcrumb"'), source.indexOf("</nav>"));
+    assert.ok(crumbs.length > 0, "no breadcrumb markup found");
+    assert.ok(!/text-slate-|text-brand-ink/.test(crumbs), "dark ink on the dark stage");
+    assert.match(crumbs, /text-white\/65/);
+    assert.match(crumbs, /font-semibold text-white/, "the current page is the emphasised crumb");
+  });
+
+  it("keeps the accent on a lens with no autoplay to report", () => {
+    // A static lens has no progress arc, and without the ring the page's
+    // identity colour disappears from the hero entirely.
+    const media = read("components/capsule/capsule-media.tsx");
+    assert.match(media, /accentRing\?:\s*boolean/);
+    assert.match(media, /const showRing = showProgress \|\| accentRing/);
+    // A closed circle: offset 0 whenever there is no progress to draw.
+    assert.match(media, /ringOffset\s*=\s*typeof progress === "number" && showProgress \? 100 - progress : 0/);
+    assert.match(read("components/capsule/capsule-page-hero.tsx"), /accentRing/);
   });
 
   it("keeps var() out of SVG presentation attributes", () => {

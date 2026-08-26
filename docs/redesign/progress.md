@@ -74,6 +74,23 @@ The initiative gallery's lightbox was removed with the component. It closed on
 an outside click, had no Escape handler and no focus trap, so it failed §24 of
 the constitution; native scroll has no controller to get wrong.
 
+## Phase 3 — main-page template adoption
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Typed section registry | done | `types/page-sections.ts`, `lib/page-sections/schema.ts` |
+| Twelve shared section renderers | done | `components/page-sections/` |
+| Nine main routes use the registry | done | `components/page-sections/main-page-adoption.test.ts` |
+| Template chapter order adopted | done | `lib/content/main-page-sections.ts`, `components/home/homepage-sections.tsx` |
+| Existing CMS/domain data preserved through adapters | done | `lib/content/main-page-sections.ts` |
+| CMS persistence and editor handoff documented | done | `docs/redesign/main-page-section-cms.md` |
+| Main-page eval | done | `npm run eval:main-pages` |
+
+This phase changes the rendering boundary, not Firestore. The current fixed
+domain records remain authoritative for content while the adapters supply an
+ordered `PageSection[]`. The later CMS composition document and admin editor
+must follow the migration contract in `main-page-section-cms.md`.
+
 ## Design references
 
 `docs/design_templates/` holds nine finished HTML page concepts and is the

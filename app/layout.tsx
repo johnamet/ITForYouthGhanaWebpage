@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 
 import "@fontsource-variable/dm-sans/wght.css";
 import "@fontsource-variable/playfair-display/wght.css";
+// The hero headline sets its accented phrase in real Playfair italic. Without
+// this face the browser synthesises an oblique by shearing the roman, which
+// loses the calligraphic letterforms the treatment is built on.
+import "@fontsource-variable/playfair-display/wght-italic.css";
 
 import "./globals.css";
 

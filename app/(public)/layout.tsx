@@ -26,6 +26,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <>
+      <a
+        href="#main-content"
+        className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-control bg-white px-4 py-3 font-bold text-brand-deep shadow-panel transition focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-brand-accent motion-reduce:transition-none"
+      >
+        Skip to main content
+      </a>
       {/*
        * Stack order:
        *   AnnouncementBar - z-50, not sticky, scrolls away naturally
@@ -35,7 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       */}
       <AnnouncementBar announcement={announcement} />
       <SiteHeader logoUrl={settings.logoUrl} />
-      <main className="antialiased">{children}</main>
+      <main id="main-content" tabIndex={-1} className="antialiased">{children}</main>
       <FloatingElements content={floating} />
       <SiteFooter settings={settings} />
     </>

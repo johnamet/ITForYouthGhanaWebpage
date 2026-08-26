@@ -5,8 +5,8 @@ import {
   CapsuleContent,
   CapsuleMedia,
   CapsuleShell,
+  CapsuleStage,
   SlideshowControls,
-  SlideshowStage,
   useSlideshow,
 } from "@/components/capsule";
 import { safeCssColor } from "@/lib/utils/css-color";
@@ -65,7 +65,7 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
       className="relative"
       {...containerProps}
     >
-      <SlideshowStage
+      <CapsuleStage
         images={slides.map((item) => ({ id: item.id, src: item.image }))}
         activeIndex={index}
         overlayFrom={overlayFrom}
@@ -115,7 +115,7 @@ export function HeroCapsuleSlideshow({ slides, interval = 6000 }: HeroCapsuleSli
 
         {/* The controls use the stage's reserved lower band, separate from the
             media, text and CTA pair in the capsule. */}
-      </SlideshowStage>
+      </CapsuleStage>
 
       {/* Announces the change without duplicating the heading on screen. */}
       <p role="status" aria-live="polite" className="sr-only">

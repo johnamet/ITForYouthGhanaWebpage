@@ -146,7 +146,9 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
         {/* ── Hamburger ─────────────────────────────────────────────── */}
         <button
           onClick={() => setMobileOpen((o) => !o)}
-          aria-label="Toggle menu"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-navigation"
           className="flex h-9 w-9 flex-col items-center justify-center gap-[5px] rounded-lg border border-white/15 transition hover:bg-white/[0.07] xl:hidden"
         >
           {mobileOpen ? (
@@ -163,7 +165,7 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
 
       {/* ── Mobile drawer ─────────────────────────────────────────────── */}
       {mobileOpen && (
-        <div className="border-t border-white/[0.12] bg-[#030b18] xl:hidden">
+        <div id="mobile-navigation" className="border-t border-white/[0.12] bg-[#030b18] xl:hidden">
           <div className="mx-auto max-w-[1400px] space-y-0.5 px-4 py-4 sm:px-6">
             {publicNavigation.map((item) =>
               item.items ? (
@@ -172,6 +174,8 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
                     onClick={() =>
                       setMobileSection((s) => (s === item.label ? null : item.label))
                     }
+                    aria-expanded={mobileSection === item.label}
+                    aria-controls={`mobile-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
                     className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-[0.85rem] font-medium text-white transition hover:bg-white/[0.12]"
                   >
                     {item.label}
@@ -183,7 +187,7 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
                     />
                   </button>
                   {mobileSection === item.label && (
-                    <div className="ml-4 mt-0.5 space-y-0.5 border-l border-white/[0.08] pb-2 pl-3">
+                    <div id={`mobile-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} className="ml-4 mt-0.5 space-y-0.5 border-l border-white/[0.08] pb-2 pl-3">
                       {item.items.map((child) => (
                         <Link
                           key={child.href}
