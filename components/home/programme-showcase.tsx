@@ -153,7 +153,14 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
 
               {/* Card content */}
               <div className="relative flex min-h-[29rem] flex-col p-5">
-                <div className="mt-[17.45rem] flex flex-1 flex-col">
+                {/*
+                  16.53rem = 57% of the card's min-h-[29rem], i.e. the image
+                  area's own height. That places the title exactly 1.25rem
+                  (one card-padding unit) below the image edge, matching the
+                  card's own spacing rhythm now that the floating icon badge
+                  that used to straddle this seam is gone.
+                */}
+                <div className="mt-[16.53rem] flex flex-1 flex-col">
                   <h3
                     className="
                       font-heading text-[1.55rem] font-bold
