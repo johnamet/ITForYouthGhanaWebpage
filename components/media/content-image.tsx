@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { cn } from "@/lib/utils/cn";
+import { safeImageSrc } from "@/lib/utils/image-src";
 
 type ContentImageProps = {
   src?: string | null;
@@ -31,11 +32,12 @@ export function ContentImage({
   overlay = false,
   sizes = "(min-width: 1024px) 50vw, 100vw",
 }: ContentImageProps) {
+  const resolvedSrc = safeImageSrc(src);
   return (
     <div className={cn("relative overflow-hidden rounded-media bg-brand-mist", aspectClasses[aspectRatio], className)}>
-      {src?.trim() ? (
+      {resolvedSrc ? (
         <Image
-          src={src}
+          src={resolvedSrc}
           alt={alt}
           fill
           priority={priority}

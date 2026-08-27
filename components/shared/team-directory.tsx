@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { TeamMemberProfile } from "@/types/content";
 import { Card } from "@/components/ui/card";
 import { StateMessage } from "@/components/ui/state-message";
+import { safeImageSrc } from "@/lib/utils/image-src";
 
 type TeamDirectoryProps = {
   members: TeamMemberProfile[];
@@ -79,7 +80,7 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
               >
                 <div className="mb-4 flex items-center gap-4">
                   <Image
-                    src={member.photo || "/images/logo/logo_small.jpg"}
+                    src={safeImageSrc(member.photo) ?? "/images/logo/logo_small.jpg"}
                     alt={member.name}
                     width={64}
                     height={64}
