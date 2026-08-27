@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { pointsToParagraph } from "@/lib/utils/prose";
 import type { DepartmentProfile, TeamMemberProfile } from "@/types/content";
 
 type DepartmentDetailPageProps = {
@@ -43,13 +44,9 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
             </Panel>
 
             <Panel title="Responsibilities">
-              <ul className="grid gap-3">
-                {department.responsibilities.map((item) => (
-                  <li key={item} className="rounded-2xl border border-brand-border bg-brand-mist/55 px-4 py-3 text-sm leading-7 text-slate-700">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-sm leading-7 text-slate-700">
+                {pointsToParagraph(department.responsibilities)}
+              </p>
             </Panel>
 
             {department.services.length ? (
@@ -60,11 +57,9 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                       <h3 className="font-heading text-xl font-bold text-brand-ink">{service.title}</h3>
                       <p className="mt-3 text-sm leading-7 text-slate-600">{service.body}</p>
                       {service.bullets?.length ? (
-                        <ul className="mt-4 grid gap-2 text-sm font-medium text-brand-navy">
-                          {service.bullets.map((bullet) => (
-                            <li key={bullet}>{bullet}</li>
-                          ))}
-                        </ul>
+                        <p className="mt-4 text-sm leading-7 text-brand-navy">
+                          {pointsToParagraph(service.bullets)}
+                        </p>
                       ) : null}
                     </article>
                   ))}
@@ -127,13 +122,9 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
             {department.priorities.length ? (
               <div className="rounded-[28px] border border-brand-border bg-white p-6">
                 <h2 className="font-heading text-xl font-bold text-brand-ink">Current priorities</h2>
-                <ul className="mt-5 grid gap-3 text-sm leading-7 text-slate-600">
-                  {department.priorities.map((priority) => (
-                    <li key={priority} className="border-l-2 border-brand-gold pl-3">
-                      {priority}
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-5 border-l-2 border-brand-gold pl-3 text-sm leading-7 text-slate-600">
+                  {pointsToParagraph(department.priorities)}
+                </p>
               </div>
             ) : null}
 

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, CheckCircle2, Clock3, PlayCircle, Tag, Users, Globe2 } from "lucide-react";
+import { CalendarDays, Clock3, PlayCircle, Tag, Users, Globe2 } from "lucide-react";
 
+import { pointsToParagraph } from "@/lib/utils/prose";
 import type { Course } from "@/types/course";
 
 type CourseDetailCardProps = {
@@ -157,17 +158,9 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
           {objectives.length ? (
             <section className="mt-10">
               <h2 className="font-heading text-2xl font-bold text-brand-ink">What you will learn</h2>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                {objectives.map((objective) => (
-                  <div
-                    key={objective}
-                    className="flex gap-3 rounded-[22px] border border-brand-border bg-brand-mist/40 p-4 text-sm leading-6 text-slate-600"
-                  >
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-gold" />
-                    <span>{objective}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="mt-5 rounded-[22px] border border-brand-border bg-brand-mist/40 p-5 text-sm leading-7 text-slate-600">
+                {pointsToParagraph(objectives)}
+              </p>
             </section>
           ) : null}
         </div>
@@ -275,21 +268,17 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
               {requirements.length ? (
                 <section>
                   <h2 className="text-sm font-bold text-brand-ink">Requirements</h2>
-                  <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
-                    {requirements.map((requirement) => (
-                      <li key={requirement}>{requirement}</li>
-                    ))}
-                  </ul>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                    {pointsToParagraph(requirements)}
+                  </p>
                 </section>
               ) : null}
               {includedItems.length ? (
                 <section>
                   <h2 className="text-sm font-bold text-brand-ink">Included</h2>
-                  <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
-                    {includedItems.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                    {pointsToParagraph(includedItems)}
+                  </p>
                 </section>
               ) : null}
             </div>
