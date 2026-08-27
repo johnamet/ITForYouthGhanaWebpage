@@ -25,14 +25,25 @@ for (const path of new Set(localPaths)) {
 
 for (const id of new Set(unsplashIds)) {
   const url = `https://images.unsplash.com/${id}?auto=format&fit=crop&w=400&q=60`;
+  let response;
   try {
-    const response = await fetch(url, { method: "HEAD" });
-    if (!response.ok) {
-      console.error(`HTTP ${response.status}  ${id}`);
+    response = await fetch(url, { method: "HEAD" });
+  } catch {
+    // A thrown exception is a transient network/DNS blip, not an answer.
+    // Retry once after a short delay before treating it as a failure.
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      response = await fetch(url, { method: "HEAD" });
+    } catch (retryError) {
+      console.error(`NETWORK  ${id}  ${retryError.message}`);
       failures += 1;
+      continue;
     }
-  } catch (error) {
-    console.error(`ERROR  ${id}  ${error.message}`);
+  }
+  if (!response.ok) {
+    // A real non-200 status is an answer, not a blip — fail immediately,
+    // never retry.
+    console.error(`HTTP ${response.status}  ${id}`);
     failures += 1;
   }
 }
