@@ -7,7 +7,7 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { InitiativePage } from "@/types/content";
-import { AlternatingFeatureRow } from "@/components/shared/alternating-feature-row";
+import { ProseMediaCard } from "@/components/shared/prose-media-card";
 
 type InitiativePageTemplateProps = {
   page: InitiativePage;
@@ -152,17 +152,19 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               title={section.howItWorksTitle}
               description={section.howItWorksDescription}
             />
-            <div className="mt-8">
-              <AlternatingFeatureRow
-                items={howItWorks.map((step) => ({
-                  title: step.title,
-                  description: step.description,
-                  // Prefer a richer image if provided on the step; else fallback to iconImage
-                  image: undefined,
-                  iconImage: step.iconImage,
-                  imageAlt: step.title,
-                }))}
-              />
+            <div className="mt-8 space-y-10">
+              {howItWorks.map((step, index) => (
+                <ProseMediaCard
+                  key={`${step.title}-${index}`}
+                  layout="side"
+                  mediaPosition={index % 2 === 1 ? "end" : "start"}
+                  title={step.title}
+                  body={step.description}
+                  media={{ iconImage: step.iconImage }}
+                  mediaKey={`what-we-do:${page.slug}:${step.title}`}
+                  theme="training"
+                />
+              ))}
             </div>
           </section> : null}
 

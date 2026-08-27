@@ -4,7 +4,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { SpotlightCard } from "@/components/shared/spotlight-card";
+import { ProseMediaCard } from "@/components/shared/prose-media-card";
 import { VideoCard } from "@/components/media/video-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { PartnershipTrackPage as PartnershipTrackPageType } from "@/types/content";
@@ -87,15 +87,19 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                 const description = composeProse(card.description, card.bullets);
                 const image = (card.image || card.iconImage) as string | undefined;
                 return (
-                  <SpotlightCard
+                  <ProseMediaCard
                     key={card.title}
-                    image={image}
-                    imageAlt={card.title}
-                    categoryLabel={page.overviewCardBadgeLabel ?? "Focus area"}
+                    variant="spotlight"
+                    eyebrow={page.overviewCardBadgeLabel ?? "Focus area"}
                     title={card.title}
-                    excerpt={description}
-                    ctaLabel={page.contactCta?.primary?.label ?? "Get in touch"}
-                    ctaHref={page.contactCta?.primary?.href ?? "/contact"}
+                    body={description}
+                    media={{ image, imageAlt: card.title }}
+                    mediaKey={`partner-with-us:${page.slug}:${card.title}`}
+                    theme="partnership"
+                    cta={{
+                      label: page.contactCta?.primary?.label ?? "Get in touch",
+                      href: page.contactCta?.primary?.href ?? "/contact",
+                    }}
                   />
                 );
               })}
