@@ -31,13 +31,13 @@ export function EditorialGuidanceGrid({ eyebrow, sections }: EditorialGuidanceGr
             }`}
           >
             {hasText(eyebrow) ? (
-              <p className="relative pr-0 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+              <p className="relative text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
                 {eyebrow}
               </p>
             ) : null}
 
             {hasText(section.title) ? (
-              <h2 className="relative mt-4 max-w-xl pr-0 font-heading text-3xl font-bold leading-tight text-brand-ink sm:text-4xl">
+              <h2 className="relative mt-4 max-w-xl font-heading text-3xl font-bold leading-tight text-brand-ink sm:text-4xl">
                 {section.title}
               </h2>
             ) : null}

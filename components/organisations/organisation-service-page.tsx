@@ -7,7 +7,7 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { OrganisationServicePage as OrganisationServicePageType } from "@/types/content";
-import { composeProse, pointsToParagraph } from "@/lib/utils/prose";
+import { composeProse } from "@/lib/utils/prose";
 
 type OrganisationServicePageProps = {
   page: OrganisationServicePageType;
@@ -101,7 +101,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                         {card.icon}
                       </span>
                     )}
-                    <span className="rounded-full bg-brand-mist/70 px=3 py-1 text-xs font-semibold text-brand-navy">
+                    <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
                       {page.overviewCardBadgeLabel ?? "Service area"}
                     </span>
                   </div>
@@ -247,8 +247,10 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                   </div>
 
                   {item.features.length ? (
+                    // Tags, not prose points — comma-joined for the same reason as the
+                    // instructor roster in course-detail-card.tsx.
                     <p className="mt-6 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
-                      {pointsToParagraph(item.features)}
+                      {item.features.map((feature) => feature.trim()).filter(Boolean).join(", ")}
                     </p>
                   ) : null}
 

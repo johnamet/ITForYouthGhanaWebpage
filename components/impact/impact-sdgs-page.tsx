@@ -145,9 +145,11 @@ export function ImpactSdgsPage({ content }: ImpactSdgsPageProps) {
             />
           </div>
 
-          <p className="rounded-[26px] border border-brand-border bg-white px-5 py-5 text-sm leading-7 text-slate-700 shadow-sm">
-            {pointsToParagraph(content.alignmentPrinciples)}
-          </p>
+          {content.alignmentPrinciples.length ? (
+            <p className="rounded-[26px] border border-brand-border bg-white px-5 py-5 text-sm leading-7 text-slate-700 shadow-sm">
+              {pointsToParagraph(content.alignmentPrinciples)}
+            </p>
+          ) : null}
         </div>
       </section>
 

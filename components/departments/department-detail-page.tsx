@@ -44,7 +44,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
             </Panel>
 
             <Panel title="Responsibilities">
-              <p className="text-sm leading-7 text-slate-700">
+              <p className="border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
                 {pointsToParagraph(department.responsibilities)}
               </p>
             </Panel>
@@ -57,8 +57,11 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
                       <h3 className="font-heading text-xl font-bold text-brand-ink">{service.title}</h3>
                       <p className="mt-3 text-sm leading-7 text-slate-600">{service.body}</p>
                       {service.bullets?.length ? (
-                        <p className="mt-4 text-sm leading-7 text-brand-navy">
-                          {pointsToParagraph(service.bullets)}
+                        // Tags, not prose points: these are 1-3 word labels, so they are
+                        // comma-joined rather than run through pointsToParagraph, which
+                        // would punctuate each one as a sentence.
+                        <p className="mt-4 text-sm font-medium leading-7 text-brand-navy">
+                          {service.bullets.map((bullet) => bullet.trim()).filter(Boolean).join(", ")}
                         </p>
                       ) : null}
                     </article>
@@ -117,7 +120,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
             {department.priorities.length ? (
               <div className="rounded-[28px] border border-brand-border bg-white p-6">
                 <h2 className="font-heading text-xl font-bold text-brand-ink">Current priorities</h2>
-                <p className="mt-5 border-l-2 border-brand-gold pl-3 text-sm leading-7 text-slate-600">
+                <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
                   {pointsToParagraph(department.priorities)}
                 </p>
               </div>
