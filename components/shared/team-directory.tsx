@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Linkedin } from "lucide-react";
 
 import type { TeamMemberProfile } from "@/types/content";
 import { Card } from "@/components/ui/card";
@@ -104,9 +103,8 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
                   {member.email ? (
                     <a
                       href={`mailto:${member.email}`}
-                      className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                      className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     >
-                      <Mail className="h-3.5 w-3.5" />
                       Email
                     </a>
                   ) : null}
@@ -116,9 +114,8 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
                       href={member.linkedin}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                      className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     >
-                      <Linkedin className="h-3.5 w-3.5" />
                       LinkedIn
                     </a>
                   ) : null}

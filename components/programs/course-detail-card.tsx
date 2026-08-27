@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, Clock3, PlayCircle, Tag, Users, Globe2 } from "lucide-react";
+import { PlayCircle } from "lucide-react";
 
 import { pointsToParagraph } from "@/lib/utils/prose";
 import type { Course } from "@/types/course";
@@ -185,57 +185,36 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
 
           <dl className="mt-5 grid gap-3 text-sm">
             <div className="rounded-[20px] bg-white px-4 py-4">
-              <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                <Clock3 className="h-4 w-4 text-brand-gold" />
-                Duration
-              </dt>
+              <dt className="font-semibold text-brand-ink">Duration</dt>
               <dd className="mt-2 text-slate-600">{course.duration}</dd>
             </div>
             <div className="rounded-[20px] bg-white px-4 py-4">
-              <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                <CalendarDays className="h-4 w-4 text-brand-gold" />
-                Starts
-              </dt>
+              <dt className="font-semibold text-brand-ink">Starts</dt>
               <dd className="mt-2 text-slate-600">{formatDate(course.startDate)}</dd>
             </div>
             {course.endDate ? (
               <div className="rounded-[20px] bg-white px-4 py-4">
-                <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                  <CalendarDays className="h-4 w-4 text-brand-gold" />
-                  Ends
-                </dt>
+                <dt className="font-semibold text-brand-ink">Ends</dt>
                 <dd className="mt-2 text-slate-600">{formatDate(course.endDate)}</dd>
               </div>
             ) : null}
             <div className="rounded-[20px] bg-white px-4 py-4">
-              <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                <Tag className="h-4 w-4 text-brand-gold" />
-                Level
-              </dt>
+              <dt className="font-semibold text-brand-ink">Level</dt>
               <dd className="mt-2 text-slate-600">{course.level}</dd>
             </div>
             <div className="rounded-[20px] bg-white px-4 py-4">
-              <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                <Globe2 className="h-4 w-4 text-brand-gold" />
-                Language
-              </dt>
+              <dt className="font-semibold text-brand-ink">Language</dt>
               <dd className="mt-2 text-slate-600">{course.language ?? "English"}</dd>
             </div>
             {course.provider ? (
               <div className="rounded-[20px] bg-white px-4 py-4">
-                <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                  <Users className="h-4 w-4 text-brand-gold" />
-                  Provider
-                </dt>
+                <dt className="font-semibold text-brand-ink">Provider</dt>
                 <dd className="mt-2 text-slate-600">{course.provider}</dd>
               </div>
             ) : null}
             {typeof course.enrollmentCount === "number" ? (
               <div className="rounded-[20px] bg-white px-4 py-4">
-                <dt className="flex items-center gap-2 font-semibold text-brand-ink">
-                  <Users className="h-4 w-4 text-brand-gold" />
-                  Enrolled
-                </dt>
+                <dt className="font-semibold text-brand-ink">Enrolled</dt>
                 <dd className="mt-2 text-slate-600">{course.enrollmentCount}</dd>
               </div>
             ) : null}

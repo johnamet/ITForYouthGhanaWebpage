@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { ArticleCard } from "@/components/news/article-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -187,9 +187,6 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
       <section id="subscribe" className="scroll-mt-36 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 rounded-[34px] border border-brand-border bg-brand-warm p-8 shadow-sm lg:grid-cols-[0.75fr_0.25fr] lg:items-center lg:p-10">
           <div className="space-y-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
-              <Mail className="h-5 w-5" />
-            </div>
             <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-navy">
               {content.subscribeSectionEyebrow}
             </p>

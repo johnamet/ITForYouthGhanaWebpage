@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useDeferredValue, useEffect, useState } from "react";
-import { ArrowRight, CalendarDays, Clock3, Search } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 
 import type { Course } from "@/types/course";
 
@@ -270,17 +270,11 @@ export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {
 
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="rounded-[22px] bg-brand-mist/55 px-4 py-4">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-brand-ink">
-                        <Clock3 className="h-4 w-4 text-brand-gold" aria-hidden="true" />
-                        Duration
-                      </div>
+                      <div className="text-sm font-semibold text-brand-ink">Duration</div>
                       <p className="mt-2 text-sm text-slate-600">{course.duration}</p>
                     </div>
                     <div className="rounded-[22px] bg-brand-mist/55 px-4 py-4">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-brand-ink">
-                        <CalendarDays className="h-4 w-4 text-brand-gold" aria-hidden="true" />
-                        Next start
-                      </div>
+                      <div className="text-sm font-semibold text-brand-ink">Next start</div>
                       <p className="mt-2 text-sm text-slate-600">{formatDate(course.startDate)}</p>
                     </div>
                   </div>

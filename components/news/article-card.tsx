@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Clock3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import {
   getArticleLabel,
@@ -21,14 +21,8 @@ function articleHref(article: ArticleSeed) {
 function ArticleMeta({ article }: { article: ArticleSeed }) {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-slate-500">
-      <span className="inline-flex items-center gap-1.5">
-        <CalendarDays className="h-3.5 w-3.5 text-brand-gold" />
-        {formatDate(article.publishedAt)}
-      </span>
-      <span className="inline-flex items-center gap-1.5">
-        <Clock3 className="h-3.5 w-3.5 text-brand-gold" />
-        {getArticleReadTime(article)} min read
-      </span>
+      <span>{formatDate(article.publishedAt)}</span>
+      <span>{getArticleReadTime(article)} min read</span>
     </div>
   );
 }

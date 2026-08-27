@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Tags } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { ArticleCard } from "@/components/news/article-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -80,18 +80,13 @@ export function NewsListingPage({
           </div>
 
           <aside className="sticky top-32 rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
-                <Tags className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-                  {content.topicsSectionEyebrow}
-                </p>
-                <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                  {content.topicsSectionTitle}
-                </h2>
-              </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                {content.topicsSectionEyebrow}
+              </p>
+              <h2 className="font-heading text-2xl font-bold text-brand-ink">
+                {content.topicsSectionTitle}
+              </h2>
             </div>
 
             <div className="mt-6 flex flex-wrap gap-2">

@@ -1,10 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Mail,
-  Tags,
-  UserRound,
-} from "lucide-react";
 
 import { ArticleCard } from "@/components/news/article-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -80,9 +75,7 @@ export function NewsArticlePage({
                       className="object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-brand-navy text-brand-gold">
-                      <UserRound className="h-5 w-5" />
-                    </div>
+                    <div className="flex h-full w-full items-center justify-center bg-brand-navy text-brand-gold" />
                   )}
                 </div>
                 <div>
@@ -99,18 +92,13 @@ export function NewsArticlePage({
 
           {article.tags?.length ? (
             <div className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
-                  <Tags className="h-4 w-4" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-                    Tags
-                  </p>
-                  <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                    Article topics
-                  </h2>
-                </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                  Tags
+                </p>
+                <h2 className="font-heading text-2xl font-bold text-brand-ink">
+                  Article topics
+                </h2>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
                 {article.tags.map((tag) => (
@@ -126,9 +114,6 @@ export function NewsArticlePage({
           ) : null}
 
           <div className="rounded-[30px] border border-brand-border bg-brand-warm p-6">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
-              <Mail className="h-4 w-4" />
-            </div>
             <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
               Stay close to the next update
             </h2>
