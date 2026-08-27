@@ -15,6 +15,11 @@
  * `images.remotePatterns`. If you add or remove a remote pattern there,
  * update ALLOWED_IMAGE_HOSTS here too, or valid images will start being
  * rejected (or invalid ones will start slipping through to a 500 again).
+ *
+ * Only "https:" is accepted below because every entry in next.config.mjs's
+ * `images.remotePatterns` specifies `protocol: "https"` — none configures
+ * "http". If an "http" pattern is ever added there, this protocol check
+ * must be revisited to allow it too.
  */
 const ALLOWED_IMAGE_HOSTS = new Set([
   "files.itforyouthghana.org",
@@ -49,9 +54,9 @@ export function safeImageSrc(src?: string | null): string | undefined {
   // configured in next.config.mjs's images.remotePatterns.
   try {
     const url = new URL(value);
-    if (url.protocol !== "http:" && url.protocol !== "https:") {
+    if (url.protocol !== "https:") {
       console.warn(
-        `[safeImageSrc] rejected image src "${value}": unsupported protocol "${url.protocol}"`
+        `[safeImageSrc] rejected image src "${value}": protocol must be https, got "${url.protocol}"`
       );
       return undefined;
     }
