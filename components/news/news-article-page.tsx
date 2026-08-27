@@ -114,7 +114,7 @@ export function NewsArticlePage({
           ) : null}
 
           <div className="rounded-[30px] border border-brand-border bg-brand-warm p-6">
-            <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
+            <h2 className="font-heading text-2xl font-bold text-brand-ink">
               Stay close to the next update
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-700">
