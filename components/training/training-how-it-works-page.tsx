@@ -92,9 +92,11 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
             </p>
           </div>
 
-          <div className="rounded-[26px] border border-brand-border bg-white px-6 py-6 shadow-sm">
-            <p className="text-sm leading-7 text-slate-700">{pointsToParagraph(checklist)}</p>
-          </div>
+          {checklist.length ? (
+            <div className="rounded-[26px] border border-brand-border bg-white px-6 py-6 shadow-sm">
+              <p className="text-sm leading-7 text-slate-700">{pointsToParagraph(checklist)}</p>
+            </div>
+          ) : null}
         </div>
       </section>
 
