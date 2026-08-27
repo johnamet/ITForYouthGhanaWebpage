@@ -3,13 +3,13 @@ import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 import {
   ArrowRight,
-  CheckCircle2,
   Compass,
   HeartHandshake,
   Layers3,
   Quote,
   ShieldCheck,
 } from "lucide-react";
+import { pointsToParagraph } from "@/lib/utils/prose";
 
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { VideoCard } from "@/components/media/video-card";
@@ -167,14 +167,9 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
                     </h2>
                     <p className="mt-4 text-sm leading-8 text-slate-600">{section.body}</p>
                     {section.bullets?.length ? (
-                      <div className="mt-6 grid gap-3">
-                        {section.bullets.map((bullet) => (
-                          <p key={bullet} className="flex gap-3 text-sm leading-7 text-slate-600">
-                            <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-brand-gold" />
-                            <span>{bullet}</span>
-                          </p>
-                        ))}
-                      </div>
+                      <p className="mt-6 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
+                        {pointsToParagraph(section.bullets)}
+                      </p>
                     ) : null}
                   </article>
                 );
@@ -243,17 +238,9 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
                         </h3>
                         <p className="mt-3 text-sm leading-8 text-white/68">{section.body}</p>
                         {section.bullets?.length ? (
-                          <div className="mt-4 grid gap-2">
-                            {section.bullets.map((bullet) => (
-                              <p
-                                key={bullet}
-                                className="flex gap-3 text-sm leading-7 text-white/72"
-                              >
-                                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-brand-gold" />
-                                <span>{bullet}</span>
-                              </p>
-                            ))}
-                          </div>
+                          <p className="mt-4 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-white/72">
+                            {pointsToParagraph(section.bullets)}
+                          </p>
                         ) : null}
                       </div>
                     </div>

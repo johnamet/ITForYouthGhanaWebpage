@@ -1,4 +1,5 @@
 import { breadcrumbs } from "@/lib/content/site-config";
+import { pointsToParagraph } from "@/lib/utils/prose";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -44,7 +45,7 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
               <p className="mt-4 text-base leading-8 text-slate-600">{card.body}</p>
               {(card.bullets ?? []).length ? (
                 <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-8 text-slate-700">
-                  {(card.bullets ?? []).join(" ")}
+                  {pointsToParagraph(card.bullets)}
                 </p>
               ) : null}
             </article>
