@@ -49,7 +49,7 @@ export function SpotlightCard({
           </span>
         ) : null}
 
-        <h3 className={cn("mt-3 font-heading text-2xl font-bold text-brand-ink", categoryLabel && "mt-4")}>{title}</h3>
+        <h3 className={cn("font-heading text-2xl font-bold text-brand-ink", categoryLabel && "mt-4")}>{title}</h3>
 
         {excerpt ? (
           <p className="mt-3 text-sm leading-7 text-slate-600">{excerpt}</p>

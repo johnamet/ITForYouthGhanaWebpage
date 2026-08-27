@@ -97,7 +97,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
             />
 
             {page.intro ? <div className="rounded-[32px] border border-brand-border bg-brand-mist/55 p-7">
-              <p className="mt-5 text-lg leading-9 text-slate-700">{page.intro}</p>
+              <p className="text-lg leading-9 text-slate-700">{page.intro}</p>
             </div> : null}
           </div>
 
@@ -142,7 +142,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
                   key={section.title}
                   className="group rounded-[32px] border border-brand-border bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-panel"
                 >
-                  <h2 className="mt-6 font-heading text-2xl font-bold text-brand-ink">
+                  <h2 className="font-heading text-2xl font-bold text-brand-ink">
                     {section.title}
                   </h2>
                   <p className="mt-4 text-sm leading-8 text-slate-600">{section.body}</p>

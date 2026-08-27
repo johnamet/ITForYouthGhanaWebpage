@@ -77,7 +77,7 @@ export function ContactPage({ content }: ContactPageProps) {
                   rel={isExternal ? "noreferrer" : undefined}
                   className="group rounded-[30px] border border-brand-border bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
                 >
-                  <p className="mt-5 text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
                     {channel.label}
                   </p>
                   <h2 className="mt-2 break-words font-heading text-2xl font-bold text-brand-ink">

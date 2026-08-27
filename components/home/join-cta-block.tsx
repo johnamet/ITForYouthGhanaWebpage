@@ -43,7 +43,7 @@ export function JoinCtaBlock({ cards }: JoinCtaBlockProps) {
                 key={card.id}
                 className="flex h-full flex-col rounded-[30px] border border-brand-border bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
               >
-                <div className="mt-6 space-y-3">
+                <div className="space-y-3">
                   <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
                     {card.eyebrow}
                   </p>
