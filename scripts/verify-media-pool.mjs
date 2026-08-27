@@ -9,6 +9,13 @@ import { join } from "node:path";
 const root = process.cwd();
 const source = await readFile(join(root, "lib/content/media-pool.ts"), "utf8");
 
+// Node's built-in fetch (undici) sends no User-Agent by default, and
+// images.unsplash.com rejects those requests outright (the connection is
+// reset before any status line comes back, so it surfaces as a thrown
+// "fetch failed" rather than a non-200 response). Do not remove this header:
+// it is required for correctness, not a stylistic addition.
+const FETCH_HEADERS = { "User-Agent": "itfyg-media-verifier" };
+
 const unsplashIds = [...source.matchAll(/UNSPLASH\("([^"]+)"\)/g)].map((m) => m[1]);
 const localPaths = [...source.matchAll(/url:\s*"(\/images\/[^"]+)"/g)].map((m) => m[1]);
 
@@ -27,13 +34,13 @@ for (const id of new Set(unsplashIds)) {
   const url = `https://images.unsplash.com/${id}?auto=format&fit=crop&w=400&q=60`;
   let response;
   try {
-    response = await fetch(url, { method: "HEAD" });
+    response = await fetch(url, { method: "HEAD", headers: FETCH_HEADERS });
   } catch {
     // A thrown exception is a transient network/DNS blip, not an answer.
     // Retry once after a short delay before treating it as a failure.
     await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
-      response = await fetch(url, { method: "HEAD" });
+      response = await fetch(url, { method: "HEAD", headers: FETCH_HEADERS });
     } catch (retryError) {
       console.error(`NETWORK  ${id}  ${retryError.message}`);
       failures += 1;
