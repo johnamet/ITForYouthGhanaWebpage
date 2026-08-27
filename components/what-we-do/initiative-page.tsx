@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { InitiativeGallery } from "@/components/what-we-do/initiative-gallery";
-import { emojiToIconImage } from "@/lib/utils/icon-map";
 import { pointsToParagraph } from "@/lib/utils/prose";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -158,10 +157,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                 items={howItWorks.map((step) => ({
                   title: step.title,
                   description: step.description,
-                  // Prefer a richer image if provided on the step; else fallback to iconImage, else emoji-derived image
+                  // Prefer a richer image if provided on the step; else fallback to iconImage
                   image: undefined,
-                  iconImage: step.iconImage ?? (emojiToIconImage(step.icon) || undefined),
-                  icon: step.icon,
+                  iconImage: step.iconImage,
                   imageAlt: step.title,
                 }))}
               />
@@ -180,13 +178,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   key={stat.label}
                   className="rounded-[30px] border border-brand-border bg-brand-mist/45 p-6"
                 >
-                  {(() => stat.iconImage ?? emojiToIconImage(stat.icon))() ? (
+                  {stat.iconImage ? (
                     <span className="inline-flex items-center justify-center" aria-hidden="true">
-                      <Image src={(stat.iconImage ?? emojiToIconImage(stat.icon)) as string} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
-                    </span>
-                  ) : stat.icon ? (
-                    <span className="text-2xl" aria-hidden="true">
-                      {stat.icon}
+                      <Image src={stat.iconImage} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
                     </span>
                   ) : null}
                   {hasText(stat.value) ? <p className="mt-4 font-heading text-4xl font-bold text-brand-navy">

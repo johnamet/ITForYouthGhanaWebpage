@@ -153,28 +153,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
 
               {/* Card content */}
               <div className="relative flex min-h-[29rem] flex-col p-5">
-                {/* Floating icon */}
-                <div className="mt-[12.7rem]">
-                  <span
-                    className="
-                      relative z-10 flex h-14 w-14
-                      items-center justify-center
-                      rounded-[1.15rem] border-4 border-white
-                      text-2xl text-brand-navy
-                      shadow-[0_12px_30px_rgba(5,25,52,0.20)]
-                      transition-all duration-500
-                      group-hover:-translate-y-1
-                      group-hover:rotate-3
-                      group-hover:scale-105
-                    "
-                    style={{ backgroundColor: item.accent }}
-                    aria-hidden="true"
-                  >
-                    {item.icon ?? "•"}
-                  </span>
-                </div>
-
-                <div className="mt-5 flex flex-1 flex-col">
+                <div className="mt-[17.45rem] flex flex-1 flex-col">
                   <h3
                     className="
                       font-heading text-[1.55rem] font-bold

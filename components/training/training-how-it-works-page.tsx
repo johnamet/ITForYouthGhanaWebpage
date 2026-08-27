@@ -10,14 +10,12 @@ type TrainingHowItWorksPageProps = {
   page: SitePage;
 };
 
-const stepIcons = ["🧭", "📝", "✅", "🚀"];
-
 function toProcessSteps(sections: SitePage["sections"]): TrainingProcessStep[] {
   return sections.slice(0, 4).map((section, index) => ({
     number: String(index + 1).padStart(2, "0"),
     title: section.title,
     description: section.body,
-    icon: stepIcons[index] ?? "•",
+    icon: "",
   }));
 }
 

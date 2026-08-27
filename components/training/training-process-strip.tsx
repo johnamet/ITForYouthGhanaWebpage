@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { emojiToIconImage } from "@/lib/utils/icon-map";
 import type { TrainingProcessStep } from "@/types/content";
 
 type TrainingProcessStripProps = {
@@ -35,17 +34,11 @@ export function TrainingProcessStrip({
             key={step.number}
             className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
           >
-            <div className="flex items-center justify-between">
-              {(() => step.iconImage ?? emojiToIconImage(step.icon))() ? (
-                <span className="inline-flex items-center justify-center" aria-hidden="true">
-                  <Image src={(step.iconImage ?? emojiToIconImage(step.icon)) as string} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
-                </span>
-              ) : (
-                <span className="text-3xl" aria-hidden="true">
-                  {step.icon}
-                </span>
-              )}
-            </div>
+            {step.iconImage ? (
+              <span className="inline-flex items-center justify-center" aria-hidden="true">
+                <Image src={step.iconImage} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
+              </span>
+            ) : null}
             <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
               {step.title}
             </h3>

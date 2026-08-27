@@ -92,9 +92,6 @@ export function ImpactOverviewPage({
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-3xl" aria-hidden="true">
-                    {card.icon}
-                  </span>
                   <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
                     {content.measurementCardBadgeLabel ?? "Evidence lens"}
                   </span>

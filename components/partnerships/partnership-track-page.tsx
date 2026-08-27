@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { emojiToIconImage } from "@/lib/utils/icon-map";
 import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
@@ -86,7 +85,7 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
               .filter((card) => card.title?.trim() || card.description?.trim())
               .map((card) => {
                 const description = composeProse(card.description, card.bullets);
-                const image = (card.image || card.iconImage || (emojiToIconImage(card.icon) as string | undefined)) as string | undefined;
+                const image = (card.image || card.iconImage) as string | undefined;
                 return (
                   <SpotlightCard
                     key={card.title}
@@ -127,17 +126,11 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
                 key={step.number}
                 className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
               >
-                <div className="flex items-center justify-between">
-                  {(() => step.iconImage ?? emojiToIconImage(step.icon))() ? (
-                    <span className="inline-flex items-center justify-center" aria-hidden="true">
-                      <Image src={(step.iconImage ?? emojiToIconImage(step.icon)) as string} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
-                    </span>
-                  ) : (
-                    <span className="text-3xl" aria-hidden="true">
-                      {step.icon}
-                    </span>
-                  )}
-                </div>
+                {step.iconImage ? (
+                  <span className="inline-flex items-center justify-center" aria-hidden="true">
+                    <Image src={step.iconImage} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
+                  </span>
+                ) : null}
                 <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
                   {step.title}
                 </h3>

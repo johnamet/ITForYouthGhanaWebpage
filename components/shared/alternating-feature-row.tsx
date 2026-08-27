@@ -3,15 +3,12 @@
 import Image from "next/image";
 import clsx from "clsx";
 
-import { emojiToIconImage } from "@/lib/utils/icon-map";
-
 export type AlternatingFeatureItem = {
   title: string;
   description?: string;
-  // Prefer a richer visual if available; falls back to iconImage or emoji → icon image
+  // Prefer a richer visual if available; falls back to iconImage
   image?: string;
   iconImage?: string;
-  icon?: string;
   imageAlt?: string;
 };
 
@@ -27,7 +24,7 @@ export function AlternatingFeatureRow({ items, className }: AlternatingFeatureRo
     <div className={clsx("space-y-10", className)}>
       {items.map((item, index) => {
         const isReversed = index % 2 === 1;
-        const visual = item.image || item.iconImage || (item.icon ? emojiToIconImage(item.icon) : undefined);
+        const visual = item.image || item.iconImage;
         const alt = item.imageAlt || item.title;
 
         return (
