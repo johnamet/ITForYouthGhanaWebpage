@@ -31,16 +31,23 @@ for (const path of new Set(localPaths)) {
 }
 
 for (const id of new Set(unsplashIds)) {
-  const url = `https://images.unsplash.com/${id}?auto=format&fit=crop&w=400&q=60`;
+  // images.unsplash.com does not serve HEAD reliably: measured across all 30
+  // unique IDs in the pool, HEAD requests threw "fetch failed" on roughly
+  // half of them regardless of added delay, while a GET of a tiny rendition
+  // (?w=32&q=20, ~1KB) was consistently 30/30 ok. Use a small GET instead of
+  // HEAD here — do not "optimise" this back to HEAD.
+  const url = `https://images.unsplash.com/${id}?w=32&q=20`;
   let response;
   try {
-    response = await fetch(url, { method: "HEAD", headers: FETCH_HEADERS });
+    response = await fetch(url, { headers: FETCH_HEADERS });
+    await response.arrayBuffer();
   } catch {
     // A thrown exception is a transient network/DNS blip, not an answer.
     // Retry once after a short delay before treating it as a failure.
     await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
-      response = await fetch(url, { method: "HEAD", headers: FETCH_HEADERS });
+      response = await fetch(url, { headers: FETCH_HEADERS });
+      await response.arrayBuffer();
     } catch (retryError) {
       console.error(`NETWORK  ${id}  ${retryError.message}`);
       failures += 1;
