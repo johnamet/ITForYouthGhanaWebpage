@@ -3,6 +3,7 @@ import { Heart } from "lucide-react";
 import { StorySection } from "@/components/content/story-section";
 import { StatsSection } from "@/components/content/stats-section";
 import { Button } from "@/components/ui/button";
+import { pointsToParagraph } from "@/lib/utils/prose";
 
 export type ChallengeSectionContent = {
   title: string;
@@ -98,13 +99,13 @@ function Challenge({ content }: { content: ChallengeSectionContent }) {
               <h4 className="mb-4 text-xl font-semibold text-white">
                 {content.problemTitle}
               </h4>
-              <p className="text-lg leading-8 text-white/80">{content.problemItems.join(" ")}</p>
+              <p className="text-lg leading-8 text-white/80">{pointsToParagraph(content.problemItems)}</p>
             </div>
             <div>
               <h4 className="mb-4 text-xl font-semibold text-white">
                 {content.solutionTitle}
               </h4>
-              <p className="text-lg leading-8 text-white/80">{content.solutionItems.join(" ")}</p>
+              <p className="text-lg leading-8 text-white/80">{pointsToParagraph(content.solutionItems)}</p>
             </div>
           </div>
         </div>

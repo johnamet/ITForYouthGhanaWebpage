@@ -4,6 +4,7 @@ import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { TrainingCohortTimeline } from "@/components/training/training-cohort-timeline";
 import { TrainingProcessStrip } from "@/components/training/training-process-strip";
+import { pointsToParagraph } from "@/lib/utils/prose";
 import type { SitePage, TrainingCohort, TrainingProcessStep } from "@/types/content";
 
 type ApplyForTrainingOverviewPageProps = {
@@ -100,7 +101,7 @@ export function ApplyForTrainingOverviewPage({
               Support should feel connected, not added on later
             </h3>
             <p className="mt-5 text-base leading-8 text-slate-600">
-              {supportPoints.join(" ")}
+              {pointsToParagraph(supportPoints)}
             </p>
           </aside>
         </div>

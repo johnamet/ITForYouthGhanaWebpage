@@ -71,7 +71,7 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
           {(readinessSection?.bullets ?? []).length ? (
             <div className="flex items-center border-y border-brand-border py-8 lg:px-6">
               <p className="text-lg leading-9 text-slate-700">
-                {(readinessSection?.bullets ?? []).join(" ")}
+                {pointsToParagraph(readinessSection?.bullets)}
               </p>
             </div>
           ) : null}
