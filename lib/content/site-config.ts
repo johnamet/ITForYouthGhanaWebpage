@@ -674,7 +674,7 @@ export const initiatives: InitiativePage[] = [
     gallery: [
       { src: "/images/randomPictures/redstudentgrouplesson.jpg", alt: "Learners working intensely during a challenge session." },
       { src: "/images/randomPictures/studentsblueclothing.jpg", alt: "A team collaborating during project development." },
-      { src: "/images/randomPictures/studentgroupguys.jpg", alt: "Participants preparing together for a showcase moment." },
+      { src: "/images/randomPictures/studentpresenting.jpg", alt: "Participants presenting their work at the showcase." },
       { src: "/images/randomPictures/studentpresenting.jpg", alt: "A final demo presentation during the challenge format." },
     ],
     testimonials: [
@@ -941,7 +941,7 @@ export const initiatives: InitiativePage[] = [
       "Tech Clubs embed digital learning inside schools as a regular, peer-supported activity. Instead of isolated workshops, students gain consistent practice, build confidence together, and discover routes into deeper training and opportunity.",
     tagline:
       "Where weekly practice and peer community turn interest into lasting capability and visible next steps.",
-    heroImage: "/images/randomPictures/studentgroupguys.jpg",
+    heroImage: "/images/randomPictures/happystudentscasual.jpg",
     overviewImage: "/images/randomPictures/studentsblueclothing.jpg",
     stats: [
       { value: "18", label: "School clubs", description: "Active or seeded club programmes operating across partner schools." },
@@ -984,7 +984,7 @@ export const initiatives: InitiativePage[] = [
       ],
     },
     gallery: [
-      { src: "/images/randomPictures/studentgroupguys.jpg", alt: "Students working together in a school-based tech club session." },
+      { src: "/images/randomPictures/groupworkstudents.jpg", alt: "Pupils taking part in a school-based tech club session." },
       { src: "/images/randomPictures/studentsblueclothing.jpg", alt: "Club participants gathered for recurring digital learning activities." },
       { src: "/images/randomPictures/groupworkstudents.jpg", alt: "Learners collaborating on a practical classroom challenge." },
       { src: "/images/randomPictures/studentpresentin.jpg", alt: "Students sharing what they have learned with peers." },
@@ -2321,7 +2321,7 @@ export const programmeShowcase: ProgrammeShowcaseItem[] = [
     title: "Tech Clubs",
     description: "Recurring, school-based clubs that provide students with consistent practice, peer learning, and sustained skill development over time.",
     href: "/what-we-do/tech-clubs",
-    image: "/images/randomPictures/studentgroupguys.jpg",
+    image: "/images/randomPictures/petertalkingtostudentscoloful.jpg",
     accent: "#1F7A8C",
     icon: "🏫",
   },
