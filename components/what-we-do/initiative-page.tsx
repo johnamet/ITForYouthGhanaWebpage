@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { InitiativeGallery } from "@/components/what-we-do/initiative-gallery";
 import { emojiToIconImage } from "@/lib/utils/icon-map";
+import { pointsToParagraph } from "@/lib/utils/prose";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -127,16 +128,11 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   description={page.intro}
                 /> : null}
                 {hasText(page.mission) ? <p className="text-base leading-8 text-slate-700">{page.mission}</p> : null}
-                {objectives.length ? <div className="grid gap-3">
-                  {objectives.map((objective) => (
-                    <div
-                      key={objective}
-                      className="rounded-[22px] border border-brand-border bg-brand-mist/60 px-5 py-4 text-sm leading-7 text-slate-700"
-                    >
-                      {objective}
-                    </div>
-                  ))}
-                </div> : null}
+                {objectives.length ? (
+                  <p className="border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
+                    {pointsToParagraph(objectives)}
+                  </p>
+                ) : null}
               </div>
 
               {hasText(page.overviewImage) ? <div className="relative min-h-[24rem] overflow-hidden rounded-[32px] bg-brand-mist">
@@ -231,16 +227,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                 {hasText(section.eligibilityEyebrow) ? <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-gold">
                   {section.eligibilityEyebrow}
                 </p> : null}
-                <div className="mt-6 space-y-4">
-                  {eligibility.map((item) => (
-                    <div
-                      key={item}
-                      className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
+                <p className="mt-6 text-sm leading-7 text-slate-600">
+                  {pointsToParagraph(eligibility)}
+                </p>
               </div> : null}
             </div>
           </section> : null}

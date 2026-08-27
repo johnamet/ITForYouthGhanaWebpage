@@ -1,4 +1,5 @@
 import { breadcrumbs } from "@/lib/content/site-config";
+import { pointsToParagraph } from "@/lib/utils/prose";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -91,15 +92,8 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
             </p>
           </div>
 
-          <div className="space-y-4">
-            {checklist.map((item) => (
-              <div
-                key={item}
-                className="rounded-[26px] border border-brand-border bg-white px-5 py-5 shadow-sm"
-              >
-                <p className="text-sm leading-7 text-slate-700">{item}</p>
-              </div>
-            ))}
+          <div className="rounded-[26px] border border-brand-border bg-white px-6 py-6 shadow-sm">
+            <p className="text-sm leading-7 text-slate-700">{pointsToParagraph(checklist)}</p>
           </div>
         </div>
       </section>

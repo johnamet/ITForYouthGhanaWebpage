@@ -1,4 +1,5 @@
 import { breadcrumbs } from "@/lib/content/site-config";
+import { pointsToParagraph } from "@/lib/utils/prose";
 
 import { PartnersStrip, type Partner } from "@/components/home/patrners-strip";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -102,16 +103,11 @@ export function ImpactOverviewPage({
                   {card.title}
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-slate-600">{card.description}</p>
-                <div className="mt-5 space-y-3">
-                  {card.bullets.map((bullet) => (
-                    <div
-                      key={bullet}
-                      className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
-                    >
-                      {bullet}
-                    </div>
-                  ))}
-                </div>
+                {card.bullets.length ? (
+                  <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
+                    {pointsToParagraph(card.bullets)}
+                  </p>
+                ) : null}
               </div>
             ))}
           </div>

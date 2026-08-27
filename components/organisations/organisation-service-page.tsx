@@ -7,7 +7,7 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { OrganisationServicePage as OrganisationServicePageType } from "@/types/content";
-import { composeProse } from "@/lib/utils/prose";
+import { composeProse, pointsToParagraph } from "@/lib/utils/prose";
 
 type OrganisationServicePageProps = {
   page: OrganisationServicePageType;
@@ -249,16 +249,11 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                     </div>
                   </div>
 
-                  <div className="mt-6 space-y-3">
-                    {item.features.map((feature) => (
-                      <div
-                        key={feature}
-                        className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
-                      >
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
+                  {item.features.length ? (
+                    <p className="mt-6 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
+                      {pointsToParagraph(item.features)}
+                    </p>
+                  ) : null}
 
                   {item.note ? (
                     <p className="mt-5 text-sm leading-7 text-slate-500">{item.note}</p>

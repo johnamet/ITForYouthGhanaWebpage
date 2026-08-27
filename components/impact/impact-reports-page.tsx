@@ -94,16 +94,11 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
 
                 <p className="mt-4 text-sm leading-7 text-slate-600">{resource.summary}</p>
 
-                <div className="mt-5 space-y-3">
-                  {resource.highlights.map((highlight) => (
-                    <div
-                      key={highlight}
-                      className="rounded-[22px] border border-brand-border bg-brand-mist/45 px-4 py-4 text-sm leading-7 text-slate-700"
-                    >
-                      {highlight}
-                    </div>
-                  ))}
-                </div>
+                {resource.highlights.length ? (
+                  <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
+                    {pointsToParagraph(resource.highlights)}
+                  </p>
+                ) : null}
 
                 <a
                   href={resource.href}

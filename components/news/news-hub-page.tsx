@@ -11,6 +11,7 @@ import {
   articleCategoryLabels,
   articleCategories,
 } from "@/lib/content/news-config";
+import { pointsToParagraph } from "@/lib/utils/prose";
 import type { ArticleSeed, NewsHubContent } from "@/types/content";
 
 type NewsHubPageProps = {
@@ -151,16 +152,9 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-slate-600">{pillar.body}</p>
                 {pillar.bullets?.length ? (
-                  <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                    {pillar.bullets.map((bullet) => (
-                      <div
-                        key={bullet}
-                        className="rounded-[20px] border border-brand-border bg-brand-mist/55 px-4 py-4 text-sm font-medium leading-6 text-slate-700"
-                      >
-                        {bullet}
-                      </div>
-                    ))}
-                  </div>
+                  <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
+                    {pointsToParagraph(pillar.bullets)}
+                  </p>
                 ) : null}
               </div>
             ))}
