@@ -62,10 +62,32 @@ for (const id of new Set(unsplashIds)) {
   }
 }
 
-const themes = [...source.matchAll(/^  "?([a-z-]+)"?:\s*\[$/gm)].map((m) => m[1]);
+const themeMatches = [...source.matchAll(/^  "?([a-z-]+)"?:\s*\[$/gm)];
+const themes = themeMatches.map((m) => m[1]);
+
+// Report any theme with fewer than 8 entries. A short theme thins out
+// resolveMediaSet's group-dedupe headroom (more sibling cards forced to
+// repeat), but it is not itself a broken photograph, so it is a warning,
+// not a build failure.
+const MIN_THEME_ENTRIES = 8;
+let shortThemes = 0;
+for (let i = 0; i < themeMatches.length; i += 1) {
+  const start = themeMatches[i].index + themeMatches[i][0].length;
+  const end = i + 1 < themeMatches.length ? themeMatches[i + 1].index : source.length;
+  const slice = source.slice(start, end);
+  const entryCount = (slice.match(/(?:LOCAL\.\w+|\{\s*url:)/g) ?? []).length;
+  if (entryCount < MIN_THEME_ENTRIES) {
+    console.warn(`WARNING  theme "${themes[i]}" has only ${entryCount} entries (fewer than ${MIN_THEME_ENTRIES})`);
+    shortThemes += 1;
+  }
+}
+
 console.log(
   `Checked ${new Set(localPaths).size} local and ${new Set(unsplashIds).size} Unsplash photographs across ${themes.length} themes.`,
 );
+if (shortThemes) {
+  console.warn(`${shortThemes} theme(s) below the ${MIN_THEME_ENTRIES}-entry minimum.`);
+}
 
 if (failures) {
   console.error(`${failures} failed.`);

@@ -188,12 +188,23 @@ export function resolveMedia(key: string, theme: MediaTheme): PoolEntry {
 export function resolveMediaSet(keys: string[], theme: MediaTheme): PoolEntry[] {
   const pool = MEDIA_POOL[theme];
   const used = new Set<number>();
+  let lastIndex: number | undefined;
 
   return keys.map((key) => {
-    if (used.size >= pool.length) used.clear();
+    if (used.size >= pool.length) {
+      used.clear();
+      // Re-seed with the photo just handed out so the wrap-around can't
+      // repeat it immediately — card 9 landing on the same photo as card 8
+      // is the most visible kind of duplicate. Guard pool.length === 1: a
+      // repeat is then unavoidable, and re-adding would leave used.size
+      // equal to pool.length, breaking the while loop's termination
+      // guarantee below.
+      if (lastIndex !== undefined && pool.length > 1) used.add(lastIndex);
+    }
     let index = fnv1a(key) % pool.length;
     while (used.has(index)) index = (index + 1) % pool.length;
     used.add(index);
+    lastIndex = index;
     return pool[index];
   });
 }
