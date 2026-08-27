@@ -6,7 +6,6 @@ import {
   AlertCircle,
   CheckCircle2,
   Loader2,
-  Send,
 } from "lucide-react";
 
 import type {
@@ -343,10 +342,7 @@ export function ContactForm({
             Sending...
           </>
         ) : (
-          <>
-            <Send className="h-4 w-4" />
-            Send message
-          </>
+          "Send message"
         )}
       </Button>
 

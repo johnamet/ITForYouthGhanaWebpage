@@ -1,18 +1,11 @@
-import {
-  ArrowRight,
-  Mail,
-  MapPin,
-  MessageSquareText,
-  Phone,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { ContactForm } from "@/components/contact/contact-form";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatList } from "@/components/shared/stat-list";
-import type { ContactChannel, ContactPageContent } from "@/types/content";
+import type { ContactPageContent } from "@/types/content";
 
 type ContactPageProps = {
   content: ContactPageContent;
@@ -23,18 +16,6 @@ const anchorLinks = [
   { id: "form", label: "Form" },
   { id: "routing", label: "Routes" },
 ];
-
-function ChannelIcon({ channel }: { channel: ContactChannel }) {
-  if (channel.label === "Email") {
-    return <Mail className="h-5 w-5" />;
-  }
-
-  if (channel.label === "Phone") {
-    return <Phone className="h-5 w-5" />;
-  }
-
-  return <MapPin className="h-5 w-5" />;
-}
 
 export function ContactPage({ content }: ContactPageProps) {
   const emailChannel = content.channels.find((channel) => channel.label.toLowerCase() === "email");
@@ -96,9 +77,6 @@ export function ContactPage({ content }: ContactPageProps) {
                   rel={isExternal ? "noreferrer" : undefined}
                   className="group rounded-[30px] border border-brand-border bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
-                    <ChannelIcon channel={channel} />
-                  </div>
                   <p className="mt-5 text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
                     {channel.label}
                   </p>
@@ -147,38 +125,28 @@ export function ContactPage({ content }: ContactPageProps) {
             </div>
 
             {content.privacyNote ? <div className="rounded-[28px] border border-brand-border bg-brand-warm p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
-                  <ShieldCheck className="h-5 w-5" />
-                </div>
-                <div>
-                  <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                    {content.privacyTitle}
-                  </h2>
-                  <p className="mt-2 text-sm leading-7 text-slate-700">
-                    {content.privacyNote}
-                  </p>
-                </div>
+              <div>
+                <h2 className="font-heading text-2xl font-bold text-brand-ink">
+                  {content.privacyTitle}
+                </h2>
+                <p className="mt-2 text-sm leading-7 text-slate-700">
+                  {content.privacyNote}
+                </p>
               </div>
             </div> : null}
           </div>
 
           <div className="rounded-[34px] border border-brand-border bg-white p-6 shadow-sm sm:p-8">
-            <div className="mb-8 flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-navy text-brand-gold">
-                <MessageSquareText className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-                  {content.messageEyebrow}
-                </p>
-                <h2 className="font-heading text-3xl font-bold text-brand-ink">
-                  {content.messageTitle}
-                </h2>
-                <p className="mt-2 text-sm leading-7 text-slate-600">
-                  {content.messageDescription}
-                </p>
-              </div>
+            <div className="mb-8">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                {content.messageEyebrow}
+              </p>
+              <h2 className="font-heading text-3xl font-bold text-brand-ink">
+                {content.messageTitle}
+              </h2>
+              <p className="mt-2 text-sm leading-7 text-slate-600">
+                {content.messageDescription}
+              </p>
             </div>
 
             <ContactForm

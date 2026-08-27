@@ -1,14 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
-import {
-  ArrowRight,
-  Compass,
-  HeartHandshake,
-  Layers3,
-  Quote,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { pointsToParagraph } from "@/lib/utils/prose";
 
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -30,7 +23,6 @@ const anchorLinks = [
 ];
 
 const heroImage = "/images/randomPictures/groupworkstudents.jpg";
-const operatingIcons = [Layers3, Compass, HeartHandshake];
 
 function isPresent<T>(value: T | null | undefined): value is T {
   return Boolean(value);
@@ -105,7 +97,6 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
             />
 
             {page.intro ? <div className="rounded-[32px] border border-brand-border bg-brand-mist/55 p-7">
-              <Quote className="h-9 w-9 text-brand-gold" />
               <p className="mt-5 text-lg leading-9 text-slate-700">{page.intro}</p>
             </div> : null}
           </div>
@@ -146,31 +137,22 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
             />
 
             <div className="grid gap-5 lg:grid-cols-3">
-              {operatingSections.map((section, index) => {
-                const Icon = operatingIcons[index] ?? Compass;
-
-                return (
-                  <article
-                    key={section.title}
-                    className="group rounded-[32px] border border-brand-border bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-panel"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-navy text-brand-gold transition group-hover:scale-105">
-                        <Icon className="h-6 w-6" />
-                      </div>
-                    </div>
-                    <h2 className="mt-6 font-heading text-2xl font-bold text-brand-ink">
-                      {section.title}
-                    </h2>
-                    <p className="mt-4 text-sm leading-8 text-slate-600">{section.body}</p>
-                    {section.bullets?.length ? (
-                      <p className="mt-6 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
-                        {pointsToParagraph(section.bullets)}
-                      </p>
-                    ) : null}
-                  </article>
-                );
-              })}
+              {operatingSections.map((section) => (
+                <article
+                  key={section.title}
+                  className="group rounded-[32px] border border-brand-border bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-panel"
+                >
+                  <h2 className="mt-6 font-heading text-2xl font-bold text-brand-ink">
+                    {section.title}
+                  </h2>
+                  <p className="mt-4 text-sm leading-8 text-slate-600">{section.body}</p>
+                  {section.bullets?.length ? (
+                    <p className="mt-6 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
+                      {pointsToParagraph(section.bullets)}
+                    </p>
+                  ) : null}
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -191,16 +173,13 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/86 via-brand-navy/16 to-transparent" />
               </div>
               {page.principlesHeroEyebrow || page.principlesHeroTitle ? <div className="absolute bottom-5 left-5 right-5 rounded-[28px] border border-white/14 bg-white/12 p-6 backdrop-blur-md">
-                <div className="flex items-start gap-4">
-                  <ShieldCheck className="mt-1 h-7 w-7 shrink-0 text-brand-gold" />
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-                      {page.principlesHeroEyebrow ?? "What we protect"}
-                    </p>
-                    <h2 className="mt-2 font-heading text-3xl font-bold text-white">
-                      {page.principlesHeroTitle ?? "Trust, inclusion, and accountability as the work grows."}
-                    </h2>
-                  </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
+                    {page.principlesHeroEyebrow ?? "What we protect"}
+                  </p>
+                  <h2 className="mt-2 font-heading text-3xl font-bold text-white">
+                    {page.principlesHeroTitle ?? "Trust, inclusion, and accountability as the work grows."}
+                  </h2>
                 </div>
               </div> : null}
             </div> : null}
