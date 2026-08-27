@@ -1,12 +1,25 @@
+import Image from "next/image";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import { ContentImage } from "@/components/media/content-image";
 import { VideoCard } from "@/components/media/video-card";
 import { resolveMedia, type MediaTheme, type PoolEntry } from "@/lib/content/media-pool";
+import { safeImageSrc } from "@/lib/utils/image-src";
 import { composeProse } from "@/lib/utils/prose";
 import { cn } from "@/lib/utils/cn";
 
 export type ProseMediaCardProps = {
+  /**
+   * "panel" (default) is the padded card the media rollout uses.
+   * "spotlight" reproduces the retired SpotlightCard: a 6px accent bar, an
+   * edge-to-edge 16/9 image, a pill eyebrow, and an optional CTA button.
+   */
+  variant?: "panel" | "spotlight";
+  /** Spotlight variant only — the accent bar colour. */
+  accentColor?: string;
+  /** Spotlight variant only — renders a Button below the prose. */
+  cta?: { label: string; href: string };
   eyebrow?: string;
   title: string;
   body?: string;
@@ -71,6 +84,9 @@ function stackedSizes(columns: 1 | 2 | 3 | 4): string {
  * resolved deterministically from the themed pool.
  */
 export function ProseMediaCard({
+  variant = "panel",
+  accentColor = "var(--color-accent)",
+  cta,
   eyebrow,
   title,
   body,
@@ -91,7 +107,13 @@ export function ProseMediaCard({
 
   if (!title.trim() && !description) return null;
 
-  const isDark = tone === "dark";
+  // The spotlight variant is a single fixed design (ported verbatim from the
+  // retired SpotlightCard) with no layout, columns, mediaPosition or tone
+  // behaviour of its own. If those props are supplied alongside
+  // variant="spotlight" they are simply ignored here rather than throwing.
+  const isSpotlight = variant === "spotlight";
+
+  const isDark = !isSpotlight && tone === "dark";
 
   const authoredImage = media?.image?.trim();
   const authoredIconImage = media?.iconImage?.trim();
@@ -141,6 +163,17 @@ export function ProseMediaCard({
     />
   );
 
+  // The spotlight variant renders its image edge-to-edge via next/image
+  // directly instead of through ContentImage, because ContentImage imposes
+  // its own rounding and gradient placeholder that SpotlightCard never had.
+  // ContentImage runs every src through safeImageSrc internally to guard
+  // against a malformed CMS URL crashing the route — bypassing ContentImage
+  // must not lose that protection, so the same guard is applied explicitly
+  // here. SpotlightCard never supported video, so this variant has no
+  // VideoCard treatment; videoUrl still only governs whether the outer href
+  // wrap below is suppressed.
+  const spotlightImageSrc = isSpotlight ? safeImageSrc(image) : undefined;
+
   // When a video is present, VideoCard renders its own <a> around the
   // thumbnail. Also wrapping the whole card in a next/link <a> (the `href`
   // branch below) would nest anchors — invalid HTML that causes a hydration
@@ -158,29 +191,91 @@ export function ProseMediaCard({
   const text = (
     <div>
       {eyebrow ? (
-        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-          {eyebrow}
-        </p>
+        isSpotlight ? (
+          <span className="inline-flex rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
+            {eyebrow}
+          </span>
+        ) : (
+          <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+            {eyebrow}
+          </p>
+        )
       ) : null}
       {title.trim() ? (
         <h3
           className={cn(
             "font-heading text-2xl font-bold",
             eyebrow ? "mt-4" : null,
-            isDark ? "text-white" : "text-brand-ink",
+            isSpotlight ? "text-brand-ink" : isDark ? "text-white" : "text-brand-ink",
           )}
         >
           {title}
         </h3>
       ) : null}
       {description ? (
-        <p className={cn("mt-3 text-sm leading-7", isDark ? "text-white/78" : "text-slate-600")}>
+        <p
+          className={cn(
+            "mt-3 text-sm leading-7",
+            isSpotlight ? "text-slate-600" : isDark ? "text-white/78" : "text-slate-600",
+          )}
+        >
           {description}
         </p>
       ) : null}
       {readMore}
+      {isSpotlight && cta ? (
+        <div className="mt-5">
+          <Button href={cta.href} variant="pink" size="lg">
+            {cta.label}
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
+
+  // A linkable shell only makes sense when the card actually ends up wrapped
+  // in the outer <Link> below; the video branch never gets that wrap (see
+  // above), so it shouldn't get the link-only hover/focus treatment either.
+  // This holds for both variants.
+  const isLinked = Boolean(href) && !videoUrl;
+
+  if (isSpotlight) {
+    const shell = cn(
+      "overflow-hidden rounded-[18px] border border-brand-border bg-white shadow-sm",
+      isLinked
+        ? "transition hover:shadow-editorial focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2"
+        : null,
+      className,
+    );
+
+    const spotlightContent = (
+      <>
+        <div aria-hidden="true" style={{ background: accentColor, height: 6 }} />
+        {spotlightImageSrc ? (
+          <div className="relative aspect-[16/9] w-full">
+            <Image
+              src={spotlightImageSrc}
+              alt={imageAlt}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+        ) : null}
+        <div className="p-6">{text}</div>
+      </>
+    );
+
+    if (isLinked) {
+      return (
+        <Link href={href!} className={cn("block", shell)}>
+          {spotlightContent}
+        </Link>
+      );
+    }
+
+    return <article className={shell}>{spotlightContent}</article>;
+  }
 
   const flipMedia = layout === "side" && mediaPosition === "end";
 
@@ -196,11 +291,6 @@ export function ProseMediaCard({
         {text}
       </div>
     );
-
-  // A linkable shell only makes sense when the card actually ends up wrapped
-  // in the outer <Link> below; the video branch never gets that wrap (see
-  // above), so it shouldn't get the link-only hover/focus treatment either.
-  const isLinked = Boolean(href) && !videoUrl;
 
   const shell = cn(
     "rounded-[30px] p-6 shadow-sm",
