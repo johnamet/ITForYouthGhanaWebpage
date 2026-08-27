@@ -675,7 +675,7 @@ export const initiatives: InitiativePage[] = [
       { src: "/images/randomPictures/redstudentgrouplesson.jpg", alt: "Learners working intensely during a challenge session." },
       { src: "/images/randomPictures/studentsblueclothing.jpg", alt: "A team collaborating during project development." },
       { src: "/images/randomPictures/studentpresenting.jpg", alt: "Participants presenting their work at the showcase." },
-      { src: "/images/randomPictures/studentpresenting.jpg", alt: "A final demo presentation during the challenge format." },
+      { src: "/images/randomPictures/studentpresentin.jpg", alt: "A final demo presentation during the challenge format." },
     ],
     testimonials: [
       { quote: "The challenge forced us to think clearly, move faster, and explain our decisions in a way we never had before.", name: "Saah J.", role: "Challenge participant", avatar: "/images/people/saah.jpg" },
@@ -986,7 +986,7 @@ export const initiatives: InitiativePage[] = [
     gallery: [
       { src: "/images/randomPictures/groupworkstudents.jpg", alt: "Pupils taking part in a school-based tech club session." },
       { src: "/images/randomPictures/studentsblueclothing.jpg", alt: "Club participants gathered for recurring digital learning activities." },
-      { src: "/images/randomPictures/groupworkstudents.jpg", alt: "Learners collaborating on a practical classroom challenge." },
+      { src: "/images/randomPictures/redstudentgrouplesson.jpg", alt: "Learners collaborating on a practical classroom challenge." },
       { src: "/images/randomPictures/studentpresentin.jpg", alt: "Students sharing what they have learned with peers." },
     ],
     testimonials: [
