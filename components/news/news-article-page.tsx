@@ -24,6 +24,13 @@ function getArticleHtml(article: ArticleSeed) {
   return article.content.map((paragraph) => `<p>${paragraph}</p>`).join("");
 }
 
+function getAuthorInitials(name?: string | null) {
+  const words = name?.trim().split(/\s+/).filter(Boolean) ?? [];
+  if (!words.length) return "";
+  if (words.length === 1) return words[0][0]?.toUpperCase() ?? "";
+  return `${words[0][0] ?? ""}${words[words.length - 1][0] ?? ""}`.toUpperCase();
+}
+
 export function NewsArticlePage({
   article,
   relatedArticles,
@@ -75,7 +82,11 @@ export function NewsArticlePage({
                       className="object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-brand-navy text-brand-gold" />
+                    <div className="flex h-full w-full items-center justify-center bg-brand-navy text-brand-gold">
+                      <span className="text-sm font-bold" aria-hidden="true">
+                        {getAuthorInitials(article.author.name)}
+                      </span>
+                    </div>
                   )}
                 </div>
                 <div>

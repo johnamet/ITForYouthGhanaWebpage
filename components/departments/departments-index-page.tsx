@@ -50,15 +50,15 @@ export function DepartmentsIndexPage({ departments }: DepartmentsIndexPageProps)
                   />
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/65 via-brand-navy/15 to-transparent" />
-                <div
-                  className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl text-xl text-white shadow-lg"
-                  style={{ backgroundColor: department.color ?? "#1E72BA" }}
-                  aria-hidden="true"
-                >
-                  {department.iconImage ? (
+                {department.iconImage ? (
+                  <div
+                    className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl text-xl text-white shadow-lg"
+                    style={{ backgroundColor: department.color ?? "#1E72BA" }}
+                    aria-hidden="true"
+                  >
                     <Image src={department.iconImage} alt={department.title} width={24} height={24} className="h-6 w-6 object-contain" />
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="p-6">

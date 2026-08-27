@@ -15,6 +15,8 @@ function toProcessSteps(sections: SitePage["sections"]): TrainingProcessStep[] {
     number: String(index + 1).padStart(2, "0"),
     title: section.title,
     description: section.body,
+    // Unread since the de-iconing pass; kept because the content types and
+    // admin forms that would populate this field were deliberately out of scope.
     icon: "",
   }));
 }

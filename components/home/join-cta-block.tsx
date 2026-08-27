@@ -8,6 +8,8 @@ export type JoinCtaCard = {
   description: string;
   href: string;
   buttonLabel: string;
+  // Unread since the de-iconing pass; kept required because the content types
+  // and admin forms that supply this field were deliberately out of scope.
   icon: "students" | "organisations" | "volunteer";
   active?: boolean;
 };

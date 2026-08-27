@@ -11,6 +11,8 @@ export type ProgrammeShowcaseItem = {
   href: string;
   image: string;
   accent: string;
+  // Unread since the de-iconing pass; kept because the content types and
+  // admin forms that populate this field were deliberately out of scope.
   icon?: string;
   eyebrow?: string;
   active?: boolean;
@@ -92,7 +94,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
               "
             >
               {/* Image area */}
-              <div className="absolute inset-x-0 top-0 h-[57%] overflow-hidden bg-brand-mist">
+              <div className="absolute inset-x-0 top-0 h-[16.53rem] overflow-hidden bg-brand-mist">
                 <Image
                   src={item.image}
                   alt={item.title}
@@ -154,11 +156,13 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
               {/* Card content */}
               <div className="relative flex min-h-[29rem] flex-col p-5">
                 {/*
-                  16.53rem = 57% of the card's min-h-[29rem], i.e. the image
-                  area's own height. That places the title exactly 1.25rem
-                  (one card-padding unit) below the image edge, matching the
-                  card's own spacing rhythm now that the floating icon badge
-                  that used to straddle this seam is gone.
+                  The image area above is a fixed h-[16.53rem], and this
+                  offset is set to the identical value, so the two are
+                  provably coupled rather than independently guessed. That
+                  places the title exactly 1.25rem (one card-padding unit)
+                  below the image edge, matching the card's own spacing
+                  rhythm now that the floating icon badge that used to
+                  straddle this seam is gone.
                 */}
                 <div className="mt-[16.53rem] flex flex-1 flex-col">
                   <h3
