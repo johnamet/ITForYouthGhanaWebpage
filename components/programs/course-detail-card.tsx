@@ -258,11 +258,12 @@ export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProp
               {teachers.length ? (
                 <section>
                   <h2 className="text-sm font-bold text-brand-ink">Taught by</h2>
-                  <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
-                    {teachers.map((t) => (
-                      <li key={`${t.name}-${t.email ?? "noemail"}`}>{t.name}</li>
-                    ))}
-                  </ul>
+                  {/* Teachers are a roster of names, not prose points, so join with commas
+                      here instead of routing through pointsToParagraph (which appends a
+                      full stop to every entry, e.g. "Ama Mensah. Kofi Boateng."). */}
+                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                    {teachers.map((teacher) => teacher.name.trim()).filter(Boolean).join(", ")}
+                  </p>
                 </section>
               ) : null}
               {requirements.length ? (
