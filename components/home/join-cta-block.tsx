@@ -1,11 +1,5 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  Building2,
-  GraduationCap,
-  HeartHandshake,
-  LucideIcon,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export type JoinCtaCard = {
   id: string;
@@ -20,12 +14,6 @@ export type JoinCtaCard = {
 
 type JoinCtaBlockProps = {
   cards: JoinCtaCard[];
-};
-
-const iconMap: Record<JoinCtaCard["icon"], LucideIcon> = {
-  students: GraduationCap,
-  organisations: Building2,
-  volunteer: HeartHandshake,
 };
 
 export function JoinCtaBlock({ cards }: JoinCtaBlockProps) {
@@ -50,17 +38,11 @@ export function JoinCtaBlock({ cards }: JoinCtaBlockProps) {
 
         <div className="grid gap-6 lg:grid-cols-3">
           {visibleCards.map((card) => {
-            const Icon = iconMap[card.icon];
-
             return (
               <div
                 key={card.id}
                 className="flex h-full flex-col rounded-[30px] border border-brand-border bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-mist text-brand-navy">
-                  <Icon className="h-7 w-7" />
-                </div>
-
                 <div className="mt-6 space-y-3">
                   <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
                     {card.eyebrow}

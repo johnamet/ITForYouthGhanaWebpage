@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Clock3, HeartHandshake, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export type DonationCampaignContent = {
   id: string;
@@ -111,7 +111,6 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
                 href={campaign.primaryCta.href}
                 className="itfy-button-primary px-6 py-3.5 text-sm"
               >
-                <HeartHandshake className="h-4 w-4" />
                 {campaign.primaryCta.label}
               </Link>
               {campaign.secondaryCta ? (
@@ -169,21 +168,15 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-[24px] border border-brand-border bg-brand-mist/50 p-5">
-                <div className="flex items-center gap-3">
-                  <Users className="h-5 w-5 text-brand-gold" />
-                  <div>
-                    <p className="text-sm text-slate-500">Donors so far</p>
-                    <p className="text-2xl font-bold text-brand-ink">{campaign.donorCount}</p>
-                  </div>
+                <div>
+                  <p className="text-sm text-slate-500">Donors so far</p>
+                  <p className="text-2xl font-bold text-brand-ink">{campaign.donorCount}</p>
                 </div>
               </div>
               <div className="rounded-[24px] border border-brand-border bg-brand-mist/50 p-5">
-                <div className="flex items-center gap-3">
-                  <Clock3 className="h-5 w-5 text-brand-gold" />
-                  <div>
-                    <p className="text-sm text-slate-500">Days remaining</p>
-                    <p className="text-2xl font-bold text-brand-ink">{daysRemaining}</p>
-                  </div>
+                <div>
+                  <p className="text-sm text-slate-500">Days remaining</p>
+                  <p className="text-2xl font-bold text-brand-ink">{daysRemaining}</p>
                 </div>
               </div>
             </div>
