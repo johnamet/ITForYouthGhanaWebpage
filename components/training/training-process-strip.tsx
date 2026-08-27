@@ -45,9 +45,6 @@ export function TrainingProcessStrip({
                   {step.icon}
                 </span>
               )}
-              <span className="font-heading text-3xl font-bold text-brand-gold/70">
-                {step.number}
-              </span>
             </div>
             <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
               {step.title}

@@ -33,15 +33,12 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
         </div>
 
         <div className="mt-10 grid gap-x-10 gap-y-12 border-y border-brand-border py-10 lg:grid-cols-3">
-          {audienceSections.map((card, index) => (
+          {audienceSections.map((card) => (
             <article
               key={card.title}
               className="relative"
             >
-              <p className="font-heading text-5xl font-bold text-brand-mist">
-                {String(index + 1).padStart(2, "0")}
-              </p>
-              <h3 className="mt-2 font-heading text-2xl font-bold text-brand-ink">{card.title}</h3>
+              <h3 className="font-heading text-2xl font-bold text-brand-ink">{card.title}</h3>
               <p className="mt-4 text-base leading-8 text-slate-600">{card.body}</p>
               {(card.bullets ?? []).length ? (
                 <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-8 text-slate-700">

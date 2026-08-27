@@ -134,18 +134,13 @@ export function ContactPage({ content }: ContactPageProps) {
                   key={step.number}
                   className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
                 >
-                  <div className="flex items-start gap-4">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-navy text-sm font-bold text-brand-gold">
-                      {step.number}
-                    </span>
-                    <div>
-                      <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                        {step.title}
-                      </h2>
-                      <p className="mt-2 text-sm leading-7 text-slate-600">
-                        {step.description}
-                      </p>
-                    </div>
+                  <div>
+                    <h2 className="font-heading text-2xl font-bold text-brand-ink">
+                      {step.title}
+                    </h2>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">
+                      {step.description}
+                    </p>
                   </div>
                 </div>
               ))}

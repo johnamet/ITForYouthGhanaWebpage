@@ -158,9 +158,6 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
                       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-navy text-brand-gold transition group-hover:scale-105">
                         <Icon className="h-6 w-6" />
                       </div>
-                      <p className="font-heading text-4xl font-bold text-brand-gold/55">
-                        {String(index + 1).padStart(2, "0")}
-                      </p>
                     </div>
                     <h2 className="mt-6 font-heading text-2xl font-bold text-brand-ink">
                       {section.title}
@@ -223,26 +220,21 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
               </div>
 
               <div className="grid gap-4">
-                {principleSections.map((section, index) => (
+                {principleSections.map((section) => (
                   <article
                     key={section.title}
                     className="rounded-[28px] border border-white/12 bg-white/8 p-6"
                   >
-                    <div className="flex gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-gold text-brand-ink">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h3 className="font-heading text-2xl font-bold text-white">
-                          {section.title}
-                        </h3>
-                        <p className="mt-3 text-sm leading-8 text-white/68">{section.body}</p>
-                        {section.bullets?.length ? (
-                          <p className="mt-4 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-white/72">
-                            {pointsToParagraph(section.bullets)}
-                          </p>
-                        ) : null}
-                      </div>
+                    <div>
+                      <h3 className="font-heading text-2xl font-bold text-white">
+                        {section.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-8 text-white/68">{section.body}</p>
+                      {section.bullets?.length ? (
+                        <p className="mt-4 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-white/72">
+                          {pointsToParagraph(section.bullets)}
+                        </p>
+                      ) : null}
                     </div>
                   </article>
                 ))}

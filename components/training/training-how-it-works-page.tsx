@@ -59,15 +59,12 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
           </div>
 
           <div className="grid gap-5 lg:grid-cols-4">
-            {timelineSections.map((item, index) => (
+            {timelineSections.map((item) => (
               <div
                 key={item.title}
                 className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
               >
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-                  Step {String(index + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
+                <h3 className="font-heading text-2xl font-bold text-brand-ink">
                   {item.title}
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-600">{item.body}</p>

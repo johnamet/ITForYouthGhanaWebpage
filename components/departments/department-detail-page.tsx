@@ -104,15 +104,10 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
               <div className="rounded-[28px] border border-brand-border bg-white p-6">
                 <h2 className="font-heading text-xl font-bold text-brand-ink">How work moves</h2>
                 <div className="mt-5 grid gap-4">
-                  {department.workflows.map((step, index) => (
-                    <div key={step.title} className="flex gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-navy text-sm font-bold text-white">
-                        {index + 1}
-                      </span>
-                      <div>
-                        <p className="font-semibold text-brand-ink">{step.title}</p>
-                        <p className="mt-1 text-sm leading-6 text-slate-600">{step.description}</p>
-                      </div>
+                  {department.workflows.map((step) => (
+                    <div key={step.title}>
+                      <p className="font-semibold text-brand-ink">{step.title}</p>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">{step.description}</p>
                     </div>
                   ))}
                 </div>

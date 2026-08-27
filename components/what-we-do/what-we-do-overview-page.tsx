@@ -204,15 +204,12 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
           />
 
           <div className="grid gap-5 lg:grid-cols-4">
-            {content.pathwayCards.map((card, index) => (
+            {content.pathwayCards.map((card) => (
               <div
                 key={card.title}
                 className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
               >
-                <p className="font-heading text-4xl font-bold text-brand-gold/70">
-                  {String(index + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
+                <h3 className="font-heading text-2xl font-bold text-brand-ink">
                   {card.title}
                 </h3>
                 <p className="mt-4 text-sm leading-7 text-slate-600">{card.description}</p>

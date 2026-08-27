@@ -30,18 +30,14 @@ export function EditorialGuidanceGrid({ eyebrow, sections }: EditorialGuidanceGr
               index > 0 ? "border-t border-brand-border lg:border-l lg:border-t-0" : ""
             }`}
           >
-            <div className="absolute right-4 top-7 font-heading text-7xl font-bold leading-none text-brand-mist sm:right-8">
-              {String(index + 1).padStart(2, "0")}
-            </div>
-
             {hasText(eyebrow) ? (
-              <p className="relative pr-20 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
+              <p className="relative pr-0 text-[0.65rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
                 {eyebrow}
               </p>
             ) : null}
 
             {hasText(section.title) ? (
-              <h2 className="relative mt-4 max-w-xl pr-14 font-heading text-3xl font-bold leading-tight text-brand-ink sm:text-4xl">
+              <h2 className="relative mt-4 max-w-xl pr-0 font-heading text-3xl font-bold leading-tight text-brand-ink sm:text-4xl">
                 {section.title}
               </h2>
             ) : null}

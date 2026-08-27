@@ -158,7 +158,6 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                 items={howItWorks.map((step) => ({
                   title: step.title,
                   description: step.description,
-                  number: step.number,
                   // Prefer a richer image if provided on the step; else fallback to iconImage, else emoji-derived image
                   image: undefined,
                   iconImage: step.iconImage ?? (emojiToIconImage(step.icon) || undefined),

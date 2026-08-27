@@ -149,19 +149,6 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                     {item.eyebrow ?? "Initiative"}
                   </span>
                 </div>
-
-                {/* Card number */}
-                <span
-                  aria-hidden="true"
-                  className="
-                    absolute right-5 top-5
-                    font-heading text-sm font-bold
-                    tracking-[0.12em] text-white
-                    drop-shadow-md
-                  "
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
               </div>
 
               {/* Card content */}

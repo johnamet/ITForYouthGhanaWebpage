@@ -12,7 +12,6 @@ export type AlternatingFeatureItem = {
   image?: string;
   iconImage?: string;
   icon?: string;
-  number?: string;
   imageAlt?: string;
 };
 
@@ -58,13 +57,7 @@ export function AlternatingFeatureRow({ items, className }: AlternatingFeatureRo
             {/* Copy */}
             <div className={clsx("order-2", isReversed ? "lg:order-1" : "lg:order-2")}> 
               <div className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div className="h-7 w-7" aria-hidden="true" />
-                  {item.number ? (
-                    <span className="font-heading text-3xl font-bold text-brand-gold/70">{item.number}</span>
-                  ) : null}
-                </div>
-                <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">{item.title}</h3>
+                <h3 className="font-heading text-2xl font-bold text-brand-ink">{item.title}</h3>
                 {item.description ? (
                   <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
                 ) : null}
