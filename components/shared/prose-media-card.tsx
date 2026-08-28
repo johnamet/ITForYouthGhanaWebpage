@@ -57,6 +57,26 @@ export type ProseMediaCardProps = {
   sizes?: string;
   /** Which grid column the media occupies for `layout="side"`. Defaults to `"start"`. */
   mediaPosition?: "start" | "end";
+  /**
+   * "card" (default) is the current panel treatment: the whole row renders
+   * as one white card. "bare" instead renders the outer row with no card
+   * styling at all and gives the copy block its own
+   * `rounded-[30px] border border-brand-border bg-white p-6 shadow-sm` card.
+   * This exists only to reproduce the retired
+   * components/shared/alternating-feature-row.tsx's exact chrome for
+   * layout="side" callers (the initiative "how it works" rows) — do not
+   * remove it as unused.
+   */
+  chrome?: "card" | "bare";
+  /**
+   * When true, frames the media in a
+   * `min-h-[18rem] overflow-hidden rounded-[32px] border border-brand-border
+   * bg-brand-mist` box instead of routing it through ContentImage's own
+   * rounding/aspect-ratio treatment. Defaults to false (current behaviour).
+   * Like `chrome`, this exists solely to preserve the retired
+   * AlternatingFeatureRow's treatment — do not remove it as unused.
+   */
+  mediaFrame?: boolean;
   tone?: "light" | "dark";
   href?: string;
   className?: string;
@@ -99,6 +119,8 @@ export function ProseMediaCard({
   columns = 4,
   sizes,
   mediaPosition = "start",
+  chrome = "card",
+  mediaFrame = false,
   tone = "light",
   href,
   className,
@@ -152,7 +174,29 @@ export function ProseMediaCard({
   const computedSizes =
     sizes ?? (layout === "side" ? "(min-width: 1024px) 50vw, 100vw" : stackedSizes(columns));
 
-  const visual = videoUrl ? (
+  // `mediaFrame`'s framed image is rendered via a plain next/image (like the
+  // spotlight branch below) rather than ContentImage, because ContentImage
+  // always imposes its own aspect-ratio box and rounded-media corners, which
+  // would fight the retired AlternatingFeatureRow's min-h-[18rem]/rounded-32
+  // frame this prop reproduces. safeImageSrc is applied explicitly here for
+  // the same reason it is on the spotlight image below: bypassing
+  // ContentImage forfeits its internal guard against a malformed CMS URL.
+  const framedImageSrc = mediaFrame && !videoUrl ? safeImageSrc(image) : undefined;
+
+  const visual = mediaFrame ? (
+    <div className="relative min-h-[18rem] overflow-hidden rounded-[32px] border border-brand-border bg-brand-mist">
+      {videoUrl ? (
+        <VideoCard
+          thumbnail={image}
+          title={media?.videoTitle?.trim() || title}
+          videoUrl={videoUrl}
+          className="absolute inset-0 h-full w-full"
+        />
+      ) : framedImageSrc ? (
+        <Image src={framedImageSrc} alt={imageAlt} fill sizes={computedSizes} className="object-cover" />
+      ) : null}
+    </div>
+  ) : videoUrl ? (
     <VideoCard thumbnail={image} title={media?.videoTitle?.trim() || title} videoUrl={videoUrl} />
   ) : (
     <ContentImage
@@ -287,22 +331,39 @@ export function ProseMediaCard({
 
   const flipMedia = layout === "side" && mediaPosition === "end";
 
+  // `chrome="bare"` (never used by the spotlight variant, which has its own
+  // fixed shell below) moves the card styling from the outer shell onto the
+  // copy block, and — for layout="side" — restores the retired
+  // AlternatingFeatureRow's 1.05fr/0.95fr column bias instead of an even
+  // split. See the `chrome` prop doc for why this exists.
+  const isBareChrome = chrome === "bare";
+
+  const copyBlock = isBareChrome ? (
+    <div className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">{text}</div>
+  ) : (
+    text
+  );
+
   const content =
     layout === "side" ? (
-      <div className="grid gap-6 lg:grid-cols-2 lg:items-center">
+      <div
+        className={cn(
+          "grid gap-6 lg:items-center",
+          isBareChrome ? "lg:grid-cols-[1.05fr_0.95fr]" : "lg:grid-cols-2",
+        )}
+      >
         <div className={flipMedia ? "lg:order-2" : undefined}>{visual}</div>
-        <div className={flipMedia ? "lg:order-1" : undefined}>{text}</div>
+        <div className={flipMedia ? "lg:order-1" : undefined}>{copyBlock}</div>
       </div>
     ) : (
       <div className="space-y-5">
         {visual}
-        {text}
+        {copyBlock}
       </div>
     );
 
   const shell = cn(
-    "rounded-[30px] p-6 shadow-sm",
-    isDark ? "bg-brand-navy" : "border border-brand-border bg-white",
+    isBareChrome ? null : cn("rounded-[30px] p-6 shadow-sm", isDark ? "bg-brand-navy" : "border border-brand-border bg-white"),
     isLinked
       ? "transition hover:shadow-editorial focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2"
       : null,

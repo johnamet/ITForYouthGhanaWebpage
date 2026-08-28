@@ -158,6 +158,11 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   key={`${step.title}-${index}`}
                   layout="side"
                   mediaPosition={index % 2 === 1 ? "end" : "start"}
+                  // Reproduces the retired AlternatingFeatureRow's chrome
+                  // (bare row, framed media, card-only copy) — do not drop
+                  // these when touching this call site.
+                  chrome="bare"
+                  mediaFrame
                   title={step.title}
                   body={step.description}
                   media={{ iconImage: step.iconImage }}
