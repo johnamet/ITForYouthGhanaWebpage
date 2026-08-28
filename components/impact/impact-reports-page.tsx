@@ -74,7 +74,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
           />
 
           <ProseMediaCardGrid
-            theme="impact"
+            theme="training"
             columns={3}
             breakpoint="lg"
             gap="6"
@@ -116,7 +116,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
           </div>
 
           <ProseMediaCardGrid
-            theme="training"
+            theme="mentoring"
             columns={2}
             breakpoint="md"
             gap="5"

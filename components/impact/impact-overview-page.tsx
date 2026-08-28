@@ -86,7 +86,7 @@ export function ImpactOverviewPage({
           />
 
           <ProseMediaCardGrid
-            theme="impact"
+            theme="graduation"
             columns={2}
             breakpoint="md"
             gap="5"

@@ -37,9 +37,9 @@ Produced by search and confirmed by `npm run verify:media-pages` across all 31 p
 | `what-we-do/[slug]` | `howItWorks` *(4a)* | `training` | — | — | — |
 | `what-we-do` | `ecosystemCards` | `community` | 3 | lg | 5 |
 | `what-we-do` | `pathwayCards` | `training` | 4 | lg | 5 |
-| `our-impact` | `measurementCards` | `impact` | 2 | md | 5 |
-| `our-impact/reports` | `reportResources` | `impact` | 3 | lg | 6 |
-| `our-impact/reports` | `evidenceCards` | `training` | 2 | md | 5 |
+| `our-impact` | `measurementCards` | `graduation` | 2 | md | 5 |
+| `our-impact/reports` | `reportResources` | `training` | 3 | lg | 6 |
+| `our-impact/reports` | `evidenceCards` | `mentoring` | 2 | md | 5 |
 | `our-impact/sdgs` | `goals` | `advocacy` | 1 | lg | 6 |
 | `news-and-updates` | `editorialPillars` | `community` | 1 | lg | 5 |
 | `contact` | `responseSteps` | `mentoring` | 1 | lg | 4 |

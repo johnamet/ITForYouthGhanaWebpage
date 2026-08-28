@@ -60,10 +60,10 @@ for (const p of partnershipTracks as any[]) gate('partner-with-us/' + p.slug, [
   ['hiw', 'training', (p.howItWorks ?? []).filter(t).map((x: any) => `partner-with-us:${p.slug}:hiw:${x.title}`)]], p.heroImage ?? p.image);
 for (const i of initiatives as any[]) gate('what-we-do/' + i.slug, [
   ['hiw(4a)', 'training', (i.sections?.howItWorks ?? []).filter(t).map((x: any) => `what-we-do:${i.slug}:${x.title}`)]], i.heroImage);
-gate('our-impact', [['measure', 'impact', (impactOverviewContent as any).measurementCards.map((c: any) => `our-impact:measure:${c.title}`)]], (impactOverviewContent as any).heroImage);
+gate('our-impact', [['measure', 'graduation', (impactOverviewContent as any).measurementCards.map((c: any) => `our-impact:measure:${c.title}`)]], (impactOverviewContent as any).heroImage);
 gate('our-impact/reports', [
-  ['rr', 'impact', (impactReportsContent as any).reportResources.map((r: any) => `our-impact:rr:${r.title}`)],
-  ['ev', 'training', (impactReportsContent as any).evidenceCards.map((c: any) => `our-impact:ev:${c.title}`)]], (impactReportsContent as any).heroImage);
+  ['rr', 'training', (impactReportsContent as any).reportResources.map((r: any) => `our-impact:rr:${r.title}`)],
+  ['ev', 'mentoring', (impactReportsContent as any).evidenceCards.map((c: any) => `our-impact:ev:${c.title}`)]], (impactReportsContent as any).heroImage);
 gate('our-impact/sdgs', [['goals', 'advocacy', (impactSdgsContent as any).goals.map((g: any) => `our-impact:sdg:${g.goal}`)]], (impactSdgsContent as any).heroImage);
 gate('what-we-do', [
   ['eco', 'community', (whatWeDoOverviewContent as any).ecosystemCards.map((c: any) => `what-we-do:eco:${c.title}`)],
