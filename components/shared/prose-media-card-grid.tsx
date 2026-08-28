@@ -18,7 +18,7 @@ export type ProseMediaCardGridProps = {
   columns?: 1 | 2 | 3 | 4;
   /** Breakpoint at which the columns kick in. Below it the grid is one column. */
   breakpoint?: "sm" | "md" | "lg";
-  gap?: "5" | "6";
+  gap?: "4" | "5" | "6";
   className?: string;
 };
 
@@ -114,7 +114,7 @@ export function ProseMediaCardGrid({
     <div
       className={cn(
         "grid",
-        gap === "6" ? "gap-6" : "gap-5",
+        gap === "6" ? "gap-6" : gap === "4" ? "gap-4" : "gap-5",
         columnClasses[breakpoint][columns],
         className,
       )}

@@ -22,7 +22,15 @@ import { resolveMediaSet } from '../lib/content/media-pool';
 import { organisationServices } from '../lib/content/organisation-config';
 import { partnershipTracks } from '../lib/content/partnership-config';
 import { impactOverviewContent, impactReportsContent, impactSdgsContent } from '../lib/content/impact-config';
-import { whatWeDoOverviewContent, departments, initiatives } from '../lib/content/site-config';
+import {
+  whatWeDoOverviewContent,
+  departments,
+  initiatives,
+  whoCanApplyHub,
+  applyForTrainingHub,
+  howItWorksHub,
+  trainingCoursesHub,
+} from '../lib/content/site-config';
 import { newsHubContent } from '../lib/content/news-config';
 import { contactPageContent } from '../lib/content/contact-config';
 let fails = 0, pages = 0;
@@ -57,4 +65,29 @@ gate('news-and-updates', [['pillars', 'community', (newsHubContent as any).edito
 gate('contact', [['steps', 'mentoring', (contactPageContent as any).responseSteps.map((s: any) => `contact:step:${s.number}`)]]);
 for (const d of departments as any[]) gate('departments/' + d.slug, [
   ['svc', 'team', (d.services ?? []).map((s: any) => `departments:${d.slug}:${s.title}`)]]);
+
+// Task 1 (phase 4b-2): the two grids the survey left unthemed. Both are
+// single-grid pages, but `training` is checked here rather than assumed —
+// see the module doc above on why an editorially-obvious theme still has to
+// be gated.
+gate('apply-for-training/who-can-apply', [
+  ['audience', 'training', (whoCanApplyHub.sections ?? []).slice(0, 3).filter(t).map((s: any) => `training:audience:${s.title}`)]]);
+
+// TrainingProcessStrip renders on three routes (apply-for-training,
+// apply-for-training/courses, apply-for-training/how-it-works). Each is
+// gated as its own page instance — the strip is the only grid on any of the
+// three, so there is no co-located grid to collide with, but the theme
+// still has to be checked per the rule above.
+gate('apply-for-training', [
+  ['process', 'training', (applyForTrainingHub.process ?? []).filter(t).map((s: any) => `training:process:${s.number}`)]]);
+gate('apply-for-training/courses', [
+  ['process', 'training', (trainingCoursesHub.process ?? []).filter(t).map((s: any) => `training:process:${s.number}`)]]);
+gate('apply-for-training/how-it-works', [
+  // TrainingHowItWorksPage derives its steps from the page's first four
+  // sections rather than from a `process` field — see toProcessSteps in
+  // components/training/training-how-it-works-page.tsx — so the gate
+  // mirrors that derivation instead of reading a `process` array that page
+  // never renders.
+  ['process', 'training', (howItWorksHub.sections ?? []).slice(0, 4).filter(t).map((s: any, i: number) => `training:process:${String(i + 1).padStart(2, '0')}`)]]);
+
 console.log(fails === 0 ? `ALL ${pages} PAGE INSTANCES PASS — page-level union distinct everywhere` : `${fails} of ${pages} FAILED`);

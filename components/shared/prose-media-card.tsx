@@ -18,7 +18,7 @@ export type ProseMediaCardProps = {
   variant?: "panel" | "spotlight";
   /** Spotlight variant only — the accent bar colour. */
   accentColor?: string;
-  /** Spotlight variant only — renders a Button below the prose. */
+  /** Renders a Button below the prose, on either variant ("pink" on spotlight, "blue" on panel). */
   cta?: { label: string; href: string };
   eyebrow?: string;
   title: string;
@@ -288,9 +288,9 @@ export function ProseMediaCard({
         </p>
       ) : null}
       {readMore}
-      {isSpotlight && cta ? (
+      {cta ? (
         <div className="mt-5">
-          <Button href={cta.href} variant="pink" size="lg">
+          <Button href={cta.href} variant={isSpotlight ? "pink" : "blue"} size="lg">
             {cta.label}
           </Button>
         </div>
@@ -300,17 +300,15 @@ export function ProseMediaCard({
 
   // A linkable shell only makes sense when the card actually ends up wrapped
   // in the outer <Link> below. VideoCard renders its own <a> around the
-  // thumbnail, and (on the spotlight variant) Button renders `cta.href`
-  // through next/link when given an href, i.e. its own <a> too — wrapping
-  // either in the outer <Link> below would nest anchors, which is invalid
-  // HTML and causes a hydration mismatch. So the outer wrap, and the
-  // link-only hover/focus treatment that comes with it, is skipped whenever
-  // videoUrl is set, or when cta is set on the spotlight variant; a
-  // card-level `href` is deliberately ignored in that case. `cta` only
-  // renders under variant="spotlight" (see the render branches below), so
-  // only that combination can actually nest anchors — on the panel variant a
-  // `cta` prop renders nothing, so it must not suppress the link too.
-  const isLinked = Boolean(href) && !videoUrl && !(isSpotlight && cta);
+  // thumbnail, and Button renders `cta.href` through next/link when given an
+  // href, i.e. its own <a> too — wrapping either in the outer <Link> below
+  // would nest anchors, which is invalid HTML and causes a hydration
+  // mismatch. So the outer wrap, and the link-only hover/focus treatment
+  // that comes with it, is skipped whenever videoUrl is set, or whenever cta
+  // is set; a card-level `href` is deliberately ignored in that case. `cta`
+  // now renders on both variants (see the render branches above), so this
+  // guard is no longer variant-conditional.
+  const isLinked = Boolean(href) && !videoUrl && !cta;
 
   if (isSpotlight) {
     const shell = cn(
