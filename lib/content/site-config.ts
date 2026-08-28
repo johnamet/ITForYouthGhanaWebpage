@@ -8,7 +8,7 @@
 import type { HeroSlide }       from "@/components/home/hero-slideshow";
 import type { MarqueeTickerContent } from "@/components/home/marquee-ticker";
 import type { FeaturedProgram } from "@/components/home/featured-programs";
-import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
+import type { ProgrammeShowcaseItem } from "@/types/content";
 import type { ChallengeSectionContent, MissionSectionContent, OverviewSectionContent } from "@/components/home/legacy-homepage-sections";
 import type { DonationCampaignContent } from "@/components/home/donation-campaign";
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";

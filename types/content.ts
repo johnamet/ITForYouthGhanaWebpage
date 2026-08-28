@@ -1013,3 +1013,23 @@ export interface ContactPageContent {
   emailCtaLabel?: string;
   formCtaLabel?: string;
 }
+
+/**
+ * One initiative as edited in the homepage CMS and rendered by the
+ * initiatives grid. Declared here rather than beside a component so the
+ * CMS loader, the seed content and the admin form can all share it
+ * without importing a rendering module.
+ */
+export type ProgrammeShowcaseItem = {
+  id: string;
+  title: string;
+  description: string;
+  href: string;
+  image: string;
+  accent: string;
+  // Unread since the de-iconing pass; kept because the content types and
+  // admin forms that populate this field were deliberately out of scope.
+  icon?: string;
+  eyebrow?: string;
+  active?: boolean;
+};

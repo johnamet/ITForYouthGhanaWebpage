@@ -21,7 +21,7 @@ import type { Announcement } from "@/components/layout/announcement-bar";
 import type { FloatingElementsContent } from "@/components/layout/floating-elements";
 import type { HeroSlide } from "@/components/home/hero-slideshow";
 import type { MarqueeTickerContent } from "@/components/home/marquee-ticker";
-import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
+import type { ProgrammeShowcaseItem } from "@/types/content";
 import type { DonationCampaignContent } from "@/components/home/donation-campaign";
 import type { FeaturedStoryContent } from "@/components/home/featured-story-video";
 import type { JoinCtaCard } from "@/components/home/join-cta-block";

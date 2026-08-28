@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, ArrowDown, ArrowUp, CheckCircle2, Loader2, Plus, Save, Trash2 } from "lucide-react";
 
-import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
+import type { ProgrammeShowcaseItem } from "@/types/content";
 
 type ApiResponse = { success?: boolean; message?: string };
 type SubmitState = { type: "idle" | "success" | "error"; message: string };

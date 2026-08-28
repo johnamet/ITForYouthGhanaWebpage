@@ -22,7 +22,6 @@ import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { ImpactCounter } from "@/components/home/impact-counter";
 import { InitiativesTree } from "@/components/home/initiatives-tree";
 import { LegacyHomepageSections } from "@/components/home/legacy-homepage-sections";
-import { ProgrammeShowcase } from "@/components/home/programme-showcase";
 import { DonationCampaign } from "@/components/home/donation-campaign";
 import { FeaturedStoryVideo } from "@/components/home/featured-story-video";
 import { LatestNewsGrid } from "@/components/home/latest-news-grid";
@@ -96,34 +95,31 @@ export async function HomepageSections() {
       {/* 4 ── Impact counter */}
       <ImpactCounter stats={impactStats} />
 
-      {/* 5 ── Connected initiatives tree */}
+      {/* 5 ── Initiatives grid */}
       <InitiativesTree items={initiativeTreeItems} />
 
-      {/* 6 ── Programme showcase */}
-      <ProgrammeShowcase items={showcase} />
-
-      {/* 7 ── Donation campaign */}
+      {/* 6 ── Donation campaign */}
       <DonationCampaign campaign={campaign} />
 
-      {/* 8 ── Featured story / video */}
+      {/* 7 ── Featured story / video */}
       <FeaturedStoryVideo story={story} />
 
-      {/* 9 ── Latest news & blog */}
+      {/* 8 ── Latest news & blog */}
       <LatestNewsGrid articles={articles} />
 
-      {/* 10 ── Student testimonials */}
+      {/* 9 ── Student testimonials */}
       <TestimonialsSection testimonials={testimonials} />
 
-      {/* 11 ── Team members */}
+      {/* 10 ── Team members */}
       <HomepageTeamSection members={teamMembers} />
 
-      {/* 12 ── Partner strip */}
+      {/* 11 ── Partner strip */}
       <PartnersStrip partners={partners} />
 
-      {/* 13 ── Apply / join CTA block */}
+      {/* 12 ── Apply / join CTA block */}
       <JoinCtaBlock cards={joinCards} />
 
-      {/* 14 ── Newsletter signup */}
+      {/* 13 ── Newsletter signup */}
       <NewsletterSignupSection content={newsletter} />
     </div>
   );
