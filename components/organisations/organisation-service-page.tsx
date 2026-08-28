@@ -1,12 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import type { OrganisationServicePage as OrganisationServicePageType } from "@/types/content";
-import { composeProse } from "@/lib/utils/prose";
 
 type OrganisationServicePageProps = {
   page: OrganisationServicePageType;
@@ -82,32 +81,22 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
             }
           />
 
-          <div className="grid gap-5 md:grid-cols-2">
-            {page.overviewCards.filter((card) => card.title?.trim() || card.description?.trim()).map((card) => {
-              const description = composeProse(card.description, card.bullets);
-              return (
-                <div
-                  key={card.title}
-                  className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-                >
-                  <div className="flex items-center justify-between">
-                    {card.iconImage ? (
-                      <span className="inline-flex items-center justify-center" aria-hidden="true">
-                        <Image src={card.iconImage} alt={card.title} width={28} height={28} className="h-7 w-7 object-contain" />
-                      </span>
-                    ) : null}
-                    <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
-                      {page.overviewCardBadgeLabel ?? "Service area"}
-                    </span>
-                  </div>
-                  <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                    {card.title}
-                  </h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
-                </div>
-              );
-            })}
-          </div>
+          <ProseMediaCardGrid
+            theme="corporate"
+            columns={2}
+            breakpoint="md"
+            gap="5"
+            cards={page.overviewCards
+              .filter((card) => card.title?.trim() || card.description?.trim())
+              .map((card) => ({
+                eyebrow: page.overviewCardBadgeLabel ?? "Service area",
+                title: card.title,
+                body: card.description,
+                points: card.bullets,
+                mediaKey: `for-organisations:${page.slug}:ov:${card.title}`,
+                media: { iconImage: card.iconImage },
+              }))}
+          />
         </div>
       </section>
 
@@ -128,24 +117,20 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
             }
           />
 
-          <div className="grid gap-5 lg:grid-cols-4">
-            {page.howItWorks.filter((step) => step.title?.trim() || step.description?.trim()).map((step) => (
-              <div
-                key={step.number}
-                className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
-              >
-                {step.iconImage ? (
-                  <span className="inline-flex items-center justify-center" aria-hidden="true">
-                    <Image src={step.iconImage} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
-                  </span>
-                ) : null}
-                <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{step.description}</p>
-              </div>
-            ))}
-          </div>
+          <ProseMediaCardGrid
+            theme="coding"
+            columns={4}
+            breakpoint="lg"
+            gap="5"
+            cards={page.howItWorks
+              .filter((step) => step.title?.trim() || step.description?.trim())
+              .map((step) => ({
+                title: step.title,
+                body: step.description,
+                mediaKey: `for-organisations:${page.slug}:hiw:${step.title}`,
+                media: { iconImage: step.iconImage },
+              }))}
+          />
         </div>
       </section>
 
@@ -211,44 +196,40 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
               }
             />
 
-            <div className="grid gap-5 md:grid-cols-2">
-                {page.packages.filter((item) => item.name?.trim() || item.description?.trim()).map((item) => (
-                <div
-                  key={item.name}
-                  className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div>
-                      <h3 className="font-heading text-2xl font-bold text-brand-ink">
-                        {item.name}
-                      </h3>
-                      <p className="mt-3 text-sm leading-7 text-slate-600">
-                        {item.description}
-                      </p>
-                    </div>
+            <ProseMediaCardGrid
+              theme="entrepreneurship"
+              columns={2}
+              breakpoint="md"
+              gap="5"
+              cards={page.packages
+                .filter((item) => item.name?.trim() || item.description?.trim())
+                .map((item) => {
+                  // Tags, not prose points — comma-joined for the same reason as the
+                  // instructor roster in course-detail-card.tsx. Folded into `body`
+                  // (rather than `points`, which would punctuate each tag as its own
+                  // sentence) alongside the note, since ProseMediaCard has no separate
+                  // slot for either. Price is surfaced as the card's `eyebrow` instead
+                  // of buried in the paragraph.
+                  const featureLine = item.features
+                    .map((feature) => feature.trim())
+                    .filter(Boolean)
+                    .join(", ");
+                  const body = [
+                    item.description?.trim(),
+                    featureLine ? `Includes: ${featureLine}.` : null,
+                    item.note?.trim(),
+                  ]
+                    .filter((part): part is string => Boolean(part))
+                    .join(" ");
 
-                    <div className="rounded-[20px] bg-brand-navy px-4 py-3 text-white">
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-gold">
-                        Pricing
-                      </p>
-                      <p className="mt-2 font-heading text-2xl font-bold">{item.price}</p>
-                    </div>
-                  </div>
-
-                  {item.features.length ? (
-                    // Tags, not prose points — comma-joined for the same reason as the
-                    // instructor roster in course-detail-card.tsx.
-                    <p className="mt-6 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
-                      {item.features.map((feature) => feature.trim()).filter(Boolean).join(", ")}
-                    </p>
-                  ) : null}
-
-                  {item.note ? (
-                    <p className="mt-5 text-sm leading-7 text-slate-500">{item.note}</p>
-                  ) : null}
-                </div>
-              ))}
-            </div>
+                  return {
+                    eyebrow: item.price?.trim() || undefined,
+                    title: item.name,
+                    body,
+                    mediaKey: `for-organisations:${page.slug}:pk:${item.name}`,
+                  };
+                })}
+            />
           </div>
         </section>
       ) : null}
