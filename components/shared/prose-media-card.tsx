@@ -25,6 +25,21 @@ export type ProseMediaCardProps = {
   body?: string;
   /** Rendered as prose, never as a list. */
   points?: string[];
+  /**
+   * A prominent labelled value, rendered top-right of the text block. Built for
+   * the price on a pricing card, where the number is what a reader scans for
+   * and an `eyebrow` reads as a category label instead. Not rendered on the
+   * spotlight variant.
+   */
+  badge?: { label?: string; value: string };
+  /**
+   * A supporting line set off by the site's gold rule, below the prose. Use it
+   * for content that belongs with the card but is not part of its prose — a
+   * feature list, a set of tags. Not rendered on the spotlight variant.
+   */
+  aside?: string;
+  /** A muted closing line, below everything else. Not rendered on the spotlight variant. */
+  footnote?: string;
   /** Authored media always wins over the pool. */
   media?: {
     image?: string;
@@ -123,6 +138,9 @@ export function ProseMediaCard({
   title,
   body,
   points,
+  badge,
+  aside,
+  footnote,
   media,
   resolved,
   mediaKey,
@@ -253,6 +271,28 @@ export function ProseMediaCard({
       </Link>
     ) : null;
 
+  const titleElement = title.trim() ? (
+    <h3
+      className={cn(
+        "font-heading text-2xl font-bold",
+        eyebrow ? "mt-4" : null,
+        isDark ? "text-white" : "text-brand-ink",
+      )}
+    >
+      {title}
+    </h3>
+  ) : null;
+
+  // badge/aside/footnote are a panel-only extension for card families that
+  // need a price, a feature line, or a closing note alongside their prose
+  // (see the props' docs). The spotlight variant is a frozen port of the
+  // retired SpotlightCard — its appearance must not change — so all three
+  // are suppressed here rather than wired up, even if a caller supplies
+  // them. Do not "complete" this by rendering them on spotlight.
+  const showBadge = !isSpotlight && Boolean(badge);
+  const showAside = !isSpotlight && Boolean(aside);
+  const showFootnote = !isSpotlight && Boolean(footnote);
+
   const text = (
     <div>
       {eyebrow ? (
@@ -266,17 +306,23 @@ export function ProseMediaCard({
           </p>
         )
       ) : null}
-      {title.trim() ? (
-        <h3
-          className={cn(
-            "font-heading text-2xl font-bold",
-            eyebrow ? "mt-4" : null,
-            isDark ? "text-white" : "text-brand-ink",
-          )}
-        >
-          {title}
-        </h3>
-      ) : null}
+      {showBadge && badge ? (
+        // Title and badge share a row only when a badge is present — a card
+        // with no badge keeps exactly the plain title markup below.
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          {titleElement}
+          <div className="rounded-[20px] bg-brand-navy px-4 py-3 text-white">
+            {badge.label ? (
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-gold">
+                {badge.label}
+              </p>
+            ) : null}
+            <p className="mt-2 font-heading text-2xl font-bold">{badge.value}</p>
+          </div>
+        </div>
+      ) : (
+        titleElement
+      )}
       {description ? (
         <p
           className={cn(
@@ -285,6 +331,31 @@ export function ProseMediaCard({
           )}
         >
           {description}
+        </p>
+      ) : null}
+      {showAside && aside ? (
+        <p
+          className={cn(
+            "mt-6 border-l-2 border-brand-gold pl-5 text-sm leading-7",
+            // Dark tone equivalent of the light tone's text-slate-600 — this
+            // is the same treatment the prose paragraph above uses on navy.
+            isDark ? "text-white/78" : "text-slate-600",
+          )}
+        >
+          {aside}
+        </p>
+      ) : null}
+      {showFootnote && footnote ? (
+        <p
+          className={cn(
+            "mt-5 text-sm leading-7",
+            // Dark tone equivalent of the light tone's muted text-slate-500.
+            // Dimmer than the aside/body treatment above (white/78) so the
+            // footnote still reads as the most muted line on a navy card.
+            isDark ? "text-white/60" : "text-slate-500",
+          )}
+        >
+          {footnote}
         </p>
       ) : null}
       {readMore}

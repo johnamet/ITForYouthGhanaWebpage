@@ -205,27 +205,23 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
                 .filter((item) => item.name?.trim() || item.description?.trim())
                 .map((item) => {
                   // Tags, not prose points — comma-joined for the same reason as the
-                  // instructor roster in course-detail-card.tsx. Folded into `body`
-                  // (rather than `points`, which would punctuate each tag as its own
-                  // sentence) alongside the note, since ProseMediaCard has no separate
-                  // slot for either. Price is surfaced as the card's `eyebrow` instead
-                  // of buried in the paragraph.
+                  // instructor roster in course-detail-card.tsx. Passed as `aside`
+                  // (not `points`, which would punctuate each 1-3 word tag as its
+                  // own sentence) so the feature line keeps its own gold-rule
+                  // treatment instead of folding into the prose. Price goes in
+                  // `badge`, which gets the navy price-block treatment instead of
+                  // reading as a category label the way `eyebrow` would.
                   const featureLine = item.features
                     .map((feature) => feature.trim())
                     .filter(Boolean)
                     .join(", ");
-                  const body = [
-                    item.description?.trim(),
-                    featureLine ? `Includes: ${featureLine}.` : null,
-                    item.note?.trim(),
-                  ]
-                    .filter((part): part is string => Boolean(part))
-                    .join(" ");
 
                   return {
-                    eyebrow: item.price?.trim() || undefined,
                     title: item.name,
-                    body,
+                    body: item.description,
+                    badge: item.price?.trim() ? { label: "Pricing", value: item.price } : undefined,
+                    aside: featureLine || undefined,
+                    footnote: item.note?.trim() || undefined,
                     mediaKey: `for-organisations:${page.slug}:pk:${item.name}`,
                   };
                 })}
