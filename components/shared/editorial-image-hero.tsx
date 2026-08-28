@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
+import { safeImageSrc } from "@/lib/utils/image-src";
 
 export type EditorialHeroBreadcrumb = {
   label: string;
@@ -50,7 +51,7 @@ export function EditorialImageHero({
   priority = false,
   className,
 }: EditorialImageHeroProps) {
-  const visibleImage = hasText(imageSrc) ? imageSrc : null;
+  const visibleImage = safeImageSrc(imageSrc) ?? null;
   const visibleBreadcrumbs = breadcrumbs.filter((crumb) => hasText(crumb.label));
   const visibleCtas = ctas.filter((cta) => hasText(cta.label) && hasText(cta.href));
   const hasPanel =

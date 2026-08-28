@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { DepartmentProfile } from "@/types/content";
 
 type DepartmentsIndexPageProps = {
@@ -33,16 +34,19 @@ export function DepartmentsIndexPage({ departments }: DepartmentsIndexPageProps)
 
       <section className="px-6 py-16 lg:px-10">
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {visibleDepartments.map((department) => (
+          {visibleDepartments.map((department) => {
+            const heroImageSrc = safeImageSrc(department.heroImage);
+            const iconImageSrc = safeImageSrc(department.iconImage);
+            return (
             <Link
               key={department.id}
               href={`/departments/${department.slug}`}
               className="group overflow-hidden rounded-[28px] border border-brand-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-panel"
             >
               <div className="relative h-48 overflow-hidden bg-brand-mist">
-                {department.heroImage ? (
+                {heroImageSrc ? (
                   <Image
-                    src={department.heroImage}
+                    src={heroImageSrc}
                     alt={department.title}
                     fill
                     sizes="(max-width: 767px) 100vw, 33vw"
@@ -50,13 +54,13 @@ export function DepartmentsIndexPage({ departments }: DepartmentsIndexPageProps)
                   />
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/65 via-brand-navy/15 to-transparent" />
-                {department.iconImage ? (
+                {iconImageSrc ? (
                   <div
                     className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl text-xl text-white shadow-lg"
                     style={{ backgroundColor: department.color ?? "#1E72BA" }}
                     aria-hidden="true"
                   >
-                    <Image src={department.iconImage} alt={department.title} width={24} height={24} className="h-6 w-6 object-contain" />
+                    <Image src={iconImageSrc} alt={department.title} width={24} height={24} className="h-6 w-6 object-contain" />
                   </div>
                 ) : null}
               </div>
@@ -75,7 +79,8 @@ export function DepartmentsIndexPage({ departments }: DepartmentsIndexPageProps)
                 </span>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>

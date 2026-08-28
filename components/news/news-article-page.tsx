@@ -9,6 +9,7 @@ import {
   getArticleReadTime,
 } from "@/lib/content/news-config";
 import { formatDate } from "@/lib/utils/formatters";
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { ArticleSeed } from "@/types/content";
 
 type NewsArticlePageProps = {
@@ -38,7 +39,7 @@ export function NewsArticlePage({
   return (
     <article className="bg-white">
       <EditorialImageHero
-        imageSrc={article.coverImage || "/images/randomPictures/groupworkstudents.jpg"}
+        imageSrc={safeImageSrc(article.coverImage) ?? "/images/randomPictures/groupworkstudents.jpg"}
         imageAlt={article.coverAlt ?? article.title}
         eyebrow={`${getArticleLabel(article)}${article.featured ? " · Featured" : ""}`}
         title={article.title}
@@ -73,9 +74,9 @@ export function NewsArticlePage({
               </p>
               <div className="mt-5 flex items-center gap-4">
                 <div className="relative h-14 w-14 overflow-hidden rounded-full bg-white">
-                  {article.author.avatar ? (
+                  {safeImageSrc(article.author.avatar) ? (
                     <Image
-                      src={article.author.avatar}
+                      src={safeImageSrc(article.author.avatar)!}
                       alt={article.author.name}
                       fill
                       sizes="56px"

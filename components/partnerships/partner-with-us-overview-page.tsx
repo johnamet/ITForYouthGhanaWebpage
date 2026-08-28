@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { VideoCard } from "@/components/media/video-card";
 import { StatsSection } from "@/components/content/stats-section";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type {
   PartnershipOverviewContent,
   PartnershipTrackPage,
@@ -90,11 +91,13 @@ export function PartnerWithUsOverviewPage({
           <div className="grid gap-5 lg:grid-cols-3">
             {content.valueCards
               .filter((card) => card.title?.trim() || card.description?.trim())
-              .map((card) => (
+              .map((card) => {
+                const cardImageSrc = safeImageSrc(card.image);
+                return (
                 <div key={card.title} className="overflow-hidden rounded-[30px] border border-brand-border bg-white shadow-sm">
-                  {card.image ? (
+                  {cardImageSrc ? (
                     <div className="relative aspect-[16/9] w-full">
-                      <Image src={card.image} alt={card.imageAlt || card.title} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" />
+                      <Image src={cardImageSrc} alt={card.imageAlt || card.title} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" />
                     </div>
                   ) : null}
                   <div className="p-7">
@@ -102,7 +105,8 @@ export function PartnerWithUsOverviewPage({
                     <p className="mt-4 text-sm leading-7 text-slate-600">{card.description}</p>
                   </div>
                 </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       </section>
@@ -125,7 +129,9 @@ export function PartnerWithUsOverviewPage({
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            {tracks.filter((track) => track.title?.trim() || track.description?.trim()).map((track) => (
+            {tracks.filter((track) => track.title?.trim() || track.description?.trim()).map((track) => {
+              const trackHeroImageSrc = safeImageSrc(track.heroImage);
+              return (
               <Link
                 key={track.slug}
                 href={`/partner-with-us/${track.slug}`}
@@ -133,13 +139,15 @@ export function PartnerWithUsOverviewPage({
               >
                 <div className="grid md:grid-cols-[0.42fr_0.58fr]">
                   <div className="relative min-h-[18rem] bg-brand-mist">
+                    {trackHeroImageSrc ? (
                     <Image
-                      src={track.heroImage}
+                      src={trackHeroImageSrc}
                       alt={track.title}
                       fill
                       sizes="(max-width: 767px) 100vw, 35vw"
                       className="object-cover transition duration-700 group-hover:scale-105"
                     />
+                    ) : null}
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/45 via-transparent to-transparent" />
                   </div>
 
@@ -184,7 +192,8 @@ export function PartnerWithUsOverviewPage({
                   </div>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -209,11 +218,13 @@ export function PartnerWithUsOverviewPage({
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {content.partnerTypeCards
               .filter((card) => card.title?.trim() || card.description?.trim())
-              .map((card) => (
+              .map((card) => {
+                const partnerTypeCardImageSrc = safeImageSrc(card.image);
+                return (
                 <div key={card.title} className="overflow-hidden rounded-[28px] border border-brand-border bg-white shadow-sm">
-                  {card.image ? (
+                  {partnerTypeCardImageSrc ? (
                     <div className="relative aspect-[16/9] w-full">
-                      <Image src={card.image} alt={card.imageAlt || card.title} fill sizes="(max-width: 1280px) 100vw, 33vw" className="object-cover" />
+                      <Image src={partnerTypeCardImageSrc} alt={card.imageAlt || card.title} fill sizes="(max-width: 1280px) 100vw, 33vw" className="object-cover" />
                     </div>
                   ) : null}
                   <div className="p-6">
@@ -221,7 +232,8 @@ export function PartnerWithUsOverviewPage({
                     <p className="mt-3 text-sm leading-7 text-slate-600">{card.description}</p>
                   </div>
                 </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       </section>

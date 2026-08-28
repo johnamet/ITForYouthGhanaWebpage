@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { Partner } from "@/components/home/patrners-strip";
 import { Card } from "@/components/ui/card";
 import { StateMessage } from "@/components/ui/state-message";
+import { safeImageSrc } from "@/lib/utils/image-src";
 
 type PartnerDirectoryProps = {
   partners: Partner[];
@@ -34,12 +35,14 @@ export function PartnerDirectory({ partners }: PartnerDirectoryProps) {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {visiblePartners.map((partner) => (
+          {visiblePartners.map((partner) => {
+            const logoSrc = safeImageSrc(partner.logo);
+            return (
             <Card key={partner.id} className="rounded-[26px]">
               <div className="mb-4 flex h-16 items-center">
-                {partner.logo ? (
+                {logoSrc ? (
                   <Image
-                    src={partner.logo}
+                    src={logoSrc}
                     alt={partner.name}
                     width={160}
                     height={56}
@@ -65,7 +68,8 @@ export function PartnerDirectory({ partners }: PartnerDirectoryProps) {
                 </a>
               ) : null}
             </Card>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

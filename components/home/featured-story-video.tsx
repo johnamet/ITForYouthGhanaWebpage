@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Play, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { safeImageSrc } from "@/lib/utils/image-src";
 
 export type FeaturedStoryContent = {
   id: string;
@@ -62,6 +63,7 @@ function toEmbedUrl(url?: string) {
 export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
   const [isOpen, setIsOpen] = useState(false);
   const embedUrl = useMemo(() => toEmbedUrl(story.videoUrl), [story.videoUrl]);
+  const backgroundImageSrc = safeImageSrc(story.backgroundImage);
 
   useEffect(() => {
     if (!isOpen) {
@@ -88,13 +90,15 @@ export function FeaturedStoryVideo({ story }: FeaturedStoryVideoProps) {
       <section className="bg-white px-6 pb-20 lg:px-10">
         <div className="mx-auto max-w-6xl">
           <div className="relative min-h-[34rem] overflow-hidden rounded-[36px] bg-brand-navy shadow-[0_20px_55px_rgba(12,45,90,0.2)]">
-            <Image
-              src={story.backgroundImage}
-              alt={story.headline}
-              fill
-              sizes="100vw"
-              className="object-cover"
-            />
+            {backgroundImageSrc ? (
+              <Image
+                src={backgroundImageSrc}
+                alt={story.headline}
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+            ) : null}
             <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(12,45,90,0.88)_0%,rgba(12,45,90,0.52)_46%,rgba(12,45,90,0.16)_100%)]" />
 
             <div className="relative flex min-h-[34rem] items-end p-6 sm:p-10">

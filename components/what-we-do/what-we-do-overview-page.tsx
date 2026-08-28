@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { WhatWeDoGallery } from "@/components/what-we-do/what-we-do-gallery";
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { InitiativePage, WhatWeDoOverviewContent } from "@/types/content";
 
 type WhatWeDoOverviewPageProps = {
@@ -105,7 +106,9 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            {initiatives.map((initiative) => (
+            {initiatives.map((initiative) => {
+              const heroImageSrc = safeImageSrc(initiative.heroImage);
+              return (
               <Link
                 key={initiative.slug}
                 href={`/what-we-do/${initiative.slug}`}
@@ -113,13 +116,15 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
               >
                 <div className="grid md:grid-cols-[0.42fr_0.58fr]">
                   <div className="relative min-h-[18rem] bg-brand-mist">
+                    {heroImageSrc ? (
                     <Image
-                      src={initiative.heroImage}
+                      src={heroImageSrc}
                       alt={initiative.title}
                       fill
                       sizes="(max-width: 767px) 100vw, 35vw"
                       className="object-cover transition duration-700 group-hover:scale-105"
                     />
+                    ) : null}
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/45 via-transparent to-transparent" />
                   </div>
 
@@ -166,7 +171,8 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
                   </div>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

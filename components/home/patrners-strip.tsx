@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { safeImageSrc } from "@/lib/utils/image-src";
+
 export type Partner = {
   id: string;
   name: string;
@@ -34,7 +36,9 @@ export function PartnersStrip({
 
         <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
           <div className="flex w-max items-center gap-12 [animation:marquee_42s_linear_infinite]">
-            {doubled.map((p, i) => (
+            {doubled.map((p, i) => {
+              const logoSrc = safeImageSrc(p.logo);
+              return (
               <a
                 key={`${p.id}-${i}`}
                 href={p.href || undefined}
@@ -43,9 +47,9 @@ export function PartnersStrip({
                 className="flex h-10 w-32 shrink-0 items-center justify-center"
                 title={p.name}
               >
-                {p.logo ? (
+                {logoSrc ? (
                   <Image
-                    src={p.logo}
+                    src={logoSrc}
                     alt={p.name}
                     width={120}
                     height={40}
@@ -57,7 +61,8 @@ export function PartnersStrip({
                   </span>
                 )}
               </a>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

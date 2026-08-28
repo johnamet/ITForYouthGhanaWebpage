@@ -9,6 +9,7 @@ import { VideoCard } from "@/components/media/video-card";
 import { StatsSection } from "@/components/content/stats-section";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { SitePage } from "@/types/content";
 
 type WhoWeArePageProps = {
@@ -48,11 +49,13 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
   const visibleAnchors = anchorLinks.filter((link) =>
     link.id === "overview" ? hasOverview : link.id === "model" ? operatingSections.length : link.id === "principles" ? principleSections.length : page.related.length,
   );
+  const resolvedHeroImage = safeImageSrc(page.heroImage) ?? heroImage;
+  const principlesImageSrc = safeImageSrc(page.principlesImage);
 
   return (
     <div className="overflow-hidden bg-white text-brand-ink">
       <EditorialImageHero
-        imageSrc={page.heroImage ?? heroImage}
+        imageSrc={resolvedHeroImage}
         imageAlt="IT For Youth Ghana learners collaborating during a training session"
         eyebrow={page.eyebrow}
         title={page.title}
@@ -103,7 +106,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
 
           <div>
             <VideoCard
-              thumbnail={page.heroImage ?? heroImage}
+              thumbnail={resolvedHeroImage}
               title={page.overviewVideoTitle ?? page.title}
               videoUrl={page.overviewVideoUrl}
               className="max-w-3xl lg:ml-auto"
@@ -161,10 +164,10 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
       {principleSections.length ? (
         <section id="principles" className="scroll-mt-36 bg-brand-navy px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-20">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            {page.principlesImage ? <div className="relative overflow-hidden rounded-[36px] border border-white/12 bg-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
+            {principlesImageSrc ? <div className="relative overflow-hidden rounded-[36px] border border-white/12 bg-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
               <div className="relative min-h-[26rem]">
                 <Image
-                  src={page.principlesImage}
+                  src={principlesImageSrc}
                   alt={page.principlesImageAlt ?? "IT For Youth Ghana facilitator speaking with learners"}
                   fill
                   sizes="(max-width: 1023px) 100vw, 42vw"

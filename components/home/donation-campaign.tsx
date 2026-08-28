@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import { safeImageSrc } from "@/lib/utils/image-src";
+
 export type DonationCampaignContent = {
   id: string;
   eyebrow: string;
@@ -62,15 +64,16 @@ export function DonationCampaign({ campaign }: DonationCampaignProps) {
     100,
     Math.round((campaign.raisedAmount / Math.max(campaign.goalAmount, 1)) * 100),
   );
+  const campaignImageSrc = safeImageSrc(campaign.image);
 
   return (
     <section className="overflow-hidden bg-[linear-gradient(135deg,var(--color-primary-light)_0%,var(--color-bg)_52%,#ffffff_100%)] px-6 py-20 lg:px-10">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-[linear-gradient(135deg,var(--color-primary-dark)_0%,var(--color-primary)_58%,var(--color-accent)_130%)] p-8 text-white shadow-[0_20px_50px_rgba(1,82,190,0.18)] sm:p-10">
-          {campaign.image ? (
+          {campaignImageSrc ? (
             <div className="absolute inset-y-0 right-0 hidden w-[42%] overflow-hidden lg:block">
               <Image
-                src={campaign.image}
+                src={campaignImageSrc}
                 alt={campaign.headline}
                 fill
                 sizes="40vw"

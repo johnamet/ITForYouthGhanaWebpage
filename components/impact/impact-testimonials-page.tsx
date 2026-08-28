@@ -5,6 +5,7 @@ import { FeaturedStoryVideo } from "@/components/home/featured-story-video";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { ImpactTestimonialsContent } from "@/types/content";
 
 type ImpactTestimonialsPageProps = {
@@ -55,16 +56,18 @@ export function ImpactTestimonialsPage({
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            {content.stories.map((story) => (
+            {content.stories.map((story) => {
+              const storyImageSrc = safeImageSrc(story.image);
+              return (
               <article
                 key={story.id}
                 className="overflow-hidden rounded-[30px] border border-brand-border bg-white shadow-sm"
               >
                 <div className="grid md:grid-cols-[0.38fr_0.62fr]">
                   <div className="relative min-h-[16rem] bg-brand-mist">
-                    {story.image ? (
+                    {storyImageSrc ? (
                       <Image
-                        src={story.image}
+                        src={storyImageSrc}
                         alt={story.name}
                         fill
                         sizes="(max-width: 767px) 100vw, 35vw"
@@ -102,7 +105,8 @@ export function ImpactTestimonialsPage({
                   </div>
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

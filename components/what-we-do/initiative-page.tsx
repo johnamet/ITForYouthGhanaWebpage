@@ -9,6 +9,7 @@ import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { InitiativePage } from "@/types/content";
 import { ProseMediaCard } from "@/components/shared/prose-media-card";
 import { resolveMediaSet } from "@/lib/content/media-pool";
+import { safeImageSrc } from "@/lib/utils/image-src";
 
 type InitiativePageTemplateProps = {
   page: InitiativePage;
@@ -71,6 +72,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
   const faqs = page.faqs.filter((faq) => hasText(faq.question) || hasText(faq.answer));
   const hasOverview =
     hasText(page.intro) || hasText(page.mission) || objectives.length > 0 || hasText(page.overviewImage);
+  const overviewImageSrc = safeImageSrc(page.overviewImage);
   const hasAudience =
     hasText(page.audience.summary) || audienceGroups.length > 0 || eligibility.length > 0;
   const hasApplyCta =
@@ -141,9 +143,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                 ) : null}
               </div>
 
-              {hasText(page.overviewImage) ? <div className="relative min-h-[24rem] overflow-hidden rounded-[32px] bg-brand-mist">
+              {overviewImageSrc ? <div className="relative min-h-[24rem] overflow-hidden rounded-[32px] bg-brand-mist">
                 <Image
-                  src={page.overviewImage}
+                  src={overviewImageSrc}
                   alt={section.overviewImageAlt || page.title}
                   fill
                   sizes="(max-width: 1023px) 100vw, 45vw"
@@ -193,9 +195,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   key={stat.label}
                   className="rounded-[30px] border border-brand-border bg-brand-mist/45 p-6"
                 >
-                  {stat.iconImage ? (
+                  {safeImageSrc(stat.iconImage) ? (
                     <span className="inline-flex items-center justify-center" aria-hidden="true">
-                      <Image src={stat.iconImage} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
+                      <Image src={safeImageSrc(stat.iconImage)!} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
                     </span>
                   ) : null}
                   {hasText(stat.value) ? <p className="mt-4 font-heading text-4xl font-bold text-brand-navy">
@@ -268,10 +270,10 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                     {testimonial.quote}
                   </blockquote> : null}
                   {hasText(testimonial.name) || hasText(testimonial.role) || hasText(testimonial.avatar) ? <div className="mt-6 flex items-center gap-4">
-                    {hasText(testimonial.avatar) ? <div className="relative h-14 w-14 overflow-hidden rounded-full bg-brand-mist">
+                    {safeImageSrc(testimonial.avatar) ? <div className="relative h-14 w-14 overflow-hidden rounded-full bg-brand-mist">
                       {(
                         <Image
-                          src={testimonial.avatar}
+                          src={safeImageSrc(testimonial.avatar)!}
                           alt={testimonial.name}
                           fill
                           sizes="56px"
@@ -302,9 +304,9 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   className="flex gap-4 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
                 >
                   {hasText(partner.logo) || hasText(partner.name) ? <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-mist text-sm font-bold text-brand-navy">
-                    {hasText(partner.logo) ? (
+                    {safeImageSrc(partner.logo) ? (
                       <Image
-                        src={partner.logo}
+                        src={safeImageSrc(partner.logo)!}
                         alt={partner.name}
                         width={44}
                         height={44}

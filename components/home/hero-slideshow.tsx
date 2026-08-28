@@ -16,6 +16,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+import { safeImageSrc } from "@/lib/utils/image-src";
+
 export type HeroSlide = {
   id: string;
   eyebrow: string;
@@ -314,6 +316,7 @@ export function HeroSlideshow({
           {/* Background slides */}
           {slides.map((item, index) => {
             const isActive = index === current;
+            const slideImageSrc = safeImageSrc(item.image);
 
             return (
               <div
@@ -336,8 +339,9 @@ export function HeroSlideshow({
                  * Blurred duplicate fills the empty spaces
                  * caused by object-contain.
                  */}
+                {slideImageSrc ? (
                 <Image
-                  src={item.image}
+                  src={slideImageSrc}
                   alt=""
                   fill
                   aria-hidden="true"
@@ -360,6 +364,7 @@ export function HeroSlideshow({
                     }
                   `}
                 />
+                ) : null}
 
                 {/* Dark treatment over blurred filler */}
                 <div className="absolute inset-0 bg-black/40" />
@@ -409,8 +414,9 @@ export function HeroSlideshow({
                       sm:rounded-[2rem]
                     "
                   >
+                    {slideImageSrc ? (
                     <Image
-                      src={item.image}
+                      src={slideImageSrc}
                       alt={item.heading}
                       fill
                       priority={index === 0}
@@ -431,6 +437,7 @@ export function HeroSlideshow({
                         }
                       `}
                     />
+                    ) : null}
 
                     {/* Very light image overlays */}
                     <div

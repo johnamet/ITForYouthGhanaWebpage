@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useDeferredValue, useEffect, useState } from "react";
 import { ArrowRight, Search } from "lucide-react";
 
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { Course } from "@/types/course";
 
 type TrainingCourseCatalogProps = {
@@ -13,17 +14,6 @@ type TrainingCourseCatalogProps = {
 };
 
 type PriceFilter = "all" | "free" | "paid";
-
-const allowedRemoteHosts = new Set([
-  "images.unsplash.com",
-  "firebasestorage.googleapis.com",
-  "storage.googleapis.com",
-  "images.pexels.com",
-  "tse2.mm.bing.net",
-  "imarticus.org",
-  "img.freepik.com",
-  "photos.fife.usercontent.google.com",
-]);
 
 function formatPrice(course: Course) {
   if (course.pricing.isFree || course.pricing.amount === 0) {
@@ -48,24 +38,7 @@ function formatDate(value: string | null) {
 }
 
 function resolveCourseImage(image: string | null) {
-  if (!image) {
-    return "/images/fallback/placeholder.svg";
-  }
-
-  if (image.startsWith("/")) {
-    return image;
-  }
-
-  try {
-    const url = new URL(image);
-    if (allowedRemoteHosts.has(url.hostname)) {
-      return image;
-    }
-  } catch {
-    return "/images/fallback/placeholder.svg";
-  }
-
-  return "/images/fallback/placeholder.svg";
+  return safeImageSrc(image) ?? "/images/fallback/placeholder.svg";
 }
 
 export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {

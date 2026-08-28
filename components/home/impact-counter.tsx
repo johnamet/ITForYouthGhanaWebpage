@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 import { useCountUp } from "@/hooks/useCountUp";
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { HighlightStat } from "@/types/content";
 
 type ImpactCounterProps = {
@@ -26,12 +27,13 @@ function splitStatValue(value: string) {
 function ImpactCounterItem({ stat, start }: { stat: HighlightStat; start: boolean }) {
   const parsed = useMemo(() => splitStatValue(stat.value), [stat.value]);
   const count = useCountUp(parsed.numeric, 2000, start);
+  const iconImageSrc = safeImageSrc(stat.iconImage);
 
   return (
     <div className="px-6 py-10 sm:px-8">
-      {stat.iconImage ? (
+      {iconImageSrc ? (
         <span className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-mist">
-          <Image src={stat.iconImage} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
+          <Image src={iconImageSrc} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
         </span>
       ) : null}
       <p className="font-heading text-5xl font-bold leading-none text-brand-navy sm:text-6xl">

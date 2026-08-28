@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { safeImageSrc } from "@/lib/utils/image-src";
+
 export type FeaturedProgram = {
   id: string;
   eyebrow: string;
@@ -20,6 +22,7 @@ type FeaturedProgramsProps = {
 export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const hero = programs.find((p) => p.featured);
   const rest = programs.filter((p) => !p.featured);
+  const heroImageSrc = safeImageSrc(hero?.image);
 
   return (
     <section className="px-6 py-20 lg:px-10">
@@ -50,9 +53,9 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
               href={hero.href}
               className="group relative col-span-1 overflow-hidden rounded-[24px] bg-brand-navy lg:col-span-2 lg:row-span-2"
             >
-              {hero.image && (
+              {heroImageSrc && (
                 <Image
-                  src={hero.image}
+                  src={heroImageSrc}
                   alt={hero.title}
                   fill
                   className="object-cover opacity-40 transition duration-700 group-hover:scale-105 group-hover:opacity-50"

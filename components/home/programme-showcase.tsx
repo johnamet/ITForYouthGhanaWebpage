@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { safeImageSrc } from "@/lib/utils/image-src";
 
 export type ProgrammeShowcaseItem = {
   id: string;
@@ -95,8 +96,9 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
             >
               {/* Image area */}
               <div className="absolute inset-x-0 top-0 h-[16.53rem] overflow-hidden bg-brand-mist">
+                {safeImageSrc(item.image) ? (
                 <Image
-                  src={item.image}
+                  src={safeImageSrc(item.image)!}
                   alt={item.title}
                   fill
                   priority={index < 4}
@@ -109,6 +111,7 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
                     group-hover:saturate-[1.08]
                   "
                 />
+                ) : null}
 
                 {/* Image tint */}
                 <div className="absolute inset-0 bg-brand-navy/10 transition-colors duration-500 group-hover:bg-brand-navy/5" />

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowUp, X } from "lucide-react";
 
 import { NewsletterSignupForm } from "@/components/shared/newsletter-signup-form";
+import { safeImageSrc } from "@/lib/utils/image-src";
 
 export type FloatingElementsContent = {
   donateButton: {
@@ -43,6 +44,7 @@ export function FloatingElements({ content }: FloatingElementsProps) {
   const [scrollY, setScrollY] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [isExitPopupDismissed, setIsExitPopupDismissed] = useState(false);
+  const exitIntentImageSrc = safeImageSrc(content.exitIntent.image);
 
   const dismissKey = useMemo(
     () => `itfy-exit-popup-dismissed:${content.exitIntent.id}`,
@@ -190,9 +192,9 @@ export function FloatingElements({ content }: FloatingElementsProps) {
 
             <div className="grid md:grid-cols-[0.46fr_0.54fr]">
               <div className="relative min-h-[18rem] bg-brand-mist">
-                {content.exitIntent.image ? (
+                {exitIntentImageSrc ? (
                   <Image
-                    src={content.exitIntent.image}
+                    src={exitIntentImageSrc}
                     alt={content.exitIntent.headline}
                     fill
                     sizes="(max-width: 767px) 100vw, 40vw"

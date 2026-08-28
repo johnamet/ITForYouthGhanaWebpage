@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { InitiativeGalleryImage } from "@/types/content";
 
 type InitiativeGalleryProps = {
@@ -23,6 +24,7 @@ export function InitiativeGallery({ images }: InitiativeGalleryProps) {
               : index % 3 === 0
                 ? "lg:col-span-5"
                 : "lg:col-span-4";
+          const imageSrc = safeImageSrc(image.src);
 
           return (
             <button
@@ -31,13 +33,15 @@ export function InitiativeGallery({ images }: InitiativeGalleryProps) {
               onClick={() => setActiveIndex(index)}
               className={`group relative min-h-[16rem] overflow-hidden rounded-[28px] bg-brand-mist text-left ${spanClass}`}
             >
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                sizes="(max-width: 1023px) 100vw, 33vw"
-                className="object-cover transition duration-700 group-hover:scale-105"
-              />
+              {imageSrc ? (
+                <Image
+                  src={imageSrc}
+                  alt={image.alt}
+                  fill
+                  sizes="(max-width: 1023px) 100vw, 33vw"
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+              ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/55 via-transparent to-transparent" />
               <span className="absolute bottom-4 left-4 right-4 text-sm font-medium text-white">
                 {image.alt}
@@ -68,13 +72,15 @@ export function InitiativeGallery({ images }: InitiativeGalleryProps) {
               <X className="h-5 w-5" />
             </button>
             <div className="relative aspect-[4/3]">
-              <Image
-                src={images[activeIndex].src}
-                alt={images[activeIndex].alt}
-                fill
-                sizes="90vw"
-                className="object-contain"
-              />
+              {safeImageSrc(images[activeIndex].src) ? (
+                <Image
+                  src={safeImageSrc(images[activeIndex].src)!}
+                  alt={images[activeIndex].alt}
+                  fill
+                  sizes="90vw"
+                  className="object-contain"
+                />
+              ) : null}
             </div>
           </div>
         </div>

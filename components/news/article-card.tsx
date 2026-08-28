@@ -7,6 +7,7 @@ import {
   getArticleReadTime,
 } from "@/lib/content/news-config";
 import { formatDate } from "@/lib/utils/formatters";
+import { safeImageSrc } from "@/lib/utils/image-src";
 import type { ArticleSeed } from "@/types/content";
 
 type ArticleCardProps = {
@@ -33,6 +34,7 @@ export function ArticleCard({
 }: ArticleCardProps) {
   const isFeatured = variant === "featured";
   const isCompact = variant === "compact";
+  const coverImageSrc = safeImageSrc(article.coverImage);
 
   return (
     <Link
@@ -47,9 +49,9 @@ export function ArticleCard({
             isFeatured ? "min-h-[23rem] lg:min-h-full" : isCompact ? "h-44" : "h-60"
           }`}
         >
-          {article.coverImage ? (
+          {coverImageSrc ? (
             <Image
-              src={article.coverImage}
+              src={coverImageSrc}
               alt={article.coverAlt ?? article.title}
               fill
               sizes={isFeatured ? "(max-width: 1023px) 100vw, 52vw" : "(max-width: 1023px) 100vw, 33vw"}

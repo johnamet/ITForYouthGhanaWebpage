@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import { safeImageSrc } from "@/lib/utils/image-src";
+
 export type Testimonial = {
   id: string;
   quote: string;
@@ -69,6 +71,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   }
 
   const t = visibleTestimonials[current];
+  const avatarSrc = safeImageSrc(t.avatar);
 
   return (
     <section className="overflow-hidden bg-brand-navy px-6 py-20 lg:px-10">
@@ -89,8 +92,8 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
 
             <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
               <div className="relative h-64 overflow-hidden rounded-[24px] bg-white/10">
-                {t.avatar ? (
-                  <Image src={t.avatar} alt={t.name} fill className="object-cover" />
+                {avatarSrc ? (
+                  <Image src={avatarSrc} alt={t.name} fill className="object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-brand-gold/15 font-heading text-4xl font-bold text-brand-gold">
                     {t.initials}

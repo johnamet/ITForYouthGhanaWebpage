@@ -8,6 +8,9 @@ import { ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { Button } from "@/components/ui/button";
 import { publicNavigation, headerCtas } from "@/lib/content/site-config";
+import { safeImageSrc } from "@/lib/utils/image-src";
+
+const DEFAULT_LOGO_URL = "/Asset-1.png";
 
 // ─── Dropdown panel ───────────────────────────────────────────────────────────
 // Items ≥ 5 → 2-column glass panel. Below that → single column.
@@ -64,9 +67,10 @@ type SiteHeaderProps = {
   logoUrl?: string;
 };
 
-export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
+export function SiteHeader({ logoUrl = DEFAULT_LOGO_URL }: SiteHeaderProps) {
   const [mobileOpen, setMobileOpen]       = useState(false);
   const [mobileSection, setMobileSection] = useState<string | null>(null);
+  const resolvedLogoUrl = safeImageSrc(logoUrl) ?? DEFAULT_LOGO_URL;
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/[0.12] bg-[#030b18]/95 backdrop-blur-xl">
@@ -75,12 +79,12 @@ export function SiteHeader({ logoUrl = "/Asset-1.png" }: SiteHeaderProps) {
         {/* ── Logo ─────────────────────────────────────────────────── */}
         <Link href="/" className="flex shrink-0 items-center gap-3 py-3.5">
           <Image
-            src={logoUrl}
+            src={resolvedLogoUrl}
             alt="IT For Youth Ghana"
             width={36}
             height={36}
             className="h-9 w-9 rounded-[10px] object-contain"
-            unoptimized={logoUrl.startsWith("http")}
+            unoptimized={resolvedLogoUrl.startsWith("http")}
             priority
           />
           {/* Wordmark */}
