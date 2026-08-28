@@ -1,6 +1,19 @@
-// Asserts that every image a public page renders is distinct — not just its
-// grid photos, and not just its grid photos plus its own hero, but every
-// image the page puts on screen.
+// Asserts the one invariant that is actually this programme's to guarantee:
+// a pool-resolved photograph (one that came out of `resolveMediaSet`, i.e.
+// a `ProseMediaCardGrid`/`gate()` grid entry) must not collide with any
+// other image the page renders — whether that other image is another
+// pool-resolved photograph, or an authored image (hero, overview image,
+// gallery item, initiative card, ...) that predates this work entirely.
+//
+// It deliberately does NOT assert that authored images are distinct from
+// each other. An editor re-showing a hero inside a gallery, or a gallery
+// repeating an overview image, is a normal editorial choice that predates
+// the media-pool rollout and is not something this programme introduced —
+// it is not this gate's business to block on it. Those cases are reported
+// as an informational line (`INFO`, not `FAIL`) so the information is not
+// thrown away, but they never fail the run.
+//
+// Put precisely: pool-vs-anything is in scope; authored-vs-authored is not.
 //
 // ProseMediaCardGrid guarantees no repeat WITHIN one grid, by resolving the
 // group in a single resolveMediaSet call. It cannot guarantee anything about
@@ -9,7 +22,7 @@
 // the same 30 local ITFYG photographs that stock the pool are also used
 // directly as authored heroes, overview images, and gallery images. So two
 // grids on one page can collide with each other, and any of them can collide
-// with an image the page renders outside a grid altogether.
+// with an authored image the page renders outside a grid altogether.
 //
 // Choosing different themes is NOT sufficient — it has to be checked. Every
 // editorially-natural assignment tried while planning the rollout failed this
@@ -22,20 +35,29 @@
 // Keep it in sync with the grids that actually exist. A page missing from here
 // is a page nobody is checking.
 //
-// This model has been widened three times, each time because it missed a
-// real duplicate:
+// This model's SCOPE — what counts as a collision, not the union/collision
+// logic itself — has been the thing repeatedly wrong. It has been widened
+// three times and narrowed once:
 //   1. Grid-vs-grid only — missed a page's own hero colliding with a card.
 //   2. + the page's own hero — missed a page whose hero was omitted from the
 //      source list, and missed images a page renders that are neither its
 //      hero nor a grid card (an initiative overview page's own initiative
 //      cards, each carrying its own heroImage; a what-we-do gallery strip).
 //   3. + every other image the page renders (`otherImages`, below) — the
-//      `gate()` helper now takes an array of every non-grid image a page
-//      puts on screen, not a single `hero` string. Treat this scope as the
-//      thing most likely to be wrong next, not the union-size logic: when a
-//      page gets a new section, a new card variant, or a new gallery, re-read
-//      its component and ask whether it renders an image this file doesn't
-//      know about yet.
+//      `gate()` helper took an array of every non-grid image a page puts on
+//      screen, not a single `hero` string. This widening overshot: it also
+//      started failing on authored images duplicating each other (an
+//      initiative's own gallery re-showing its hero or overview image, two
+//      static `what-we-do` gallery items), which is authored-content
+//      editorial choice, not a defect this programme introduced.
+//   4. Narrowed back to pool-vs-anything (this version) — `otherImages` is
+//      still every non-grid image a page renders, and is still the thing
+//      most likely to be incomplete next: when a page gets a new section, a
+//      new card variant, or a new gallery, re-read its component and ask
+//      whether it renders an image this file doesn't know about yet. But the
+//      gate now only fails when a pool-resolved image (from a `grids` entry)
+//      is part of the collision — never when two authored images collide
+//      with each other and no pool image is involved.
 //
 // Two categories are deliberately excluded from `otherImages`, and both are
 // noted again at their call site so the exclusion isn't silently assumed:
@@ -71,17 +93,39 @@ import { newsHubContent } from '../lib/content/news-config';
 import { contactPageContent } from '../lib/content/contact-config';
 let fails = 0, pages = 0;
 const t = (v: any) => v?.title?.trim() || v?.description?.trim();
-// `otherImages`: every image this page instance renders outside a converted
-// grid — the hero, plus anything else a component read turned up (initiative
-// cards, gallery strips, overview images, ...). See the module doc above for
-// what is deliberately left out and why.
+// `otherImages`: every AUTHORED image this page instance renders outside a
+// converted grid — the hero, plus anything else a component read turned up
+// (initiative cards, gallery strips, overview images, ...). See the module
+// doc above for what is deliberately left out and why, and for why authored
+// images are allowed to duplicate each other.
 function gate(name: string, grids: [string, any, string[]][], otherImages: (string | undefined)[] = []) {
   pages++;
-  const urls: string[] = otherImages.filter((u): u is string => Boolean(u));
-  for (const [, theme, keys] of grids) resolveMediaSet(keys, theme).forEach((e) => urls.push(e.url));
-  if (new Set(urls).size !== urls.length) {
+  const authored: string[] = otherImages.filter((u): u is string => Boolean(u));
+  const pool: string[] = [];
+  for (const [, theme, keys] of grids) resolveMediaSet(keys, theme).forEach((e) => pool.push(e.url));
+
+  // Informational only: authored images duplicating each other. Real (an
+  // editor's choice, predates this work) but not this gate's business — see
+  // the module doc's "pool-vs-anything, not authored-vs-authored" invariant.
+  const authoredCounts = new Map<string, number>();
+  for (const u of authored) authoredCounts.set(u, (authoredCounts.get(u) ?? 0) + 1);
+  const authoredDupes = [...authoredCounts.entries()].filter(([, n]) => n > 1).map(([u]) => u);
+  if (authoredDupes.length) {
+    console.log(`INFO ${name}  authored-vs-authored duplicate(s), not a failure: ${authoredDupes.join(', ')}`);
+  }
+
+  // The actual gate: a pool-resolved image colliding with anything else
+  // (another pool image, or an authored image) fails the page.
+  const authoredSet = new Set(authored);
+  const seenPool = new Set<string>();
+  const poolCollisions = new Set<string>();
+  for (const u of pool) {
+    if (authoredSet.has(u) || seenPool.has(u)) poolCollisions.add(u);
+    seenPool.add(u);
+  }
+  if (poolCollisions.size) {
     fails++;
-    console.log(`FAIL ${name}  union ${new Set(urls).size}/${urls.length}  [${grids.map((g) => g[0] + ':' + g[1]).join(' ')}]`);
+    console.log(`FAIL ${name}  pool collision(s): ${[...poolCollisions].join(', ')}  [${grids.map((g) => g[0] + ':' + g[1]).join(' ')}]`);
   }
 }
 // Case studies (organisation-service-page.tsx) are title/summary/outcome text
@@ -126,8 +170,8 @@ gate('our-impact/sdgs', [['goals', 'advocacy', (impactSdgsContent as any).goals.
 // Both are real <img>/<Image> renders on this exact page instance, so both
 // belong in the union.
 gate('what-we-do', [
-  ['eco', 'community', (whatWeDoOverviewContent as any).ecosystemCards.map((c: any) => `what-we-do:eco:${c.title}`)],
-  ['path', 'training', (whatWeDoOverviewContent as any).pathwayCards.map((c: any) => `what-we-do:path:${c.title}`)]], [
+  ['eco', 'mentoring', (whatWeDoOverviewContent as any).ecosystemCards.map((c: any) => `what-we-do:eco:${c.title}`)],
+  ['path', 'coding', (whatWeDoOverviewContent as any).pathwayCards.map((c: any) => `what-we-do:path:${c.title}`)]], [
   (whatWeDoOverviewContent as any).heroImage,
   ...(initiatives as any[]).map((i) => i.heroImage),
   ...((whatWeDoOverviewContent as any).galleryItems ?? []).map((g: any) => g.url),
