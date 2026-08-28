@@ -206,7 +206,7 @@ export function ProseMediaCard({
           className={cn(
             "font-heading text-2xl font-bold",
             eyebrow ? "mt-4" : null,
-            isSpotlight ? "text-brand-ink" : isDark ? "text-white" : "text-brand-ink",
+            isDark ? "text-white" : "text-brand-ink",
           )}
         >
           {title}
@@ -216,7 +216,7 @@ export function ProseMediaCard({
         <p
           className={cn(
             "mt-3 text-sm leading-7",
-            isSpotlight ? "text-slate-600" : isDark ? "text-white/78" : "text-slate-600",
+            isDark ? "text-white/78" : "text-slate-600",
           )}
         >
           {description}
@@ -234,10 +234,15 @@ export function ProseMediaCard({
   );
 
   // A linkable shell only makes sense when the card actually ends up wrapped
-  // in the outer <Link> below; the video branch never gets that wrap (see
-  // above), so it shouldn't get the link-only hover/focus treatment either.
-  // This holds for both variants.
-  const isLinked = Boolean(href) && !videoUrl;
+  // in the outer <Link> below. VideoCard renders its own <a> around the
+  // thumbnail, and (on the spotlight variant) Button renders `cta.href`
+  // through next/link when given an href, i.e. its own <a> too — wrapping
+  // either in the outer <Link> below would nest anchors, which is invalid
+  // HTML and causes a hydration mismatch. So the outer wrap, and the
+  // link-only hover/focus treatment that comes with it, is skipped whenever
+  // videoUrl or cta is set; a card-level `href` is deliberately ignored in
+  // that case. This holds for both variants.
+  const isLinked = Boolean(href) && !videoUrl && !cta;
 
   if (isSpotlight) {
     const shell = cn(
