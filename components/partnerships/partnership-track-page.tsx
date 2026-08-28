@@ -5,6 +5,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { ProseMediaCard } from "@/components/shared/prose-media-card";
+import { resolveMediaSet } from "@/lib/content/media-pool";
 import { VideoCard } from "@/components/media/video-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { PartnershipTrackPage as PartnershipTrackPageType } from "@/types/content";
@@ -23,6 +24,16 @@ const anchorLinks = [
 ];
 
 export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
+  const focusCards = page.focusCards.filter(
+    (card) => card.title?.trim() || card.description?.trim(),
+  );
+  // Resolved once for the whole group, in the same order as `focusCards` is
+  // rendered, so sibling cards don't land on the same pool photograph.
+  const focusCardsMedia = resolveMediaSet(
+    focusCards.map((card) => `partner-with-us:${page.slug}:${card.title}`),
+    "partnership",
+  );
+
   return (
     <div className="bg-white">
       <EditorialImageHero
@@ -81,28 +92,27 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
           </div>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {page.focusCards
-              .filter((card) => card.title?.trim() || card.description?.trim())
-              .map((card) => {
-                const description = composeProse(card.description, card.bullets);
-                const image = (card.image || card.iconImage) as string | undefined;
-                return (
-                  <ProseMediaCard
-                    key={card.title}
-                    variant="spotlight"
-                    eyebrow={page.overviewCardBadgeLabel ?? "Focus area"}
-                    title={card.title}
-                    body={description}
-                    media={{ image, imageAlt: card.title }}
-                    mediaKey={`partner-with-us:${page.slug}:${card.title}`}
-                    theme="partnership"
-                    cta={{
-                      label: page.contactCta?.primary?.label ?? "Get in touch",
-                      href: page.contactCta?.primary?.href ?? "/contact",
-                    }}
-                  />
-                );
-              })}
+            {focusCards.map((card, index) => {
+              const description = composeProse(card.description, card.bullets);
+              const image = (card.image || card.iconImage) as string | undefined;
+              return (
+                <ProseMediaCard
+                  key={card.title}
+                  variant="spotlight"
+                  eyebrow={page.overviewCardBadgeLabel ?? "Focus area"}
+                  title={card.title}
+                  body={description}
+                  media={{ image, imageAlt: card.title }}
+                  resolved={focusCardsMedia[index]}
+                  mediaKey={`partner-with-us:${page.slug}:${card.title}`}
+                  theme="partnership"
+                  cta={{
+                    label: page.contactCta?.primary?.label ?? "Get in touch",
+                    href: page.contactCta?.primary?.href ?? "/contact",
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       </section>

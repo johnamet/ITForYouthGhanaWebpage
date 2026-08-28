@@ -8,6 +8,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import type { InitiativePage } from "@/types/content";
 import { ProseMediaCard } from "@/components/shared/prose-media-card";
+import { resolveMediaSet } from "@/lib/content/media-pool";
 
 type InitiativePageTemplateProps = {
   page: InitiativePage;
@@ -47,6 +48,12 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
   const objectives = page.objectives.filter(hasText);
   const howItWorks = page.howItWorks.filter(
     (step) => hasText(step.title) || hasText(step.description),
+  );
+  // Resolved once for the whole group, in the same order as `howItWorks` is
+  // rendered, so sibling cards don't land on the same pool photograph.
+  const howItWorksMedia = resolveMediaSet(
+    howItWorks.map((step) => `what-we-do:${page.slug}:${step.title}`),
+    "training",
   );
   const impactStats = page.impactStats.filter(
     (stat) => hasText(stat.value) || hasText(stat.label) || hasText(stat.description),
@@ -166,6 +173,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                   title={step.title}
                   body={step.description}
                   media={{ iconImage: step.iconImage }}
+                  resolved={howItWorksMedia[index]}
                   mediaKey={`what-we-do:${page.slug}:${step.title}`}
                   theme="training"
                 />
