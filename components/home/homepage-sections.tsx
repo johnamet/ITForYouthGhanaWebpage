@@ -14,10 +14,12 @@ import { getCmsFeaturedArticles } from "@/lib/cms/articles";
 import { getCmsPartners } from "@/lib/cms/partners";
 import { getCmsTestimonials } from "@/lib/cms/testimonials";
 import { getCmsImpactStats } from "@/lib/cms/impact-stats";
+import { programmeShowcase as defaultProgrammeShowcase } from "@/lib/content/site-config";
 
 import { HeroSlideshow } from "@/components/home/hero-slideshow";
 import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { ImpactCounter } from "@/components/home/impact-counter";
+import { InitiativesTree } from "@/components/home/initiatives-tree";
 import { LegacyHomepageSections } from "@/components/home/legacy-homepage-sections";
 import { ProgrammeShowcase } from "@/components/home/programme-showcase";
 import { DonationCampaign } from "@/components/home/donation-campaign";
@@ -61,6 +63,21 @@ export async function HomepageSections() {
     getCmsOverviewSection(),
   ]);
 
+  // Firestore may return records with non-plain prototypes. Rebuild the small
+  // initiative payload before passing it across the Server-to-Client boundary.
+  const initiativeTreeSource = showcase.length ? showcase : defaultProgrammeShowcase;
+  const initiativeTreeItems = initiativeTreeSource.map((item) => ({
+    id: String(item.id),
+    title: String(item.title),
+    description: String(item.description),
+    href: String(item.href),
+    image: String(item.image),
+    accent: String(item.accent),
+    icon: item.icon ? String(item.icon) : undefined,
+    eyebrow: item.eyebrow ? String(item.eyebrow) : undefined,
+    active: item.active !== false,
+  }));
+
   return (
     <div className="bg-white">
       {/* 1 ── Hero slideshow */}
@@ -75,28 +92,31 @@ export async function HomepageSections() {
       {/* 4 ── Impact counter */}
       <ImpactCounter stats={impactStats} />
 
-      {/* 5 ── Programme showcase */}
+      {/* 5 ── Connected initiatives tree */}
+      <InitiativesTree items={initiativeTreeItems} />
+
+      {/* 6 ── Programme showcase */}
       <ProgrammeShowcase items={showcase} />
 
-      {/* 6 ── Donation campaign */}
+      {/* 7 ── Donation campaign */}
       <DonationCampaign campaign={campaign} />
 
-      {/* 7 ── Featured story / video */}
+      {/* 8 ── Featured story / video */}
       <FeaturedStoryVideo story={story} />
 
-      {/* 8 ── Latest news & blog */}
+      {/* 9 ── Latest news & blog */}
       <LatestNewsGrid articles={articles} />
 
-      {/* 9 ── Student testimonials */}
+      {/* 10 ── Student testimonials */}
       <TestimonialsSection testimonials={testimonials} />
 
-      {/* 10 ── Partner strip */}
+      {/* 11 ── Partner strip */}
       <PartnersStrip partners={partners} />
 
-      {/* 11 ── Apply / join CTA block */}
+      {/* 12 ── Apply / join CTA block */}
       <JoinCtaBlock cards={joinCards} />
 
-      {/* 12 ── Newsletter signup */}
+      {/* 13 ── Newsletter signup */}
       <NewsletterSignupSection content={newsletter} />
     </div>
   );
