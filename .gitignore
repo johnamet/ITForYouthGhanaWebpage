@@ -35,3 +35,4 @@ coverage
 .codex
 .azure
 credentials/
+.superdesign/tmp/
