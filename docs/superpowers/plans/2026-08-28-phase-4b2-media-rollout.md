@@ -44,10 +44,12 @@ Produced by search and confirmed by `npm run verify:media-pages` across all 31 p
 | `news-and-updates` | `editorialPillars` | `community` | 1 | lg | 5 |
 | `contact` | `responseSteps` | `mentoring` | 1 | lg | 4 |
 | `departments/[slug]` | `services` | `team` | 2 | md | 4 |
-| `apply-for-training/who-can-apply` | `audienceSections` | `training` | 3 | lg | — |
+| `apply-for-training/who-can-apply` | `audienceSections` | `girls-in-tech` | 3 | lg | — |
 | `apply-for-training` (+ `/courses`, `/how-it-works`) | `TrainingProcessStrip` steps | `training` | 4 | lg | 5 |
 
-The last two rows were assigned and gated by Task 1. Both settled on `training` and passed on the first candidate, because each is the only grid on its page — so `resolveMediaSet` alone guarantees no repeat regardless of theme. Note the process strip renders on three routes (`/apply-for-training`, `/apply-for-training/courses`, `/apply-for-training/how-it-works`), all now covered by the gate.
+The last two rows were assigned and gated by Task 1. Both initially settled on `training` and passed on the first candidate, because each is the only grid on its page — so `resolveMediaSet` alone guarantees no repeat regardless of theme. Note the process strip renders on three routes (`/apply-for-training`, `/apply-for-training/courses`, `/apply-for-training/how-it-works`), all now covered by the gate.
+
+`who-can-apply`'s theme later changed to `girls-in-tech`. Once the gate was extended to also cover this page's own hero image (`studentsblueclothing.jpg`, part of hero-coverage work in phase 4b-2), `training` collided: it resolved one `audienceSections` card to that same photograph. `girls-in-tech` is hero-aware clean for these keys and is what the table above and `scripts/verify-media-pages.ts` now use — this row is what a later conversion task should read, not `training`.
 
 ## The canonical transformation
 

@@ -37,6 +37,7 @@ import {
   applyForTrainingHub,
   howItWorksHub,
   trainingCoursesHub,
+  newsAndUpdatesHub,
 } from '../lib/content/site-config';
 import { newsHubContent } from '../lib/content/news-config';
 import { contactPageContent } from '../lib/content/contact-config';
@@ -67,18 +68,21 @@ gate('our-impact/reports', [
 gate('our-impact/sdgs', [['goals', 'advocacy', (impactSdgsContent as any).goals.map((g: any) => `our-impact:sdg:${g.goal}`)]], (impactSdgsContent as any).heroImage);
 gate('what-we-do', [
   ['eco', 'community', (whatWeDoOverviewContent as any).ecosystemCards.map((c: any) => `what-we-do:eco:${c.title}`)],
-  ['path', 'training', (whatWeDoOverviewContent as any).pathwayCards.map((c: any) => `what-we-do:path:${c.title}`)]]);
-gate('news-and-updates', [['pillars', 'community', (newsHubContent as any).editorialPillars.map((p: any) => `news:pillar:${p.title}`)]]);
-gate('contact', [['steps', 'mentoring', (contactPageContent as any).responseSteps.map((s: any) => `contact:step:${s.number}`)]]);
+  ['path', 'training', (whatWeDoOverviewContent as any).pathwayCards.map((c: any) => `what-we-do:path:${c.title}`)]], (whatWeDoOverviewContent as any).heroImage);
+gate('news-and-updates', [['pillars', 'community', (newsHubContent as any).editorialPillars.map((p: any) => `news:pillar:${p.title}`)]], (newsHubContent as any).heroImage ?? (newsAndUpdatesHub as any).heroImage);
+gate('contact', [['steps', 'mentoring', (contactPageContent as any).responseSteps.map((s: any) => `contact:step:${s.number}`)]], (contactPageContent as any).heroImage);
 for (const d of departments as any[]) gate('departments/' + d.slug, [
-  ['svc', 'team', (d.services ?? []).map((s: any) => `departments:${d.slug}:${s.title}`)]]);
+  ['svc', 'team', (d.services ?? []).map((s: any) => `departments:${d.slug}:${s.title}`)]], d.heroImage);
 
 // Task 1 (phase 4b-2): the two grids the survey left unthemed. Both are
-// single-grid pages, but `training` is checked here rather than assumed —
+// single-grid pages, but the theme is checked here rather than assumed —
 // see the module doc above on why an editorially-obvious theme still has to
-// be gated.
+// be gated. `who-can-apply` was originally `training`, but once its hero
+// (studentsblueclothing.jpg) was added to this gate (F1, phase 4b-2), that
+// theme collided: `training` resolves one audienceSections card to the
+// page's own hero. Retheming to `girls-in-tech` clears it.
 gate('apply-for-training/who-can-apply', [
-  ['audience', 'training', (whoCanApplyHub.sections ?? []).slice(0, 3).filter(t).map((s: any) => `training:audience:${s.title}`)]]);
+  ['audience', 'girls-in-tech', (whoCanApplyHub.sections ?? []).slice(0, 3).filter(t).map((s: any) => `training:audience:${s.title}`)]], whoCanApplyHub.heroImage);
 
 // TrainingProcessStrip renders on three routes (apply-for-training,
 // apply-for-training/courses, apply-for-training/how-it-works). Each is
@@ -86,15 +90,15 @@ gate('apply-for-training/who-can-apply', [
 // three, so there is no co-located grid to collide with, but the theme
 // still has to be checked per the rule above.
 gate('apply-for-training', [
-  ['process', 'training', (applyForTrainingHub.process ?? []).filter(t).map((s: any) => `training:process:${s.number}`)]]);
+  ['process', 'training', (applyForTrainingHub.process ?? []).filter(t).map((s: any) => `training:process:${s.number}`)]], applyForTrainingHub.heroImage);
 gate('apply-for-training/courses', [
-  ['process', 'training', (trainingCoursesHub.process ?? []).filter(t).map((s: any) => `training:process:${s.number}`)]]);
+  ['process', 'training', (trainingCoursesHub.process ?? []).filter(t).map((s: any) => `training:process:${s.number}`)]], trainingCoursesHub.heroImage);
 gate('apply-for-training/how-it-works', [
   // TrainingHowItWorksPage derives its steps from the page's first four
   // sections rather than from a `process` field — see toProcessSteps in
   // components/training/training-how-it-works-page.tsx — so the gate
   // mirrors that derivation instead of reading a `process` array that page
   // never renders.
-  ['process', 'training', (howItWorksHub.sections ?? []).slice(0, 4).filter(t).map((s: any, i: number) => `training:process:${String(i + 1).padStart(2, '0')}`)]]);
+  ['process', 'training', (howItWorksHub.sections ?? []).slice(0, 4).filter(t).map((s: any, i: number) => `training:process:${String(i + 1).padStart(2, '0')}`)]], howItWorksHub.heroImage);
 
 console.log(fails === 0 ? `ALL ${pages} PAGE INSTANCES PASS — page-level union distinct everywhere` : `${fails} of ${pages} FAILED`);
