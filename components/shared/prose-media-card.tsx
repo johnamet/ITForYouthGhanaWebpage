@@ -240,9 +240,12 @@ export function ProseMediaCard({
   // either in the outer <Link> below would nest anchors, which is invalid
   // HTML and causes a hydration mismatch. So the outer wrap, and the
   // link-only hover/focus treatment that comes with it, is skipped whenever
-  // videoUrl or cta is set; a card-level `href` is deliberately ignored in
-  // that case. This holds for both variants.
-  const isLinked = Boolean(href) && !videoUrl && !cta;
+  // videoUrl is set, or when cta is set on the spotlight variant; a
+  // card-level `href` is deliberately ignored in that case. `cta` only
+  // renders under variant="spotlight" (see the render branches below), so
+  // only that combination can actually nest anchors — on the panel variant a
+  // `cta` prop renders nothing, so it must not suppress the link too.
+  const isLinked = Boolean(href) && !videoUrl && !(isSpotlight && cta);
 
   if (isSpotlight) {
     const shell = cn(
