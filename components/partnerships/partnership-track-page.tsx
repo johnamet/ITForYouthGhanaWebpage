@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { ProseMediaCard } from "@/components/shared/prose-media-card";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import { resolveMediaSet } from "@/lib/content/media-pool";
 import { VideoCard } from "@/components/media/video-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
@@ -32,6 +32,9 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
   const focusCardsMedia = resolveMediaSet(
     focusCards.map((card) => `partner-with-us:${page.slug}:${card.title}`),
     "partnership",
+  );
+  const howItWorksSteps = page.howItWorks.filter(
+    (step) => step.title?.trim() || step.description?.trim(),
   );
 
   return (
@@ -134,24 +137,18 @@ export function PartnershipTrackPage({ page }: PartnershipTrackPageProps) {
             }
           />
 
-          <div className="grid gap-5 lg:grid-cols-4">
-            {page.howItWorks.filter((step) => step.title?.trim() || step.description?.trim()).map((step) => (
-              <div
-                key={step.number}
-                className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
-              >
-                {step.iconImage ? (
-                  <span className="inline-flex items-center justify-center" aria-hidden="true">
-                    <Image src={step.iconImage} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
-                  </span>
-                ) : null}
-                <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{step.description}</p>
-              </div>
-            ))}
-          </div>
+          <ProseMediaCardGrid
+            theme="training"
+            columns={4}
+            breakpoint="lg"
+            gap="5"
+            cards={howItWorksSteps.map((step) => ({
+              title: step.title,
+              body: step.description,
+              media: { iconImage: step.iconImage },
+              mediaKey: `partner-with-us:${page.slug}:hiw:${step.title}`,
+            }))}
+          />
         </div>
       </section>
 

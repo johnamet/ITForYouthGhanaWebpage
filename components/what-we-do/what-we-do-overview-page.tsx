@@ -4,6 +4,7 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { WhatWeDoGallery } from "@/components/what-we-do/what-we-do-gallery";
 import type { InitiativePage, WhatWeDoOverviewContent } from "@/types/content";
@@ -69,26 +70,20 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
             }
           />
 
-          <div className="grid gap-5 lg:grid-cols-3">
-            {content.ecosystemCards.map((card) => (
-              <div key={card.title} className="overflow-hidden rounded-[30px] border border-brand-border bg-white shadow-sm">
-                {card.image ? (
-                  <div className="relative aspect-[16/9] w-full">
-                    <Image src={card.image} alt={card.imageAlt || card.title} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" />
-                  </div>
-                ) : null}
-                <div className="p-7">
-                  <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-                    {card.eyebrow}
-                  </p>
-                  <h2 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
-                    {card.title}
-                  </h2>
-                  <p className="mt-4 text-sm leading-7 text-slate-600">{card.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ProseMediaCardGrid
+            theme="community"
+            columns={3}
+            breakpoint="lg"
+            gap="5"
+            cards={content.ecosystemCards.map((card) => ({
+              variant: "spotlight" as const,
+              eyebrow: card.eyebrow,
+              title: card.title,
+              body: card.description,
+              media: { image: card.image, imageAlt: card.imageAlt },
+              mediaKey: `what-we-do:eco:${card.title}`,
+            }))}
+          />
         </div>
       </section>
 
@@ -203,19 +198,17 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
             }
           />
 
-          <div className="grid gap-5 lg:grid-cols-4">
-            {content.pathwayCards.map((card) => (
-              <div
-                key={card.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <h3 className="font-heading text-2xl font-bold text-brand-ink">
-                  {card.title}
-                </h3>
-                <p className="mt-4 text-sm leading-7 text-slate-600">{card.description}</p>
-              </div>
-            ))}
-          </div>
+          <ProseMediaCardGrid
+            theme="training"
+            columns={4}
+            breakpoint="lg"
+            gap="5"
+            cards={content.pathwayCards.map((card) => ({
+              title: card.title,
+              body: card.description,
+              mediaKey: `what-we-do:path:${card.title}`,
+            }))}
+          />
         </div>
       </section>
 
