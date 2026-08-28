@@ -2,11 +2,12 @@ import { breadcrumbs } from "@/lib/content/site-config";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import { VideoCard } from "@/components/media/video-card";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatsSection } from "@/components/content/stats-section";
 import type { ImpactReportsContent } from "@/types/content";
-import { composeProse, pointsToParagraph } from "@/lib/utils/prose";
+import { pointsToParagraph } from "@/lib/utils/prose";
 
 type ImpactReportsPageProps = {
   content: ImpactReportsContent;
@@ -72,44 +73,24 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
             }
           />
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            {content.reportResources.map((resource) => (
-              <article
-                key={resource.id}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">
-                      {resource.year}
-                    </p>
-                    <h2 className="mt-4 font-heading text-2xl font-bold text-brand-ink">
-                      {resource.title}
-                    </h2>
-                  </div>
-                  <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
-                    {content.reportBadgeLabel ?? "Brief"}
-                  </span>
-                </div>
-
-                <p className="mt-4 text-sm leading-7 text-slate-600">{resource.summary}</p>
-
-                {resource.highlights.length ? (
-                  <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
-                    {pointsToParagraph(resource.highlights)}
-                  </p>
-                ) : null}
-
-                <a
-                  href={resource.href}
-                  download
-                  className="mt-6 inline-flex rounded-full bg-brand-gold px-5 py-3 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-md"
-                >
-                  {resource.fileLabel}
-                </a>
-              </article>
-            ))}
-          </div>
+          <ProseMediaCardGrid
+            theme="impact"
+            columns={3}
+            breakpoint="lg"
+            gap="6"
+            cards={content.reportResources.map((resource) => ({
+              eyebrow: resource.year,
+              title: resource.title,
+              // The badge pill (content.reportBadgeLabel) has no second
+              // eyebrow-shaped slot to live in now that resource.year owns
+              // the eyebrow, so it becomes a leading clause of the body
+              // instead of being dropped.
+              body: `${content.reportBadgeLabel ?? "Brief"}. ${resource.summary}`,
+              points: resource.highlights,
+              cta: { label: resource.fileLabel, href: resource.href },
+              mediaKey: `our-impact:rr:${resource.title}`,
+            }))}
+          />
         </div>
       </section>
 
@@ -134,27 +115,20 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
             />
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
-            {content.evidenceCards.map((card) => {
-              const description = composeProse(card.description, card.bullets);
-              return (
-                <div
-                  key={card.title}
-                  className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
-                      {content.methodCardBadgeLabel ?? "Evidence theme"}
-                    </span>
-                  </div>
-                  <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                    {card.title}
-                  </h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
-                </div>
-              );
-            })}
-          </div>
+          <ProseMediaCardGrid
+            theme="training"
+            columns={2}
+            breakpoint="md"
+            gap="5"
+            cards={content.evidenceCards.map((card) => ({
+              eyebrow: content.methodCardBadgeLabel ?? "Evidence theme",
+              title: card.title,
+              body: card.description,
+              points: card.bullets,
+              mediaKey: `our-impact:ev:${card.title}`,
+              media: { iconImage: card.iconImage },
+            }))}
+          />
 
           <div className="rounded-[32px] bg-brand-navy p-8 text-white">
             <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-brand-gold">

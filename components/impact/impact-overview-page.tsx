@@ -1,8 +1,8 @@
 import { breadcrumbs } from "@/lib/content/site-config";
-import { pointsToParagraph } from "@/lib/utils/prose";
 
 import { PartnersStrip, type Partner } from "@/components/home/patrners-strip";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatsSection } from "@/components/content/stats-section";
@@ -85,29 +85,19 @@ export function ImpactOverviewPage({
             }
           />
 
-          <div className="grid gap-5 md:grid-cols-2">
-            {content.measurementCards.map((card) => (
-              <div
-                key={card.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full bg-brand-mist/70 px-3 py-1 text-xs font-semibold text-brand-navy">
-                    {content.measurementCardBadgeLabel ?? "Evidence lens"}
-                  </span>
-                </div>
-                <h2 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-                  {card.title}
-                </h2>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{card.description}</p>
-                {card.bullets.length ? (
-                  <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
-                    {pointsToParagraph(card.bullets)}
-                  </p>
-                ) : null}
-              </div>
-            ))}
-          </div>
+          <ProseMediaCardGrid
+            theme="impact"
+            columns={2}
+            breakpoint="md"
+            gap="5"
+            cards={content.measurementCards.map((card) => ({
+              eyebrow: content.measurementCardBadgeLabel ?? "Evidence lens",
+              title: card.title,
+              body: card.description,
+              points: card.bullets,
+              mediaKey: `our-impact:measure:${card.title}`,
+            }))}
+          />
         </div>
       </section>
 
