@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
+import { safeImageSrcOrFallback } from "@/lib/utils/image-src";
 import { pointsToParagraph } from "@/lib/utils/prose";
 import type { DepartmentProfile, TeamMemberProfile } from "@/types/content";
 
@@ -24,7 +25,7 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
   return (
     <div className="bg-white">
       <EditorialImageHero
-        imageSrc={department.heroImage || "/images/randomPictures/studentslisteningfrontal.JPG"}
+        imageSrc={safeImageSrcOrFallback(department.heroImage, "/images/randomPictures/studentslisteningfrontal.JPG")}
         imageAlt={department.title}
         eyebrow={department.eyebrow}
         title={department.title}

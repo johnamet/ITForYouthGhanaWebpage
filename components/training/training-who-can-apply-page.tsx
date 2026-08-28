@@ -4,6 +4,7 @@ import { pointsToParagraph } from "@/lib/utils/prose";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
+import { safeImageSrcOrFallback } from "@/lib/utils/image-src";
 import type { SitePage } from "@/types/content";
 
 type TrainingWhoCanApplyPageProps = {
@@ -17,7 +18,7 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
 
   return (
     <div className="bg-white">
-      <EditorialImageHero imageSrc={page.heroImage ?? "/images/randomPictures/studentsblueclothing.jpg"} imageAlt="Learners gathering for an ITFY training session" eyebrow={page.eyebrow} title={page.title} description={page.description} supportingText={[page.intro, practiceSection?.body, ...(practiceSection?.bullets ?? [])].filter((value): value is string => Boolean(value?.trim())).join(" • ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.apply.root, href: "/apply-for-training" }, { label: breadcrumbs.apply.whoCanApply }]} priority />
+      <EditorialImageHero imageSrc={safeImageSrcOrFallback(page.heroImage, "/images/randomPictures/studentsblueclothing.jpg")} imageAlt="Learners gathering for an ITFY training session" eyebrow={page.eyebrow} title={page.title} description={page.description} supportingText={[page.intro, practiceSection?.body, ...(practiceSection?.bullets ?? [])].filter((value): value is string => Boolean(value?.trim())).join(" • ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.apply.root, href: "/apply-for-training" }, { label: breadcrumbs.apply.whoCanApply }]} priority />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-3xl space-y-3">

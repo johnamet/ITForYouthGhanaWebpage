@@ -7,6 +7,7 @@ import { TrainingCourseCatalog } from "@/components/training/training-course-cat
 import { TrainingCohortTimeline } from "@/components/training/training-cohort-timeline";
 import { TrainingProcessStrip } from "@/components/training/training-process-strip";
 import { trainingCatalogContent } from "@/lib/content/training-config";
+import { safeImageSrcOrFallback } from "@/lib/utils/image-src";
 import type { SitePage } from "@/types/content";
 import type { Course } from "@/types/course";
 
@@ -26,7 +27,7 @@ export function TrainingCourseListingPage({
   return (
     <div className="bg-white">
       <EditorialImageHero
-        imageSrc={page.heroImage ?? trainingCatalogContent.heroImage}
+        imageSrc={safeImageSrcOrFallback(page.heroImage, trainingCatalogContent.heroImage)}
         imageAlt="Learners exploring training pathways"
         eyebrow={page.eyebrow}
         title={page.title}

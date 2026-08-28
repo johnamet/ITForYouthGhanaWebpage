@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useDeferredValue, useEffect, useState } from "react";
 import { ArrowRight, Search } from "lucide-react";
 
-import { safeImageSrc } from "@/lib/utils/image-src";
+import { resolveCourseImage } from "@/lib/utils/image-src";
 import type { Course } from "@/types/course";
 
 type TrainingCourseCatalogProps = {
@@ -35,10 +35,6 @@ function formatDate(value: string | null) {
     month: "short",
     year: "numeric",
   }).format(new Date(value));
-}
-
-function resolveCourseImage(image: string | null) {
-  return safeImageSrc(image) ?? "/images/fallback/placeholder.svg";
 }
 
 export function TrainingCourseCatalog({ courses }: TrainingCourseCatalogProps) {

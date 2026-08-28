@@ -33,6 +33,40 @@ const ALLOWED_IMAGE_HOSTS = new Set([
   "photos.fife.usercontent.google.com",
 ]);
 
+/**
+ * Resolves a CMS image value against a static fallback, but only for the
+ * "present but rejected" case — not for "absent".
+ *
+ * A bare `value ?? fallback` (or `||`) cannot tell those apart: an emptied
+ * CMS field and a malformed CMS URL both end up substituting the fallback,
+ * even though only the second one is actually broken. The first is a
+ * legitimate "no image here" that the caller's own empty-state gate (e.g.
+ * `EditorialImageHero`, `ContentImage`) is meant to render as such.
+ *
+ * So: an absent/whitespace-only value is returned untouched, letting that
+ * gate do its job. A non-empty value that `safeImageSrc` rejects (bad host,
+ * bad protocol, unparsable) is the only case that falls back.
+ */
+export function safeImageSrcOrFallback(
+  value: string | null | undefined,
+  fallback: string,
+): string | null | undefined {
+  if (!value?.trim()) return value;
+  return safeImageSrc(value) ?? fallback;
+}
+
+/**
+ * Course cards always render an `<Image>` unconditionally (no empty-state
+ * gate like `EditorialImageHero`/`ContentImage`), so unlike
+ * `safeImageSrcOrFallback` this substitutes the fallback for an absent value
+ * too, not just a rejected one — there is no "let the caller's gate handle
+ * it" option here. Shared by `CourseDetailCard` and `TrainingCourseCatalog`,
+ * which were previously carrying byte-identical copies of this one-liner.
+ */
+export function resolveCourseImage(image: string | null | undefined): string {
+  return safeImageSrc(image) ?? "/images/fallback/placeholder.svg";
+}
+
 export function safeImageSrc(src?: string | null): string | undefined {
   const value = src?.trim();
   if (!value) return undefined;

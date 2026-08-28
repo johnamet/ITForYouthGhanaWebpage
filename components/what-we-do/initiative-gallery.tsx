@@ -13,6 +13,7 @@ type InitiativeGalleryProps = {
 
 export function InitiativeGallery({ images }: InitiativeGalleryProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const activeImageSrc = activeIndex !== null ? safeImageSrc(images[activeIndex].src) : undefined;
 
   return (
     <>
@@ -72,9 +73,9 @@ export function InitiativeGallery({ images }: InitiativeGalleryProps) {
               <X className="h-5 w-5" />
             </button>
             <div className="relative aspect-[4/3]">
-              {safeImageSrc(images[activeIndex].src) ? (
+              {activeImageSrc ? (
                 <Image
-                  src={safeImageSrc(images[activeIndex].src)!}
+                  src={activeImageSrc}
                   alt={images[activeIndex].alt}
                   fill
                   sizes="90vw"

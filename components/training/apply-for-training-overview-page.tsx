@@ -4,6 +4,7 @@ import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { TrainingCohortTimeline } from "@/components/training/training-cohort-timeline";
 import { TrainingProcessStrip } from "@/components/training/training-process-strip";
+import { safeImageSrcOrFallback } from "@/lib/utils/image-src";
 import { pointsToParagraph } from "@/lib/utils/prose";
 import type { SitePage, TrainingCohort, TrainingProcessStep } from "@/types/content";
 
@@ -34,7 +35,7 @@ export function ApplyForTrainingOverviewPage({
   return (
     <div className="bg-white">
       <EditorialImageHero
-        imageSrc={page.heroImage ?? "/images/randomPictures/peterblackboard.jpg"}
+        imageSrc={safeImageSrcOrFallback(page.heroImage, "/images/randomPictures/peterblackboard.jpg")}
         imageAlt="Learners in an IT For Youth Ghana training session"
         eyebrow={page.eyebrow}
         title={page.title}

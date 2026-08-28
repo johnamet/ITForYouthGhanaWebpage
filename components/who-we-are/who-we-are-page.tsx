@@ -9,7 +9,7 @@ import { VideoCard } from "@/components/media/video-card";
 import { StatsSection } from "@/components/content/stats-section";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { safeImageSrc } from "@/lib/utils/image-src";
+import { safeImageSrc, safeImageSrcOrFallback } from "@/lib/utils/image-src";
 import type { SitePage } from "@/types/content";
 
 type WhoWeArePageProps = {
@@ -49,7 +49,7 @@ export function WhoWeArePage({ page }: WhoWeArePageProps) {
   const visibleAnchors = anchorLinks.filter((link) =>
     link.id === "overview" ? hasOverview : link.id === "model" ? operatingSections.length : link.id === "principles" ? principleSections.length : page.related.length,
   );
-  const resolvedHeroImage = safeImageSrc(page.heroImage) ?? heroImage;
+  const resolvedHeroImage = safeImageSrcOrFallback(page.heroImage, heroImage);
   const principlesImageSrc = safeImageSrc(page.principlesImage);
 
   return (

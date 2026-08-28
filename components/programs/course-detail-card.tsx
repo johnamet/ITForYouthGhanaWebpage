@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PlayCircle } from "lucide-react";
 
 import { pointsToParagraph } from "@/lib/utils/prose";
-import { safeImageSrc } from "@/lib/utils/image-src";
+import { resolveCourseImage } from "@/lib/utils/image-src";
 import type { Course } from "@/types/course";
 
 type CourseDetailCardProps = {
@@ -31,10 +31,6 @@ function formatDate(value: string | null) {
     month: "short",
     year: "numeric",
   }).format(new Date(value));
-}
-
-function resolveCourseImage(image: string | null) {
-  return safeImageSrc(image) ?? "/images/fallback/placeholder.svg";
 }
 
 export function CourseDetailCard({ course, fallbackTitle }: CourseDetailCardProps) {

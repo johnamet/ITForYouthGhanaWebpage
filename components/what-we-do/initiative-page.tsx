@@ -190,14 +190,17 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               description={section.impactDescription}
             />
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {impactStats.map((stat) => (
+              {impactStats.map((stat) => {
+                const iconImageSrc = safeImageSrc(stat.iconImage);
+
+                return (
                 <div
                   key={stat.label}
                   className="rounded-[30px] border border-brand-border bg-brand-mist/45 p-6"
                 >
-                  {safeImageSrc(stat.iconImage) ? (
+                  {iconImageSrc ? (
                     <span className="inline-flex items-center justify-center" aria-hidden="true">
-                      <Image src={safeImageSrc(stat.iconImage)!} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
+                      <Image src={iconImageSrc} alt={stat.label} width={28} height={28} className="h-7 w-7 object-contain" />
                     </span>
                   ) : null}
                   {hasText(stat.value) ? <p className="mt-4 font-heading text-4xl font-bold text-brand-navy">
@@ -210,7 +213,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                     <p className="mt-3 text-sm leading-7 text-slate-600">{stat.description}</p>
                   ) : null}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </section> : null}
 
@@ -260,7 +264,10 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               description={section.testimonialsDescription}
             />
             <div className="grid gap-5 lg:grid-cols-3">
-              {testimonials.map((testimonial) => (
+              {testimonials.map((testimonial) => {
+                const avatarSrc = safeImageSrc(testimonial.avatar);
+
+                return (
                 <div
                   key={`${testimonial.name}-${testimonial.role}`}
                   className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
@@ -270,10 +277,10 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                     {testimonial.quote}
                   </blockquote> : null}
                   {hasText(testimonial.name) || hasText(testimonial.role) || hasText(testimonial.avatar) ? <div className="mt-6 flex items-center gap-4">
-                    {safeImageSrc(testimonial.avatar) ? <div className="relative h-14 w-14 overflow-hidden rounded-full bg-brand-mist">
+                    {avatarSrc ? <div className="relative h-14 w-14 overflow-hidden rounded-full bg-brand-mist">
                       {(
                         <Image
-                          src={safeImageSrc(testimonial.avatar)!}
+                          src={avatarSrc}
                           alt={testimonial.name}
                           fill
                           sizes="56px"
@@ -287,7 +294,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                     </div>
                   </div> : null}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </section> : null}
 
@@ -298,15 +306,18 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               description={section.partnersDescription}
             />
             <div className="grid gap-5 md:grid-cols-2">
-              {partners.map((partner) => (
+              {partners.map((partner) => {
+                const logoSrc = safeImageSrc(partner.logo);
+
+                return (
                 <div
                   key={partner.name}
                   className="flex gap-4 rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
                 >
                   {hasText(partner.logo) || hasText(partner.name) ? <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-mist text-sm font-bold text-brand-navy">
-                    {safeImageSrc(partner.logo) ? (
+                    {logoSrc ? (
                       <Image
-                        src={safeImageSrc(partner.logo)!}
+                        src={logoSrc}
                         alt={partner.name}
                         width={44}
                         height={44}
@@ -331,7 +342,8 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
                     ) : null}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </section> : null}
 

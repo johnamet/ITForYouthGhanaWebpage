@@ -4,6 +4,7 @@ import { pointsToParagraph } from "@/lib/utils/prose";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { TrainingProcessStrip } from "@/components/training/training-process-strip";
+import { safeImageSrcOrFallback } from "@/lib/utils/image-src";
 import type { SitePage, TrainingProcessStep } from "@/types/content";
 
 type TrainingHowItWorksPageProps = {
@@ -28,7 +29,7 @@ export function TrainingHowItWorksPage({ page }: TrainingHowItWorksPageProps) {
 
   return (
     <div className="bg-white">
-      <EditorialImageHero imageSrc={page.heroImage ?? "/images/randomPictures/studentslisteningfrontal.JPG"} imageAlt="Learners listening during orientation and onboarding" eyebrow={page.eyebrow} title={page.title} description={page.description} supportingText={[page.intro, page.principlesHeroTitle].filter((value): value is string => Boolean(value?.trim())).join(" ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.apply.root, href: "/apply-for-training" }, { label: breadcrumbs.apply.howItWorks }]} priority />
+      <EditorialImageHero imageSrc={safeImageSrcOrFallback(page.heroImage, "/images/randomPictures/studentslisteningfrontal.JPG")} imageAlt="Learners listening during orientation and onboarding" eyebrow={page.eyebrow} title={page.title} description={page.description} supportingText={[page.intro, page.principlesHeroTitle].filter((value): value is string => Boolean(value?.trim())).join(" ") || null} breadcrumbs={[{ label: breadcrumbs.home, href: "/" }, { label: breadcrumbs.apply.root, href: "/apply-for-training" }, { label: breadcrumbs.apply.howItWorks }]} priority />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <TrainingProcessStrip

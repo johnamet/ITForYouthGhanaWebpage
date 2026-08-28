@@ -74,7 +74,10 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
             xl:grid-cols-4
           "
         >
-          {visibleItems.map((item, index) => (
+          {visibleItems.map((item, index) => {
+            const imageSrc = safeImageSrc(item.image);
+
+            return (
             <Link
               key={item.id}
               href={item.href}
@@ -96,9 +99,9 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
             >
               {/* Image area */}
               <div className="absolute inset-x-0 top-0 h-[16.53rem] overflow-hidden bg-brand-mist">
-                {safeImageSrc(item.image) ? (
+                {imageSrc ? (
                 <Image
-                  src={safeImageSrc(item.image)!}
+                  src={imageSrc}
                   alt={item.title}
                   fill
                   priority={index < 4}
@@ -221,7 +224,8 @@ export function ProgrammeShowcase({ items }: ProgrammeShowcaseProps) {
               {/* Hover border highlight */}
               <div className="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/30" />
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
