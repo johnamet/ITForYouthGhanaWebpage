@@ -14,6 +14,7 @@ import { getCmsFeaturedArticles } from "@/lib/cms/articles";
 import { getCmsPartners } from "@/lib/cms/partners";
 import { getCmsTestimonials } from "@/lib/cms/testimonials";
 import { getCmsImpactStats } from "@/lib/cms/impact-stats";
+import { getCmsTeamMembers } from "@/lib/cms/team";
 import { programmeShowcase as defaultProgrammeShowcase } from "@/lib/content/site-config";
 
 import { HeroSlideshow } from "@/components/home/hero-slideshow";
@@ -26,6 +27,7 @@ import { DonationCampaign } from "@/components/home/donation-campaign";
 import { FeaturedStoryVideo } from "@/components/home/featured-story-video";
 import { LatestNewsGrid } from "@/components/home/latest-news-grid";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
+import { HomepageTeamSection } from "@/components/home/homepage-team-section";
 import { PartnersStrip } from "@/components/home/patrners-strip";
 import { JoinCtaBlock } from "@/components/home/join-cta-block";
 import { NewsletterSignupSection } from "@/components/home/newsletter-signup-section";
@@ -34,6 +36,7 @@ export async function HomepageSections() {
   const [
     articles,
     testimonials,
+    teamMembers,
     partners,
     impactStats,
     slides,
@@ -49,6 +52,7 @@ export async function HomepageSections() {
   ] = await Promise.all([
     getCmsFeaturedArticles(3),
     getCmsTestimonials(),
+    getCmsTeamMembers(false),
     getCmsPartners(),
     getCmsImpactStats(),
     getCmsHeroSlides(),
@@ -110,13 +114,16 @@ export async function HomepageSections() {
       {/* 10 ── Student testimonials */}
       <TestimonialsSection testimonials={testimonials} />
 
-      {/* 11 ── Partner strip */}
+      {/* 11 ── Team members */}
+      <HomepageTeamSection members={teamMembers} />
+
+      {/* 12 ── Partner strip */}
       <PartnersStrip partners={partners} />
 
-      {/* 12 ── Apply / join CTA block */}
+      {/* 13 ── Apply / join CTA block */}
       <JoinCtaBlock cards={joinCards} />
 
-      {/* 13 ── Newsletter signup */}
+      {/* 14 ── Newsletter signup */}
       <NewsletterSignupSection content={newsletter} />
     </div>
   );

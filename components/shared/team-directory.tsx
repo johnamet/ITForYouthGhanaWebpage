@@ -10,6 +10,60 @@ type TeamDirectoryProps = {
   members: TeamMemberProfile[];
 };
 
+type TeamMemberCardProps = {
+  member: TeamMemberProfile;
+};
+
+export function TeamMemberCard({ member }: TeamMemberCardProps) {
+  return (
+    <Card className="rounded-[26px]">
+      <div className="mb-4 flex items-center gap-4">
+        <Image
+          src={safeImageSrc(member.photo) ?? "/images/logo/logo_small.jpg"}
+          alt={member.name}
+          width={64}
+          height={64}
+          className="h-16 w-16 rounded-full object-cover"
+        />
+        <div>
+          <h3 className="font-heading text-xl font-semibold text-brand-ink">{member.name}</h3>
+          <p className="text-sm font-medium text-slate-600">{member.role}</p>
+        </div>
+      </div>
+
+      <p className="text-sm leading-7 text-slate-600">{member.bio}</p>
+
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        {member.featured ? (
+          <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
+            Featured
+          </span>
+        ) : null}
+
+        {member.email ? (
+          <a
+            href={`mailto:${member.email}`}
+            className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            Email
+          </a>
+        ) : null}
+
+        {member.linkedin ? (
+          <a
+            href={member.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            LinkedIn
+          </a>
+        ) : null}
+      </div>
+    </Card>
+  );
+}
+
 function groupedByDepartment(members: TeamMemberProfile[]) {
   const groups = new Map<
     string,
@@ -74,54 +128,7 @@ export function TeamDirectory({ members }: TeamDirectoryProps) {
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {group.members.map((member) => (
-              <Card
-                key={member.id}
-                className="rounded-[26px]"
-              >
-                <div className="mb-4 flex items-center gap-4">
-                  <Image
-                    src={safeImageSrc(member.photo) ?? "/images/logo/logo_small.jpg"}
-                    alt={member.name}
-                    width={64}
-                    height={64}
-                    className="h-16 w-16 rounded-full object-cover"
-                  />
-                  <div>
-                    <h3 className="font-heading text-xl font-semibold text-brand-ink">{member.name}</h3>
-                    <p className="text-sm font-medium text-slate-600">{member.role}</p>
-                  </div>
-                </div>
-
-                <p className="text-sm leading-7 text-slate-600">{member.bio}</p>
-
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  {member.featured ? (
-                    <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
-                      Featured
-                    </span>
-                  ) : null}
-
-                  {member.email ? (
-                    <a
-                      href={`mailto:${member.email}`}
-                      className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-                    >
-                      Email
-                    </a>
-                  ) : null}
-
-                  {member.linkedin ? (
-                    <a
-                      href={member.linkedin}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-                    >
-                      LinkedIn
-                    </a>
-                  ) : null}
-                </div>
-              </Card>
+              <TeamMemberCard key={member.id} member={member} />
             ))}
           </div>
         </div>
