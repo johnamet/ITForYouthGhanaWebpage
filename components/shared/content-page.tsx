@@ -6,6 +6,7 @@ import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StorySection } from "@/components/content/story-section";
+import { breadcrumbs } from "@/lib/content/site-config";
 import { composeProse } from "@/lib/utils/prose";
 
 type ContentPageProps = {
@@ -19,6 +20,16 @@ export function ContentPage({ page }: ContentPageProps) {
   );
   const ctas = page.ctas.filter((cta) => cta.label.trim() && cta.href.trim());
   const related = page.related.filter((card) => card.title.trim() && card.href.trim());
+  const heroBreadcrumbs = page.slug === "who-we-are"
+    ? [
+        { label: breadcrumbs.home, href: "/" },
+        { label: breadcrumbs.whoWeAre?.root ?? "Who We Are" },
+      ]
+    : [
+        { label: breadcrumbs.home, href: "/" },
+        { label: breadcrumbs.whoWeAre?.root ?? "Who We Are", href: "/who-we-are" },
+        { label: page.title },
+      ];
 
   return (
     <div className="bg-brand-mist">
@@ -29,6 +40,7 @@ export function ContentPage({ page }: ContentPageProps) {
         title={page.title}
         description={page.description}
         supportingText={page.intro}
+        breadcrumbs={heroBreadcrumbs}
         ctas={ctas.map((cta, i) => ({ ...cta, variant: i === 0 ? "primary" : "secondary" }))}
         priority
       />

@@ -1543,6 +1543,7 @@ export const teamHub: SitePage = {
   title: "Our Team",
   description: "Facilitators, mentors, and operations staff who run cohort training, school clubs, and partnerships across Ghana.",
   intro: "We are practitioners first — people who have built products, taught in classrooms, and worked with young people in real Ghanaian contexts. The team combines technical depth, facilitation experience, and operational discipline.",
+  heroImage: "/images/randomPictures/groupworkstudents.jpg",
   stats: heroStats,
   sections: [
     {
@@ -1570,6 +1571,7 @@ export const partnersHub: SitePage = {
   title: "Our Partners",
   description: "Google.org, UNICEF Ghana, GIZ, Mastercard Foundation, Vodafone Ghana, Microsoft, Tony Elumelu Foundation, and USAID — organisations that have chosen ITFY for delivery.",
   intro: "We do not list logos for decoration. Every partner on this page has worked with us on real programmes — funded cohorts, co-designed clubs, sponsored learners, or hired graduates. They return because we deliver numbers and stories they can stand behind.",
+  heroImage: "/images/randomPictures/peterTalking.jpg",
   stats: heroStats,
   sections: [
     {
@@ -1597,6 +1599,7 @@ export const careersHub: SitePage = {
   title: "Join Our Team",
   description: "Roles, volunteering, and contribution pathways for people who want to build digital opportunity in Ghana.",
   intro: "We hire facilitators, programme coordinators, partnership leads, and operations staff who are serious about outcomes. We also create structured volunteering and internship routes for professionals and students who want to contribute without a full-time role.",
+  heroImage: "/images/randomPictures/studentsblueclothing.jpg",
   stats: heroStats,
   sections: [
     {
