@@ -19,7 +19,7 @@ export type ProseMediaCardProps = {
   /** Spotlight variant only — the accent bar colour. */
   accentColor?: string;
   /** Renders a Button below the prose, on either variant ("pink" on spotlight, "blue" on panel). */
-  cta?: { label: string; href: string };
+  cta?: { label: string; href: string; download?: boolean };
   eyebrow?: string;
   title: string;
   body?: string;
@@ -290,7 +290,7 @@ export function ProseMediaCard({
       {readMore}
       {cta ? (
         <div className="mt-5">
-          <Button href={cta.href} variant={isSpotlight ? "pink" : "blue"} size="lg">
+          <Button href={cta.href} download={cta.download} variant={isSpotlight ? "pink" : "blue"} size="lg">
             {cta.label}
           </Button>
         </div>

@@ -35,6 +35,15 @@ type ButtonProps = SharedButtonProps &
 type ButtonLinkProps = SharedButtonProps & {
   href: string;
   external?: boolean;
+  /**
+   * Renders the link as a plain anchor with the `download` attribute instead
+   * of `next/link`. `next/link` always calls `preventDefault()` on click and
+   * client-navigates, which pre-empts the browser's native download
+   * behaviour regardless of whether `download` is present on the underlying
+   * `<a>` — so an href that should download a file must bypass `Link`
+   * entirely rather than route through it.
+   */
+  download?: boolean;
 };
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -79,7 +88,15 @@ export function Button(props: ButtonProps | ButtonLinkProps) {
   const classes = buttonClassName({ className, variant, size });
 
   if ("href" in props && props.href) {
-    const { href, external } = props;
+    const { href, external, download } = props;
+
+    if (download) {
+      return (
+        <a href={href} className={classes} download>
+          {children}
+        </a>
+      );
+    }
 
     if (external) {
       return (

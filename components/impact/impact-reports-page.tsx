@@ -87,7 +87,7 @@ export function ImpactReportsPage({ content }: ImpactReportsPageProps) {
               // instead of being dropped.
               body: `${content.reportBadgeLabel ?? "Brief"}. ${resource.summary}`,
               points: resource.highlights,
-              cta: { label: resource.fileLabel, href: resource.href },
+              cta: { label: resource.fileLabel, href: resource.href, download: true },
               mediaKey: `our-impact:rr:${resource.title}`,
             }))}
           />
