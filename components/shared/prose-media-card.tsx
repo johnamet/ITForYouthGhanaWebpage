@@ -80,6 +80,18 @@ export type ProseMediaCardProps = {
   tone?: "light" | "dark";
   href?: string;
   className?: string;
+  /**
+   * Overrides the aspect ratio the layout would otherwise pick — `wide` for
+   * stacked, `landscape` for side. Needed by card families whose media is
+   * icon-shaped artwork rather than photography.
+   */
+  aspectRatio?: "landscape" | "portrait" | "square" | "wide";
+  /**
+   * `cover` (default) crops to fill, which is right for photographs. `contain`
+   * fits the whole image inside the box without cropping, which is right for
+   * uploaded logos, SDG tiles and other icon artwork.
+   */
+  mediaFit?: "cover" | "contain";
 };
 
 function stackedSizes(columns: 1 | 2 | 3 | 4): string {
@@ -124,6 +136,8 @@ export function ProseMediaCard({
   tone = "light",
   href,
   className,
+  aspectRatio,
+  mediaFit = "cover",
 }: ProseMediaCardProps) {
   const description = composeProse(body, points);
 
@@ -193,7 +207,13 @@ export function ProseMediaCard({
           className="absolute inset-0 h-full w-full"
         />
       ) : framedImageSrc ? (
-        <Image src={framedImageSrc} alt={imageAlt} fill sizes={computedSizes} className="object-cover" />
+        <Image
+          src={framedImageSrc}
+          alt={imageAlt}
+          fill
+          sizes={computedSizes}
+          className={mediaFit === "contain" ? "object-contain" : "object-cover"}
+        />
       ) : null}
     </div>
   ) : videoUrl ? (
@@ -202,8 +222,9 @@ export function ProseMediaCard({
     <ContentImage
       src={image}
       alt={imageAlt}
-      aspectRatio={layout === "side" ? "landscape" : "wide"}
+      aspectRatio={aspectRatio ?? (layout === "side" ? "landscape" : "wide")}
       sizes={computedSizes}
+      fit={mediaFit}
     />
   );
 
@@ -310,7 +331,7 @@ export function ProseMediaCard({
               alt={imageAlt}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
+              className={mediaFit === "contain" ? "object-contain" : "object-cover"}
             />
           </div>
         ) : null}

@@ -12,6 +12,15 @@ type ContentImageProps = {
   imageClassName?: string;
   overlay?: boolean;
   sizes?: string;
+  /**
+   * `cover` (default) crops to fill, right for photographs. `contain` fits
+   * the whole image inside the box without cropping, right for icon
+   * artwork. Selects exactly one object-fit class at source, rather than
+   * layering one on top of `imageClassName` — `lib/utils/cn.ts` is plain
+   * clsx (no tailwind-merge), so both classes would otherwise land on the
+   * element and CSS source order, not prop intent, would decide the result.
+   */
+  fit?: "cover" | "contain";
 };
 
 const aspectClasses = {
@@ -31,6 +40,7 @@ export function ContentImage({
   imageClassName,
   overlay = false,
   sizes = "(min-width: 1024px) 50vw, 100vw",
+  fit = "cover",
 }: ContentImageProps) {
   const resolvedSrc = safeImageSrc(src);
   return (
@@ -42,7 +52,7 @@ export function ContentImage({
           fill
           priority={priority}
           sizes={sizes}
-          className={cn("object-cover transition duration-700", imageClassName)}
+          className={cn(fit === "contain" ? "object-contain" : "object-cover", "transition duration-700", imageClassName)}
         />
       ) : (
         <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--color-primary-light),var(--color-bg-alt))]" aria-hidden="true" />
