@@ -35,8 +35,8 @@ Produced by search and confirmed by `npm run verify:media-pages` across all 31 p
 | `partner-with-us/[slug]` | `focusCards` *(4a)* | `partnership` | — | — | — |
 | `partner-with-us/[slug]` | `howItWorks` | `training` | 4 | lg | 5 |
 | `what-we-do/[slug]` | `howItWorks` *(4a)* | `training` | — | — | — |
-| `what-we-do` | `ecosystemCards` | `community` | 3 | lg | 5 |
-| `what-we-do` | `pathwayCards` | `training` | 4 | lg | 5 |
+| `what-we-do` | `ecosystemCards` | `mentoring` | 3 | lg | 5 |
+| `what-we-do` | `pathwayCards` | `coding` | 4 | lg | 5 |
 | `our-impact` | `measurementCards` | `graduation` | 2 | md | 5 |
 | `our-impact/reports` | `reportResources` | `training` | 3 | lg | 6 |
 | `our-impact/reports` | `evidenceCards` | `mentoring` | 2 | md | 5 |
@@ -50,6 +50,8 @@ Produced by search and confirmed by `npm run verify:media-pages` across all 31 p
 The last two rows were assigned and gated by Task 1. Both initially settled on `training` and passed on the first candidate, because each is the only grid on its page — so `resolveMediaSet` alone guarantees no repeat regardless of theme. Note the process strip renders on three routes (`/apply-for-training`, `/apply-for-training/courses`, `/apply-for-training/how-it-works`), all now covered by the gate.
 
 `who-can-apply`'s theme later changed to `girls-in-tech`. Once the gate was extended to also cover this page's own hero image (`studentsblueclothing.jpg`, part of hero-coverage work in phase 4b-2), `training` collided: it resolved one `audienceSections` card to that same photograph. `girls-in-tech` is hero-aware clean for these keys and is what the table above and `scripts/verify-media-pages.ts` now use — this row is what a later conversion task should read, not `training`.
+
+`what-we-do`'s two rows later changed from `community`/`training` to `mentoring`/`coding`. The gate was corrected to fail only on a pool-resolved image colliding with anything (not on two authored images colliding with each other), and under that narrower, correct invariant `community`/`training` still left two pool collisions on this page (`happystudentscasual.jpg` and `studentslistening.jpg`, both resolved by the grids themselves). `mentoring`/`coding` clears both; the two authored-vs-authored duplicates that remain (`groupworkstudents.jpg`, `redstudentgrouplesson.jpg`, each shared between an initiative's own hero and this page's `galleryItems`) are reported informationally and are not this gate's business — see the header comment in `scripts/verify-media-pages.ts`.
 
 ## The canonical transformation
 

@@ -71,7 +71,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
           />
 
           <ProseMediaCardGrid
-            theme="community"
+            theme="mentoring"
             columns={3}
             breakpoint="lg"
             gap="5"
@@ -199,7 +199,7 @@ export function WhatWeDoOverviewPage({ content, initiatives }: WhatWeDoOverviewP
           />
 
           <ProseMediaCardGrid
-            theme="training"
+            theme="coding"
             columns={4}
             breakpoint="lg"
             gap="5"
