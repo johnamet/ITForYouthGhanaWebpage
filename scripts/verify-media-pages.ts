@@ -17,6 +17,13 @@
 //
 // Keep it in sync with the grids that actually exist. A page missing from here
 // is a page nobody is checking.
+//
+// The per-page URL set also has to include the page's own authored hero
+// image, not just what its grids resolve. The pool deliberately contains the
+// 30 local ITFYG photographs, and those same photographs are used as page
+// heroes, so a hero repeating a card's photograph is near-inevitable rather
+// than a fluke — it has to be checked like any other repeat, not assumed
+// away because "the hero is a different thing from the grid."
 
 import { resolveMediaSet } from '../lib/content/media-pool';
 import { organisationServices } from '../lib/content/organisation-config';
@@ -35,9 +42,9 @@ import { newsHubContent } from '../lib/content/news-config';
 import { contactPageContent } from '../lib/content/contact-config';
 let fails = 0, pages = 0;
 const t = (v: any) => v?.title?.trim() || v?.description?.trim();
-function gate(name: string, grids: [string, any, string[]][]) {
+function gate(name: string, grids: [string, any, string[]][], hero?: string) {
   pages++;
-  const urls: string[] = [];
+  const urls: string[] = hero ? [hero] : [];
   for (const [, theme, keys] of grids) resolveMediaSet(keys, theme).forEach((e) => urls.push(e.url));
   if (new Set(urls).size !== urls.length) {
     fails++;
@@ -47,17 +54,17 @@ function gate(name: string, grids: [string, any, string[]][]) {
 for (const s of organisationServices as any[]) gate('for-organisations/' + s.slug, [
   ['ov', 'corporate', (s.overviewCards ?? []).filter(t).map((x: any) => `for-organisations:${s.slug}:ov:${x.title}`)],
   ['hiw', 'coding', (s.howItWorks ?? []).filter(t).map((x: any) => `for-organisations:${s.slug}:hiw:${x.title}`)],
-  ['pk', 'entrepreneurship', (s.packages ?? []).filter((p: any) => p.name?.trim() || p.description?.trim()).map((p: any) => `for-organisations:${s.slug}:pk:${p.name}`)]]);
+  ['pk', 'entrepreneurship', (s.packages ?? []).filter((p: any) => p.name?.trim() || p.description?.trim()).map((p: any) => `for-organisations:${s.slug}:pk:${p.name}`)]], s.heroImage);
 for (const p of partnershipTracks as any[]) gate('partner-with-us/' + p.slug, [
   ['focus(4a)', 'partnership', (p.focusCards ?? []).filter(t).map((c: any) => `partner-with-us:${p.slug}:${c.title}`)],
-  ['hiw', 'training', (p.howItWorks ?? []).filter(t).map((x: any) => `partner-with-us:${p.slug}:hiw:${x.title}`)]]);
+  ['hiw', 'training', (p.howItWorks ?? []).filter(t).map((x: any) => `partner-with-us:${p.slug}:hiw:${x.title}`)]], p.heroImage ?? p.image);
 for (const i of initiatives as any[]) gate('what-we-do/' + i.slug, [
-  ['hiw(4a)', 'training', (i.sections?.howItWorks ?? []).filter(t).map((x: any) => `what-we-do:${i.slug}:${x.title}`)]]);
-gate('our-impact', [['measure', 'impact', (impactOverviewContent as any).measurementCards.map((c: any) => `our-impact:measure:${c.title}`)]]);
+  ['hiw(4a)', 'training', (i.sections?.howItWorks ?? []).filter(t).map((x: any) => `what-we-do:${i.slug}:${x.title}`)]], i.heroImage);
+gate('our-impact', [['measure', 'impact', (impactOverviewContent as any).measurementCards.map((c: any) => `our-impact:measure:${c.title}`)]], (impactOverviewContent as any).heroImage);
 gate('our-impact/reports', [
   ['rr', 'impact', (impactReportsContent as any).reportResources.map((r: any) => `our-impact:rr:${r.title}`)],
-  ['ev', 'training', (impactReportsContent as any).evidenceCards.map((c: any) => `our-impact:ev:${c.title}`)]]);
-gate('our-impact/sdgs', [['goals', 'advocacy', (impactSdgsContent as any).goals.map((g: any) => `our-impact:sdg:${g.goal}`)]]);
+  ['ev', 'training', (impactReportsContent as any).evidenceCards.map((c: any) => `our-impact:ev:${c.title}`)]], (impactReportsContent as any).heroImage);
+gate('our-impact/sdgs', [['goals', 'advocacy', (impactSdgsContent as any).goals.map((g: any) => `our-impact:sdg:${g.goal}`)]], (impactSdgsContent as any).heroImage);
 gate('what-we-do', [
   ['eco', 'community', (whatWeDoOverviewContent as any).ecosystemCards.map((c: any) => `what-we-do:eco:${c.title}`)],
   ['path', 'training', (whatWeDoOverviewContent as any).pathwayCards.map((c: any) => `what-we-do:path:${c.title}`)]]);
