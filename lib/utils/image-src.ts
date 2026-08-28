@@ -67,6 +67,41 @@ export function resolveCourseImage(image: string | null | undefined): string {
   return safeImageSrc(image) ?? "/images/fallback/placeholder.svg";
 }
 
+export type ImageSrcRejection = { value: string; reason: string };
+
+// Opt-in rejection sink. Off by default and untouched by normal rendering —
+// `rejectionCollectionEnabled` only ever flips true when a caller (currently
+// only scripts/verify-media-pages.ts) explicitly asks for it, so this array
+// stays empty and this module stays otherwise unaffected in every request
+// path. console.warn (below) remains the always-on signal; this sink exists
+// only to let that same information be gathered and reported by a script
+// instead of read one browser console at a time.
+let rejectionCollectionEnabled = false;
+const collectedRejections: ImageSrcRejection[] = [];
+
+/** Turns on rejection collection. Call once, before rendering, from a script. */
+export function enableImageSrcRejectionCollection(): void {
+  rejectionCollectionEnabled = true;
+}
+
+/** Returns every rejection collected so far (a copy — callers cannot mutate the sink). */
+export function getCollectedImageSrcRejections(): ImageSrcRejection[] {
+  return [...collectedRejections];
+}
+
+/** Empties the sink without disabling collection. */
+export function clearCollectedImageSrcRejections(): void {
+  collectedRejections.length = 0;
+}
+
+function rejectImageSrc(value: string, reason: string): undefined {
+  console.warn(`[safeImageSrc] rejected image src "${value}": ${reason}`);
+  if (rejectionCollectionEnabled) {
+    collectedRejections.push({ value, reason });
+  }
+  return undefined;
+}
+
 export function safeImageSrc(src?: string | null): string | undefined {
   const value = src?.trim();
   if (!value) return undefined;
@@ -75,10 +110,7 @@ export function safeImageSrc(src?: string | null): string | undefined {
   // so reject it before the rooted-path fast path below would otherwise wave
   // it through (it also starts with "/").
   if (value.startsWith("//")) {
-    console.warn(
-      `[safeImageSrc] rejected image src "${value}": protocol-relative URLs ("//...") are not supported by next/image`
-    );
-    return undefined;
+    return rejectImageSrc(value, `protocol-relative URLs ("//...") are not supported by next/image`);
   }
 
   // A rooted path is always fine.
@@ -89,20 +121,13 @@ export function safeImageSrc(src?: string | null): string | undefined {
   try {
     const url = new URL(value);
     if (url.protocol !== "https:") {
-      console.warn(
-        `[safeImageSrc] rejected image src "${value}": protocol must be https, got "${url.protocol}"`
-      );
-      return undefined;
+      return rejectImageSrc(value, `protocol must be https, got "${url.protocol}"`);
     }
     if (!ALLOWED_IMAGE_HOSTS.has(url.hostname)) {
-      console.warn(
-        `[safeImageSrc] rejected image src "${value}": hostname not configured in next.config.mjs remotePatterns`
-      );
-      return undefined;
+      return rejectImageSrc(value, `hostname not configured in next.config.mjs remotePatterns`);
     }
     return url.href;
   } catch {
-    console.warn(`[safeImageSrc] rejected image src "${value}": failed to parse as a URL`);
-    return undefined;
+    return rejectImageSrc(value, `failed to parse as a URL`);
   }
 }

@@ -91,6 +91,19 @@ import {
 } from '../lib/content/site-config';
 import { newsHubContent } from '../lib/content/news-config';
 import { contactPageContent } from '../lib/content/contact-config';
+import {
+  safeImageSrc,
+  enableImageSrcRejectionCollection,
+  getCollectedImageSrcRejections,
+  clearCollectedImageSrcRejections,
+} from '../lib/utils/image-src';
+
+// Opt-in only: this sink is inert everywhere else (rendering, build, other
+// scripts) and only turns on here, on demand, when this file is run
+// directly. See lib/utils/image-src.ts for the full contract.
+clearCollectedImageSrcRejections();
+enableImageSrcRejectionCollection();
+
 let fails = 0, pages = 0;
 const t = (v: any) => v?.title?.trim() || v?.description?.trim();
 // `otherImages`: every AUTHORED image this page instance renders outside a
@@ -103,6 +116,15 @@ function gate(name: string, grids: [string, any, string[]][], otherImages: (stri
   const authored: string[] = otherImages.filter((u): u is string => Boolean(u));
   const pool: string[] = [];
   for (const [, theme, keys] of grids) resolveMediaSet(keys, theme).forEach((e) => pool.push(e.url));
+
+  // Run every image this page instance renders — authored and pool-resolved
+  // alike — through the same safeImageSrc() a real render would call. This
+  // script otherwise only compares URL strings for collisions; it never
+  // actually validated that a value is renderable at all. Return values are
+  // unused here — collection (enabled above) is what makes a rejection,
+  // if any, show up in the report printed at the end of this file.
+  for (const u of authored) safeImageSrc(u);
+  for (const u of pool) safeImageSrc(u);
 
   // Informational only: authored images duplicating each other. Real (an
   // editor's choice, predates this work) but not this gate's business — see
@@ -222,3 +244,18 @@ gate('apply-for-training/how-it-works', [
   ['process', 'training', (howItWorksHub.sections ?? []).slice(0, 4).filter(t).map((s: any, i: number) => `training:process:${String(i + 1).padStart(2, '0')}`)]], [howItWorksHub.heroImage]);
 
 console.log(fails === 0 ? `ALL ${pages} PAGE INSTANCES PASS — page-level union distinct everywhere` : `${fails} of ${pages} FAILED`);
+
+// Reported, not enforced: a rejection here never fails the run or changes
+// the exit code (see the collection call at the top of this file). Its only
+// job is to surface a broken CMS value to a human, since nine of the
+// components safeImageSrc runs inside are "use client" — their console.warn
+// only ever reaches a visitor's browser console, where nobody is looking.
+const rejections = getCollectedImageSrcRejections();
+if (rejections.length) {
+  console.log(`\n${rejections.length} REJECTED image src value(s) — safeImageSrc would blank these out:`);
+  for (const { value, reason } of rejections) {
+    console.log(`  REJECTED "${value}": ${reason}`);
+  }
+} else {
+  console.log('\nNo image src rejections — every authored and pool-resolved image value parsed and resolved cleanly.');
+}
