@@ -16,6 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { safeImageSrc } from "@/lib/utils/image-src";
 
 export type HeroSlide = {
@@ -1004,73 +1005,29 @@ export function HeroSlideshow({
                 xl:flex-row
               "
             >
-              <Link
+              <Button
                 href={slide.cta.primary.href}
-                className="
-                  group
-                  inline-flex
-                  min-h-12
-                  flex-1
-                  items-center
-                  justify-center
-                  gap-2
-                  rounded-xl
-                  bg-brand-gold
-                  px-6
-                  py-3.5
-                  text-sm
-                  font-bold
-                  text-brand-ink
-                  shadow-xl
-                  shadow-brand-gold/20
-                  transition-all
-                  duration-300
-                  hover:-translate-y-0.5
-                  hover:shadow-2xl
-                  hover:shadow-brand-gold/30
-                "
+                variant="pink"
+                size="lg"
+                className="group flex-1 rounded-xl shadow-xl shadow-brand-gold/20 hover:shadow-2xl hover:shadow-brand-gold/30"
               >
                 {slide.cta.primary.label}
 
                 <ArrowRight
-                  className="
-                    h-4
-                    w-4
-                    transition-transform
-                    duration-300
-                    group-hover:translate-x-1
-                  "
+                  aria-hidden="true"
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                 />
-              </Link>
+              </Button>
 
               {slide.cta.secondary && (
-                <Link
+                <Button
                   href={slide.cta.secondary.href}
-                  className="
-                    inline-flex
-                    min-h-12
-                    flex-1
-                    items-center
-                    justify-center
-                    rounded-xl
-                    border
-                    border-white/20
-                    bg-white/[0.05]
-                    px-6
-                    py-3.5
-                    text-sm
-                    font-semibold
-                    text-white
-                    backdrop-blur-xl
-                    transition-all
-                    duration-300
-                    hover:-translate-y-0.5
-                    hover:border-white/40
-                    hover:bg-white/10
-                  "
+                  variant="white-outline"
+                  size="lg"
+                  className="flex-1 rounded-xl backdrop-blur-xl"
                 >
                   {slide.cta.secondary.label}
-                </Link>
+                </Button>
               )}
             </div>
 

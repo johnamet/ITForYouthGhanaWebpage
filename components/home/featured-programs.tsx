@@ -87,7 +87,7 @@ export function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                 <p className="mt-3 max-w-md text-[0.85rem] leading-[1.75] text-white/70">
                   {hero.description}
                 </p>
-                <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-brand-gold px-5 py-2.5 text-[0.78rem] font-bold text-brand-ink transition group-hover:-translate-y-0.5">
+                <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-brand-gold px-5 py-2.5 text-[0.78rem] font-bold text-white transition group-hover:-translate-y-0.5">
                   {hero.cta} →
                 </span>
               </div>

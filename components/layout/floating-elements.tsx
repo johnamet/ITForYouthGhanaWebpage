@@ -151,7 +151,7 @@ export function FloatingElements({ content }: FloatingElementsProps) {
         {donateVisible ? (
           <Link
             href={content.donateButton.href}
-            className="pointer-events-auto inline-flex items-center rounded-full bg-brand-gold px-5 py-3 text-sm font-bold text-brand-ink shadow-[0_12px_30px_rgba(245,197,24,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(245,197,24,0.45)]"
+            className="pointer-events-auto inline-flex items-center rounded-full bg-brand-gold px-5 py-3 text-sm font-bold text-white shadow-[0_12px_30px_rgba(245,197,24,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(245,197,24,0.45)]"
           >
             {content.donateButton.label}
           </Link>

@@ -384,7 +384,7 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               <div className="flex flex-wrap gap-3">
                 {hasText(page.applyCta.primary.label) && hasText(page.applyCta.primary.href) ? <Link
                   href={page.applyCta.primary.href}
-                  className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-ink transition hover:-translate-y-0.5 hover:shadow-lg"
+                  className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
                 >
                   {page.applyCta.primary.label}
                 </Link> : null}
