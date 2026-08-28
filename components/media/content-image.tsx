@@ -9,6 +9,13 @@ type ContentImageProps = {
   aspectRatio?: "landscape" | "portrait" | "square" | "wide";
   priority?: boolean;
   className?: string;
+  /**
+   * Extra classes for the `<Image>` element. Never put an object-fit utility
+   * here — use `fit` instead. `lib/utils/cn.ts` is plain clsx with no
+   * tailwind-merge, so an object-fit class passed through here lands
+   * alongside the one `fit` selects, and whichever comes later in the
+   * stylesheet wins rather than whichever the caller intended.
+   */
   imageClassName?: string;
   overlay?: boolean;
   sizes?: string;
