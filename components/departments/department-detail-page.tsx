@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import { pointsToParagraph } from "@/lib/utils/prose";
 import type { DepartmentProfile, TeamMemberProfile } from "@/types/content";
 
@@ -51,22 +52,32 @@ export function DepartmentDetailPage({ department, teamMembers }: DepartmentDeta
 
             {department.services.length ? (
               <Panel title="Services and workflows">
-                <div className="grid gap-4 md:grid-cols-2">
-                  {department.services.map((service) => (
-                    <article key={service.title} className="rounded-[24px] border border-brand-border p-5">
-                      <h3 className="font-heading text-xl font-bold text-brand-ink">{service.title}</h3>
-                      <p className="mt-3 text-sm leading-7 text-slate-600">{service.body}</p>
-                      {service.bullets?.length ? (
-                        // Tags, not prose points: these are 1-3 word labels, so they are
-                        // comma-joined rather than run through pointsToParagraph, which
-                        // would punctuate each one as a sentence.
-                        <p className="mt-4 text-sm font-medium leading-7 text-brand-navy">
-                          {service.bullets.map((bullet) => bullet.trim()).filter(Boolean).join(", ")}
-                        </p>
-                      ) : null}
-                    </article>
-                  ))}
-                </div>
+                <ProseMediaCardGrid
+                  theme="team"
+                  columns={2}
+                  breakpoint="md"
+                  gap="4"
+                  cards={department.services
+                    .filter((service) => service.title?.trim())
+                    .map((service) => {
+                      // Tags, not prose points: these are 1-3 word labels, so they
+                      // are comma-joined rather than passed through `points`,
+                      // which would run them through pointsToParagraph and
+                      // punctuate each one as a sentence. ProseMediaCard has a
+                      // single prose slot, so the tag line is folded into
+                      // `body` as an unpunctuated comma-joined clause rather
+                      // than kept as its own visually distinct line.
+                      const tags = (service.bullets ?? [])
+                        .map((bullet) => bullet.trim())
+                        .filter(Boolean);
+
+                      return {
+                        title: service.title,
+                        body: tags.length ? `${service.body} ${tags.join(", ")}` : service.body,
+                        mediaKey: `departments:${department.slug}:${service.title}`,
+                      };
+                    })}
+                />
               </Panel>
             ) : null}
 

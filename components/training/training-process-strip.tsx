@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import type { TrainingProcessStep } from "@/types/content";
 
 type TrainingProcessStripProps = {
@@ -28,24 +28,20 @@ export function TrainingProcessStrip({
         <p className="text-base leading-8 text-slate-600">{description}</p>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-4">
-        {steps.map((step) => (
-          <div
-            key={step.number}
-            className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm"
-          >
-            {step.iconImage ? (
-              <span className="inline-flex items-center justify-center" aria-hidden="true">
-                <Image src={step.iconImage} alt={step.title} width={28} height={28} className="h-7 w-7 object-contain" />
-              </span>
-            ) : null}
-            <h3 className="mt-5 font-heading text-2xl font-bold text-brand-ink">
-              {step.title}
-            </h3>
-            <p className="mt-3 text-sm leading-7 text-slate-600">{step.description}</p>
-          </div>
-        ))}
-      </div>
+      <ProseMediaCardGrid
+        theme="training"
+        columns={4}
+        breakpoint="lg"
+        gap="5"
+        cards={steps
+          .filter((step) => step.title?.trim())
+          .map((step) => ({
+            title: step.title,
+            body: step.description,
+            mediaKey: `training:process:${step.number}`,
+            media: { iconImage: step.iconImage },
+          }))}
+      />
     </section>
   );
 }

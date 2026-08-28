@@ -3,6 +3,7 @@ import { pointsToParagraph } from "@/lib/utils/prose";
 
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import type { SitePage } from "@/types/content";
 
 type TrainingWhoCanApplyPageProps = {
@@ -32,21 +33,20 @@ export function TrainingWhoCanApplyPage({ page }: TrainingWhoCanApplyPageProps) 
           </p>
         </div>
 
-        <div className="mt-10 grid gap-x-10 gap-y-12 border-y border-brand-border py-10 lg:grid-cols-3">
-          {audienceSections.map((card) => (
-            <article
-              key={card.title}
-              className="relative"
-            >
-              <h3 className="font-heading text-2xl font-bold text-brand-ink">{card.title}</h3>
-              <p className="mt-4 text-base leading-8 text-slate-600">{card.body}</p>
-              {(card.bullets ?? []).length ? (
-                <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
-                  {pointsToParagraph(card.bullets)}
-                </p>
-              ) : null}
-            </article>
-          ))}
+        <div className="mt-10">
+          <ProseMediaCardGrid
+            theme="girls-in-tech"
+            columns={3}
+            breakpoint="lg"
+            cards={audienceSections
+              .filter((card) => card.title?.trim())
+              .map((card) => ({
+                title: card.title,
+                body: card.body,
+                points: card.bullets,
+                mediaKey: `training:audience:${card.title}`,
+              }))}
+          />
         </div>
       </section>
 

@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 import { ContactForm } from "@/components/contact/contact-form";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatList } from "@/components/shared/stat-list";
@@ -106,23 +107,19 @@ export function ContactPage({ content }: ContactPageProps) {
               description={content.formDescription ?? ""}
             />
 
-            <div className="grid gap-4">
-              {content.responseSteps.map((step) => (
-                <div
-                  key={step.number}
-                  className="rounded-[28px] border border-brand-border bg-white p-6 shadow-sm"
-                >
-                  <div>
-                    <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                      {step.title}
-                    </h2>
-                    <p className="mt-2 text-sm leading-7 text-slate-600">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ProseMediaCardGrid
+              theme="mentoring"
+              columns={1}
+              breakpoint="lg"
+              gap="4"
+              cards={content.responseSteps
+                .filter((step) => step.title?.trim())
+                .map((step) => ({
+                  title: step.title,
+                  body: step.description,
+                  mediaKey: `contact:step:${step.number}`,
+                }))}
+            />
 
             {content.privacyNote ? <div className="rounded-[28px] border border-brand-border bg-brand-warm p-6">
               <div>

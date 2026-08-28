@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 import { ArticleCard } from "@/components/news/article-card";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
+import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
 import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatList } from "@/components/shared/stat-list";
@@ -11,7 +12,6 @@ import {
   articleCategoryLabels,
   articleCategories,
 } from "@/lib/content/news-config";
-import { pointsToParagraph } from "@/lib/utils/prose";
 import type { ArticleSeed, NewsHubContent } from "@/types/content";
 
 type NewsHubPageProps = {
@@ -141,24 +141,20 @@ export function NewsHubPage({ content, articles }: NewsHubPageProps) {
             <StatList stats={content.stats} compact />
           </div>
 
-          <div className="grid gap-5">
-            {content.editorialPillars.map((pillar) => (
-              <div
-                key={pillar.title}
-                className="rounded-[30px] border border-brand-border bg-white p-7 shadow-sm"
-              >
-                <h2 className="font-heading text-2xl font-bold text-brand-ink">
-                  {pillar.title}
-                </h2>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{pillar.body}</p>
-                {pillar.bullets?.length ? (
-                  <p className="mt-5 border-l-2 border-brand-gold pl-5 text-sm leading-7 text-slate-600">
-                    {pointsToParagraph(pillar.bullets)}
-                  </p>
-                ) : null}
-              </div>
-            ))}
-          </div>
+          <ProseMediaCardGrid
+            theme="community"
+            columns={1}
+            breakpoint="lg"
+            gap="5"
+            cards={content.editorialPillars
+              .filter((pillar) => pillar.title?.trim())
+              .map((pillar) => ({
+                title: pillar.title,
+                body: pillar.body,
+                points: pillar.bullets,
+                mediaKey: `news:pillar:${pillar.title}`,
+              }))}
+          />
         </div>
       </section>
 
