@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
 import type { ProgrammeShowcaseItem } from "@/components/home/programme-showcase";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils/cn";
 import { safeImageSrc } from "@/lib/utils/image-src";
 
 type InitiativesTreeProps = {
