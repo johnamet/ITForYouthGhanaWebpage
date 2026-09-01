@@ -171,6 +171,18 @@ const nextConfig = {
         destination: "/what-we-do/youth-academy",
         permanent: true,
       },
+      // IT for Youth Laptop Bank, build spec §2.2. Early links went out with
+      // the /what-we-do/ path before the Laptop Bank was made top level.
+      {
+        source: "/what-we-do/laptop-bank",
+        destination: "/laptop-bank",
+        permanent: true,
+      },
+      // NOTE: /laptop-bank/uk is RESERVED and must not be published (spec
+      // §2.2). It deliberately has no route file and no redirect, so it 404s.
+      // Do not repurpose the path — it is held for a UK entity whose
+      // registration and banking are not yet in place, and Draft 1 §16
+      // forbids implying that entity can receive donations before they are.
     ];
   },
   async headers() {

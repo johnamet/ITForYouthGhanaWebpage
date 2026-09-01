@@ -134,6 +134,28 @@ export const publicNavigation: NavItem[] = [
       { label: "Tech Clubs", href: "/what-we-do/tech-clubs" },
     ],
   },
+  /**
+   * IT for Youth Laptop Bank (build spec §2.1).
+   *
+   * Top level, not nested — the spec is explicit about that, and the reason is
+   * that its audience is corporate IT and CSR leads who arrive from a press
+   * mention rather than from the programme pages.
+   *
+   * Spec §2.1 also lists Impact and Partners as children. Both are Phase 2,
+   * and spec §9 BUILD keeps pages 5.11–5.14 out of navigation and the sitemap
+   * until they are populated with real records, so they are deliberately
+   * absent here. Add them when those pages carry data.
+   */
+  {
+    label: "Laptop Bank",
+    href: "/laptop-bank",
+    items: [
+      { label: "How It Works", href: "/laptop-bank/how-it-works" },
+      { label: "What We Accept", href: "/laptop-bank/what-we-accept" },
+      { label: "Data Security", href: "/laptop-bank/data-security" },
+      { label: "Donate Equipment", href: "/laptop-bank/donate-equipment" },
+    ],
+  },
   {
     label: "Apply for Training",
     href: "/apply-for-training",
@@ -157,6 +179,8 @@ export const publicNavigation: NavItem[] = [
     label: "Get Involved",
     href: "/partner-with-us",
     items: [
+      // Spec §2.1: the "Get involved" dropdown leads with Her First Laptop.
+      { label: "Her First Laptop", href: "/her-first-laptop" },
       { label: "Partner With Us", href: "/partner-with-us" },
       { label: "Educational Institutions", href: "/partner-with-us/educational" },
       { label: "Government", href: "/partner-with-us/government" },
@@ -213,6 +237,19 @@ export const footerNavigation: NavigationColumn[] = [
       { label: "For Organisations", href: "/for-organisations" },
       { label: "Partner With Us", href: "/partner-with-us" },
       { label: "Donate", href: "/donate" },
+    ],
+  },
+  {
+    // Spec 5.9 BUILD: the Laptop Bank privacy notice must link from the footer
+    // of every page, which is why it lives here rather than only on the two
+    // form pages.
+    heading: "Laptop Bank",
+    links: [
+      { label: "IT for Youth Laptop Bank", href: "/laptop-bank" },
+      { label: "Her First Laptop", href: "/her-first-laptop" },
+      { label: "Donate Equipment", href: "/laptop-bank/donate-equipment" },
+      { label: "Apply for a Laptop", href: "/her-first-laptop/apply" },
+      { label: "Laptop Bank Privacy Notice", href: "/policies/laptop-bank-privacy-notice" },
     ],
   },
   {

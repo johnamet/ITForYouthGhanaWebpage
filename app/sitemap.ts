@@ -42,6 +42,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/contact",
     "/donate",
     "/departments",
+    /**
+     * IT for Youth Laptop Bank, Phase 1 only (build spec §2.2).
+     *
+     * /laptop-bank itself arrives via the publicNavigation spread below, so it
+     * is not repeated here. The four Phase 2 routes — /laptop-bank/impact,
+     * /laptop-bank/partners, /laptop-bank/recycling and
+     * /her-first-laptop/stories — are DELIBERATELY ABSENT: spec §9 BUILD keeps
+     * them out of navigation and the sitemap until they are populated with
+     * real records, and each of them serves noindex until then. Add them when
+     * they carry data.
+     *
+     * /laptop-bank/uk is reserved and unpublished (spec §2.2), so it has no
+     * route and no sitemap entry.
+     */
+    "/laptop-bank/how-it-works",
+    "/laptop-bank/what-we-accept",
+    "/laptop-bank/data-security",
+    "/laptop-bank/donate-equipment",
+    "/her-first-laptop",
+    "/her-first-laptop/eligibility",
+    "/her-first-laptop/apply",
+    "/policies/laptop-bank-privacy-notice",
+    "/policies/laptop-bank-documents",
     ...publicNavigation.map((item) => item.href),
     ...initiatives.map((page) => `/what-we-do/${page.slug}`),
     ...organisationServices.map((page) => `/for-organisations/${page.slug}`),
