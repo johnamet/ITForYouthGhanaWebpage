@@ -985,3 +985,215 @@ export const contactMessageAdminUpdateSchema = z.object({
 });
 
 export type ContactMessageAdminUpdatePayload = z.infer<typeof contactMessageAdminUpdateSchema>;
+
+// ─── IT for Youth Laptop Bank ─────────────────────────────────────────────────
+//
+// Build spec §6.1 and §6.2. Enum values are the spec's own options; do not add
+// to them without a spec change, because several of them write straight through
+// to a CMS field (public recognition → Donor.display_consent).
+
+/**
+ * A consent that must be actively given. Spec §7: "Consent checkboxes are never
+ * pre-ticked and never bundled. Store each consent as its own boolean with a
+ * timestamp." Each one is therefore its own literal(true) field, never a single
+ * combined flag.
+ */
+const requiredConsent = z.preprocess(
+  (value) => value === true || value === "true" || value === "on",
+  z.literal(true, {
+    errorMap: () => ({ message: "Please tick this box to continue." }),
+  }),
+);
+
+const optionalConsent = z.preprocess(
+  (value) => value === true || value === "true" || value === "on",
+  z.boolean().default(false),
+);
+
+/**
+ * Ghana mobile numbers, in the two forms people actually type: +233XXXXXXXXX
+ * and 0XXXXXXXXX. Draft 1 §13.1 asks that both be accepted and normalised.
+ */
+const ghanaPhone = z
+  .string()
+  .trim()
+  .regex(
+    /^(?:\+233|0)\d{9}$/,
+    "Please enter a Ghana phone number, starting either +233 or 0.",
+  );
+
+export const equipmentOfferSchema = z.object({
+  // Step 1 — About your organisation
+  organisationName: z.string().trim().min(2, "Please enter your organisation's name."),
+  sector: z
+    .enum([
+      "banking",
+      "telecoms",
+      "mining",
+      "oil-and-gas",
+      "public-sector",
+      "education",
+      "ngo",
+      "technology",
+      "other",
+    ])
+    .optional(),
+  country: z.string().trim().min(2, "Please choose a country."),
+  city: z.string().trim().min(2, "Please enter a city."),
+  contactName: z.string().trim().min(2, "Please enter your name."),
+  contactRole: z.string().trim().min(2, "Please enter your role."),
+  workEmail: z.string().trim().email("Please enter a valid work email address."),
+  phone: optionalTrimmedString,
+  heardAboutUs: optionalTrimmedString,
+
+  // Step 2 — About the equipment
+  equipmentTypes: stringList.refine(
+    (types) => types.length > 0,
+    "Please choose at least one type of equipment.",
+  ),
+  estimatedQuantity: z.enum(["1-9", "10-49", "50-99", "100-499", "500+"]),
+  approximateAge: z.enum(["under-3", "3-5", "5-7", "over-7", "mixed"]),
+  makeAndModel: optionalTrimmedString,
+  releasedFromManagement: z.enum(["yes", "no", "need-to-check"]),
+  firmwarePasswordsCleared: z.enum(["yes", "no", "need-to-check"]),
+  drivesAlreadyWiped: z.enum(["yes-with-certificates", "yes-without", "no", "unsure"]),
+  drivesRetainedByYou: z.enum(["yes", "no"]),
+
+  // Step 3 — Logistics, recognition and consent
+  collectionAddress: optionalTrimmedString,
+  targetTimeline: z.enum(["within-a-month", "1-3-months", "3-6-months", "later", "no-fixed-date"]),
+  /** Writes directly to Donor.display_consent — spec §6.1 step 3. */
+  publicRecognition: z.enum(["logo", "named", "anonymous"]),
+  supportRefurbishmentCosts: optionalConsent,
+  /** The one checkbox that defaults checked. It is a preference, not a consent. */
+  deploymentReport: optionalConsent,
+  anythingElse: optionalTrimmedString,
+  privacyConsent: requiredConsent,
+  marketingConsent: optionalConsent,
+
+  /** Honeypot. Spec §6.1 BEHAVIOUR. */
+  companyFax: optionalTrimmedString,
+});
+
+export type EquipmentOfferPayload = z.infer<typeof equipmentOfferSchema>;
+
+/**
+ * Spec §6.2.
+ *
+ * DATA CONSTRAINT, from the spec and non-negotiable: "Do not add fields for
+ * household income, guardian income, bank details, or hardship documentation.
+ * Do not add date of birth." Draft 1 §13.2 gives the reasoning — none of it
+ * improves the selection decision, and all of it increases what the
+ * organisation is liable for if this data is ever exposed. The device-access
+ * question and the free-text question already provide a hardship signal.
+ *
+ * Anyone adding a field here should check it against that list first.
+ */
+export const studentApplicationSchema = z
+  .object({
+    fullName: z.string().trim().min(2, "Please enter your full name."),
+    preferredName: optionalTrimmedString,
+    phone: ghanaPhone,
+    phoneIsWhatsApp: optionalConsent,
+    /** Spec §6.2: "Must differ from the primary phone." Checked in .refine below. */
+    alternativeContact: z.string().trim().min(5, "Please give one alternative contact."),
+    email: z.preprocess(
+      (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+      z.string().trim().email("Please enter a valid email address.").optional(),
+    ),
+    institution: z.string().trim().min(2, "Please choose your institution."),
+    programmeOfStudy: z.string().trim().min(2, "Please enter your programme of study."),
+    yearOfStudy: z.string().trim().min(1, "Please choose your year of study."),
+    expectedCompletionMonth: z.string().trim().min(1, "Please choose a month."),
+    expectedCompletionYear: z.string().trim().regex(/^\d{4}$/, "Please choose a year."),
+    studentIdentifier: z.string().trim().min(2, "Please enter your student identifier."),
+    regionOfResidence: z.string().trim().min(2, "Please choose your region."),
+    currentComputerAccess: z.enum([
+      "none",
+      "phone-only",
+      "shared-machine",
+      "campus-lab-or-cafe",
+      "broken-laptop",
+    ]),
+    itfyTrack: z.string().trim().min(2, "Please choose a track, or 'Not yet enrolled'."),
+    whyYouNeedIt: z
+      .string()
+      .trim()
+      .min(20, "Please tell us a little more — at least a couple of sentences.")
+      .refine((value) => countWords(value) <= 200, "Please keep this to 200 words or fewer."),
+    whatYouWillDo: z
+      .string()
+      .trim()
+      .min(20, "Please tell us a little more — at least a couple of sentences.")
+      .refine((value) => countWords(value) <= 150, "Please keep this to 150 words or fewer."),
+    referralSource: optionalTrimmedString,
+
+    // Four separate commitments and consents. Spec §6.2 BEHAVIOUR: "All four
+    // commitment and consent checkboxes are separate inputs. No single
+    // combined checkbox."
+    commitmentCompleteTrack: requiredConsent,
+    commitmentPeerTeaching: requiredConsent,
+    commitmentCheckIns: requiredConsent,
+    loanToOwnTerms: requiredConsent,
+    declarationOfTruth: requiredConsent,
+    privacyConsent: requiredConsent,
+    /** Optional, and refusing it must not affect the application. */
+    storyAndPhotoConsent: optionalConsent,
+
+    /** Honeypot. */
+    companyFax: optionalTrimmedString,
+  })
+  .refine(
+    (data) => normalisePhone(data.alternativeContact) !== normalisePhone(data.phone),
+    {
+      message: "Please give an alternative contact that is different from your main phone number.",
+      path: ["alternativeContact"],
+    },
+  );
+
+export type StudentApplicationPayload = z.infer<typeof studentApplicationSchema>;
+
+/** Words, for the live counters and the hard caps in spec §6.2. */
+export function countWords(value: string): number {
+  const trimmed = value.trim();
+  if (!trimmed) return 0;
+  return trimmed.split(/\s+/).length;
+}
+
+/**
+ * Normalises 0XXXXXXXXX and +233XXXXXXXXX to one form, so "0241234567" and
+ * "+233241234567" are correctly recognised as the same number when checking
+ * that the alternative contact actually differs.
+ */
+export function normalisePhone(value: string): string {
+  const digits = value.trim().replace(/[\s()-]/g, "");
+  if (digits.startsWith("+233")) return `0${digits.slice(4)}`;
+  if (digits.startsWith("233")) return `0${digits.slice(3)}`;
+  return digits;
+}
+
+/**
+ * Free webmail domains. Spec §6.1: a free webmail work-email domain "triggers a
+ * soft prompt, not a block" — so this is used by the form for a nudge and by
+ * the route only to flag the record for follow-up. It must never reject.
+ */
+const FREE_WEBMAIL_DOMAINS = new Set([
+  "gmail.com",
+  "yahoo.com",
+  "yahoo.co.uk",
+  "hotmail.com",
+  "outlook.com",
+  "live.com",
+  "icloud.com",
+  "aol.com",
+  "protonmail.com",
+  "proton.me",
+  "mail.com",
+  "yandex.com",
+  "gmx.com",
+]);
+
+export function isFreeWebmail(email: string): boolean {
+  const domain = email.trim().toLowerCase().split("@")[1];
+  return domain ? FREE_WEBMAIL_DOMAINS.has(domain) : false;
+}
