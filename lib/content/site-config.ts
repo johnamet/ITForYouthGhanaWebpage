@@ -5,6 +5,7 @@
  * Replace your existing site-config.ts with this file entirely.
  */
 
+import { LAPTOP_BANK_PATHWAY_CROSSLINKS } from "@/lib/content/laptop-bank-config";
 import type { HeroSlide }       from "@/components/home/hero-slideshow";
 import type { MarqueeTickerContent } from "@/components/home/marquee-ticker";
 import type { FeaturedProgram } from "@/components/home/featured-programs";
@@ -414,6 +415,14 @@ function buildInitiativePage(config: InitiativeSeedConfig): InitiativePage {
       { label: "Partner with us", href: "/partner-with-us" },
       { label: "See our impact", href: "/our-impact/reports" },
     ],
+    /**
+     * C13, Laptop Bank build spec §8. Seeded from one table keyed by slug
+     * rather than pasted into each initiative's config, so the seven blocks
+     * cannot drift from the spec or from each other. Undefined for
+     * community-outreach, which spec §8 gives no block at launch. The CMS can
+     * override it per page.
+     */
+    relatedProgramme: LAPTOP_BANK_PATHWAY_CROSSLINKS[config.slug],
   };
 }
 

@@ -274,6 +274,19 @@ export interface InitiativeSectionContent {
   quickLinksEyebrow: string;
 }
 
+/**
+ * C13 — the related programme block placed on the eight pathway pages
+ * (Laptop Bank build spec §8).
+ *
+ * Optional, because spec §8 gives Community Outreach "No block at launch" and
+ * a required field would force an empty object onto it.
+ */
+export interface InitiativeRelatedProgramme {
+  body: string;
+  linkLabel: string;
+  href: string;
+}
+
 export interface InitiativePage extends SitePage {
   tagline: string;
   heroImage: string;
@@ -290,6 +303,8 @@ export interface InitiativePage extends SitePage {
   applyCta: InitiativeApplyCta;
   sectionContent: InitiativeSectionContent;
   quickLinks: ActionLink[];
+  /** C13. See InitiativeRelatedProgramme. CMS-editable per page. */
+  relatedProgramme?: InitiativeRelatedProgramme;
 }
 
 export type ArticleCategory = "news" | "blogs";

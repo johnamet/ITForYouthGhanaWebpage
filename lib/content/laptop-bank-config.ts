@@ -601,3 +601,60 @@ export const laptopBankDocumentsContent = {
     public: "Published for anyone",
   },
 };
+
+// ─── §8: cross-links on the eight pathway pages (C13) ─────────────────────────
+//
+// Body text verbatim from spec §8. Keyed by the pathway slug used in
+// lib/content/site-config.ts's `initiatives`, so buildInitiativePage can seed
+// each page from one table rather than the same block being pasted into seven
+// large config objects and drifting.
+//
+// The field stays optional on InitiativePage so the CMS can override it per
+// page, which spec §8 requires ("CMS-editable per page").
+//
+// community-outreach is deliberately absent: spec §8 gives it "No block at
+// launch". Do not add one without a spec change.
+
+export type InitiativeRelatedProgrammeSeed = {
+  body: string;
+  linkLabel: string;
+  href: string;
+};
+
+export const LAPTOP_BANK_PATHWAY_CROSSLINKS: Record<string, InitiativeRelatedProgrammeSeed> = {
+  "girls-in-tech": {
+    body: "Every woman on this pathway can apply for a refurbished laptop of her own through Her First Laptop.",
+    linkLabel: "Apply for a laptop",
+    href: "/her-first-laptop",
+  },
+  "youth-academy": {
+    body: "Academy participants without a working computer can apply for one through the IT for Youth Laptop Bank.",
+    linkLabel: "About the Laptop Bank",
+    href: "/laptop-bank",
+  },
+  "rural-tech-connect": {
+    body: "The devices behind this pathway come from companies retiring their equipment, through the IT for Youth Laptop Bank.",
+    linkLabel: "About the Laptop Bank",
+    href: "/laptop-bank",
+  },
+  "tech-clubs": {
+    body: "School clubs are equipped with refurbished machines from the IT for Youth Laptop Bank.",
+    linkLabel: "About the Laptop Bank",
+    href: "/laptop-bank",
+  },
+  "entrepreneurship-hub": {
+    body: "Founders in the Hub can apply for a device through the IT for Youth Laptop Bank.",
+    linkLabel: "About the Laptop Bank",
+    href: "/laptop-bank",
+  },
+  "code-impact-challenge": {
+    body: "Challenge teams are loaned machines from the IT for Youth Laptop Bank for the duration of the build.",
+    linkLabel: "About the Laptop Bank",
+    href: "/laptop-bank",
+  },
+  advocacy: {
+    body: "Our position on device access and electronic waste sits with the IT for Youth Laptop Bank.",
+    linkLabel: "Recycling and e-waste",
+    href: "/laptop-bank/recycling",
+  },
+};

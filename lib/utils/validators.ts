@@ -655,6 +655,19 @@ export const initiativeSchema = z.object({
   applyCta: initiativeApplyCtaSchema,
   sectionContent: initiativeSectionContentSchema,
   quickLinks: z.array(initiativeActionLinkSchema).default([]),
+  /**
+   * C13 — the Laptop Bank cross-link block (Laptop Bank build spec §8).
+   * Optional so it round-trips through the CMS: spec §8 requires the block to
+   * be editable per page, and Community Outreach has no block at launch.
+   * Without this field a CMS write would silently strip the seeded block.
+   */
+  relatedProgramme: z
+    .object({
+      body: z.string().trim(),
+      linkLabel: z.string().trim(),
+      href: z.string().trim(),
+    })
+    .optional(),
 });
 
 export type InitiativePayload = z.infer<typeof initiativeSchema>;

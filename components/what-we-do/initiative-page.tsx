@@ -1,3 +1,4 @@
+import { RelatedProgrammeBlock } from "@/components/laptop-bank/related-programme-block";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -397,6 +398,22 @@ export function InitiativePageTemplate({ page }: InitiativePageTemplateProps) {
               </div>
             </div>
           </section> : null}
+
+          {/*
+            C13 — the related programme block (Laptop Bank build spec §8).
+            Placed "after the main body, before the footer", which on this
+            template means the end of the main column, after the related-routes
+            grid below has had its say about the wider programme. Guarded on
+            presence because spec §8 gives Community Outreach no block at
+            launch.
+          */}
+          {page.relatedProgramme ? (
+            <RelatedProgrammeBlock
+              body={page.relatedProgramme.body}
+              linkLabel={page.relatedProgramme.linkLabel}
+              href={page.relatedProgramme.href}
+            />
+          ) : null}
 
           {page.related.length ? (
             <section className="space-y-8">
