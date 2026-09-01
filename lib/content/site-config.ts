@@ -110,10 +110,6 @@ export const floatingElementsContent: FloatingElementsContent = {
 
 export const publicNavigation: NavItem[] = [
   {
-    label: "Home",
-    href: "/",
-  },
-  {
     label: "Who We Are",
     href: "/who-we-are",
     items: [
@@ -158,9 +154,10 @@ export const publicNavigation: NavItem[] = [
     ],
   },
   {
-    label: "Partner With Us",
+    label: "Get Involved",
     href: "/partner-with-us",
     items: [
+      { label: "Partner With Us", href: "/partner-with-us" },
       { label: "Educational Institutions", href: "/partner-with-us/educational" },
       { label: "Government", href: "/partner-with-us/government" },
       { label: "NGOs & Foundations", href: "/partner-with-us/ngo-foundations" },
@@ -185,7 +182,6 @@ export const publicNavigation: NavItem[] = [
       { label: "Blogs", href: "/news-and-updates/blogs" },
     ],
   },
-  { label: "Contact", href: "/contact" },
 ];
 
 /** Footer links are maintained beside the header navigation to prevent route drift. */
