@@ -124,6 +124,103 @@ const optionalUrl = z.preprocess(
     .optional(),
 );
 
+const optionalDate = z.preprocess(
+  (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+  z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Please enter a valid date.")
+    .optional(),
+);
+
+const organisationEnquiryBaseSchema = z.object({
+  organisationName: z.string().trim().min(2, "Please enter the organisation name."),
+  organisationWebsite: optionalUrl,
+  industry: z.string().trim().min(2, "Please enter the organisation's sector or industry."),
+  contactName: z.string().trim().min(2, "Please enter the main contact's name."),
+  contactRole: z.string().trim().min(2, "Please enter the main contact's role."),
+  workEmail: z.string().trim().email("Please enter a valid work email address."),
+  phone: z.string().trim().min(7, "Please enter a contact phone number."),
+  preferredContact: z.enum(["email", "phone", "either"]).default("email"),
+  consent: consentBoolean,
+  // Honeypot. Real users never see or complete this field.
+  companyFax: optionalTrimmedString,
+});
+
+const jobVacancyEnquirySchema = organisationEnquiryBaseSchema.extend({
+  kind: z.literal("job-vacancy"),
+  roleTitle: z.string().trim().min(2, "Please enter the vacancy title."),
+  opportunityType: z.enum([
+    "full-time",
+    "part-time",
+    "internship",
+    "graduate-programme",
+    "contract",
+    "apprenticeship",
+  ]),
+  team: optionalTrimmedString,
+  numberOfOpenings: z.coerce
+    .number()
+    .int()
+    .min(1, "Please enter at least one opening.")
+    .max(500, "Please enter 500 openings or fewer."),
+  jobLocation: z.string().trim().min(2, "Please enter the role location."),
+  workArrangement: z.enum(["on-site", "hybrid", "remote"]),
+  entryLevelFit: z.enum(["yes", "no", "depends"]),
+  applicationDeadline: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Please enter a valid application deadline."),
+  expectedStartDate: optionalDate,
+  compensation: optionalTrimmedString,
+  roleSummary: z.string().trim().min(30, "Please describe the role in at least 30 characters."),
+  requirements: z.string().trim().min(20, "Please share the main skills or requirements."),
+  applicationMethod: z.string().trim().min(10, "Please explain how candidates should apply."),
+  additionalNotes: optionalTrimmedString,
+});
+
+const staffVolunteeringEnquirySchema = organisationEnquiryBaseSchema.extend({
+  kind: z.literal("staff-volunteering"),
+  organisationAddress: z.string().trim().min(5, "Please enter the organisation's address."),
+  numberOfStaff: z.coerce
+    .number()
+    .int()
+    .min(1, "Please enter at least one staff volunteer.")
+    .max(500, "Please enter 500 staff volunteers or fewer."),
+  volunteeringAreas: z
+    .array(
+      z.enum([
+        "mentoring",
+        "workshops",
+        "career-talks",
+        "cv-portfolio-reviews",
+        "mock-interviews",
+        "event-judging",
+        "project-coaching",
+        "other",
+      ]),
+    )
+    .min(1, "Please select at least one way your staff would like to help."),
+  staffExpertise: z.string().trim().min(20, "Please describe the skills your staff can offer."),
+  engagementLength: z.enum(["one-off", "short-series", "ongoing", "not-sure"]),
+  availability: z.string().trim().min(5, "Please share a preferred date or availability window."),
+  deliveryMode: z.enum(["in-person", "remote", "hybrid", "flexible"]),
+  preferredLocation: optionalTrimmedString,
+  numberOfLearners: z.preprocess(
+    (value) => (value === "" || value === undefined || value === null ? undefined : Number(value)),
+    z.number().int().min(1).max(1000).optional(),
+  ),
+  goals: z.string().trim().min(20, "Please tell us what a useful engagement would achieve."),
+  additionalNotes: optionalTrimmedString,
+});
+
+export const organisationEnquirySchema = z.discriminatedUnion("kind", [
+  jobVacancyEnquirySchema,
+  staffVolunteeringEnquirySchema,
+]);
+
+export type OrganisationEnquiryPayload = z.infer<typeof organisationEnquirySchema>;
+
 export const teamSchema = z.object({
   name: z.string().trim().min(2, "Please enter a name."),
   role: z.string().trim().min(2, "Please enter a role."),

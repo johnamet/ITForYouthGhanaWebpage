@@ -34,25 +34,21 @@ const ALLOWED_IMAGE_HOSTS = new Set([
 ]);
 
 /**
- * Resolves a CMS image value against a static fallback, but only for the
- * "present but rejected" case — not for "absent".
+ * Resolves a CMS image to a usable src, falling back when the stored value is
+ * blank or rejected as an invalid image URL.
  *
- * A bare `value ?? fallback` (or `||`) cannot tell those apart: an emptied
- * CMS field and a malformed CMS URL both end up substituting the fallback,
- * even though only the second one is actually broken. The first is a
- * legitimate "no image here" that the caller's own empty-state gate (e.g.
- * `EditorialImageHero`, `ContentImage`) is meant to render as such.
- *
- * So: an absent/whitespace-only value is returned untouched, letting that
- * gate do its job. A non-empty value that `safeImageSrc` rejects (bad host,
- * bad protocol, unparsable) is the only case that falls back.
+ * This is purposely more forgiving than a raw `value ?? fallback` because CMS
+ * content can be empty, whitespace-only, or malformed. For page heroes and
+ * card imagery we want a usable asset instead of an empty no-image state when a
+ * fallback exists.
  */
 export function safeImageSrcOrFallback(
   value: string | null | undefined,
   fallback: string,
 ): string | null | undefined {
-  if (!value?.trim()) return value;
-  return safeImageSrc(value) ?? fallback;
+  const trimmed = value?.trim();
+  if (!trimmed) return fallback;
+  return safeImageSrc(trimmed) ?? fallback;
 }
 
 /**

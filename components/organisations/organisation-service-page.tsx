@@ -5,13 +5,41 @@ import { RouteCardGrid } from "@/components/shared/route-card-grid";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { ProseMediaCardGrid } from "@/components/shared/prose-media-card-grid";
+import {
+  OrganisationEnquiryForm,
+  type OrganisationEnquiryKind,
+} from "@/components/organisations/organisation-enquiry-form";
 import type { OrganisationServicePage as OrganisationServicePageType } from "@/types/content";
 
 type OrganisationServicePageProps = {
   page: OrganisationServicePageType;
 };
 
-function buildAnchorLinks(page: OrganisationServicePageType) {
+function getEnquiryKind(slug: string): OrganisationEnquiryKind | undefined {
+  if (slug === "hire-graduates") {
+    return "job-vacancy";
+  }
+
+  if (slug === "staff-volunteering") {
+    return "staff-volunteering";
+  }
+
+  return undefined;
+}
+
+function getEnquiryCta(kind?: OrganisationEnquiryKind) {
+  if (kind === "job-vacancy") {
+    return { label: "Submit a vacancy", href: "#submit-vacancy" };
+  }
+
+  if (kind === "staff-volunteering") {
+    return { label: "Plan staff volunteering", href: "#staff-volunteering-enquiry" };
+  }
+
+  return undefined;
+}
+
+function buildAnchorLinks(page: OrganisationServicePageType, enquiryKind?: OrganisationEnquiryKind) {
   const links = [
     { id: "overview", label: "Overview" },
     { id: "how-it-works", label: "How It Works" },
@@ -22,16 +50,24 @@ function buildAnchorLinks(page: OrganisationServicePageType) {
     links.push({ id: "pricing", label: "Packages" });
   }
 
-  links.push(
-    { id: "faqs", label: "FAQs" },
-    { id: "contact", label: "Contact" },
-  );
+  links.push({ id: "faqs", label: "FAQs" });
+
+  if (enquiryKind === "job-vacancy") {
+    links.push({ id: "submit-vacancy", label: "Submit a Vacancy" });
+  } else if (enquiryKind === "staff-volunteering") {
+    links.push({ id: "staff-volunteering-enquiry", label: "Volunteer With Us" });
+  }
+
+  links.push({ id: "contact", label: "Contact" });
 
   return links;
 }
 
 export function OrganisationServicePage({ page }: OrganisationServicePageProps) {
-  const anchorLinks = buildAnchorLinks(page);
+  const enquiryKind = getEnquiryKind(page.slug);
+  const enquiryCta = getEnquiryCta(enquiryKind);
+  const primaryCta = enquiryCta ?? page.contactCta.primary;
+  const anchorLinks = buildAnchorLinks(page, enquiryKind);
 
   return (
     <div className="bg-white">
@@ -48,7 +84,7 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
           { label: page.title },
         ]}
         ctas={[
-          { label: page.contactCta.primary.label, href: page.contactCta.primary.href },
+          { label: primaryCta.label, href: primaryCta.href },
           { label: "Learn more", href: "#overview", variant: "secondary" },
         ]}
         priority
@@ -260,6 +296,8 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
         </div>
       </section>
 
+      {enquiryKind ? <OrganisationEnquiryForm kind={enquiryKind} /> : null}
+
       <section
         id="contact"
         className="scroll-mt-36 bg-brand-navy px-4 py-16 text-white sm:px-6 lg:px-8"
@@ -285,10 +323,10 @@ export function OrganisationServicePage({ page }: OrganisationServicePageProps) 
 
           <div className="flex flex-wrap gap-3">
             <Link
-              href={page.contactCta.primary.href}
+              href={primaryCta.href}
               className="rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
             >
-              {page.contactCta.primary.label}
+              {primaryCta.label}
             </Link>
             <Link
               href={page.contactCta.secondary.href}

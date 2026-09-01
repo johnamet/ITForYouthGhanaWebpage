@@ -616,7 +616,7 @@ export const organisationServices: OrganisationServicePage[] = [
       description:
         "If your team is open to early-career talent and can provide thoughtful onboarding, this route can help you hire with more confidence and context.",
       email: "info@itforyouthghana.org",
-      primary: { label: "Talk about hiring", href: "/contact" },
+      primary: { label: "Submit a vacancy", href: "#submit-vacancy" },
       secondary: { label: "See impact stories", href: "/our-impact/testimonials" },
     },
     related: [
@@ -774,7 +774,7 @@ export const organisationServices: OrganisationServicePage[] = [
       description:
         "If your team wants to mentor, teach, judge, or contribute skills through ITFY Ghana, we can help shape a route that is structured, useful, and realistic.",
       email: "info@itforyouthghana.org",
-      primary: { label: "Plan a volunteering route", href: "/contact" },
+      primary: { label: "Plan staff volunteering", href: "#staff-volunteering-enquiry" },
       secondary: { label: "Explore sponsorships", href: "/for-organisations/sponsorships" },
     },
     related: [
