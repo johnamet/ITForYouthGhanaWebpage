@@ -226,3 +226,130 @@ export const herFirstLaptopApplyContent = {
     "Commitments and consent",
   ],
 };
+
+// ─── Reference lists for form 6.2 ─────────────────────────────────────────────
+
+/**
+ * The sixteen regions of Ghana, which is the count spec §6.2 specifies.
+ * Alphabetical, because an applicant is scanning for their own.
+ */
+export const GHANA_REGIONS = [
+  "Ahafo",
+  "Ashanti",
+  "Bono",
+  "Bono East",
+  "Central",
+  "Eastern",
+  "Greater Accra",
+  "North East",
+  "Northern",
+  "Oti",
+  "Savannah",
+  "Upper East",
+  "Upper West",
+  "Volta",
+  "Western",
+  "Western North",
+] as const;
+
+/**
+ * Spec §6.2: "Pre-populated list of recognised institutions", with an "other"
+ * escape. The list is deliberately not exhaustive — Ghana has many accredited
+ * tertiary institutions, and an applicant whose institution is missing must
+ * never be blocked, which is what "Another institution" is for. Maintain this
+ * list from the CMS as real applications name places it does not cover.
+ */
+export const GHANA_TERTIARY_INSTITUTIONS = [
+  "University of Ghana",
+  "Kwame Nkrumah University of Science and Technology",
+  "University of Cape Coast",
+  "University of Education, Winneba",
+  "University for Development Studies",
+  "University of Professional Studies, Accra",
+  "University of Mines and Technology",
+  "University of Energy and Natural Resources",
+  "University of Health and Allied Sciences",
+  "C. K. Tedam University of Technology and Applied Sciences",
+  "Akenten Appiah-Menka University of Skills Training and Entrepreneurial Development",
+  "Ghana Communication Technology University",
+  "Ghana Institute of Management and Public Administration",
+  "Accra Technical University",
+  "Kumasi Technical University",
+  "Takoradi Technical University",
+  "Ho Technical University",
+  "Tamale Technical University",
+  "Cape Coast Technical University",
+  "Koforidua Technical University",
+  "Sunyani Technical University",
+  "Bolgatanga Technical University",
+  "Ashesi University",
+  "Central University",
+  "Valley View University",
+  "Presbyterian University College",
+  "Methodist University Ghana",
+  "Catholic University of Ghana",
+  "Regent University College of Science and Technology",
+  "Wisconsin International University College",
+  "Pentecost University",
+  "All Nations University",
+] as const;
+
+/**
+ * Spec §6.2: "The 8 pathways plus 'Not yet enrolled'." Slugs and labels match
+ * lib/content/site-config.ts's initiatives, so an answer here maps onto a real
+ * programme page.
+ */
+export const ITFY_TRACKS = [
+  { value: "girls-in-tech", label: "Girls in Tech" },
+  { value: "youth-academy", label: "Youth Tech Academy" },
+  { value: "entrepreneurship-hub", label: "Entrepreneurship Hub" },
+  { value: "code-impact-challenge", label: "Code Impact Challenge" },
+  { value: "rural-tech-connect", label: "Rural Tech Connect" },
+  { value: "community-outreach", label: "Community Outreach" },
+  { value: "advocacy", label: "Advocacy" },
+  { value: "tech-clubs", label: "Tech Clubs" },
+  { value: "not-yet-enrolled", label: "Not yet enrolled" },
+] as const;
+
+/** Spec §6.2: "Current computer access". */
+export const CURRENT_COMPUTER_ACCESS = [
+  { value: "none", label: "None" },
+  { value: "phone-only", label: "Phone only" },
+  { value: "shared-machine", label: "A shared family or friend's machine" },
+  { value: "campus-lab-or-cafe", label: "Campus lab or internet cafe only" },
+  { value: "broken-laptop", label: "A broken laptop I cannot repair" },
+] as const;
+
+export const YEARS_OF_STUDY = [
+  "Year 1",
+  "Year 2",
+  "Year 3",
+  "Year 4",
+  "Year 5 or above",
+  "Postgraduate",
+] as const;
+
+export const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
+export const REFERRAL_SOURCES = [
+  { value: "itfy-programme", label: "Through an IT for Youth programme" },
+  { value: "friend", label: "A friend or classmate" },
+  { value: "lecturer", label: "A lecturer or coordinator" },
+  { value: "social", label: "Social media" },
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "search", label: "Search engine" },
+  { value: "other", label: "Somewhere else" },
+] as const;
