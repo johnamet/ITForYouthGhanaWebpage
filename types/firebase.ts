@@ -20,6 +20,16 @@ export const FIREBASE_COLLECTIONS = {
   auditLog: "auditLog",
   settings: "settings",
   trainingCohorts: "trainingCohorts",
+  // IT for Youth Laptop Bank (build spec §4). The first six are the CMS
+  // content types; the last two hold form submissions from §6.1 and §6.2.
+  laptopBankStages: "laptopBankStages",
+  laptopBankIntake: "laptopBankIntake",
+  laptopBankDonors: "laptopBankDonors",
+  laptopBankStories: "laptopBankStories",
+  laptopBankMetrics: "laptopBankMetrics",
+  laptopBankDocuments: "laptopBankDocuments",
+  laptopBankOffers: "laptopBankOffers",
+  laptopBankApplications: "laptopBankApplications",
 } as const;
 
 export type FirebaseCollection = keyof typeof FIREBASE_COLLECTIONS;
