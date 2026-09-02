@@ -69,11 +69,27 @@ const FORM_LABELS: Record<LaptopBankFormKind, string> = {
   "student-application": "Her First Laptop application",
 };
 
-function adminLinkFor(kind: LaptopBankFormKind): string {
+/**
+ * The staff link, pointed at the specific submission.
+ *
+ * THIS MUST RESOLVE TO A ROUTE THAT ACTUALLY SHOWS THE RECORD. Spec §7 keeps
+ * every piece of personal data out of the email body, so this link is the only
+ * route staff have to a submission — if it lands on a page that cannot see the
+ * record, the submission is invisible and effectively lost.
+ *
+ * It previously pointed at /admin/messages and /admin/applications, which read
+ * the `contactMessages` and `applications` collections. Laptop Bank
+ * submissions are written to `laptopBankOffers` and `laptopBankApplications`,
+ * so those pages would never have shown them. Do not point this at a generic
+ * inbox again.
+ */
+function adminLinkFor(kind: LaptopBankFormKind, reference: string): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://itforyouthghana.org";
-  return kind === "equipment-offer"
-    ? `${base}/admin/messages`
-    : `${base}/admin/applications`;
+  const path =
+    kind === "equipment-offer"
+      ? `/admin/laptop-bank/offers/${reference}`
+      : `/admin/laptop-bank/applications/${reference}`;
+  return `${base}${path}`;
 }
 
 /**
@@ -88,7 +104,7 @@ export async function sendLaptopBankStaffNotification(
   if (!config) return { configured: false, delivered: false };
 
   const label = FORM_LABELS[kind];
-  const link = adminLinkFor(kind);
+  const link = adminLinkFor(kind, reference);
 
   return send(
     {

@@ -1210,3 +1210,49 @@ export function isFreeWebmail(email: string): boolean {
   const domain = email.trim().toLowerCase().split("@")[1];
   return domain ? FREE_WEBMAIL_DOMAINS.has(domain) : false;
 }
+
+// ─── Laptop Bank submission review (admin) ────────────────────────────────────
+
+/**
+ * Offer statuses use the spec's own vocabulary. Spec 5.2 stage 1: an offer
+ * "can be accepted in full, accepted in part, or declined with an explanation
+ * and a referral to a certified recycler" — so those are the three outcomes a
+ * reviewer records, plus the states either side of them.
+ */
+export const equipmentOfferAdminUpdateSchema = z.object({
+  status: z.enum([
+    "new",
+    "reviewing",
+    "accepted-in-full",
+    "accepted-in-part",
+    "declined",
+    "collected",
+    "archived",
+  ]),
+  notes: optionalTrimmedString,
+});
+
+export type EquipmentOfferAdminUpdatePayload = z.infer<typeof equipmentOfferAdminUpdateSchema>;
+
+/**
+ * Application statuses. "waiting-list" is not decoration: spec 5.7 block 5
+ * promises an unsuccessful applicant that she "stays on the list for the next
+ * one", and Draft 1 §9 §7 wants every applicant to get an outcome. A reviewer
+ * needs a state that means exactly that.
+ */
+export const studentApplicationAdminUpdateSchema = z.object({
+  status: z.enum([
+    "new",
+    "reviewed",
+    "shortlisted",
+    "waiting-list",
+    "offered",
+    "rejected",
+    "enrolled",
+  ]),
+  notes: optionalTrimmedString,
+});
+
+export type StudentApplicationAdminUpdatePayload = z.infer<
+  typeof studentApplicationAdminUpdateSchema
+>;
