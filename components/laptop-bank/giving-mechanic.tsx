@@ -18,14 +18,16 @@ type GivingMechanicProps = {
 
 type Tier = {
   amountToken: TokenName;
+  /** The same amount in sterling, supplied separately — never derived. */
+  sterlingToken: TokenName;
   outcomeToken: TokenName;
 };
 
 /** Spec C15: three fixed amounts plus an open amount. */
 const TIERS: Tier[] = [
-  { amountToken: "GIVE_1", outcomeToken: "GIVE_1_OUTCOME" },
-  { amountToken: "GIVE_2", outcomeToken: "GIVE_2_OUTCOME" },
-  { amountToken: "GIVE_3", outcomeToken: "GIVE_3_OUTCOME" },
+  { amountToken: "GIVE_1", sterlingToken: "GIVE_1_GBP", outcomeToken: "GIVE_1_OUTCOME" },
+  { amountToken: "GIVE_2", sterlingToken: "GIVE_2_GBP", outcomeToken: "GIVE_2_OUTCOME" },
+  { amountToken: "GIVE_3", sterlingToken: "GIVE_3_GBP", outcomeToken: "GIVE_3_OUTCOME" },
 ];
 
 /**
@@ -45,14 +47,15 @@ const SECOND_CURRENCY = "GBP";
  * line. Dual currency display: GHS and GBP/USD."
  *
  * A NOTE ON THE DUAL CURRENCY, because there is a real gap in the spec here.
- * Spec §11 supplies ONE token per tier ({{GIVE_1}}) while spec §3 requires two
- * currencies displayed side by side. No conversion rate is supplied either, and
- * Draft 1 §16 forbids publishing any cost figure not calculated including
- * failed intake and labour — so this component must not compute the second
- * figure from the first. Both currency slots are therefore rendered, and the
- * single supplied token fills the GHS slot; the GBP slot reads as awaited until
- * IT for Youth supplies it. Raise this with them: each tier needs a cedi
- * figure AND a sterling figure, not one amount.
+ * Spec §3 requires two currencies side by side, but spec §11 supplies ONE
+ * token per tier ({{GIVE_1}}) and no conversion rate. So the registry declares
+ * a separate {{GIVE_n_GBP}} token per tier and this component renders it as-is.
+ * It must NEVER derive sterling from cedis: Draft 1 §16 forbids publishing a
+ * cost figure that was not properly calculated, a rate hardcoded here would be
+ * wrong within weeks, and it would amount to publishing an exchange rate the
+ * organisation never agreed to. An earlier version of this component rendered
+ * the cedi token in both slots, which would have published a 1:1 rate the
+ * moment the amounts arrived — do not reintroduce that.
  *
  * Selection is disabled while a tier's amount is still a token — a donor
  * cannot be allowed to select an amount that does not exist. The open-amount
@@ -83,7 +86,11 @@ export function GivingMechanic({ id, heading, description, className }: GivingMe
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         {TIERS.map((tier) => {
-          const resolved = isTokenResolved(tier.amountToken);
+          // Selectable only once BOTH figures exist. The spec makes the dual
+          // display mandatory, so an amount that can be chosen must never be
+          // showing a red token in one of its two currency slots.
+          const resolved =
+            isTokenResolved(tier.amountToken) && isTokenResolved(tier.sterlingToken);
           const isSelected = selected === tier.amountToken;
 
           return (
@@ -109,12 +116,7 @@ export function GivingMechanic({ id, heading, description, className }: GivingMe
                 </span>
               </div>
               <p className="mt-1 text-sm font-semibold text-slate-500">
-                {SECOND_CURRENCY}{" "}
-                {resolved ? (
-                  <TokenText>{token(tier.amountToken)}</TokenText>
-                ) : (
-                  <span className="font-bold text-red-600">awaiting sterling figure</span>
-                )}
+                {SECOND_CURRENCY} <TokenText>{token(tier.sterlingToken)}</TokenText>
               </p>
               <p className="mt-4 text-sm leading-7 text-slate-600">
                 <TokenText>{token(tier.outcomeToken)}</TokenText>

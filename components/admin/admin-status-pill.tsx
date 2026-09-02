@@ -15,6 +15,17 @@ const statusStyles: Record<string, string> = {
   shortlisted: "bg-emerald-100 text-emerald-700",
   rejected: "bg-rose-100 text-rose-700",
   enrolled: "bg-teal-100 text-teal-700",
+  // Laptop Bank submission review states. Offer statuses follow the spec's own
+  // vocabulary (5.2 stage 1: accepted in full, in part, or declined); without
+  // these every row's pill fell back to grey and the status column carried no
+  // signal at all.
+  reviewing: "bg-sky-100 text-sky-700",
+  "accepted-in-full": "bg-emerald-100 text-emerald-700",
+  "accepted-in-part": "bg-lime-100 text-lime-800",
+  declined: "bg-rose-100 text-rose-700",
+  collected: "bg-teal-100 text-teal-700",
+  "waiting-list": "bg-amber-100 text-amber-800",
+  offered: "bg-emerald-100 text-emerald-700",
   active: "bg-emerald-100 text-emerald-700",
   inactive: "bg-slate-100 text-slate-700",
   configured: "bg-emerald-100 text-emerald-700",

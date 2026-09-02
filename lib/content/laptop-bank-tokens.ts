@@ -27,10 +27,13 @@ export type TokenName =
   | "FACILITY_STATEMENT"
   | "OS_NAME"
   | "GIVE_1"
+  | "GIVE_1_GBP"
   | "GIVE_1_OUTCOME"
   | "GIVE_2"
+  | "GIVE_2_GBP"
   | "GIVE_2_OUTCOME"
   | "GIVE_3"
+  | "GIVE_3_GBP"
   | "GIVE_3_OUTCOME"
   | "LOAN_MONTHS"
   | "PEER_HOURS"
@@ -65,11 +68,26 @@ export const LAPTOP_BANK_TOKENS: Record<TokenName, TokenEntry> = {
   CERT_RETENTION: { needed: "Certificate retention period", usedOn: ["5.4 §4"], phase: 1 },
   FACILITY_STATEMENT: { needed: "Physical security paragraph", usedOn: ["5.4 §6"], phase: 1 },
   OS_NAME: { needed: "Operating system installed", usedOn: ["5.2 stage 6"], phase: 1 },
-  GIVE_1: { needed: "First giving amount", usedOn: ["5.6"], phase: 1 },
+  /*
+   * The giving tiers need TWO figures each, not one.
+   *
+   * Spec §3 requires C15 to show "GHS and GBP/USD side by side", but spec §11
+   * supplies only one token per tier and no conversion rate. The sterling
+   * tokens below close that gap explicitly rather than deriving sterling from
+   * cedis: Draft 1 §16 forbids publishing a cost figure that was not properly
+   * calculated, and a rate hardcoded here would be wrong within weeks and
+   * would be publishing an exchange rate the organisation never agreed.
+   *
+   * Ask IT for Youth for a cedi amount AND a sterling amount per tier.
+   */
+  GIVE_1: { needed: "First giving amount, in cedis", usedOn: ["5.6"], phase: 1 },
+  GIVE_1_GBP: { needed: "First giving amount, in sterling", usedOn: ["5.6"], phase: 1 },
   GIVE_1_OUTCOME: { needed: "Outcome line for the first amount", usedOn: ["5.6"], phase: 1 },
-  GIVE_2: { needed: "Second giving amount", usedOn: ["5.6"], phase: 1 },
+  GIVE_2: { needed: "Second giving amount, in cedis", usedOn: ["5.6"], phase: 1 },
+  GIVE_2_GBP: { needed: "Second giving amount, in sterling", usedOn: ["5.6"], phase: 1 },
   GIVE_2_OUTCOME: { needed: "Outcome line for the second amount", usedOn: ["5.6"], phase: 1 },
-  GIVE_3: { needed: "Third giving amount", usedOn: ["5.6"], phase: 1 },
+  GIVE_3: { needed: "Third giving amount, in cedis", usedOn: ["5.6"], phase: 1 },
+  GIVE_3_GBP: { needed: "Third giving amount, in sterling", usedOn: ["5.6"], phase: 1 },
   GIVE_3_OUTCOME: { needed: "Outcome line for the third amount", usedOn: ["5.6"], phase: 1 },
   LOAN_MONTHS: { needed: "Loan period", usedOn: ["5.6", "5.7", "6.2"], phase: 1 },
   PEER_HOURS: { needed: "Teaching hours", usedOn: ["5.2", "5.6", "5.7", "6.2"], phase: 1 },
