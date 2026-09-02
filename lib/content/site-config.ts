@@ -2013,6 +2013,12 @@ export const adminNavigation: AdminNavItem[] = [
     description: "Content Explorer: hubs and page editors.",
   },
   {
+    label: "Laptop Bank",
+    href: "/admin/laptop-bank",
+    description:
+      "Process stages, intake specification, documents, donors, stories, metrics, and both submission inboxes.",
+  },
+  {
     label: "What We Do",
     href: "/admin/programmes",
     description: "What We Do overview and initiative subpage CMS.",
