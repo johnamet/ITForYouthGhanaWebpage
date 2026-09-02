@@ -170,3 +170,134 @@ needing a developer:
    **/admin/laptop-bank/records/document**.
 4. The privacy notice body, all eight sections.
 5. Confirmation on the phase 1 navigation ruling.
+
+---
+
+# Addendum — defect-fix pass (2026-09-02, later)
+
+Six commits: `5be830f`, `dfd2959`, `0c85ac5`, `98b3549`, `509a751`, plus this
+note. Every claim below was run and its output read.
+
+## Fixed
+
+**1. Firestore Timestamps leaking into Client Components** (`5be830f`) —
+*pre-existing, not introduced here.* The production build had been logging
+`Error: Only plain objects, and a few built-ins, can be passed to Client
+Components` twice, while still exiting 0, since before any of this work.
+
+Located by scanning every zero-arg CMS reader for non-plain values rather than
+guessing. Exactly two leaked — `getCmsPartnershipOverview` and
+`getCmsPartnershipTracks` — which matches the two logged errors. Both go
+through `normalizeObject`, which spread the raw Firestore document over the
+seed and so carried the `updatedAt` Timestamp written by the two updaters in
+the same file. My first hypothesis (the layout's floating-elements read) was
+wrong; the scan corrected it.
+
+Fixed at the reader boundary with `lib/utils/plain.ts`. A Timestamp becomes an
+ISO string; any other non-plain object is dropped rather than coerced, because
+a `DocumentReference` has no meaningful string form and stringifying it would
+put "[object Object]" into page content. **Build output is now completely
+clean: zero Error lines.**
+
+**2. C15 would have published a fabricated exchange rate** (`dfd2959`) — the
+giving mechanic rendered the *same* token in both its cedi and sterling slots.
+Masked only because the amounts are unresolved; the moment IT for Youth
+supplied them, the page would have asserted a 1:1 GHS–GBP rate on a donation
+page. The registry now declares a separate `{{GIVE_n_GBP}}` per tier, sterling
+is never derived, and a tier is selectable only once both figures exist. The
+old behaviour is named in a comment so it is not reintroduced. `verify:tokens`
+went 24 → 27 outstanding; the three additions are real missing content.
+
+**3. The stat band's "equipped" figure** (`dfd2959`) is now
+`deployed_individual + deployed_shared`. A machine in a school club has been
+equipped just as much as one handed to a student, and reporting only the
+individual figure contradicted /laptop-bank block 5, which exists to tell a
+corporate donor their equipment is not ring-fenced to one campaign.
+
+**4. All seven review statuses were rendering grey** (`dfd2959`) — none of the
+Laptop Bank statuses existed in `AdminStatusPill`'s style map, so the status
+column in both inboxes carried no signal at all.
+
+**5. The giving hand-off was discarded** (`0c85ac5`) — `/donate` took no
+`searchParams`, so C15's `campaign` and `amount` went nowhere and choosing a
+tier did nothing. The page now splits the choice (Draft 1 §11 and §3.3) and
+acknowledges the amount. It does **not** fabricate a checkout: no payment
+provider exists anywhere in this repo, Draft 1 §15 lists one as blocking the
+giving flow, and §16 forbids implying the UK entity can receive donations. The
+page carries the intent to a person with the amount in the email subject, and
+the comment marks where a checkout drops in. The amount is caller-controlled,
+so it is validated to a plain figure with a length cap — verified that a script
+payload and an over-long number both fall back to the un-prefixed heading and
+never reach the markup.
+
+## Added
+
+**Open Graph share cards** for both new sections (`98b3549`), generated with
+`next/og`. Draft 1 §14.4 singles out the Her First Laptop one as "the one that
+will circulate on WhatsApp, which will be your largest referral channel";
+before this, a shared link had no image at all. Typographic by decision, not
+shortcut: Draft 1 §8 rules out stock imagery of anonymous African students,
+consented portraits are still owed, and a share image is the most-copied asset
+on a page — the worst place for a placeholder photograph. Verified both emit
+`og:image`, return 200 `image/png`, decode as 1200×630, and — by rendering one
+and reading it back — are legible rather than merely valid.
+
+**Applicant outcome emails** (`509a751`). Draft 1 §14.6 lists eight templates
+and only two existed. Added the four outcome letters *and a real trigger*,
+since a template nobody can send is dead code. The not-selected letter is the
+longest, per Draft 1's judgement that it "matters more than the offer email";
+it never implies she fell short, and it offers the two things spec 5.7 block 5
+already promises in writing.
+
+Sending is opt-in on every save, never implied by the status change — a
+reviewer correcting a mis-click must not email a real person a decision that
+was never made — and the box unticks itself after a save so Save-twice cannot
+send twice. Where she gave no email (spec §6.2 makes it optional, and SMS is
+the primary channel), the checkbox disables itself and names the phone/WhatsApp
+route instead; the response and the audit entry distinguish sent / no-email /
+not-configured / failed.
+
+## Could not fix — needs IT for Youth
+
+**The live bad CMS value.** Exactly one record is affected, found by scanning
+every image field in fourteen collections: `team/fkQ145Q5qCvOTxCUEHSB`
+("Peter Duodu"), field `photo`, value `"https:/files/PETER_PROFILE.png"` — a
+single slash after `https:`.
+
+I did **not** repair it. The obvious correction is
+`https://files.itforyouthghana.org/PETER_PROFILE.png`, but that path and the
+two other plausible ones (`/uploads/`, `/team/`) all return **404** — the file
+is not on the file server. Writing a guessed URL would replace a graceful
+placeholder with a hard 404 image, which is worse. Clearing the field would
+lose the only record of the intended filename.
+
+**Action for John:** upload `PETER_PROFILE.png` to the file server and correct
+the URL at `/admin/team/fkQ145Q5qCvOTxCUEHSB`, or clear the field there. The
+page stays at 200 either way — `safeImageSrc` already catches it — but Peter
+renders with no photograph until then.
+
+## Verification
+
+`type-check`, `lint`, `build`, `verify:media-pages`, `verify:laptop-bank` all
+exit 0. `verify:tokens` exits 1 with 27 outstanding, which is the honest
+pre-content state. Build output carries zero Error lines for the first time.
+
+Regression sweep on a production server: 18 public routes all 200 (including
+`/partner-with-us` and `/who-we-are/team`, the two touched by the Timestamp
+fix), all three admin routes 307 to the login, and the application review
+endpoint 401 unauthenticated even with `notifyApplicant: true` in the body.
+
+## Still open
+
+Unchanged: throttled-3G submission; the end-to-end round trip (writes a real
+submission and sends real email — do it on staging); the admin screens
+rendering inside a real session.
+
+Still not built, unchanged: the token → CMS refactor (**the recommended next
+phase**), the cookie-consent gate spec §7 requires before any analytics, the
+retention deletion job (blocked on the awaited retention schedule), SMS
+(blocked on a provider), FAQ/Organization structured data, the remaining four
+Draft 1 email templates, and the application status banner Draft 1 §9 calls
+"the single most valuable component on the site for your workload" — which
+v1.0 dropped and which is worth a deliberate decision rather than a silent
+omission.
