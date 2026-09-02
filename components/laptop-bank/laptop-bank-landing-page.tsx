@@ -14,6 +14,8 @@ import { laptopBankLandingContent, type LaptopBankCard } from "@/lib/content/lap
 import type { Donor, DashboardMetrics, IntakeItem, ProcessStage } from "@/types/laptop-bank";
 
 type LaptopBankLandingPageProps = {
+  /** CMS-resolved page copy, seeded from laptopBankLandingContent. */
+  copy: typeof laptopBankLandingContent;
   stages: ProcessStage[];
   intakeItems: IntakeItem[];
   metrics: DashboardMetrics | null;
@@ -45,12 +47,12 @@ function toCards(cards: LaptopBankCard[], keyPrefix: string) {
  * competence.
  */
 export function LaptopBankLandingPage({
+  copy,
   stages,
   intakeItems,
   metrics,
   logoDonors,
 }: LaptopBankLandingPageProps) {
-  const copy = laptopBankLandingContent;
   const showPartners = logoDonors.length >= MINIMUM_PARTNER_LOGOS;
 
   return (

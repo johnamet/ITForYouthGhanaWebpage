@@ -1,3 +1,5 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
+import { getEligibilityFaqs } from "@/lib/cms/laptop-bank-faqs";
 import type { Metadata } from "next";
 
 import { CalloutBox } from "@/components/laptop-bank/callout-box";
@@ -9,10 +11,10 @@ import { Button } from "@/components/ui/button";
 import { herFirstLaptopEligibilityContent } from "@/lib/content/her-first-laptop-config";
 import { pointsToParagraph } from "@/lib/utils/prose";
 
-export const metadata: Metadata = {
-  title: herFirstLaptopEligibilityContent.meta.title,
-  description: herFirstLaptopEligibilityContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof herFirstLaptopEligibilityContent>("eligibility");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.7 — /her-first-laptop/eligibility.
@@ -32,8 +34,11 @@ export const metadata: Metadata = {
  * already established in components/organisations/organisation-enquiry-form.tsx:
  * numbered circles, no bullet glyph, no icon.
  */
-export default function HerFirstLaptopEligibilityRoute() {
-  const copy = herFirstLaptopEligibilityContent;
+export default async function HerFirstLaptopEligibilityRoute() {
+  const [copy, faqs] = await Promise.all([
+    getLaptopBankPageContent<typeof herFirstLaptopEligibilityContent>("eligibility"),
+    getEligibilityFaqs(),
+  ]);
 
   return (
     <div className="bg-white">
@@ -108,9 +113,9 @@ export default function HerFirstLaptopEligibilityRoute() {
         <div>
           <SectionHeading eyebrow={copy.faqs.eyebrow} title={copy.faqs.title} />
           <div className="mt-8 space-y-4">
-            {copy.faqs.items.map((faq, index) => (
+            {faqs.map((faq, index) => (
               <ExpandableSection
-                key={faq.question}
+                key={faq.id}
                 id={`faq-${index + 1}`}
                 title={faq.question}
               >

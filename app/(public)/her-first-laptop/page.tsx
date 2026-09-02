@@ -1,3 +1,6 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
+import { getApplicationStatus } from "@/lib/cms/laptop-bank-settings";
+import { ApplicationStatusBanner } from "@/components/laptop-bank/application-status-banner";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -11,10 +14,10 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { getPublishableStories } from "@/lib/cms/laptop-bank";
 import { herFirstLaptopContent } from "@/lib/content/her-first-laptop-config";
 
-export const metadata: Metadata = {
-  title: herFirstLaptopContent.meta.title,
-  description: herFirstLaptopContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof herFirstLaptopContent>("her-first-laptop");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.6 — /her-first-laptop.
@@ -25,10 +28,13 @@ export const metadata: Metadata = {
  * to feeling; /laptop-bank sells competence instead.
  */
 export default async function HerFirstLaptopRoute() {
-  const copy = herFirstLaptopContent;
+  const copy = await getLaptopBankPageContent<typeof herFirstLaptopContent>("her-first-laptop");
   // Block 6 is Phase 2 and hides when no consented record exists. The query
   // has already excluded anything without publication_consent.
-  const [story] = await getPublishableStories(1);
+  const [[story], applicationStatus] = await Promise.all([
+    getPublishableStories(1),
+    getApplicationStatus(),
+  ]);
 
   return (
     <div className="bg-white">
@@ -58,6 +64,16 @@ export default async function HerFirstLaptopRoute() {
         ]}
         priority
       />
+
+      {/*
+        The application status, for the students who land here rather than on
+        the apply page (Draft 1 §12 lists this page as one of its three homes).
+        Placed after the hero so a donor meets the appeal first, but above the
+        fold's end so a student does not have to hunt for it.
+      */}
+      <section className="mx-auto max-w-3xl px-4 pt-12 sm:px-6 lg:px-8">
+        <ApplicationStatusBanner status={applicationStatus} applyCta />
+      </section>
 
       {/* ── Block 2: the need ──────────────────────────────────────────── */}
       <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">

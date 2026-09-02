@@ -1,3 +1,4 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
 import type { Metadata } from "next";
 
 import { ProcessStepper } from "@/components/laptop-bank/process-stepper";
@@ -11,10 +12,10 @@ import {
   laptopBankStageSummaryRows,
 } from "@/lib/content/laptop-bank-config";
 
-export const metadata: Metadata = {
-  title: laptopBankHowItWorksContent.meta.title,
-  description: laptopBankHowItWorksContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof laptopBankHowItWorksContent>("how-it-works");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.2 — /laptop-bank/how-it-works.
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
  */
 export default async function LaptopBankHowItWorksRoute() {
   const stages = await getProcessStages();
-  const copy = laptopBankHowItWorksContent;
+  const copy = await getLaptopBankPageContent<typeof laptopBankHowItWorksContent>("how-it-works");
 
   return (
     <div className="bg-white">

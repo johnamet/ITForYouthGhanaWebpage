@@ -14,6 +14,7 @@ import {
   FolderKanban,
   Home,
   Inbox,
+  Laptop,
   LayoutDashboard,
   LogOut,
   Newspaper,
@@ -74,6 +75,11 @@ const recordItems: SidebarItem[] = [
 const operationsItems: SidebarItem[] = [
   { label: "Applications", href: "/admin/applications", description: "Training pipeline", icon: Inbox },
   { label: "Messages", href: "/admin/messages", description: "Contact enquiries", icon: Inbox },
+  // The Laptop Bank's two inboxes sit here rather than only under its hub:
+  // a submission waiting for a reply is operations work, and the staff
+  // notification email links straight to these.
+  { label: "Equipment offers", href: "/admin/laptop-bank/offers", description: "Laptop Bank donations", icon: Laptop },
+  { label: "Laptop applications", href: "/admin/laptop-bank/applications", description: "Her First Laptop", icon: Laptop },
   { label: "Media", href: "/admin/media", description: "Asset library", icon: FolderKanban },
   { label: "Users", href: "/admin/users", description: "Admin access", icon: UserCog },
   { label: "Settings", href: "/admin/settings", description: "Site settings", icon: Settings },
@@ -81,6 +87,7 @@ const operationsItems: SidebarItem[] = [
 ];
 
 const hubIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  "laptop-bank": Laptop,
   homepage: Home,
   "who-we-are": Users,
   "what-we-do": FolderKanban,
@@ -159,7 +166,7 @@ export function AdminShell({ children, adminUser }: AdminShellProps) {
                     return (
                       <Link
                         key={hub.key}
-                        href={`/admin/content/hubs/${hub.key}`}
+                        href={hub.adminPath ?? `/admin/content/hubs/${hub.key}`}
                         className={cn(
                           "group flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition",
                           active ? "bg-white text-slate-950" : "text-slate-300 hover:bg-white/10",

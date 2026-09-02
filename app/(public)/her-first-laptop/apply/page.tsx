@@ -1,13 +1,16 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
+import { getApplicationStatus } from "@/lib/cms/laptop-bank-settings";
+import { ApplicationStatusBanner } from "@/components/laptop-bank/application-status-banner";
 import type { Metadata } from "next";
 
 import { StudentApplicationForm } from "@/components/laptop-bank/student-application-form";
 import { TokenText } from "@/components/laptop-bank/token";
 import { herFirstLaptopApplyContent } from "@/lib/content/her-first-laptop-config";
 
-export const metadata: Metadata = {
-  title: herFirstLaptopApplyContent.meta.title,
-  description: herFirstLaptopApplyContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof herFirstLaptopApplyContent>("apply");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.8 — /her-first-laptop/apply.
@@ -30,12 +33,25 @@ export const metadata: Metadata = {
  * the reason: an applicant who reaches field 14 and discovers they need a
  * document they do not have will abandon, and then message the team instead.
  */
-export default function HerFirstLaptopApplyRoute() {
-  const copy = herFirstLaptopApplyContent;
+export default async function HerFirstLaptopApplyRoute() {
+  const [copy, applicationStatus] = await Promise.all([
+    getLaptopBankPageContent<typeof herFirstLaptopApplyContent>("apply"),
+    getApplicationStatus(),
+  ]);
 
   return (
     <div className="bg-white">
       <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+        {/*
+          Draft 1 §9 §1 puts this at the very top: "This banner is the single
+          most valuable component on the site for your workload. Every call and
+          direct message you currently field can be answered with a saved reply
+          pointing at this URL." The form below stays usable in every state —
+          the closed copy invites the reader to join the waiting list, which is
+          this same form.
+        */}
+        <ApplicationStatusBanner status={applicationStatus} className="mb-10" />
+
         <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-gold">
           Her First Laptop
         </p>

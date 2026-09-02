@@ -1996,6 +1996,15 @@ export const articles: ArticleSeed[] = [
   },
 ];
 
+/**
+ * NOTE: nothing renders this list.
+ *
+ * The admin sidebar and the Content Explorer both read
+ * lib/content/admin-registry.ts (`adminHubs` / `adminNodes`). Adding an entry
+ * here does NOT make a route appear in the admin — the Laptop Bank was
+ * registered here first and stayed invisible until it was added to the
+ * registry. Add new admin areas there.
+ */
 export const adminNavigation: AdminNavItem[] = [
   {
     label: "Dashboard",

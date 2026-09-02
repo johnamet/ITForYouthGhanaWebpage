@@ -1,3 +1,8 @@
+import {
+  LAPTOP_BANK_PAGE_SEEDS,
+  NON_EDITABLE_KEYS,
+  PATH_SEPARATOR,
+} from "@/lib/content/laptop-bank-page-seeds";
 import { LAPTOP_BANK_TOKENS, type TokenName } from "@/lib/content/laptop-bank-tokens";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
@@ -44,7 +49,16 @@ export type LaptopBankContentTypeKey =
   | "donor"
   | "story"
   | "dashboard-metrics"
-  | "token";
+  | "token"
+  | "application-status"
+  | "faq"
+  /**
+   * One descriptor per editable page, generated from the page's own seed
+   * content — see PAGE_CONTENT_TYPES at the bottom of this file. Typed as a
+   * template literal rather than enumerated so adding a page to the seed
+   * registry needs no change here.
+   */
+  | `page-${string}`;
 
 export type ContentTypeDescriptor = {
   key: LaptopBankContentTypeKey;
@@ -111,10 +125,7 @@ const TOKEN_FIELDS: FieldDescriptor[] = (
   } satisfies FieldDescriptor;
 });
 
-export const LAPTOP_BANK_CONTENT_TYPES: Record<
-  LaptopBankContentTypeKey,
-  ContentTypeDescriptor
-> = {
+const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   "process-stage": {
     key: "process-stage",
     collection: FIREBASE_COLLECTIONS.laptopBankStages,
@@ -246,6 +257,81 @@ export const LAPTOP_BANK_CONTENT_TYPES: Record<
   },
 
   /**
+   * The application status banner (Draft 1 §9 §1).
+   *
+   * Draft 1: "This banner is the single most valuable component on the site
+   * for your workload. Every call and direct message you currently field can
+   * be answered with a saved reply pointing at this URL."
+   *
+   * "Open" is deliberately not the stored default — see
+   * DEFAULT_APPLICATION_STATUS. An unattended banner claiming applications are
+   * open sends students into a form nobody is reading.
+   */
+  "application-status": {
+    key: "application-status",
+    collection: FIREBASE_COLLECTIONS.laptopBankSettings,
+    label: "Application status",
+    plural: "Application status",
+    description:
+      "The banner at the top of /her-first-laptop/apply and /her-first-laptop. Answers \"are applications open?\" so your team does not have to, one message at a time.",
+    shape: "singleton",
+    singletonId: "application-status",
+    titleField: "state",
+    guidance:
+      "Change this the moment a round opens or closes — it is the one setting that most reduces the calls and direct messages your team fields by hand. Dates are optional: a state on its own still answers the question. Use the message override only for a situation the three states do not describe, such as a pause while a consignment is delayed.",
+    fields: [
+      {
+        key: "state",
+        label: "Status",
+        kind: "select",
+        required: true,
+        options: [
+          { value: "open", label: "Open — applications are being accepted" },
+          { value: "closed", label: "Closed — the round has ended" },
+          { value: "waiting-list", label: "Waiting list only — more applications than machines" },
+        ],
+        help: "Shown as a coloured banner with a matching text label, so the state reads without relying on colour.",
+      },
+      { key: "openUntil", label: "Open until", kind: "text", help: "Open state only. For example \"30 November 2026\". Leave empty to say only that applications are open." },
+      { key: "replyBy", label: "All applicants hear by", kind: "text", help: "Open state only. Every applicant gets an answer, so only promise a date you can hold." },
+      { key: "nextRoundOpens", label: "Next round opens", kind: "text", help: "Closed state only. For example \"February 2027\"." },
+      { key: "messageOverride", label: "Message override", kind: "textarea", wide: true, help: "Replaces the generated sentence entirely. Leave empty unless the three states genuinely do not fit." },
+    ],
+  },
+
+  /**
+   * The FAQs on /her-first-laptop/eligibility (spec 5.7 block 7).
+   *
+   * Draft 1 §1's second rule for the developer names FAQ entries explicitly:
+   * "Every counter, tier amount, FAQ entry, story and application status must
+   * be editable without a code change. These change often." Draft 1 §4 §8 adds
+   * that the team should "add to them from the CMS as real questions arrive" —
+   * which is the whole point: the questions students actually ask are not the
+   * six anyone guessed up front.
+   *
+   * Spec 5.7 supplies six questions in a fixed order, so sort_order drives the
+   * ordering rather than insertion time.
+   */
+  faq: {
+    key: "faq",
+    collection: FIREBASE_COLLECTIONS.laptopBankFaqs,
+    label: "FAQ",
+    plural: "Eligibility FAQs",
+    description:
+      "The questions and answers on /her-first-laptop/eligibility. Add the questions students actually send you.",
+    shape: "collection",
+    titleField: "question",
+    sortField: "sort_order",
+    guidance:
+      "Add a question the moment it arrives more than once — that is cheaper than answering it by hand every time. Keep answers to what you can stand behind: an answer here is a public commitment, and anything about payment, ownership or timing should match the eligibility page above it.",
+    fields: [
+      { key: "question", label: "Question", kind: "text", required: true, wide: true },
+      { key: "answer", label: "Answer", kind: "textarea", required: true, wide: true, help: "A {{TOKEN}} such as {{PEER_HOURS}} may be used here and will resolve to its CMS value." },
+      { key: "sort_order", label: "Sort order", kind: "number", required: true, help: "Lower numbers appear first." },
+    ],
+  },
+
+  /**
    * The {{TOKEN}} values (build spec §11, and 5.1's "single source in the
    * CMS"). A singleton document, so {{SLA_REPLY}} cannot render one value on
    * page 5.1 and a different one on 5.5 — spec §10 checks precisely that.
@@ -302,16 +388,132 @@ export const LAPTOP_BANK_CONTENT_TYPES: Record<
   },
 };
 
+
+
+
+
+
+// ─── Page copy descriptors, generated from each page's seed ───────────────────
+
+/** "handleForYou" -> "Handle for you"; "cards" -> "Cards"; "0" -> "1". */
+function humaniseSegment(segment: string): string {
+  if (/^\d+$/.test(segment)) return String(Number(segment) + 1);
+  const spaced = segment.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ");
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1).toLowerCase();
+}
+
+/** A long string, or one that reads like prose, gets a textarea. */
+function looksLongform(key: string, value: string): boolean {
+  return value.length > 90 || ["body", "answer", "description", "intro", "subheading", "summary"].some((hint) =>
+    key.toLowerCase().includes(hint),
+  );
+}
+
+/**
+ * Walks a page's seed content and produces one editable field per leaf string.
+ *
+ * Generated rather than hand-listed because the ten pages hold roughly two
+ * hundred strings between them: enumerating those by hand would be a second
+ * copy to keep in step with the seed, and the first field anyone forgot would
+ * be silently uneditable. Adding a string to a content object now makes it
+ * appear in the editor automatically.
+ *
+ * Only strings become fields. Numbers and booleans do not appear in page copy,
+ * and NON_EDITABLE_KEYS holds back the values that are structure rather than
+ * content — link destinations (spec §2.2: the URL map is final and printed on
+ * legal paperwork) and anchors (spec §10 checks they resolve, and a shared
+ * anchor is a URL someone may have bookmarked).
+ */
+function walkSeed(
+  value: unknown,
+  trail: string[],
+  fields: FieldDescriptor[],
+  depth = 0,
+): void {
+  if (depth > 8) return;
+
+  if (typeof value === "string") {
+    const key = trail.join(PATH_SEPARATOR);
+    const leaf = trail[trail.length - 1] ?? key;
+    fields.push({
+      key,
+      label: trail.map(humaniseSegment).join(" › "),
+      kind: looksLongform(leaf, value) ? "textarea" : "text",
+      wide: looksLongform(leaf, value),
+      help: `Currently: “${value.length > 120 ? `${value.slice(0, 120)}…` : value}”`,
+    });
+    return;
+  }
+
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => walkSeed(item, [...trail, String(index)], fields, depth + 1));
+    return;
+  }
+
+  if (value && typeof value === "object") {
+    for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
+      if (NON_EDITABLE_KEYS.has(key)) continue;
+      walkSeed(item, [...trail, key], fields, depth + 1);
+    }
+  }
+}
+
+export function buildPageFields(seed: Record<string, unknown>): FieldDescriptor[] {
+  const fields: FieldDescriptor[] = [];
+  // `meta` is deliberately included: spec 5.1 BUILD fixes the title and meta
+  // description for the landing page, but the other nine are ours to tune, and
+  // SEO copy is exactly the kind of thing that should not need a developer.
+  walkSeed(seed, [], fields);
+  return fields;
+}
+
+const PAGE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = Object.fromEntries(
+  LAPTOP_BANK_PAGE_SEEDS.map((page) => [
+    `page-${page.key}`,
+    {
+      key: `page-${page.key}` as LaptopBankContentTypeKey,
+      collection: FIREBASE_COLLECTIONS.laptopBankPages,
+      label: page.label,
+      plural: page.label,
+      description: `${page.description} Renders on ${page.route}.`,
+      shape: "singleton" as const,
+      singletonId: page.key,
+      titleField: "meta__title",
+      guidance:
+        `Every field here is live copy on ${page.route}. Leave a field empty to keep the wording the site ships with — an empty field falls back to the built-in text rather than blanking the page. Link destinations and section anchors are not editable here on purpose: the URL map is final and gets printed on legal paperwork.`,
+      fields: buildPageFields(page.seed),
+    } satisfies ContentTypeDescriptor,
+  ]),
+);
+
+/**
+ * Every editable Laptop Bank content type: the six CMS types from spec §4, the
+ * token values, the application status, the FAQs, and one entry per editable
+ * page.
+ */
+export const LAPTOP_BANK_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
+  ...BASE_CONTENT_TYPES,
+  ...PAGE_CONTENT_TYPES,
+};
+
 export const LAPTOP_BANK_CONTENT_TYPE_KEYS = Object.keys(
   LAPTOP_BANK_CONTENT_TYPES,
 ) as LaptopBankContentTypeKey[];
+
+/** Keys of everything except the generated page editors. */
+export const LAPTOP_BANK_RECORD_TYPE_KEYS = Object.keys(
+  BASE_CONTENT_TYPES,
+) as LaptopBankContentTypeKey[];
+
+/** Keys of the generated page editors, in registry order. */
+export const LAPTOP_BANK_PAGE_TYPE_KEYS = LAPTOP_BANK_PAGE_SEEDS.map(
+  (page) => `page-${page.key}` as LaptopBankContentTypeKey,
+);
 
 export function isContentTypeKey(value: string): value is LaptopBankContentTypeKey {
   return Object.prototype.hasOwnProperty.call(LAPTOP_BANK_CONTENT_TYPES, value);
 }
 
-export function getContentTypeDescriptor(
-  key: string,
-): ContentTypeDescriptor | undefined {
+export function getContentTypeDescriptor(key: string): ContentTypeDescriptor | undefined {
   return isContentTypeKey(key) ? LAPTOP_BANK_CONTENT_TYPES[key] : undefined;
 }

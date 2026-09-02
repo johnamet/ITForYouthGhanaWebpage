@@ -1,3 +1,4 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
 import type { Metadata } from "next";
 
 import { DocumentDownloadBlock } from "@/components/laptop-bank/document-download-block";
@@ -10,10 +11,10 @@ import {
   laptopBankDataSecurityContent,
 } from "@/lib/content/laptop-bank-config";
 
-export const metadata: Metadata = {
-  title: laptopBankDataSecurityContent.meta.title,
-  description: laptopBankDataSecurityContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof laptopBankDataSecurityContent>("data-security");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.4 — /laptop-bank/data-security.
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
  */
 export default async function LaptopBankDataSecurityRoute() {
   const documents = await getLaptopBankDocuments();
-  const copy = laptopBankDataSecurityContent;
+  const copy = await getLaptopBankPageContent<typeof laptopBankDataSecurityContent>("data-security");
   const dataHandlingStatement = documents.filter(
     (document) => document.id === DATA_HANDLING_STATEMENT_ID,
   );

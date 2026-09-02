@@ -1,3 +1,4 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
 import type { Metadata } from "next";
 
 import { CalloutBox } from "@/components/laptop-bank/callout-box";
@@ -8,10 +9,10 @@ import { Button } from "@/components/ui/button";
 import { getIntakeItems } from "@/lib/cms/laptop-bank";
 import { laptopBankWhatWeAcceptContent } from "@/lib/content/laptop-bank-config";
 
-export const metadata: Metadata = {
-  title: laptopBankWhatWeAcceptContent.meta.title,
-  description: laptopBankWhatWeAcceptContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof laptopBankWhatWeAcceptContent>("what-we-accept");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.3 — /laptop-bank/what-we-accept.
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
  */
 export default async function LaptopBankWhatWeAcceptRoute() {
   const intakeItems = await getIntakeItems();
-  const copy = laptopBankWhatWeAcceptContent;
+  const copy = await getLaptopBankPageContent<typeof laptopBankWhatWeAcceptContent>("what-we-accept");
 
   return (
     <div className="bg-white">

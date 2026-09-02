@@ -1,13 +1,14 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
 import type { Metadata } from "next";
 
 import { CalloutBox } from "@/components/laptop-bank/callout-box";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { laptopBankPrivacyNoticeContent } from "@/lib/content/laptop-bank-config";
 
-export const metadata: Metadata = {
-  title: laptopBankPrivacyNoticeContent.meta.title,
-  description: laptopBankPrivacyNoticeContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof laptopBankPrivacyNoticeContent>("privacy-notice");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.9 — /policies/laptop-bank-privacy-notice.
@@ -31,8 +32,8 @@ export const metadata: Metadata = {
  * Every form and every footer already links here (spec 5.9 BUILD), so this
  * page must be honest about its own state rather than silent.
  */
-export default function LaptopBankPrivacyNoticeRoute() {
-  const copy = laptopBankPrivacyNoticeContent;
+export default async function LaptopBankPrivacyNoticeRoute() {
+  const copy = await getLaptopBankPageContent<typeof laptopBankPrivacyNoticeContent>("privacy-notice");
 
   return (
     <div className="bg-white">

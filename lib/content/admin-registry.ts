@@ -1,6 +1,12 @@
 // lib/content/admin-registry.ts
 // Central registry for Admin Content Explorer (hubs -> pages/collections)
 
+import {
+  LAPTOP_BANK_CONTENT_TYPES,
+  LAPTOP_BANK_PAGE_TYPE_KEYS,
+  LAPTOP_BANK_RECORD_TYPE_KEYS,
+} from "@/lib/content/laptop-bank-admin-schema";
+import { LAPTOP_BANK_PAGE_SEEDS } from "@/lib/content/laptop-bank-page-seeds";
 import { organisationServices } from "@/lib/content/organisation-config";
 import { partnershipTracks } from "@/lib/content/partnership-config";
 
@@ -20,6 +26,13 @@ export type AdminHub = {
   key: string;              // hub key (e.g., homepage, who-we-are)
   label: string;            // display name
   description?: string;
+  /**
+   * Where the sidebar sends this hub. Defaults to the generic Content
+   * Explorer page at /admin/content/hubs/<key>. Set it when a hub has a
+   * purpose-built index worth landing on instead — the Laptop Bank's shows
+   * live record counts and how many submissions are awaiting review.
+   */
+  adminPath?: string;
 };
 
 export const adminHubs: AdminHub[] = [
@@ -33,6 +46,12 @@ export const adminHubs: AdminHub[] = [
   { key: "news-and-updates", label: "News & Updates",  description: "News and Blogs" },
   { key: "contact",          label: "Contact",         description: "Contact page content" },
   { key: "media",            label: "Media Library",   description: "Uploads and assets" },
+  {
+    key: "laptop-bank",
+    label: "Laptop Bank",
+    description: "Stages, intake, documents, donors, stories, metrics, page wording",
+    adminPath: "/admin/laptop-bank",
+  },
   { key: "operations",       label: "Operations",      description: "Applications and messages" },
   { key: "system",           label: "System",          description: "Audit, settings, and tools" },
 ];
@@ -121,3 +140,56 @@ export function getHubs() {
 export function getNodesForHub(hubKey: string) {
   return adminNodes.filter((n) => n.hub === hubKey);
 }
+
+
+// ─── IT for Youth Laptop Bank ─────────────────────────────────────────────────
+//
+// Generated from the descriptors rather than listed by hand, so a content type
+// or page added there shows up in the Content Explorer and in the sidebar's
+// editor count without a second edit here. Getting that wrong is exactly how
+// the Laptop Bank ended up initially registered in `adminNavigation`, which
+// nothing renders.
+
+const laptopBankRecordNodes: AdminNode[] = LAPTOP_BANK_RECORD_TYPE_KEYS.map((key) => {
+  const descriptor = LAPTOP_BANK_CONTENT_TYPES[key];
+  return {
+    key: `laptop-bank.${key}`,
+    hub: "laptop-bank",
+    label: descriptor.plural,
+    type: descriptor.shape === "singleton" ? "singleton" : "collection",
+    adminPath: `/admin/laptop-bank/records/${key}`,
+  };
+});
+
+const laptopBankPageNodes: AdminNode[] = LAPTOP_BANK_PAGE_TYPE_KEYS.map((key, index) => {
+  const descriptor = LAPTOP_BANK_CONTENT_TYPES[key];
+  return {
+    key: `laptop-bank.${key}`,
+    hub: "laptop-bank",
+    label: `${descriptor.label} — wording`,
+    type: "singleton",
+    adminPath: `/admin/laptop-bank/records/${key}`,
+    previewHref: LAPTOP_BANK_PAGE_SEEDS[index]?.route,
+  };
+});
+
+const laptopBankInboxNodes: AdminNode[] = [
+  {
+    key: "laptop-bank.offers",
+    hub: "laptop-bank",
+    label: "Equipment offers",
+    type: "collection",
+    adminPath: "/admin/laptop-bank/offers",
+    previewHref: "/laptop-bank/donate-equipment",
+  },
+  {
+    key: "laptop-bank.applications",
+    hub: "laptop-bank",
+    label: "Laptop applications",
+    type: "collection",
+    adminPath: "/admin/laptop-bank/applications",
+    previewHref: "/her-first-laptop/apply",
+  },
+];
+
+adminNodes.push(...laptopBankInboxNodes, ...laptopBankRecordNodes, ...laptopBankPageNodes);

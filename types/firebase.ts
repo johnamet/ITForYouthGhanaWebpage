@@ -32,6 +32,8 @@ export const FIREBASE_COLLECTIONS = {
   laptopBankApplications: "laptopBankApplications",
   // Holds the {{TOKEN}} values document (spec 5.1: single source in the CMS).
   laptopBankSettings: "laptopBankSettings",
+  laptopBankPages: "laptopBankPages",
+  laptopBankFaqs: "laptopBankFaqs",
 } as const;
 
 export type FirebaseCollection = keyof typeof FIREBASE_COLLECTIONS;

@@ -1,3 +1,4 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
 import type { Metadata } from "next";
 
 import { DocumentDownloadBlock } from "@/components/laptop-bank/document-download-block";
@@ -5,10 +6,10 @@ import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { getLaptopBankDocuments } from "@/lib/cms/laptop-bank";
 import { laptopBankDocumentsContent } from "@/lib/content/laptop-bank-config";
 
-export const metadata: Metadata = {
-  title: laptopBankDocumentsContent.meta.title,
-  description: laptopBankDocumentsContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof laptopBankDocumentsContent>("documents");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.10 — /policies/laptop-bank-documents.
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
  */
 export default async function LaptopBankDocumentsRoute() {
   const documents = await getLaptopBankDocuments();
-  const copy = laptopBankDocumentsContent;
+  const copy = await getLaptopBankPageContent<typeof laptopBankDocumentsContent>("documents");
 
   return (
     <div className="bg-white">

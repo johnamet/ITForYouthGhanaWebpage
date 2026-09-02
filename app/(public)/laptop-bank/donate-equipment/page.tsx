@@ -1,3 +1,4 @@
+import { getLaptopBankPageContent } from "@/lib/cms/laptop-bank-pages";
 import type { Metadata } from "next";
 
 import { EquipmentOfferForm } from "@/components/laptop-bank/equipment-offer-form";
@@ -5,10 +6,10 @@ import { TokenText } from "@/components/laptop-bank/token";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { laptopBankDonateEquipmentContent } from "@/lib/content/laptop-bank-config";
 
-export const metadata: Metadata = {
-  title: laptopBankDonateEquipmentContent.meta.title,
-  description: laptopBankDonateEquipmentContent.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getLaptopBankPageContent<typeof laptopBankDonateEquipmentContent>("donate-equipment");
+  return { title: copy.meta.title, description: copy.meta.description };
+}
 
 /**
  * Page 5.5 — /laptop-bank/donate-equipment.
@@ -18,8 +19,8 @@ export const metadata: Metadata = {
  * swaps it in place of the form on the same URL, because spec 5.5 BEHAVIOUR is
  * explicit: "Do not redirect to a generic thank-you page."
  */
-export default function LaptopBankDonateEquipmentRoute() {
-  const copy = laptopBankDonateEquipmentContent;
+export default async function LaptopBankDonateEquipmentRoute() {
+  const copy = await getLaptopBankPageContent<typeof laptopBankDonateEquipmentContent>("donate-equipment");
 
   return (
     <div className="bg-white">
