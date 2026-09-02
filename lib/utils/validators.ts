@@ -1251,6 +1251,12 @@ export const studentApplicationAdminUpdateSchema = z.object({
     "enrolled",
   ]),
   notes: optionalTrimmedString,
+  /**
+   * Whether to email the applicant her outcome. Opt-in per save, never
+   * implied by the status change: a reviewer correcting a mis-click must not
+   * email a real person a decision that was never made.
+   */
+  notifyApplicant: optionalConsent,
 });
 
 export type StudentApplicationAdminUpdatePayload = z.infer<

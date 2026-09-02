@@ -154,6 +154,7 @@ export default async function AdminLaptopBankApplicationPage({
             reference={application.reference}
             status={application.status}
             notes={application.notes}
+            applicantEmail={application.email}
           />
         </div>
       )}

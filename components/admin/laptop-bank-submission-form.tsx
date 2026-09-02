@@ -55,19 +55,31 @@ const LISTS: Record<SubmissionFormKind, string> = {
  * record of what they said, and a reviewer amending an applicant's own words
  * or a donor's stated consent would destroy that.
  */
+/** Statuses that have an outcome letter — mirrors hasOutcomeEmail(). */
+const NOTIFIABLE_STATUSES = new Set(["shortlisted", "waiting-list", "offered", "rejected"]);
+
 export function LaptopBankSubmissionForm({
   kind,
   reference,
   status,
   notes,
+  applicantEmail,
 }: {
   kind: SubmissionFormKind;
   reference: string;
   status: string;
   notes?: string;
+  /** Applications only. Absent when she gave no email address. */
+  applicantEmail?: string;
 }) {
   const router = useRouter();
-  const [values, setValues] = useState({ status, notes: notes ?? "" });
+  const [values, setValues] = useState({
+    status,
+    notes: notes ?? "",
+    // Never pre-ticked: sending a real person a decision is an action the
+    // reviewer opts into each time, not a default.
+    notifyApplicant: false,
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [notice, setNotice] = useState<{ type: "idle" | "success" | "error"; message: string }>({
@@ -88,6 +100,8 @@ export function LaptopBankSubmissionForm({
       const payload = await response.json().catch(() => null);
       if (!response.ok || !payload?.success) throw new Error(payload?.message || "Update failed");
       setNotice({ type: "success", message: payload.message || "Submission updated." });
+      // Untick after a save, so pressing Save again does not email her twice.
+      setValues((current) => ({ ...current, notifyApplicant: false }));
       router.refresh();
     } catch (error) {
       setNotice({
@@ -181,6 +195,42 @@ export function LaptopBankSubmissionForm({
           placeholder="Visible to staff only. Not shared with the submitter."
         />
       </div>
+
+      {kind === "student-application" && NOTIFIABLE_STATUSES.has(values.status) ? (
+        <div className="rounded-[24px] border border-amber-300 bg-amber-50 p-5">
+          <label
+            htmlFor={`${reference}-notify`}
+            className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-amber-900"
+          >
+            <input
+              id={`${reference}-notify`}
+              type="checkbox"
+              checked={values.notifyApplicant}
+              onChange={(event) =>
+                setValues((current) => ({ ...current, notifyApplicant: event.target.checked }))
+              }
+              className="mt-1 h-4 w-4 shrink-0 accent-brand-gold"
+              disabled={!applicantEmail}
+            />
+            <span>
+              <span className="font-bold">Email her this outcome when I save.</span>{" "}
+              {applicantEmail ? (
+                <>
+                  She will receive a letter at {applicantEmail} explaining the decision — and, if
+                  she was not selected, the shared machines and the tracks that do not need a
+                  laptop. Nothing is sent unless you tick this.
+                </>
+              ) : (
+                <>
+                  She gave no email address, so this cannot be sent. Reach her by phone or
+                  WhatsApp on the number in her application — for most applicants that is the
+                  channel that actually reaches them.
+                </>
+              )}
+            </span>
+          </label>
+        </div>
+      ) : null}
 
       <div className="flex flex-wrap items-center gap-3 border-t border-slate-200 pt-5">
         <button
