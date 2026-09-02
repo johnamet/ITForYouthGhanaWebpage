@@ -1,12 +1,23 @@
 import { partnershipOverviewContent as seedOverview, partnershipTracks as seedTracks } from "@/lib/content/partnership-config";
 import { getAdminFirestore } from "@/lib/firebase/admin";
+import { toPlainData } from "@/lib/utils/plain";
 import type { PartnershipOverviewContent, PartnershipTrackPage } from "@/types/content";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 const OVERVIEW_ID = "_overview";
 
+/**
+ * Merges stored fields over the seed.
+ *
+ * `toPlainData` is applied to the stored side because both readers below feed
+ * pages that render through Client Components, and a raw Firestore document
+ * carries an `updatedAt` Timestamp (written by the two updaters at the bottom
+ * of this file). Spreading that through produced the "Only plain objects can
+ * be passed to Client Components" error that Next logged twice on every
+ * production build while still exiting 0.
+ */
 function normalizeObject<T extends object>(fallback: T, data: Record<string, unknown> | undefined): T {
-  return { ...fallback, ...(data ?? {}) } as T;
+  return { ...fallback, ...toPlainData(data ?? {}) } as T;
 }
 
 export async function getCmsPartnershipOverview(): Promise<PartnershipOverviewContent> {
