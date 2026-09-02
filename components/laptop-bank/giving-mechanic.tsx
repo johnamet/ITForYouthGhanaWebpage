@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { TokenText } from "@/components/laptop-bank/token";
+import { TokenText, useTokenValues } from "@/components/laptop-bank/token";
 import { Button } from "@/components/ui/button";
 import { FormField, TextInput } from "@/components/ui/form-field";
 import { isTokenResolved, token, type TokenName } from "@/lib/content/laptop-bank-tokens";
@@ -63,11 +63,14 @@ const SECOND_CURRENCY = "GBP";
  * design caps donors who would give more than the top tier.
  */
 export function GivingMechanic({ id, heading, description, className }: GivingMechanicProps) {
+  const tokenValues = useTokenValues();
   const [selected, setSelected] = useState<TokenName | "open">("open");
   const [openAmount, setOpenAmount] = useState("");
 
+  // The href must carry the real figure, never the placeholder — /donate
+  // validates the amount and would reject "{{GIVE_1}}".
   const selectedAmount =
-    selected === "open" ? openAmount.trim() : token(selected);
+    selected === "open" ? openAmount.trim() : (tokenValues[selected] ?? "").trim();
   // The payment provider is not configured in this repo (Draft 1 §15 lists it
   // as blocking the giving flow), so the CTA hands the amount to the existing
   // /donate route rather than pretending to take a payment here.
@@ -90,7 +93,8 @@ export function GivingMechanic({ id, heading, description, className }: GivingMe
           // display mandatory, so an amount that can be chosen must never be
           // showing a red token in one of its two currency slots.
           const resolved =
-            isTokenResolved(tier.amountToken) && isTokenResolved(tier.sterlingToken);
+            isTokenResolved(tokenValues, tier.amountToken) &&
+            isTokenResolved(tokenValues, tier.sterlingToken);
           const isSelected = selected === tier.amountToken;
 
           return (

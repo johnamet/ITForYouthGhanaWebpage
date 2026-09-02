@@ -5,6 +5,8 @@ import { herFirstLaptopApplyContent } from "@/lib/content/her-first-laptop-confi
 import { sendLaptopBankAcknowledgement, sendLaptopBankStaffNotification } from "@/lib/email/laptop-bank-notification";
 import { storeUpload } from "@/lib/laptop-bank/uploads";
 import { getAdminFirestore } from "@/lib/firebase/admin";
+import { getTokenValues } from "@/lib/cms/laptop-bank-tokens";
+import { resolveTokens } from "@/lib/content/laptop-bank-tokens";
 import { checkRateLimit, rateLimitKeyFromRequest } from "@/lib/utils/rate-limit";
 import { applyReference, generateReference } from "@/lib/utils/reference";
 import { studentApplicationSchema } from "@/lib/utils/validators";
@@ -174,7 +176,13 @@ export async function POST(request: Request) {
 
   // ─── Confirm to the applicant ──────────────────────────────────────────────
 
-  const confirmation = applyReference(herFirstLaptopApplyContent.confirmation, reference);
+  // Resolve {{TOKEN}} placeholders before this reaches a person. The copy
+  // carries them so the CMS stays the single source, but a submitter must
+  // never receive "{{SLA_REPLY}}" in a confirmation.
+  const confirmation = resolveTokens(
+    applyReference(herFirstLaptopApplyContent.confirmation, reference),
+    await getTokenValues(),
+  );
 
   /*
    * TODO(spec 5.8): SMS is the primary confirmation channel — "On submit: send

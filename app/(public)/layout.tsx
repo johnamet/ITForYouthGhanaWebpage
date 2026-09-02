@@ -7,6 +7,8 @@ import { SiteFooter }      from "@/components/layout/site-footer";
 import { siteMeta } from "@/lib/content/site-config";
 import { getCmsAnnouncement, getCmsFloatingElements } from "@/lib/cms/homepage";
 import { getCmsSettings } from "@/lib/cms/settings";
+import { getTokenValues } from "@/lib/cms/laptop-bank-tokens";
+import { TokenValuesProvider } from "@/components/laptop-bank/token";
 
 export const metadata: Metadata = {
   title: {
@@ -18,14 +20,19 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [announcement, floating, settings] = await Promise.all([
+  const [announcement, floating, settings, tokenValues] = await Promise.all([
     getCmsAnnouncement(),
     getCmsFloatingElements(),
     getCmsSettings(),
+    // One cached document read supplying every {{TOKEN}} on the Laptop Bank
+    // and Her First Laptop pages. Read here rather than per page so
+    // {{SLA_REPLY}} cannot render one value on 5.1 and another on 5.5 — spec
+    // §10 checks for exactly that.
+    getTokenValues(),
   ]);
 
   return (
-    <>
+    <TokenValuesProvider values={tokenValues}>
       {/*
        * Stack order:
        *   AnnouncementBar - z-50, not sticky, scrolls away naturally
@@ -38,6 +45,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <main className="antialiased">{children}</main>
       <FloatingElements content={floating} />
       <SiteFooter settings={settings} />
-    </>
+    </TokenValuesProvider>
   );
 }

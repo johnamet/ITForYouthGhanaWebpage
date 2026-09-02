@@ -1,3 +1,4 @@
+import { LAPTOP_BANK_TOKENS, type TokenName } from "@/lib/content/laptop-bank-tokens";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 /**
@@ -42,7 +43,8 @@ export type LaptopBankContentTypeKey =
   | "document"
   | "donor"
   | "story"
-  | "dashboard-metrics";
+  | "dashboard-metrics"
+  | "token";
 
 export type ContentTypeDescriptor = {
   key: LaptopBankContentTypeKey;
@@ -86,6 +88,28 @@ const DISPLAY_CONSENT_OPTIONS = [
   { value: "named", label: "Named only — publish the name, not the logo" },
   { value: "logo", label: "Named with logo — publish the name and the logo" },
 ];
+
+/**
+ * The token fields, generated from the registry rather than listed again here.
+ *
+ * The registry already declares every token, what IT for Youth needs to supply
+ * and which pages consume it, so restating 27 fields would be a second list to
+ * keep in step. Adding a token to the registry makes it appear in the editor.
+ */
+const TOKEN_FIELDS: FieldDescriptor[] = (
+  Object.keys(LAPTOP_BANK_TOKENS) as TokenName[]
+).map((name) => {
+  const entry = LAPTOP_BANK_TOKENS[name];
+  return {
+    key: name,
+    label: `{{${name}}}`,
+    kind: entry.longform ? "textarea" : "text",
+    wide: entry.longform,
+    help: `${entry.needed}. Used on ${entry.usedOn.join(", ")}.${
+      entry.phase === 2 ? " Phase 2." : ""
+    }`,
+  } satisfies FieldDescriptor;
+});
 
 export const LAPTOP_BANK_CONTENT_TYPES: Record<
   LaptopBankContentTypeKey,
@@ -219,6 +243,32 @@ export const LAPTOP_BANK_CONTENT_TYPES: Record<
       { key: "region", label: "Region", kind: "text" },
       { key: "date", label: "Date", kind: "text" },
     ],
+  },
+
+  /**
+   * The {{TOKEN}} values (build spec §11, and 5.1's "single source in the
+   * CMS"). A singleton document, so {{SLA_REPLY}} cannot render one value on
+   * page 5.1 and a different one on 5.5 — spec §10 checks precisely that.
+   *
+   * Nothing here is optional in the sense that matters: an unfilled token
+   * renders as visible red text on the public page, so a half-completed
+   * record is loudly visible rather than silently wrong. Fields are therefore
+   * not marked required — a partially-filled record is a legitimate state
+   * while content is still being gathered.
+   */
+  token: {
+    key: "token",
+    collection: FIREBASE_COLLECTIONS.laptopBankSettings,
+    label: "Awaited content",
+    plural: "Awaited content (tokens)",
+    description:
+      "Values IT for Youth still owes: reply times, stage durations, the sanitisation standard, giving amounts, the selection cycle and the rest. Anything left empty shows as red placeholder text on the public pages.",
+    shape: "singleton",
+    singletonId: "tokens",
+    titleField: "SLA_REPLY",
+    guidance:
+      "Every value here appears on a live public page the moment you save it. Do not guess: the sanitisation standard, the recycler's licence reference, the loan period and the giving amounts are compliance, legal and financial commitments — leave one empty rather than filling it with a placeholder, because an empty token is visibly unfinished whereas a wrong one reads as fact. Run `npm run verify:tokens` to see what is still outstanding.",
+    fields: TOKEN_FIELDS,
   },
 
   "dashboard-metrics": {

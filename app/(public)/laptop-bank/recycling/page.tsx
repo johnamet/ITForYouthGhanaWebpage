@@ -5,6 +5,7 @@ import { TokenText } from "@/components/laptop-bank/token";
 import { EditorialImageHero } from "@/components/shared/editorial-image-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { isTokenResolved, token } from "@/lib/content/laptop-bank-tokens";
+import { getTokenValues } from "@/lib/cms/laptop-bank-tokens";
 
 const PHASE_2_NOINDEX = { index: false, follow: false } as const;
 
@@ -22,12 +23,14 @@ const PHASE_2_NOINDEX = { index: false, follow: false } as const;
  * Draft 1 §2 restricts "e-waste" and "scrap" to exactly this section; anywhere
  * else in this codebase, incoming donations are retired assets, never waste.
  */
-export function generateMetadata(): Metadata {
+export async function generateMetadata(): Promise<Metadata> {
+  const tokenValues = await getTokenValues();
+
   return {
     title: "Recycling and electronic waste | IT for Youth Laptop Bank",
     description:
       "What happens to units the IT for Youth Laptop Bank cannot renew, the licensed handler behind that, and why we are not an import route for foreign electronic waste.",
-    robots: isTokenResolved("RECYCLER") ? undefined : PHASE_2_NOINDEX,
+    robots: isTokenResolved(tokenValues, "RECYCLER") ? undefined : PHASE_2_NOINDEX,
   };
 }
 

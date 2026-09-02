@@ -10,6 +10,8 @@ import {
   laptopBankDonateEquipmentContent,
 } from "@/lib/content/laptop-bank-config";
 import { getAdminFirestore } from "@/lib/firebase/admin";
+import { getTokenValues } from "@/lib/cms/laptop-bank-tokens";
+import { resolveTokens } from "@/lib/content/laptop-bank-tokens";
 import { checkRateLimit, rateLimitKeyFromRequest } from "@/lib/utils/rate-limit";
 import { applyReference, generateReference } from "@/lib/utils/reference";
 import { equipmentOfferSchema, isFreeWebmail } from "@/lib/utils/validators";
@@ -170,7 +172,13 @@ export async function POST(request: Request) {
 
   const staffNotification = await sendLaptopBankStaffNotification("equipment-offer", reference);
 
-  const confirmation = applyReference(laptopBankDonateEquipmentContent.confirmation, reference);
+  // Resolve {{TOKEN}} placeholders before this reaches a person. The copy
+  // carries them so the CMS stays the single source, but a submitter must
+  // never receive "{{SLA_REPLY}}" in a confirmation.
+  const confirmation = resolveTokens(
+    applyReference(laptopBankDonateEquipmentContent.confirmation, reference),
+    await getTokenValues(),
+  );
 
   await sendLaptopBankAcknowledgement({
     toEmail: submission.workEmail,

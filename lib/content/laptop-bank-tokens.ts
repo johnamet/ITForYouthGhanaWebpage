@@ -46,17 +46,21 @@ export type TokenName =
   | "RECYCLER";
 
 export type TokenEntry = {
-  /** What IT for Youth needs to supply. Shown on hover in staging. */
+  /** What IT for Youth needs to supply. Shown as help text in the editor. */
   needed: string;
   /** Spec sections that consume it. */
   usedOn: string[];
   phase: 1 | 2;
-  /**
-   * Set this to the supplied value to retire the token. While it is
-   * undefined the token renders as red text and `verify:tokens` fails.
-   */
-  value?: string;
+  /** Longer answers get a textarea in the admin editor. */
+  longform?: boolean;
 };
+
+/**
+ * Supplied values, keyed by token name. Read from the CMS — see
+ * lib/cms/laptop-bank-tokens.ts. A token absent from this map is unresolved
+ * and renders as red text.
+ */
+export type TokenValues = Partial<Record<TokenName, string>>;
 
 export const LAPTOP_BANK_TOKENS: Record<TokenName, TokenEntry> = {
   SLA_REPLY: { needed: "Reply commitment", usedOn: ["5.1", "5.2", "5.5"], phase: 1 },
@@ -66,7 +70,7 @@ export const LAPTOP_BANK_TOKENS: Record<TokenName, TokenEntry> = {
   DUR_REFURB: { needed: "Stage 6 duration — refurbishment and quality assurance", usedOn: ["5.2"], phase: 1 },
   WIPE_STANDARD: { needed: "Named sanitisation standard", usedOn: ["5.2 stage 5", "5.4 §2"], phase: 1 },
   CERT_RETENTION: { needed: "Certificate retention period", usedOn: ["5.4 §4"], phase: 1 },
-  FACILITY_STATEMENT: { needed: "Physical security paragraph", usedOn: ["5.4 §6"], phase: 1 },
+  FACILITY_STATEMENT: { needed: "Physical security paragraph", usedOn: ["5.4 §6"], phase: 1, longform: true },
   OS_NAME: { needed: "Operating system installed", usedOn: ["5.2 stage 6"], phase: 1 },
   /*
    * The giving tiers need TWO figures each, not one.
@@ -82,38 +86,62 @@ export const LAPTOP_BANK_TOKENS: Record<TokenName, TokenEntry> = {
    */
   GIVE_1: { needed: "First giving amount, in cedis", usedOn: ["5.6"], phase: 1 },
   GIVE_1_GBP: { needed: "First giving amount, in sterling", usedOn: ["5.6"], phase: 1 },
-  GIVE_1_OUTCOME: { needed: "Outcome line for the first amount", usedOn: ["5.6"], phase: 1 },
+  GIVE_1_OUTCOME: { needed: "Outcome line for the first amount", usedOn: ["5.6"], phase: 1, longform: true },
   GIVE_2: { needed: "Second giving amount, in cedis", usedOn: ["5.6"], phase: 1 },
   GIVE_2_GBP: { needed: "Second giving amount, in sterling", usedOn: ["5.6"], phase: 1 },
-  GIVE_2_OUTCOME: { needed: "Outcome line for the second amount", usedOn: ["5.6"], phase: 1 },
+  GIVE_2_OUTCOME: { needed: "Outcome line for the second amount", usedOn: ["5.6"], phase: 1, longform: true },
   GIVE_3: { needed: "Third giving amount, in cedis", usedOn: ["5.6"], phase: 1 },
   GIVE_3_GBP: { needed: "Third giving amount, in sterling", usedOn: ["5.6"], phase: 1 },
-  GIVE_3_OUTCOME: { needed: "Outcome line for the third amount", usedOn: ["5.6"], phase: 1 },
+  GIVE_3_OUTCOME: { needed: "Outcome line for the third amount", usedOn: ["5.6"], phase: 1, longform: true },
   LOAN_MONTHS: { needed: "Loan period", usedOn: ["5.6", "5.7", "6.2"], phase: 1 },
   PEER_HOURS: { needed: "Teaching hours", usedOn: ["5.2", "5.6", "5.7", "6.2"], phase: 1 },
   CYCLE: { needed: "Selection cycle", usedOn: ["5.7", "5.8"], phase: 1 },
   PANEL: { needed: "Selection panel", usedOn: ["5.7", "5.8"], phase: 1 },
   DECISION_DATE: { needed: "Next decision date", usedOn: ["5.7", "5.8"], phase: 1 },
-  PRIORITY_GROUPS: { needed: "Published priority groups", usedOn: ["5.7"], phase: 1 },
+  PRIORITY_GROUPS: { needed: "Published priority groups", usedOn: ["5.7"], phase: 1, longform: true },
   REPORT_CONTACT: { needed: "Reporting route for payment demands", usedOn: ["5.7"], phase: 1 },
   NEED_STAT: { needed: "The one figure in block 2", usedOn: ["5.6"], phase: 1 },
   RECYCLER: { needed: "Licensed handler name and licence reference", usedOn: ["5.13"], phase: 2 },
 };
 
 /**
- * The supplied value, or the literal `{{NAME}}` string for a COPY template.
+ * Emits the `{{NAME}}` placeholder for use inside a COPY string.
+ *
+ * This ALWAYS returns the placeholder. Content modules are evaluated once at
+ * module scope, so they cannot hold a value that an editor may change at any
+ * moment — the substitution happens at render time instead, from values read
+ * out of the CMS. `TokenText` does it for markup; `resolveTokens` does it for
+ * anything server-side (metadata, an email body, an API response).
  *
  * {{REF}} is deliberately absent from this registry: it is generated at submit
  * time by lib/utils/reference.ts (spec 5.5, 5.8), not supplied by IT for Youth,
  * so it is never an unresolved-content problem.
  */
 export function token(name: TokenName): string {
-  return LAPTOP_BANK_TOKENS[name].value ?? `{{${name}}}`;
+  return `{{${name}}}`;
 }
 
-/** True once IT for Youth has supplied the value. */
-export function isTokenResolved(name: TokenName): boolean {
-  return typeof LAPTOP_BANK_TOKENS[name].value === "string";
+/** True once IT for Youth has supplied a non-empty value. */
+export function isTokenResolved(values: TokenValues, name: TokenName): boolean {
+  return Boolean(values[name]?.trim());
+}
+
+/**
+ * Substitutes supplied values into a string, leaving unresolved placeholders
+ * in place so they stay visible rather than silently vanishing.
+ */
+export function resolveTokens(text: string, values: TokenValues): string {
+  return text.replace(new RegExp(UNRESOLVED_TOKEN_SOURCE, "g"), (match, name: string) => {
+    const supplied = values[name as TokenName];
+    return supplied?.trim() ? supplied : match;
+  });
+}
+
+/** Phase 1 tokens with no supplied value. Spec §10's first checklist item. */
+export function outstandingPhaseOneTokens(values: TokenValues): TokenName[] {
+  return (Object.keys(LAPTOP_BANK_TOKENS) as TokenName[]).filter(
+    (name) => LAPTOP_BANK_TOKENS[name].phase === 1 && !isTokenResolved(values, name),
+  );
 }
 
 /**

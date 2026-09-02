@@ -1,8 +1,59 @@
+"use client";
+
+import { createContext, useContext, type ReactNode } from "react";
+
 import {
   LAPTOP_BANK_TOKENS,
   UNRESOLVED_TOKEN_SOURCE,
   type TokenName,
+  type TokenValues,
 } from "@/lib/content/laptop-bank-tokens";
+
+/**
+ * Render-time resolution of the {{TOKEN}} placeholders.
+ *
+ * WHY A CONTEXT RATHER THAN A LOOKUP AT MODULE SCOPE
+ * Content modules like lib/content/laptop-bank-config.ts are evaluated once,
+ * when the module first loads, so they cannot hold a value an editor may change
+ * a minute later — a build-time substitution would mean every content change
+ * needed a redeploy. Spec 5.1 BEHAVIOUR asks for a "single source in the CMS",
+ * so the values are read once per request in the public layout and handed down
+ * from there. Every string keeps its placeholder until it is rendered.
+ *
+ * Keeping the resolution inside `TokenText` is what let this change land
+ * without touching the twenty-two places that render token-bearing copy.
+ */
+
+const TokenContext = createContext<TokenValues>({});
+
+/**
+ * Supplies the CMS token values to everything below it.
+ *
+ * Rendered by app/(public)/layout.tsx, so it sits above every public page.
+ * Server Components between this provider and a `TokenText` are fine — the
+ * context is read by the client component that needs it, not by the server
+ * tree in between.
+ */
+export function TokenValuesProvider({
+  values,
+  children,
+}: {
+  values: TokenValues;
+  children: ReactNode;
+}) {
+  return <TokenContext.Provider value={values}>{children}</TokenContext.Provider>;
+}
+
+/**
+ * The supplied token values.
+ *
+ * For a Client Component that needs to branch on whether a value exists —
+ * the giving mechanic disables a tier until both its figures are supplied.
+ * To render copy, prefer `TokenText`.
+ */
+export function useTokenValues(): TokenValues {
+  return useContext(TokenContext);
+}
 
 type TokenTextProps = {
   children: string;
@@ -11,7 +62,6 @@ type TokenTextProps = {
 
 type Segment = string | { token: string };
 
-/** Splits a COPY string into plain runs and unresolved-token runs. */
 function splitOnTokens(value: string): Segment[] {
   // A fresh RegExp per call: /g regexps carry lastIndex, so a shared instance
   // would skip matches on alternating calls.
@@ -32,32 +82,36 @@ function splitOnTokens(value: string): Segment[] {
 }
 
 /**
- * Renders COPY that may still contain `{{TOKEN}}` placeholders.
+ * Renders COPY that may contain `{{TOKEN}}` placeholders.
  *
- * Spec §1: an unsupplied token renders as visible red text, so nobody
- * reviewing staging can mistake it for finished copy. Once the token's `value`
- * is set in lib/content/laptop-bank-tokens.ts the placeholder never reaches
- * this component and the string renders as ordinary prose.
+ * A placeholder with a supplied value renders as ordinary prose. One without
+ * renders as visible red text, which spec §1 requires so nobody reviewing
+ * staging can mistake it for finished copy — and which is the signal that told
+ * us these were reaching a deployed URL.
  *
  * Use this for any string composed with `token()`. A plain `{copy.body}` would
- * render `{{SLA_REPLY}}` in body text indistinguishable from real content,
- * which is the exact failure spec §1 is guarding against.
+ * print `{{SLA_REPLY}}` in body text indistinguishable from real content.
  */
 export function TokenText({ children, className }: TokenTextProps) {
+  const values = useTokenValues();
   const segments = splitOnTokens(children);
 
-  // No token present — the common case once content lands. Render the string
-  // directly so the DOM carries no extra wrapper.
+  // No placeholder at all — the common case for copy that never had one.
   if (segments.length === 1 && typeof segments[0] === "string") {
     return className ? <span className={className}>{children}</span> : <>{children}</>;
   }
 
   return (
     <span className={className}>
-      {segments.map((segment, index) =>
-        typeof segment === "string" ? (
-          <span key={index}>{segment}</span>
-        ) : (
+      {segments.map((segment, index) => {
+        if (typeof segment === "string") return <span key={index}>{segment}</span>;
+
+        const supplied = values[segment.token as TokenName];
+        if (supplied?.trim()) {
+          return <span key={index}>{supplied}</span>;
+        }
+
+        return (
           <span
             key={index}
             className="font-bold text-red-600"
@@ -68,13 +122,8 @@ export function TokenText({ children, className }: TokenTextProps) {
           >
             {`{{${segment.token}}}`}
           </span>
-        ),
-      )}
+        );
+      })}
     </span>
   );
-}
-
-/** True when the string still carries an unresolved token. */
-export function hasUnresolvedToken(value: string): boolean {
-  return new RegExp(UNRESOLVED_TOKEN_SOURCE).test(value);
 }
