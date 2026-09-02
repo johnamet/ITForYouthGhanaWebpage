@@ -79,6 +79,37 @@ export function projectRecord(
   return out;
 }
 
+/**
+ * Values that are out of the range their field declares, by label.
+ *
+ * Separate from `missingRequiredFields` because the two produce different
+ * messages: one asks for something, the other says a figure cannot be what was
+ * entered. A count of units offered cannot be negative, and a retention
+ * percentage cannot exceed 100 — a real record reached Firestore with
+ * units_offered = -70 before this existed.
+ */
+export function outOfRangeFields(
+  descriptor: ContentTypeDescriptor,
+  record: Record<string, unknown>,
+): string[] {
+  return descriptor.fields
+    .filter((field) => {
+      if (field.kind !== "number") return false;
+      const value = record[field.key];
+      if (typeof value !== "number") return false;
+      if (field.min !== undefined && value < field.min) return true;
+      if (field.max !== undefined && value > field.max) return true;
+      return false;
+    })
+    .map((field) => {
+      if (field.min !== undefined && field.max !== undefined) {
+        return `${field.label} (must be between ${field.min} and ${field.max})`;
+      }
+      if (field.min !== undefined) return `${field.label} (cannot be below ${field.min})`;
+      return `${field.label} (cannot be above ${field.max})`;
+    });
+}
+
 /** Missing required fields, by label, for a submitted payload. */
 export function missingRequiredFields(
   descriptor: ContentTypeDescriptor,

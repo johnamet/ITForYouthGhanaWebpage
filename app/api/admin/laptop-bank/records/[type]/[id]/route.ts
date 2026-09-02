@@ -5,6 +5,7 @@ import { writeAuditLog } from "@/lib/cms/audit";
 import {
   deleteRecord,
   missingRequiredFields,
+  outOfRangeFields,
   projectRecord,
   saveRecord,
 } from "@/lib/cms/laptop-bank-admin";
@@ -30,6 +31,14 @@ export async function PUT(request: Request, { params }: { params: { type: string
   if (missing.length) {
     return NextResponse.json(
       { success: false, message: `Please fill in: ${missing.join(", ")}.` },
+      { status: 400 },
+    );
+  }
+
+  const outOfRange = outOfRangeFields(descriptor, record);
+  if (outOfRange.length) {
+    return NextResponse.json(
+      { success: false, message: `Please check: ${outOfRange.join(", ")}.` },
       { status: 400 },
     );
   }

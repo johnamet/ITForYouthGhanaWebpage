@@ -49,7 +49,7 @@ const STORY_IDS = [
   "ZZ-TEST-story-consent-norecord",
   "ZZ-TEST-story-full",
 ];
-const STAGE_ID = "5";
+const STAGE_ID = "99";
 const METRICS_ID = "current";
 
 let failures = 0;
@@ -81,13 +81,21 @@ async function main() {
   const admin = await import("../lib/cms/laptop-bank-admin");
   const { LAPTOP_BANK_CONTENT_TYPES } = await import("../lib/content/laptop-bank-admin-schema");
 
-  // Refuse to clobber real data at the two fixed ids this script uses.
-  const existingStage = await db.collection("laptopBankStages").doc(STAGE_ID).get();
+  // The metrics singleton has one fixed document id, so this script cannot
+  // round-trip it without touching whatever is really stored there. When a
+  // real record exists, that ONE assertion is skipped and said so — it must
+  // not block the consent checks, which are the ones spec §10 actually
+  // mandates. An earlier version refused to run at all, and a metrics record
+  // someone had saved in the admin silently disabled the whole test.
   const existingMetrics = await db.collection("laptopBankMetrics").doc(METRICS_ID).get();
-  if (existingStage.exists || existingMetrics.exists) {
+  const skipMetricsRoundTrip = existingMetrics.exists;
+
+  // The stage id is 99, which the spec's nine stages can never occupy, so
+  // there is nothing real to protect here.
+  const existingStage = await db.collection("laptopBankStages").doc(STAGE_ID).get();
+  if (existingStage.exists) {
     console.error(
-      `Refusing to run: real records already exist at laptopBankStages/${STAGE_ID} or laptopBankMetrics/${METRICS_ID}.\n` +
-        "This script would delete them on cleanup. Back them up and remove them first, or run against a scratch project.",
+      `Refusing to run: a record exists at laptopBankStages/${STAGE_ID}, which this script uses as scratch space.`,
     );
     process.exit(1);
   }
@@ -184,11 +192,32 @@ async function main() {
       admin.missingRequiredFields(LAPTOP_BANK_CONTENT_TYPES["dashboard-metrics"], metrics).length === 0,
     );
 
-    await admin.saveRecord("dashboard-metrics", undefined, metrics);
-    const stored = await readers.getDashboardMetrics();
-    check("singleton written to its fixed id", Boolean(stored));
-    check("null metric survives the round trip", stored?.drives_sanitised === null, JSON.stringify(stored?.drives_sanitised));
-    check("zero metric survives the round trip", stored?.deployed_individual === 0);
+    // A count cannot be negative and a percentage cannot exceed 100. A real
+    // record reached Firestore with units_offered = -70 before this check.
+    const negative = admin.projectRecord(LAPTOP_BANK_CONTENT_TYPES["dashboard-metrics"], {
+      period_label: "ZZ", last_updated: "ZZ", units_offered: "-70", retention_12m_pct: "140",
+    });
+    const ranges = admin.outOfRangeFields(LAPTOP_BANK_CONTENT_TYPES["dashboard-metrics"], negative);
+    check("negative count rejected", ranges.some((f) => f.includes("Units offered")), ranges.join("; "));
+    check("percentage above 100 rejected", ranges.some((f) => f.includes("12 months")), ranges.join("; "));
+    check(
+      "a valid record reports no range errors",
+      admin.outOfRangeFields(LAPTOP_BANK_CONTENT_TYPES["dashboard-metrics"], metrics).length === 0,
+    );
+
+    if (skipMetricsRoundTrip) {
+      console.log(
+        "SKIP  metrics round trip — a real record exists at laptopBankMetrics/current.\n" +
+          "      The coercion assertions above still cover null-vs-zero; only the\n" +
+          "      write-and-read-back is skipped, so your data is left untouched.",
+      );
+    } else {
+      await admin.saveRecord("dashboard-metrics", undefined, metrics);
+      const stored = await readers.getDashboardMetrics();
+      check("singleton written to its fixed id", Boolean(stored));
+      check("null metric survives the round trip", stored?.drives_sanitised === null, JSON.stringify(stored?.drives_sanitised));
+      check("zero metric survives the round trip", stored?.deployed_individual === 0);
+    }
 
     const stage = {
       number: STAGE_ID,
@@ -206,12 +235,15 @@ async function main() {
     );
     check("two writes to the same stage number make ONE record", testStages.length === 1, `got ${testStages.length}`);
     check("the later write replaced the earlier", testStages[0]?.title === "ZZ TEST stage edited");
-    check("stage number coerced to a number", testStages[0]?.number === 5);
+    check("stage number coerced to a number", testStages[0]?.number === Number(STAGE_ID), typeof testStages[0]?.number);
   } finally {
     for (const id of DONOR_IDS) await db.collection("laptopBankDonors").doc(id).delete();
     for (const id of STORY_IDS) await db.collection("laptopBankStories").doc(id).delete();
     await db.collection("laptopBankStages").doc(STAGE_ID).delete();
-    await db.collection("laptopBankMetrics").doc(METRICS_ID).delete();
+    // Only remove the metrics doc if this run is what created it.
+    if (!skipMetricsRoundTrip) {
+      await db.collection("laptopBankMetrics").doc(METRICS_ID).delete();
+    }
 
     const leftovers = await Promise.all(
       ["laptopBankDonors", "laptopBankStories", "laptopBankStages", "laptopBankMetrics"].map(
@@ -221,7 +253,11 @@ async function main() {
     console.log(
       `\nCleanup: ${leftovers.map(([name, size]) => `${name}=${size}`).join(", ")}`,
     );
-    const dirty = leftovers.filter(([, size]) => size > 0);
+    const dirty = leftovers.filter(([name, size]) => {
+      // A metrics record this run deliberately did not touch is not a leftover.
+      if (name === "laptopBankMetrics" && skipMetricsRoundTrip) return false;
+      return size > 0;
+    });
     if (dirty.length) {
       console.error(
         `WARNING: ${dirty.map(([name]) => name).join(", ")} still hold documents. Check for leftover ZZ-TEST records.`,

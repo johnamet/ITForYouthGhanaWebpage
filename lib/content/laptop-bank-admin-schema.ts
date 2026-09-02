@@ -30,6 +30,14 @@ export type FieldDescriptor = {
   label: string;
   kind: FieldKind;
   required?: boolean;
+  /**
+   * Bounds for a `number` field. Counts are non-negative by nature — a real
+   * record was saved with units_offered = -70, which no amount of care at the
+   * keyboard prevents and which would have published as a figure. A
+   * percentage is additionally capped at 100.
+   */
+  min?: number;
+  max?: number;
   help?: string;
   options?: { value: string; label: string }[];
   /**
@@ -140,7 +148,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
     guidance:
       "Nine stages, numbered 1 to 9. The anchors on the public page are built from the number, so changing a number changes a URL that may already have been shared — renumber only if you mean to. The summary sentence is what the condensed stepper on /laptop-bank shows; keep it to one sentence.",
     fields: [
-      { key: "number", label: "Stage number", kind: "number", required: true, help: "1 to 9. Drives the #stage-n anchor and the ordering." },
+      { key: "number", label: "Stage number", kind: "number", required: true, min: 1, help: "1 to 9. Drives the #stage-n anchor and the ordering." },
       { key: "title", label: "Title", kind: "text", required: true },
       { key: "duration", label: "Duration", kind: "text", required: true, help: "Shown in the summary table. A token such as {{DUR_WIPE}} is allowed here." },
       { key: "summary_sentence", label: "Summary sentence", kind: "textarea", required: true, wide: true, help: "One sentence. Shown on /laptop-bank." },
@@ -167,7 +175,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
       { key: "minimum_accepted", label: "Minimum accepted", kind: "textarea", required: true, wide: true, help: "Publish a number, not \"reasonably modern\"." },
       { key: "notes", label: "Notes", kind: "textarea", wide: true },
       { key: "accepted", label: "We accept this", kind: "boolean", help: "Off puts the item in the \"We cannot accept\" group." },
-      { key: "sort_order", label: "Sort order", kind: "number", required: true, help: "Lower numbers first. The first six appear on /laptop-bank." },
+      { key: "sort_order", label: "Sort order", kind: "number", required: true, min: 0, help: "Lower numbers first. The first six appear on /laptop-bank." },
     ],
   },
 
@@ -327,7 +335,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
     fields: [
       { key: "question", label: "Question", kind: "text", required: true, wide: true },
       { key: "answer", label: "Answer", kind: "textarea", required: true, wide: true, help: "A {{TOKEN}} such as {{PEER_HOURS}} may be used here and will resolve to its CMS value." },
-      { key: "sort_order", label: "Sort order", kind: "number", required: true, help: "Lower numbers appear first." },
+      { key: "sort_order", label: "Sort order", kind: "number", required: true, min: 0, help: "Lower numbers appear first." },
     ],
   },
 
@@ -371,19 +379,19 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
     fields: [
       { key: "period_label", label: "Period label", kind: "text", required: true, help: "For example \"To 31 December 2026\"." },
       { key: "last_updated", label: "Last updated", kind: "text", required: true, help: "Shown at the top of the grid, and required before the stat band will appear." },
-      { key: "units_offered", label: "Units offered", kind: "number" },
-      { key: "units_accepted", label: "Units accepted", kind: "number", help: "Shown in the stat band on /laptop-bank." },
-      { key: "units_declined_at_offer", label: "Units declined at offer", kind: "number" },
-      { key: "units_rejected_at_intake", label: "Units rejected at intake", kind: "number" },
-      { key: "drives_sanitised", label: "Drives sanitised, with certificates issued", kind: "number", help: "Shown in the stat band on /laptop-bank." },
-      { key: "deployed_individual", label: "Deployed to individuals", kind: "number", help: "Shown in the stat band on /laptop-bank." },
-      { key: "deployed_shared", label: "Deployed to clubs and labs", kind: "number" },
-      { key: "ownership_transfers", label: "Recipients who now own their machine", kind: "number" },
-      { key: "retention_12m_pct", label: "Working and in her hands at 12 months (%)", kind: "number" },
-      { key: "units_recycled", label: "Units recycled through a licensed handler", kind: "number" },
-      { key: "partner_orgs", label: "Partner organisations", kind: "number", help: "Shown in the stat band on /laptop-bank." },
-      { key: "deployment_by_region", label: "Deployment by region", kind: "number" },
-      { key: "deployment_by_pathway", label: "Deployment by pathway", kind: "number" },
+      { key: "units_offered", label: "Units offered", kind: "number", min: 0 },
+      { key: "units_accepted", label: "Units accepted", kind: "number", min: 0, help: "Shown in the stat band on /laptop-bank." },
+      { key: "units_declined_at_offer", label: "Units declined at offer", kind: "number", min: 0 },
+      { key: "units_rejected_at_intake", label: "Units rejected at intake", kind: "number", min: 0 },
+      { key: "drives_sanitised", label: "Drives sanitised, with certificates issued", kind: "number", min: 0, help: "Shown in the stat band on /laptop-bank." },
+      { key: "deployed_individual", label: "Deployed to individuals", kind: "number", min: 0, help: "Shown in the stat band on /laptop-bank." },
+      { key: "deployed_shared", label: "Deployed to clubs and labs", kind: "number", min: 0 },
+      { key: "ownership_transfers", label: "Recipients who now own their machine", kind: "number", min: 0 },
+      { key: "retention_12m_pct", label: "Working and in her hands at 12 months (%)", kind: "number", min: 0, max: 100 },
+      { key: "units_recycled", label: "Units recycled through a licensed handler", kind: "number", min: 0 },
+      { key: "partner_orgs", label: "Partner organisations", kind: "number", min: 0, help: "Shown in the stat band on /laptop-bank." },
+      { key: "deployment_by_region", label: "Deployment by region", kind: "number", min: 0 },
+      { key: "deployment_by_pathway", label: "Deployment by pathway", kind: "number", min: 0 },
     ],
   },
 };

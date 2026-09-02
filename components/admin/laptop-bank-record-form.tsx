@@ -154,6 +154,11 @@ function Field({
           id={id}
           type="number"
           inputMode="numeric"
+          // Bounds come from the descriptor so the browser blocks an
+          // impossible figure before it is submitted. The server checks them
+          // again — a native min/max is a courtesy, not a control.
+          min={field.min}
+          max={field.max}
           value={String(value)}
           onChange={(event) => onChange(event.target.value)}
           className={inputClassName}
