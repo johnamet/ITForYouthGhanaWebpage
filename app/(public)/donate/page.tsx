@@ -4,7 +4,7 @@ import Link from "next/link";
 import { DonationCampaign } from "@/components/home/donation-campaign";
 import { TokenText } from "@/components/laptop-bank/token";
 import { Button } from "@/components/ui/button";
-import { activeDonationCampaign } from "@/lib/content/site-config";
+import { getCmsDonationCampaign } from "@/lib/cms/homepage";
 import { herFirstLaptopContent } from "@/lib/content/her-first-laptop-config";
 
 export const metadata: Metadata = {
@@ -39,9 +39,13 @@ function readAmount(raw?: string): string | undefined {
   return trimmed;
 }
 
-export default function DonatePage({ searchParams }: DonatePageProps) {
+export default async function DonatePage({ searchParams }: DonatePageProps) {
   const isHerFirstLaptop = searchParams?.campaign === HER_FIRST_LAPTOP;
   const amount = readAmount(searchParams?.amount);
+  // Read through the CMS, not the seed. The campaign is editable at
+  // /admin/content/donation-campaign, and importing the seed here meant an
+  // editor's change showed on the homepage but not on this page.
+  const campaign = await getCmsDonationCampaign();
 
   return (
     <div className="bg-white">
@@ -146,7 +150,7 @@ export default function DonatePage({ searchParams }: DonatePageProps) {
           </p>
         </section>
       ) : (
-        <DonationCampaign campaign={activeDonationCampaign} />
+        <DonationCampaign campaign={campaign} />
       )}
     </div>
   );
