@@ -2029,7 +2029,7 @@ export const adminNavigation: AdminNavItem[] = [
   },
   {
     label: "What We Do",
-    href: "/admin/programmes",
+    href: "/admin/cms/initiative",
     description: "What We Do overview and initiative subpage CMS.",
   },
   {
@@ -2039,7 +2039,7 @@ export const adminNavigation: AdminNavItem[] = [
   },
   {
     label: "Who We Are",
-    href: "/admin/content/who-we-are",
+    href: "/admin/cms/page-who-we-are",
     description: "About page copy, stats, CTAs, and related routes.",
   },
   {
@@ -2049,22 +2049,22 @@ export const adminNavigation: AdminNavItem[] = [
   },
   {
     label: "Apply Training",
-    href: "/admin/content/apply-for-training",
+    href: "/admin/cms/page-apply-for-training",
     description: "Training hub copy, stats, CTAs, and route cards.",
   },
   {
     label: "Training Fit",
-    href: "/admin/content/apply-for-training-who-can-apply",
+    href: "/admin/cms/page-apply-who-can-apply",
     description: "Eligibility guidance and learner readiness content.",
   },
   {
     label: "Training Process",
-    href: "/admin/content/apply-for-training-how-it-works",
+    href: "/admin/cms/page-apply-how-it-works",
     description: "Application journey, timeline, and preparation content.",
   },
   {
     label: "Training Courses",
-    href: "/admin/content/apply-for-training-courses",
+    href: "/admin/cms/page-apply-courses",
     description: "Course catalog page copy and support route cards.",
   },
   {
@@ -2119,22 +2119,22 @@ export const adminNavigation: AdminNavItem[] = [
   },
   {
     label: "Team",
-    href: "/admin/team",
+    href: "/admin/cms/team",
     description: "Profiles, departments, and featured people.",
   },
   {
     label: "Departments",
-    href: "/admin/departments",
+    href: "/admin/cms/department",
     description: "Department pages, responsibilities, priorities, teams, and resources.",
   },
   {
     label: "Partners",
-    href: "/admin/partners",
+    href: "/admin/cms/partner",
     description: "Logos, links, and organisation metadata.",
   },
   {
     label: "Partner With Us",
-    href: "/admin/partner-with-us",
+    href: "/admin/cms/partnership-track",
     description: "Partnership overview and partner track pages.",
   },
   {

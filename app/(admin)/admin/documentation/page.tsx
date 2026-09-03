@@ -108,7 +108,7 @@ const documentationSections: DocSection[] = [
     id: "who-we-are",
     title: "Who We Are Pages",
     summary: "About page content, route cards, custom Who We Are subpages, team profiles, departments, partners, and careers.",
-    adminRoute: "/admin/content/who-we-are",
+    adminRoute: "/admin/cms/page-who-we-are",
     publicRoutes: ["/who-we-are", "/who-we-are/team", "/departments", "/departments/[slug]", "/who-we-are/partners", "/who-we-are/careers"],
     purpose:
       "Use this area to explain the organisation, the people behind the work, formal departments, partners, governance-related pages, and opportunities to join.",
@@ -136,7 +136,7 @@ const documentationSections: DocSection[] = [
     id: "apply-training",
     title: "Apply For Training",
     summary: "Training hub, eligibility page, process page, and course listing content.",
-    adminRoute: "/admin/content/apply-for-training",
+    adminRoute: "/admin/cms/page-apply-for-training",
     publicRoutes: ["/apply-for-training", "/apply-for-training/who-can-apply", "/apply-for-training/how-it-works", "/apply-for-training/courses"],
     purpose:
       "Use these pages to help learners understand whether to apply, what happens next, and which course path fits them.",
@@ -161,7 +161,7 @@ const documentationSections: DocSection[] = [
     id: "programmes",
     title: "Programmes And Initiatives",
     summary: "What We Do overview, initiative detail pages, and custom pages below the What We Do hub.",
-    adminRoute: "/admin/programmes",
+    adminRoute: "/admin/cms/initiative",
     publicRoutes: ["/what-we-do", "/what-we-do/[slug]"],
     purpose:
       "Use this area to explain the initiative ecosystem, edit each core initiative, and create extra What We Do pages for methods, resources, or special explainers.",
@@ -190,7 +190,7 @@ const documentationSections: DocSection[] = [
     id: "organisations-partnerships",
     title: "Organisations And Partnerships",
     summary: "Organisation services, partnership overview, and partner track pages.",
-    adminRoute: "/admin/partner-with-us",
+    adminRoute: "/admin/cms/partnership-track",
     publicRoutes: ["/for-organisations", "/for-organisations/[slug]", "/partner-with-us", "/partner-with-us/[slug]"],
     purpose:
       "Use this area to guide companies, schools, NGOs, government, foundations, and technical partners toward the right collaboration route.",

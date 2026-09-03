@@ -65,7 +65,7 @@ const workspaceItems: SidebarItem[] = [
 
 const recordItems: SidebarItem[] = [
   { label: "Team", href: "/admin/cms/team", description: "People profiles", icon: Users },
-  { label: "Departments", href: "/admin/departments", description: "Department pages", icon: Building2 },
+  { label: "Departments", href: "/admin/cms/department", description: "Department pages", icon: Building2 },
   { label: "Partners", href: "/admin/cms/partner", description: "Partner logos", icon: BriefcaseBusiness },
   { label: "Articles", href: "/admin/articles", description: "News and blogs", icon: Newspaper },
   { label: "Testimonials", href: "/admin/cms/testimonial", description: "Story records", icon: FileText },

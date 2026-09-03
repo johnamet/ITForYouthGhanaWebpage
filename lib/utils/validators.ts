@@ -106,10 +106,6 @@ export type ArticlePayload = z.infer<typeof articleSchema>;
 
 export const newsPageSchema = z.record(z.unknown());
 
-export type NewsPagePayload = z.infer<typeof newsPageSchema>;
-
-// ─── Team validators ─────────────────────────────────────────────────────────
-
 const optionalEmail = z.preprocess(
   (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
   z.string().trim().email().optional(),
@@ -240,79 +236,6 @@ export type TeamPayload = z.infer<typeof teamSchema>;
 
 // ─── Department validators ──────────────────────────────────────────────────
 
-const departmentServiceSchema = z.object({
-  title: z.string().trim().min(2, "Please add a service title."),
-  body: z.string().trim().min(10, "Please add service copy."),
-  bullets: z.array(z.string().trim().min(1)).default([]),
-});
-
-const departmentWorkflowSchema = z.object({
-  title: z.string().trim().min(2, "Please add a workflow step title."),
-  description: z.string().trim().min(10, "Please add workflow step copy."),
-});
-
-const departmentResourceSchema = z.object({
-  label: z.string().trim().min(2, "Please add a resource label."),
-  href: z.string().trim().min(1, "Please add a resource link."),
-  description: optionalTrimmedString,
-});
-
-const departmentHighlightStatSchema = z.object({
-  value: z.string().trim().min(1, "Please add a stat value."),
-  label: z.string().trim().min(2, "Please add a stat label."),
-  description: optionalTrimmedString,
-  icon: optionalTrimmedString,
-  // New optional image URL for icon
-  iconImage: optionalTrimmedString,
-});
-
-const departmentActionLinkSchema = z.object({
-  label: z.string().trim().min(2, "Please add a link label."),
-  href: z.string().trim().min(1, "Please add a link destination."),
-});
-
-const departmentContactSchema = z
-  .object({
-    name: optionalTrimmedString,
-    role: optionalTrimmedString,
-    email: optionalEmail,
-  })
-  .partial()
-  .default({});
-
-export const departmentSchema = z.object({
-  slug: z
-    .string()
-    .trim()
-    .min(3, "Please add a URL slug.")
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only."),
-  eyebrow: z.string().trim().min(2, "Please add an eyebrow label."),
-  title: z.string().trim().min(2, "Please add a department title."),
-  summary: z.string().trim().default(""),
-  description: z.string().trim().default(""),
-  intro: z.string().trim().default(""),
-  mission: z.string().trim().min(12, "Please add a mission statement."),
-  heroImage: editableCmsString,
-  icon: optionalTrimmedString,
-  // New optional image URL for icon
-  iconImage: optionalTrimmedString,
-  color: optionalTrimmedString,
-  responsibilities: z.array(z.string().trim().min(1)).min(1, "Please add at least one responsibility."),
-  services: z.array(departmentServiceSchema).default([]),
-  workflows: z.array(departmentWorkflowSchema).default([]),
-  priorities: z.array(z.string().trim().min(1)).default([]),
-  stats: z.array(departmentHighlightStatSchema).default([]),
-  teamMemberIds: z.array(z.string().trim().min(1)).default([]),
-  resources: z.array(departmentResourceSchema).default([]),
-  contact: departmentContactSchema,
-  ctas: z.array(departmentActionLinkSchema).default([]),
-  featured: checkboxBoolean.default(false),
-  status: z.enum(["draft", "published", "archived"]).default("draft"),
-  order: optionalNumber,
-});
-
-export type DepartmentPayload = z.infer<typeof departmentSchema>;
-
 export const partnerSchema = z.object({
   name: z.string().trim().min(2, "Please enter a partner name."),
   logo: optionalTrimmedString,
@@ -385,8 +308,6 @@ export const settingsSchema = z.object({
     .default({}),
   socials: socialsSchema,
 });
-
-export type SettingsPayload = z.infer<typeof settingsSchema>;
 
 const sitePageHighlightStatSchema = z.object({
   value: z.string().trim().min(1, "Please add a stat value."),
@@ -522,211 +443,6 @@ export type DynamicSitePagePayload = z.infer<typeof dynamicSitePageSchema>;
 
 // ─── What We Do / Initiative validators ─────────────────────────────────────
 
-const initiativeActionLinkSchema = z.object({
-  label: z.string().trim().min(1, "Please add a link label."),
-  href: z.string().trim().min(1, "Please add a link destination."),
-});
-
-const initiativeRouteCardSchema = z.object({
-  href: z.string().trim().min(1, "Please add a card destination."),
-  eyebrow: optionalTrimmedString,
-  title: z.string().trim().min(1, "Please add a card title."),
-  description: z.string().trim().min(1, "Please add a card description."),
-});
-
-const initiativeHighlightStatSchema = z.object({
-  value: z.string().trim().min(1, "Please add a stat value."),
-  label: z.string().trim().min(1, "Please add a stat label."),
-  description: optionalTrimmedString,
-  icon: optionalTrimmedString,
-  iconImage: optionalTrimmedString,
-});
-
-const initiativeContentBlockSchema = z.object({
-  title: z.string().trim().min(1, "Please add a section title."),
-  body: z.string().trim().min(1, "Please add section copy."),
-  bullets: z.array(z.string().trim().min(1)).optional().default([]),
-});
-
-const initiativeProcessStepSchema = z.object({
-  number: z.string().trim().min(1, "Please add a step number."),
-  title: z.string().trim().min(1, "Please add a step title."),
-  description: z.string().trim().min(1, "Please add step copy."),
-  icon: z.string().trim().default(""),
-  iconImage: optionalTrimmedString,
-});
-
-const initiativeAudienceSchema = z.object({
-  summary: z.string().trim().min(1, "Please add audience summary copy."),
-  groups: z.array(z.string().trim().min(1)).default([]),
-  eligibility: z.array(z.string().trim().min(1)).default([]),
-});
-
-const initiativeGalleryImageSchema = z.object({
-  src: z.string().trim().min(1, "Please add an image URL."),
-  alt: z.string().trim().min(1, "Please add image alt text."),
-});
-
-const initiativeTestimonialSchema = z.object({
-  quote: z.string().trim().min(1, "Please add the quote."),
-  name: z.string().trim().min(1, "Please add a name."),
-  role: z.string().trim().min(1, "Please add a role."),
-  avatar: optionalTrimmedString,
-});
-
-const initiativePartnerSchema = z.object({
-  name: z.string().trim().min(1, "Please add a partner name."),
-  description: z.string().trim().min(1, "Please add partner context."),
-  href: optionalTrimmedString,
-  logo: optionalTrimmedString,
-});
-
-const initiativeFaqSchema = z.object({
-  question: z.string().trim().min(1, "Please add a question."),
-  answer: z.string().trim().min(1, "Please add an answer."),
-});
-
-const initiativeApplyCtaSchema = z.object({
-  heading: z.string().trim().min(1, "Please add a CTA heading."),
-  description: z.string().trim().min(1, "Please add CTA copy."),
-  primary: initiativeActionLinkSchema,
-  secondary: initiativeActionLinkSchema,
-});
-
-const initiativeSectionContentSchema = z.object({
-  overviewEyebrow: z.string().trim().default(""),
-  overviewTitle: z.string().trim().default(""),
-  overviewImageAlt: z.string().trim().default(""),
-  howItWorksEyebrow: z.string().trim().default(""),
-  howItWorksTitle: z.string().trim().default(""),
-  howItWorksDescription: z.string().trim().default(""),
-  impactEyebrow: z.string().trim().default(""),
-  impactTitle: z.string().trim().default(""),
-  impactDescription: z.string().trim().default(""),
-  audienceEyebrow: z.string().trim().default(""),
-  eligibilityEyebrow: z.string().trim().default(""),
-  galleryEyebrow: z.string().trim().default(""),
-  galleryTitle: z.string().trim().default(""),
-  galleryDescription: z.string().trim().default(""),
-  testimonialsEyebrow: z.string().trim().default(""),
-  testimonialsTitle: z.string().trim().default(""),
-  testimonialsDescription: z.string().trim().default(""),
-  partnersEyebrow: z.string().trim().default(""),
-  partnersTitle: z.string().trim().default(""),
-  partnersDescription: z.string().trim().default(""),
-  partnerLinkLabel: z.string().trim().default(""),
-  faqsEyebrow: z.string().trim().default(""),
-  faqsTitle: z.string().trim().default(""),
-  faqsDescription: z.string().trim().default(""),
-  applyCtaEyebrow: z.string().trim().default(""),
-  relatedEyebrow: z.string().trim().default(""),
-  relatedTitle: z.string().trim().default(""),
-  relatedDescription: z.string().trim().default(""),
-  shareEyebrow: z.string().trim().default(""),
-  quickLinksEyebrow: z.string().trim().default(""),
-});
-
-export const initiativeSchema = z.object({
-  slug: z
-    .string()
-    .trim()
-    .min(3, "Please add a URL slug.")
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only."),
-  eyebrow: z.string().trim().min(1, "Please add an eyebrow label."),
-  title: z.string().trim().min(1, "Please add a page title."),
-  description: z.string().trim().default(""),
-  intro: z.string().trim().default(""),
-  stats: z.array(initiativeHighlightStatSchema).default([]),
-  sections: z.array(initiativeContentBlockSchema).default([]),
-  ctas: z.array(initiativeActionLinkSchema).default([]),
-  related: z.array(initiativeRouteCardSchema).default([]),
-  tagline: z.string().trim().default(""),
-  heroImage: z.string().trim().min(1, "Please add a hero image."),
-  overviewImage: z.string().trim().min(1, "Please add an overview image."),
-  mission: z.string().trim().min(1, "Please add mission copy."),
-  objectives: z.array(z.string().trim().min(1)).default([]),
-  howItWorks: z.array(initiativeProcessStepSchema).default([]),
-  impactStats: z.array(initiativeHighlightStatSchema).default([]),
-  audience: initiativeAudienceSchema,
-  gallery: z.array(initiativeGalleryImageSchema).default([]),
-  testimonials: z.array(initiativeTestimonialSchema).default([]),
-  partners: z.array(initiativePartnerSchema).default([]),
-  faqs: z.array(initiativeFaqSchema).default([]),
-  applyCta: initiativeApplyCtaSchema,
-  sectionContent: initiativeSectionContentSchema,
-  quickLinks: z.array(initiativeActionLinkSchema).default([]),
-  /**
-   * C13 — the Laptop Bank cross-link block (Laptop Bank build spec §8).
-   * Optional so it round-trips through the CMS: spec §8 requires the block to
-   * be editable per page, and Community Outreach has no block at launch.
-   * Without this field a CMS write would silently strip the seeded block.
-   */
-  relatedProgramme: z
-    .object({
-      body: z.string().trim(),
-      linkLabel: z.string().trim(),
-      href: z.string().trim(),
-    })
-    .optional(),
-});
-
-export type InitiativePayload = z.infer<typeof initiativeSchema>;
-
-const whatWeDoHeroStatSchema = z.object({
-  label: z.string().trim().min(1, "Please add a stat label."),
-  description: z.string().trim().min(1, "Please add stat context."),
-});
-
-const whatWeDoEcosystemCardSchema = z.object({
-  eyebrow: z.string().trim().min(1, "Please add an eyebrow label."),
-  title: z.string().trim().min(1, "Please add a card title."),
-  description: z.string().trim().min(1, "Please add card copy."),
-  image: optionalTrimmedString,
-  imageAlt: optionalTrimmedString,
-});
-
-const whatWeDoPathwayCardSchema = z.object({
-  title: z.string().trim().min(1, "Please add a card title."),
-  description: z.string().trim().min(1, "Please add card copy."),
-});
-
-const whatWeDoGalleryItemSchema = z.object({
-  type: z.enum(["image", "video"]),
-  url: z.string().trim().min(1, "Please add a resource URL."),
-  title: z.string().trim().min(1, "Please add a media title."),
-  description: optionalTrimmedString,
-  thumbnailUrl: optionalTrimmedString,
-});
-
-export const whatWeDoOverviewSchema = z.object({
-  eyebrow: z.string().trim().min(1, "Please add an eyebrow label."),
-  title: z.string().trim().min(1, "Please add a page title."),
-  description: z.string().trim().default(""),
-  heroImage: z.string().trim().min(1, "Please add a hero image."),
-  heroStats: z.array(whatWeDoHeroStatSchema).min(4, "Please keep four hero stat labels."),
-  overviewSectionEyebrow: optionalTrimmedString,
-  overviewSectionTitle: optionalTrimmedString,
-  overviewSectionDescription: optionalTrimmedString,
-  ecosystemCards: z.array(whatWeDoEcosystemCardSchema).default([]),
-  initiativesSectionEyebrow: optionalTrimmedString,
-  initiativesSectionTitle: optionalTrimmedString,
-  initiativesSectionDescription: optionalTrimmedString,
-  gallerySectionEyebrow: optionalTrimmedString,
-  gallerySectionTitle: optionalTrimmedString,
-  gallerySectionDescription: optionalTrimmedString,
-  galleryItems: z.array(whatWeDoGalleryItemSchema).default([]),
-  pathwaysSectionEyebrow: optionalTrimmedString,
-  pathwaysSectionTitle: optionalTrimmedString,
-  pathwaysSectionDescription: optionalTrimmedString,
-  pathwayCards: z.array(whatWeDoPathwayCardSchema).default([]),
-  nextStepsSectionEyebrow: optionalTrimmedString,
-  nextStepsSectionTitle: optionalTrimmedString,
-  nextStepsSectionDescription: optionalTrimmedString,
-  nextSteps: z.array(initiativeRouteCardSchema).default([]),
-});
-
-export type WhatWeDoOverviewPayload = z.infer<typeof whatWeDoOverviewSchema>;
-
 export const homepageSchema = z
   .object({
     announcement: z
@@ -763,8 +479,6 @@ export const homepageSchema = z
   })
   .partial();
 
-export type HomepagePayload = z.infer<typeof homepageSchema>;
-
 export const highlightStatSchema = z.object({
   value: z.string().trim().min(1),
   label: z.string().trim().min(1),
@@ -774,204 +488,9 @@ export const highlightStatSchema = z.object({
   iconImage: optionalTrimmedString,
 });
 
-const contactPageChannelSchema = z.object({
-  label: z.string().trim().min(1, "Please add a channel label."),
-  value: z.string().trim().min(1, "Please add a channel value."),
-  description: z.string().trim().min(1, "Please add a channel description."),
-  href: z.string().trim().min(1, "Please add a channel link."),
-});
-
-const contactPageEnquiryOptionSchema = z.object({
-  value: z.enum([
-    "training",
-    "organisation",
-    "partnership",
-    "donation",
-    "media",
-    "volunteering",
-    "general",
-  ]),
-  label: z.string().trim().min(1, "Please add an option label."),
-  description: z.string().trim().min(1, "Please add an option description."),
-});
-
-const contactPageResponseStepSchema = z.object({
-  number: z.string().trim().min(1, "Please add a step number."),
-  title: z.string().trim().min(1, "Please add a step title."),
-  description: z.string().trim().min(1, "Please add a step description."),
-});
-
-const contactPageRouteCardSchema = z.object({
-  href: z.string().trim().min(1, "Please add a card destination."),
-  eyebrow: optionalTrimmedString,
-  title: z.string().trim().min(1, "Please add a card title."),
-  description: z.string().trim().min(1, "Please add a card description."),
-});
-
-export const contactPageSchema = z
-  .object({
-    eyebrow: editableCmsString,
-    title: editableCmsString,
-    description: editableCmsString,
-    heroImage: editableCmsString,
-    stats: z.array(highlightStatSchema).optional(),
-    channels: z.array(contactPageChannelSchema).optional(),
-    enquiryOptions: z.array(contactPageEnquiryOptionSchema).optional(),
-    responseSteps: z.array(contactPageResponseStepSchema).optional(),
-    routeCards: z.array(contactPageRouteCardSchema).optional(),
-    privacyNote: editableCmsString,
-    channelsEyebrow: editableCmsString,
-    channelsTitle: editableCmsString,
-    channelsDescription: editableCmsString,
-    formEyebrow: editableCmsString,
-    formTitle: editableCmsString,
-    formDescription: editableCmsString,
-    messageEyebrow: editableCmsString,
-    messageTitle: editableCmsString,
-    messageDescription: editableCmsString,
-    privacyTitle: editableCmsString,
-    routesEyebrow: editableCmsString,
-    routesTitle: editableCmsString,
-    routesDescription: editableCmsString,
-    emailCtaLabel: editableCmsString,
-    formCtaLabel: editableCmsString,
-  })
-  .partial();
-
-export type ContactPagePayload = z.infer<typeof contactPageSchema>;
-
-// ─── Impact stats validators ────────────────────────────────────────────────
-
 export const impactStatsSchema = z.object({
   stats: z.array(highlightStatSchema).min(1),
 });
-
-export type ImpactStatsPayload = z.infer<typeof impactStatsSchema>;
-
-export const impactPageSchema = z.record(z.unknown());
-
-export type ImpactPagePayload = z.infer<typeof impactPageSchema>;
-
-// ─── Partnership validators (Tier 1 with JSON bridges) ─────────────────────
-
-const partnershipOverviewCardSchema = z.object({
-  title: z.string().trim().min(1, "Please add a card title."),
-  description: z.string().trim().min(1, "Please add a card description."),
-  image: optionalTrimmedString,
-  imageAlt: optionalTrimmedString,
-});
-
-const partnershipFocusCardSchema = z.object({
-  title: z.string().trim().min(1, "Please add a card title."),
-  description: z.string().trim().min(1, "Please add a card description."),
-  icon: z.string().trim().min(1).default(""),
-  // Optional image URL alternative to icon
-  iconImage: optionalTrimmedString,
-  image: optionalTrimmedString,
-  imageAlt: optionalTrimmedString,
-  bullets: z.array(z.string().trim().min(1)).default([]),
-});
-
-const partnershipProcessStepSchema = z.object({
-  number: z.string().trim().min(1, "Please add a step number."),
-  title: z.string().trim().min(1, "Please add a step title."),
-  description: z.string().trim().min(1, "Please add a step description."),
-  icon: z.string().trim().min(1).default(""),
-  // Optional image URL alternative to icon
-  iconImage: optionalTrimmedString,
-});
-
-const partnershipScenarioSchema = z.object({
-  title: z.string().trim().min(1, "Please add a scenario title."),
-  partnerType: z.string().trim().min(1, "Please add a partner type."),
-  summary: z.string().trim().min(1, "Please add a scenario summary."),
-  outcome: z.string().trim().min(1, "Please add a scenario outcome."),
-  highlight: z.string().trim().min(1).default(""),
-});
-
-const partnershipFaqSchema = z.object({
-  question: z.string().trim().min(1, "Please add a question."),
-  answer: z.string().trim().min(1, "Please add an answer."),
-});
-
-const partnershipContactCtaSchema = z.object({
-  heading: z.string().trim().min(1, "Please add a contact heading."),
-  description: z.string().trim().min(1, "Please add contact copy."),
-  email: z.string().trim().min(1, "Please add a contact email."),
-  primary: sitePageActionLinkSchema,
-  secondary: sitePageActionLinkSchema,
-});
-
-export const partnershipOverviewSchema = z
-  .object({
-    eyebrow: optionalTrimmedString,
-    title: optionalTrimmedString,
-    description: optionalTrimmedString,
-    heroImage: optionalTrimmedString,
-    stats: z.array(highlightStatSchema).optional(),
-    overviewSectionEyebrow: optionalTrimmedString,
-    overviewSectionTitle: optionalTrimmedString,
-    overviewSectionDescription: optionalTrimmedString,
-    tracksSectionEyebrow: optionalTrimmedString,
-    tracksSectionTitle: optionalTrimmedString,
-    tracksSectionDescription: optionalTrimmedString,
-    partnerTypesSectionEyebrow: optionalTrimmedString,
-    partnerTypesSectionTitle: optionalTrimmedString,
-    partnerTypesSectionDescription: optionalTrimmedString,
-    nextStepsSectionEyebrow: optionalTrimmedString,
-    nextStepsSectionTitle: optionalTrimmedString,
-    nextStepsSectionDescription: optionalTrimmedString,
-    overviewVideoUrl: optionalTrimmedString,
-    overviewVideoTitle: optionalTrimmedString,
-    valueCards: z.array(partnershipOverviewCardSchema).optional(),
-    partnerTypeCards: z.array(partnershipOverviewCardSchema).optional(),
-    nextSteps: z.array(sitePageRouteCardSchema).optional(),
-  })
-  .partial();
-
-export type PartnershipOverviewPayload = z.infer<typeof partnershipOverviewSchema>;
-
-export const partnershipTrackSchema = z
-  .object({
-    slug: z.string().trim().min(2).optional(),
-    eyebrow: optionalTrimmedString,
-    title: optionalTrimmedString,
-    description: optionalTrimmedString,
-    tagline: optionalTrimmedString,
-    heroImage: optionalTrimmedString,
-    snapshotEyebrow: optionalTrimmedString,
-    stats: z.array(highlightStatSchema).optional(),
-    overviewSectionEyebrow: optionalTrimmedString,
-    overviewSectionTitle: optionalTrimmedString,
-    overviewSectionDescription: optionalTrimmedString,
-    overviewCardBadgeLabel: optionalTrimmedString,
-    focusCards: z.array(partnershipFocusCardSchema).optional(),
-    howItWorksSectionEyebrow: optionalTrimmedString,
-    howItWorksSectionTitle: optionalTrimmedString,
-    howItWorksSectionDescription: optionalTrimmedString,
-    howItWorks: z.array(partnershipProcessStepSchema).optional(),
-    scenariosSectionEyebrow: optionalTrimmedString,
-    scenariosSectionTitle: optionalTrimmedString,
-    scenariosSectionDescription: optionalTrimmedString,
-    scenarios: z.array(partnershipScenarioSchema).optional(),
-    faqsSectionEyebrow: optionalTrimmedString,
-    faqsSectionTitle: optionalTrimmedString,
-    faqsSectionDescription: optionalTrimmedString,
-    faqs: z.array(partnershipFaqSchema).optional(),
-    contactSectionEyebrow: optionalTrimmedString,
-    contactCta: partnershipContactCtaSchema.optional(),
-    relatedSectionEyebrow: optionalTrimmedString,
-    relatedSectionTitle: optionalTrimmedString,
-    relatedSectionDescription: optionalTrimmedString,
-    related: z.array(sitePageRouteCardSchema).optional(),
-    overviewVideoUrl: optionalTrimmedString,
-    overviewVideoTitle: optionalTrimmedString,
-  })
-  .partial();
-
-export type PartnershipTrackPayload = z.infer<typeof partnershipTrackSchema>;
-
-// ─── User validators ───────────────────────────────────────────────────────────
 
 export const userSchema = z.object({
   name: z.string().trim().min(2, "Please enter a name."),
@@ -997,20 +516,6 @@ export const contactMessageAdminUpdateSchema = z.object({
   notes: optionalTrimmedString,
 });
 
-export type ContactMessageAdminUpdatePayload = z.infer<typeof contactMessageAdminUpdateSchema>;
-
-// ─── IT for Youth Laptop Bank ─────────────────────────────────────────────────
-//
-// Build spec §6.1 and §6.2. Enum values are the spec's own options; do not add
-// to them without a spec change, because several of them write straight through
-// to a CMS field (public recognition → Donor.display_consent).
-
-/**
- * A consent that must be actively given. Spec §7: "Consent checkboxes are never
- * pre-ticked and never bundled. Store each consent as its own boolean with a
- * timestamp." Each one is therefore its own literal(true) field, never a single
- * combined flag.
- */
 const requiredConsent = z.preprocess(
   (value) => value === true || value === "true" || value === "on",
   z.literal(true, {
@@ -1027,6 +532,7 @@ const optionalConsent = z.preprocess(
  * Ghana mobile numbers, in the two forms people actually type: +233XXXXXXXXX
  * and 0XXXXXXXXX. Draft 1 §13.1 asks that both be accepted and normalised.
  */
+
 const ghanaPhone = z
   .string()
   .trim()
@@ -1088,20 +594,6 @@ export const equipmentOfferSchema = z.object({
   companyFax: optionalTrimmedString,
 });
 
-export type EquipmentOfferPayload = z.infer<typeof equipmentOfferSchema>;
-
-/**
- * Spec §6.2.
- *
- * DATA CONSTRAINT, from the spec and non-negotiable: "Do not add fields for
- * household income, guardian income, bank details, or hardship documentation.
- * Do not add date of birth." Draft 1 §13.2 gives the reasoning — none of it
- * improves the selection decision, and all of it increases what the
- * organisation is liable for if this data is ever exposed. The device-access
- * question and the free-text question already provide a hardship signal.
- *
- * Anyone adding a field here should check it against that list first.
- */
 export const studentApplicationSchema = z
   .object({
     fullName: z.string().trim().min(2, "Please enter your full name."),
@@ -1164,9 +656,6 @@ export const studentApplicationSchema = z
     },
   );
 
-export type StudentApplicationPayload = z.infer<typeof studentApplicationSchema>;
-
-/** Words, for the live counters and the hard caps in spec §6.2. */
 export function countWords(value: string): number {
   const trimmed = value.trim();
   if (!trimmed) return 0;
@@ -1178,6 +667,7 @@ export function countWords(value: string): number {
  * "+233241234567" are correctly recognised as the same number when checking
  * that the alternative contact actually differs.
  */
+
 export function normalisePhone(value: string): string {
   const digits = value.trim().replace(/[\s()-]/g, "");
   if (digits.startsWith("+233")) return `0${digits.slice(4)}`;
@@ -1190,6 +680,7 @@ export function normalisePhone(value: string): string {
  * soft prompt, not a block" — so this is used by the form for a nudge and by
  * the route only to flag the record for follow-up. It must never reject.
  */
+
 const FREE_WEBMAIL_DOMAINS = new Set([
   "gmail.com",
   "yahoo.com",
@@ -1219,6 +710,7 @@ export function isFreeWebmail(email: string): boolean {
  * and a referral to a certified recycler" — so those are the three outcomes a
  * reviewer records, plus the states either side of them.
  */
+
 export const equipmentOfferAdminUpdateSchema = z.object({
   status: z.enum([
     "new",
@@ -1232,14 +724,6 @@ export const equipmentOfferAdminUpdateSchema = z.object({
   notes: optionalTrimmedString,
 });
 
-export type EquipmentOfferAdminUpdatePayload = z.infer<typeof equipmentOfferAdminUpdateSchema>;
-
-/**
- * Application statuses. "waiting-list" is not decoration: spec 5.7 block 5
- * promises an unsuccessful applicant that she "stays on the list for the next
- * one", and Draft 1 §9 §7 wants every applicant to get an outcome. A reviewer
- * needs a state that means exactly that.
- */
 export const studentApplicationAdminUpdateSchema = z.object({
   status: z.enum([
     "new",
@@ -1258,7 +742,3 @@ export const studentApplicationAdminUpdateSchema = z.object({
    */
   notifyApplicant: optionalConsent,
 });
-
-export type StudentApplicationAdminUpdatePayload = z.infer<
-  typeof studentApplicationAdminUpdateSchema
->;

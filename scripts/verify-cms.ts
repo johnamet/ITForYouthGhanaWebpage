@@ -203,7 +203,59 @@ async function main() {
   }
   console.log(`Descriptor keys: ${seenIn.size} unique across ${Object.keys(CMS_DESCRIPTOR_SOURCES).length} source maps.`);
 
-  // ── 5. Descriptor reachability ───────────────────────────────────────────
+  // ── 5. Every hardcoded admin link points at a route that exists ──────────
+  //
+  // The admin's navigation is spread across four places — the sidebar in
+  // components/admin/admin-shell.tsx, `adminNodes` and `adminNavigation`, and
+  // the documentation page — and a link in any of them survives the deletion
+  // of the route it points at. Three of those lists were already carrying dead
+  // links to /admin/team and /admin/partners before this check existed, and
+  // retiring the hand-written editors would have added nine more. A dead
+  // sidebar entry is indistinguishable from a broken feature.
+  const adminRouteDir = path.join(process.cwd(), "app", "(admin)");
+  const routePatterns: RegExp[] = [];
+
+  const collectRoutes = (dir: string, segments: string[]) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) {
+        if (entry.name === "page.tsx") {
+          const pattern = segments
+            .map((segment) => (segment.startsWith("[") ? "[^/]+" : segment.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")))
+            .join("/");
+          routePatterns.push(new RegExp(`^/${pattern}$`));
+        }
+        continue;
+      }
+      // Route groups in brackets-with-parens are not part of the URL.
+      const isGroup = entry.name.startsWith("(") && entry.name.endsWith(")");
+      collectRoutes(path.join(dir, entry.name), isGroup ? segments : [...segments, entry.name]);
+    }
+  };
+  collectRoutes(adminRouteDir, []);
+
+  const linkSources = [
+    "components/admin/admin-shell.tsx",
+    "lib/cms/admin-config.ts",
+    "lib/content/site-config.ts",
+    "lib/content/admin-registry.ts",
+    "app/(admin)/admin/documentation/page.tsx",
+  ];
+
+  let linksChecked = 0;
+  for (const file of linkSources) {
+    const source = fs.readFileSync(path.join(process.cwd(), file), "utf8");
+    for (const match of source.matchAll(/"(\/admin\/[a-z0-9/_-]*)"/g)) {
+      const link = match[1].replace(/\/$/, "");
+      linksChecked += 1;
+      if (!routePatterns.some((pattern) => pattern.test(link))) {
+        fail(`${file} links to ${link}, which is not a route.`);
+      }
+    }
+  }
+
+  console.log(`Admin links: ${linksChecked} hardcoded links checked against ${routePatterns.length} routes.`);
+
+  // ── 6. Descriptor reachability ───────────────────────────────────────────
   const { CMS_DESCRIPTORS } = await import("../lib/cms/descriptors/registry");
   const { adminNodes, adminHubs } = await import("../lib/content/admin-registry");
 
