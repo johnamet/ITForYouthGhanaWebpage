@@ -94,6 +94,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   "process-stage": {
     key: "process-stage",
     hub: "laptop-bank",
+    revalidatePaths: ["/laptop-bank", "/laptop-bank/how-it-works"],
     collection: FIREBASE_COLLECTIONS.laptopBankStages,
     label: "Process stage",
     plural: "Process stages",
@@ -119,6 +120,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   "intake-item": {
     key: "intake-item",
     hub: "laptop-bank",
+    revalidatePaths: ["/laptop-bank", "/laptop-bank/what-we-accept"],
     collection: FIREBASE_COLLECTIONS.laptopBankIntake,
     label: "Intake item",
     plural: "Intake specification",
@@ -141,6 +143,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   document: {
     key: "document",
     hub: "laptop-bank",
+    revalidatePaths: ["/policies/laptop-bank-documents", "/laptop-bank/data-security", "/laptop-bank/impact"],
     collection: FIREBASE_COLLECTIONS.laptopBankDocuments,
     label: "Document",
     plural: "Documents",
@@ -163,6 +166,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   donor: {
     key: "donor",
     hub: "laptop-bank",
+    revalidatePaths: ["/laptop-bank", "/laptop-bank/partners"],
     collection: FIREBASE_COLLECTIONS.laptopBankDonors,
     label: "Donor organisation",
     plural: "Donor organisations",
@@ -193,6 +197,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   story: {
     key: "story",
     hub: "laptop-bank",
+    revalidatePaths: ["/her-first-laptop", "/her-first-laptop/stories"],
     collection: FIREBASE_COLLECTIONS.laptopBankStories,
     label: "Recipient story",
     plural: "Recipient stories",
@@ -240,6 +245,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   "application-status": {
     key: "application-status",
     hub: "laptop-bank",
+    revalidatePaths: ["/her-first-laptop", "/her-first-laptop/apply"],
     collection: FIREBASE_COLLECTIONS.laptopBankSettings,
     label: "Application status",
     plural: "Application status",
@@ -286,6 +292,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   faq: {
     key: "faq",
     hub: "laptop-bank",
+    revalidatePaths: ["/her-first-laptop/eligibility"],
     collection: FIREBASE_COLLECTIONS.laptopBankFaqs,
     label: "FAQ",
     plural: "Eligibility FAQs",
@@ -317,6 +324,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   token: {
     key: "token",
     hub: "laptop-bank",
+    revalidatePaths: ["/laptop-bank", "/laptop-bank/how-it-works", "/laptop-bank/what-we-accept", "/laptop-bank/data-security", "/laptop-bank/donate-equipment", "/laptop-bank/recycling", "/her-first-laptop", "/her-first-laptop/eligibility", "/her-first-laptop/apply"],
     collection: FIREBASE_COLLECTIONS.laptopBankSettings,
     label: "Awaited content",
     plural: "Awaited content (tokens)",
@@ -333,6 +341,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   "dashboard-metrics": {
     key: "dashboard-metrics",
     hub: "laptop-bank",
+    revalidatePaths: ["/laptop-bank", "/laptop-bank/impact"],
     collection: FIREBASE_COLLECTIONS.laptopBankMetrics,
     label: "Dashboard metrics",
     plural: "Dashboard metrics",
@@ -385,6 +394,8 @@ const PAGE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = Object.fromEnt
       guidance:
         `Every field here is live copy on ${page.route}. Leave a field empty to keep the wording the site ships with — an empty field falls back to the built-in text rather than blanking the page. Link destinations and section anchors are not editable here on purpose: the URL map is final and gets printed on legal paperwork.`,
       previewHref: page.route,
+      // A page editor only affects its own route.
+      revalidatePaths: [page.route],
       fields: buildSeedFields(page.seed),
     } satisfies ContentTypeDescriptor,
   ]),

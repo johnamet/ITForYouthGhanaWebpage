@@ -77,6 +77,16 @@ export type ContentTypeDescriptor = {
   guidance?: string;
   /** The public route this content renders on, for a preview link. */
   previewHref?: string;
+  /**
+   * Public paths to revalidate after a write.
+   *
+   * NOT optional in practice, and the reason is worth stating: the pages these
+   * editors feed are statically prerendered, so their CMS reads happen at
+   * build time. Without a revalidate call an editor saves a change, sees a
+   * success message, and the public page keeps showing the old copy until the
+   * next deploy — the worst kind of bug, because nothing appears to be wrong.
+   */
+  revalidatePaths?: string[];
 };
 
 

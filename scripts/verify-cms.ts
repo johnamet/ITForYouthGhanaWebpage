@@ -105,6 +105,14 @@ async function main() {
     if (!hubKeys.has(descriptor.hub)) {
       fail(`descriptor "${key}" declares hub "${descriptor.hub}", which is not in adminHubs.`);
     }
+
+    // A descriptor with no revalidate paths saves successfully and then leaves
+    // the public page showing the old copy until the next deploy, because
+    // these pages are statically prerendered. Nothing appears to be wrong,
+    // which is why this is asserted rather than left to review.
+    if (!descriptor.revalidatePaths?.length) {
+      fail(`descriptor "${key}" declares no revalidatePaths, so an edit would not reach the public page until the next deploy.`);
+    }
   }
 
   console.log(

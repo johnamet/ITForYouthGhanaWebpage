@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { getCurrentAdminUser, requireAdminApiSession } from "@/lib/cms/admin-auth";
@@ -20,6 +21,18 @@ import { getContentTypeDescriptor } from "@/lib/content/laptop-bank-admin-schema
  * declare, which is the part that makes this safe — a tampered body cannot
  * write an undeclared field.
  */
+/**
+ * Rebuilds the public pages a descriptor declares.
+ *
+ * The pages these editors feed are statically prerendered, so their CMS reads
+ * happen at build time. Without this an editor saves a change, sees a success
+ * message, and the public page keeps showing the old copy until the next
+ * deploy — the worst kind of bug, because nothing appears to be wrong.
+ */
+function revalidateFor(paths: string[] | undefined) {
+  for (const path of paths ?? []) revalidatePath(path);
+}
+
 export async function POST(request: Request, { params }: { params: { type: string } }) {
   const unauthorized = await requireAdminApiSession();
   if (unauthorized) return unauthorized;
@@ -78,6 +91,8 @@ export async function POST(request: Request, { params }: { params: { type: strin
     summary: `Created ${descriptor.label.toLowerCase()}`,
     changes: record,
   });
+
+  revalidateFor(descriptor.revalidatePaths);
 
   return NextResponse.json({
     success: true,

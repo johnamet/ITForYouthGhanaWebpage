@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { getCurrentAdminUser, requireAdminApiSession } from "@/lib/cms/admin-auth";
@@ -11,7 +12,19 @@ import {
 } from "@/lib/cms/laptop-bank-admin";
 import { getContentTypeDescriptor } from "@/lib/content/laptop-bank-admin-schema";
 
-/** Updates one Laptop Bank content record (build spec §4). */
+/**
+ * Rebuilds the public pages a descriptor declares.
+ *
+ * The pages these editors feed are statically prerendered, so their CMS reads
+ * happen at build time. Without this an editor saves a change, sees a success
+ * message, and the public page keeps showing the old copy until the next
+ * deploy — the worst kind of bug, because nothing appears to be wrong.
+ */
+function revalidateFor(paths: string[] | undefined) {
+  for (const path of paths ?? []) revalidatePath(path);
+}
+
+/** Updates one content record. */
 export async function PUT(request: Request, { params }: { params: { type: string; id: string } }) {
   const unauthorized = await requireAdminApiSession();
   if (unauthorized) return unauthorized;
@@ -61,6 +74,8 @@ export async function PUT(request: Request, { params }: { params: { type: string
     changes: record,
   });
 
+  revalidateFor(descriptor.revalidatePaths);
+
   return NextResponse.json({ success: true, message: `${descriptor.label} saved.` });
 }
 
@@ -107,6 +122,8 @@ export async function DELETE(
     actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
     summary: `Deleted ${descriptor.label.toLowerCase()}`,
   });
+
+  revalidateFor(descriptor.revalidatePaths);
 
   return NextResponse.json({ success: true, message: `${descriptor.label} deleted.` });
 }
