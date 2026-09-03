@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -48,7 +49,14 @@ export async function PUT(request: Request, { params }: SiteContentRouteContext)
     );
   }
 
-  const result = await saveCmsSitePage(pageSlug, parsed.data);
+  const result = await auditedWrite({
+    action: "update",
+    resourceType: "site-content",
+    resourceId: pageSlug,
+    summary: `Updated site page ${pageSlug}`,
+    changes: parsed.data,
+    write: () => saveCmsSitePage(pageSlug, parsed.data),
+  });
 
   if (!result.configured) {
     return NextResponse.json(

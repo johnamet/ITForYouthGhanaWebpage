@@ -1,3 +1,5 @@
+import { getCurrentAdminUser } from "@/lib/cms/admin-auth";
+import { writeAuditLog } from "@/lib/cms/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -32,6 +34,17 @@ export async function PUT(request: Request, { params }: RouteProps) {
   for (const path of getRevalidationPaths("partners")) {
     revalidatePath(path);
   }
+
+  // This route writes Firestore directly rather than through a CMS writer,
+  // so the audit entry is recorded here instead of via auditedWrite.
+  const actor = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "update",
+    resourceType: "partners",
+    resourceId: params.id,
+    actor: actor ? { uid: actor.uid, email: actor.email, role: actor.role } : null,
+    summary: `Reordered partner ${params.id}`,
+  }).catch((error) => console.error("Audit entry failed for partners", error));
 
   return NextResponse.json({ success: true, message: "Order updated." });
 }

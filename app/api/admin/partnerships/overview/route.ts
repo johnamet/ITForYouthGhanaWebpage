@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -19,7 +20,13 @@ export async function PUT(request: Request) {
     );
   }
 
-  const result = await saveCmsPartnershipOverview(parsed.data);
+  const result = await auditedWrite({
+    action: "update",
+    resourceType: "partnerships",
+    resourceId: "overview",
+    summary: "Updated the Partner With Us overview",
+    write: () => saveCmsPartnershipOverview(parsed.data),
+  });
   if (!result.configured) {
     return NextResponse.json(
       { success: false, message: "Firebase Admin is not configured yet, so the overview cannot be saved." },

@@ -9,6 +9,15 @@ import {
 } from "@/lib/firebase/auth";
 import { getCurrentAdminUser } from "@/lib/cms/admin-auth";
 
+/**
+ * AUDIT EXEMPT — see scripts/verify-cms.ts.
+ *
+ * This is the sign-in and sign-out endpoint. It changes no content, and a row
+ * per sign-in belongs in an authentication log rather than in the content
+ * change history that /admin/audit shows — mixing them would bury real content
+ * changes under session noise.
+ */
+
 const sessionSchema = z.object({
   idToken: z.string().min(20),
 });

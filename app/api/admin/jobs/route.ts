@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -33,7 +34,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await saveCmsJob(parsed.data);
+  const result = await auditedWrite({
+    action: "create",
+    resourceType: "jobs",
+    resourceId: (created) => created.id ?? "unknown",
+    summary: `Created job ${parsed.data.title}`,
+    changes: parsed.data,
+    write: () => saveCmsJob(parsed.data),
+  });
 
   if (!result.configured) {
     return NextResponse.json(

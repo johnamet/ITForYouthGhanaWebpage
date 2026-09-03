@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -40,7 +41,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await saveCmsWhatWeDoDynamicPage(parsed.data);
+  const result = await auditedWrite({
+    action: "create",
+    resourceType: "what-we-do-pages",
+    resourceId: parsed.data.slug,
+    summary: `Created What We Do page ${parsed.data.slug}`,
+    changes: parsed.data,
+    write: () => saveCmsWhatWeDoDynamicPage(parsed.data),
+  });
 
   if (!result.configured) {
     return NextResponse.json(

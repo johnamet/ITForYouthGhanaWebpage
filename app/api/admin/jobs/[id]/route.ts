@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -41,7 +42,14 @@ export async function PUT(request: Request, { params }: JobRouteProps) {
 
   const existingJob = await getCmsJobById(params.id);
   const documentId = existingJob?.id ?? params.id;
-  const result = await saveCmsJob(parsed.data, documentId);
+  const result = await auditedWrite({
+    action: "update",
+    resourceType: "jobs",
+    resourceId: documentId,
+    summary: `Updated job ${parsed.data.title}`,
+    changes: parsed.data,
+    write: () => saveCmsJob(parsed.data, documentId),
+  });
 
   if (!result.configured) {
     return NextResponse.json(
@@ -71,7 +79,13 @@ export async function DELETE(_request: Request, { params }: JobRouteProps) {
 
   const existingJob = await getCmsJobById(params.id);
   const documentId = existingJob?.id ?? params.id;
-  const result = await deleteCmsJob(documentId);
+  const result = await auditedWrite({
+    action: "delete",
+    resourceType: "jobs",
+    resourceId: documentId,
+    summary: `Deleted job ${documentId}`,
+    write: () => deleteCmsJob(documentId),
+  });
 
   if (!result.configured) {
     return NextResponse.json(

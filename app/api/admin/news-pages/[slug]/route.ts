@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -46,7 +47,17 @@ export async function PUT(request: Request, { params }: NewsPageRouteContext) {
     );
   }
 
-  const result = await saveCmsNewsPage(params.slug, parsed.data);
+  // Hoisted so the slug narrowing survives into the closure.
+  const slug = params.slug;
+
+  const result = await auditedWrite({
+    action: "update",
+    resourceType: "news-pages",
+    resourceId: slug,
+    summary: `Updated news page ${slug}`,
+    changes: parsed.data,
+    write: () => saveCmsNewsPage(slug, parsed.data),
+  });
 
   if (!result.configured) {
     return NextResponse.json(

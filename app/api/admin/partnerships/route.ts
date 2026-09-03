@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -19,7 +20,17 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await saveCmsPartnershipTrack(parsed.data.slug, parsed.data);
+  // Hoisted so the `!parsed.data.slug` guard above narrows inside the closure.
+  const slug = parsed.data.slug;
+
+  const result = await auditedWrite({
+    action: "create",
+    resourceType: "partnerships",
+    resourceId: slug,
+    summary: `Created partnership track ${slug}`,
+    changes: parsed.data,
+    write: () => saveCmsPartnershipTrack(slug, parsed.data),
+  });
   if (!result.configured) {
     return NextResponse.json(
       { success: false, message: "Firebase Admin is not configured yet, so the track cannot be saved." },

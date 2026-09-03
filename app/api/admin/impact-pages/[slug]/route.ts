@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -46,7 +47,17 @@ export async function PUT(request: Request, { params }: ImpactPageRouteContext) 
     );
   }
 
-  const result = await saveCmsImpactPage(params.slug, parsed.data);
+  // Hoisted so the narrowing from isImpactPageSlug survives into the closure.
+  const slug = params.slug;
+
+  const result = await auditedWrite({
+    action: "update",
+    resourceType: "impact-pages",
+    resourceId: slug,
+    summary: `Updated impact page ${slug}`,
+    changes: parsed.data,
+    write: () => saveCmsImpactPage(slug, parsed.data),
+  });
 
   if (!result.configured) {
     return NextResponse.json(

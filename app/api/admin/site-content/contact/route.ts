@@ -1,3 +1,5 @@
+import { getCurrentAdminUser } from "@/lib/cms/admin-auth";
+import { writeAuditLog } from "@/lib/cms/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -48,6 +50,18 @@ export async function PUT(request: Request) {
   );
 
   revalidatePath("/contact");
+
+  // This route writes Firestore directly rather than through a CMS writer,
+  // so the audit entry is recorded here instead of via auditedWrite.
+  const actor = await getCurrentAdminUser();
+  await writeAuditLog({
+    action: "update",
+    resourceType: "site-content",
+    resourceId: "contact",
+    actor: actor ? { uid: actor.uid, email: actor.email, role: actor.role } : null,
+    summary: "Updated the Contact page",
+    changes: parsed.data,
+  }).catch((error) => console.error("Audit entry failed for site-content", error));
 
   return NextResponse.json({ success: true, message: "Contact page updated." });
 }

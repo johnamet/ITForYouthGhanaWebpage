@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireAdminApiSession } from "@/lib/cms/admin-auth";
@@ -9,7 +10,13 @@ export async function PUT(request: Request, { params }: { params: { slug: string
   if (unauthorized) return unauthorized;
   const payload = (await request.json().catch(() => null)) as OrganisationServicePage | null;
   if (!payload || typeof payload !== "object") return NextResponse.json({ message: "Invalid page content." }, { status: 400 });
-  const result = await saveCmsOrganisationService(params.slug, payload);
+  const result = await auditedWrite({
+    action: "update",
+    resourceType: "organisations",
+    resourceId: params.slug,
+    summary: `Updated organisation service ${params.slug}`,
+    write: () => saveCmsOrganisationService(params.slug, payload),
+  });
   if (!result.configured) return NextResponse.json({ message: "Firebase Admin is not configured." }, { status: 503 });
   revalidatePath("/for-organisations");
   revalidatePath(`/for-organisations/${params.slug}`);

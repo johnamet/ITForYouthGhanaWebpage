@@ -11,7 +11,8 @@
     "verify:media": "node scripts/verify-media-pool.mjs",
     "verify:media-pages": "npx --yes tsx scripts/verify-media-pages.ts",
     "verify:tokens": "npx --yes tsx scripts/verify-tokens.ts",
-    "verify:laptop-bank": "npx --yes tsx scripts/verify-laptop-bank-cms.ts"
+    "verify:laptop-bank": "npx --yes tsx scripts/verify-laptop-bank-cms.ts",
+    "verify:cms": "npx --yes tsx scripts/verify-cms.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

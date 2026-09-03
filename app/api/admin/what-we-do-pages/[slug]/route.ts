@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -58,7 +59,14 @@ export async function PUT(request: Request, { params }: WhatWeDoDynamicPageRoute
     );
   }
 
-  const result = await saveCmsWhatWeDoDynamicPage(parsed.data);
+  const result = await auditedWrite({
+    action: "update",
+    resourceType: "what-we-do-pages",
+    resourceId: params.slug,
+    summary: `Updated What We Do page ${params.slug}`,
+    changes: parsed.data,
+    write: () => saveCmsWhatWeDoDynamicPage(parsed.data),
+  });
 
   if (!result.configured) {
     return NextResponse.json(

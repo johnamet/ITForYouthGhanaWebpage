@@ -1,3 +1,4 @@
+import { auditedWrite } from "@/lib/cms/descriptors/audit";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -21,7 +22,14 @@ export async function PUT(request: Request, { params }: RouteProps) {
     );
   }
 
-  const result = await saveCmsPartnershipTrack(params.slug, parsed.data);
+  const result = await auditedWrite({
+    action: "update",
+    resourceType: "partnerships",
+    resourceId: params.slug,
+    summary: `Updated partnership track ${params.slug}`,
+    changes: parsed.data,
+    write: () => saveCmsPartnershipTrack(params.slug, parsed.data),
+  });
   if (!result.configured) {
     return NextResponse.json(
       { success: false, message: "Firebase Admin is not configured yet, so the track cannot be saved." },
@@ -40,7 +48,13 @@ export async function DELETE(_request: Request, { params }: RouteProps) {
   const unauthorized = await requireAdminApiSession();
   if (unauthorized) return unauthorized;
 
-  const result = await deleteCmsPartnershipTrack(params.slug);
+  const result = await auditedWrite({
+    action: "delete",
+    resourceType: "partnerships",
+    resourceId: params.slug,
+    summary: `Deleted partnership track ${params.slug}`,
+    write: () => deleteCmsPartnershipTrack(params.slug),
+  });
   if (!result.configured) {
     return NextResponse.json(
       { success: false, message: "Firebase Admin is not configured yet, so the track cannot be deleted." },
