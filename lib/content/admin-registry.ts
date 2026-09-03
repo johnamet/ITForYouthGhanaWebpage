@@ -110,7 +110,7 @@ export const adminNodes: AdminNode[] = [
   { key: "news.blogs",  hub: "news-and-updates", label: "Blogs", type: "collection", adminPath: "/admin/news-and-updates", previewHref: "/news-and-updates/blogs" },
 
   // Contact
-  { key: "contact.page", hub: "contact", label: "Contact Page", type: "singleton", adminPath: "/admin/content/contact", previewHref: "/contact" },
+  { key: "contact.page", hub: "contact", label: "Contact Page", type: "singleton", adminPath: "/admin/cms/page-contact", previewHref: "/contact" },
 
   // Media
   { key: "media.library", hub: "media", label: "Assets", type: "collection", adminPath: "/admin/media" },

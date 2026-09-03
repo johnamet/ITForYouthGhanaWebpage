@@ -1,4 +1,5 @@
 import type { ContentTypeDescriptor } from "@/lib/cms/descriptors/types";
+import { PAGE_DESCRIPTORS } from "@/lib/content/cms-descriptors/pages";
 import { RECORD_DESCRIPTORS } from "@/lib/content/cms-descriptors/records";
 import { LAPTOP_BANK_CONTENT_TYPES } from "@/lib/content/laptop-bank-admin-schema";
 
@@ -18,6 +19,7 @@ import { LAPTOP_BANK_CONTENT_TYPES } from "@/lib/content/laptop-bank-admin-schem
 export const CMS_DESCRIPTORS: Record<string, ContentTypeDescriptor> = {
   ...LAPTOP_BANK_CONTENT_TYPES,
   ...RECORD_DESCRIPTORS,
+  ...PAGE_DESCRIPTORS,
 };
 
 export const CMS_DESCRIPTOR_KEYS = Object.keys(CMS_DESCRIPTORS);

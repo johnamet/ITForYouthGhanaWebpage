@@ -178,6 +178,7 @@ const nextConfig = {
         destination: "/laptop-bank",
         permanent: true,
       },
+      { source: "/admin/content/contact", destination: "/admin/cms/page-contact", permanent: false },
       // Team, jobs, partners and testimonials moved onto the descriptor-driven
       // editor. Their bespoke forms are gone, so these keep a bookmarked admin
       // URL working. Temporary, like the Laptop Bank ones below: internal

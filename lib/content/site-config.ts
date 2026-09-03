@@ -2099,7 +2099,7 @@ export const adminNavigation: AdminNavItem[] = [
   },
   {
     label: "Contact Page",
-    href: "/admin/content/contact",
+    href: "/admin/cms/page-contact",
     description: "Contact hero, channels, enquiry options, and routing cards.",
   },
   {
