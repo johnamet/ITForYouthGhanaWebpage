@@ -1,3 +1,4 @@
+import { applyOverrides } from "@/lib/cms/descriptors/page-overrides";
 import { partnershipOverviewContent as seedOverview, partnershipTracks as seedTracks } from "@/lib/content/partnership-config";
 import { getAdminFirestore } from "@/lib/firebase/admin";
 import { toPlainData } from "@/lib/utils/plain";
@@ -17,7 +18,10 @@ const OVERVIEW_ID = "_overview";
  * production build while still exiting 0.
  */
 function normalizeObject<T extends object>(fallback: T, data: Record<string, unknown> | undefined): T {
-  return { ...fallback, ...toPlainData(data ?? {}) } as T;
+  return applyOverrides(
+    fallback as unknown as Record<string, unknown>,
+    toPlainData((data ?? {}) as Record<string, unknown>),
+  ) as unknown as T;
 }
 
 export async function getCmsPartnershipOverview(): Promise<PartnershipOverviewContent> {
@@ -38,17 +42,45 @@ function normalizeTrack(slug: string, data: Record<string, unknown> | undefined)
   return normalizeObject(fallback, data ?? {});
 }
 
+/**
+ * The partnership tracks: the seeded set, with any stored document applied over
+ * its matching track.
+ *
+ * THIS USED TO REPLACE THE SEED RATHER THAN OVERRIDE IT, and that was a live
+ * content bug. The old version returned only the stored documents, so as soon
+ * as one track was edited in the CMS the hub page listed one track instead of
+ * five — the four unedited ones vanished. Their individual pages kept working,
+ * because getCmsPartnershipTrackBySlug falls back per slug, which is what made
+ * it easy to miss.
+ *
+ * The seed is the authoritative set here: these five tracks are the programme,
+ * not placeholder content. A stored document customises a track; it does not
+ * decide which tracks exist. (Contrast lib/cms/partners.ts, where the
+ * collection genuinely is CMS-owned and replacing the seed is intended.)
+ */
 export async function getCmsPartnershipTracks(): Promise<PartnershipTrackPage[]> {
   const db = await getAdminFirestore();
   if (!db) return seedTracks;
   try {
     const snapshot = await db.collection(FIREBASE_COLLECTIONS.partnerships).get();
-    const docs = snapshot.docs.filter((d) => d.id !== OVERVIEW_ID);
-    if (!docs.length) return seedTracks;
-    const tracks = docs.map((doc) => normalizeTrack(doc.id, doc.data() as Record<string, unknown>));
-    // Keep the seed order by mapping over seed slugs
-    const order = new Map(seedTracks.map((t, i) => [t.slug, i] as const));
-    return [...tracks].sort((a, b) => (order.get(a.slug) ?? 999) - (order.get(b.slug) ?? 999));
+    const stored = new Map(
+      snapshot.docs
+        .filter((doc) => doc.id !== OVERVIEW_ID)
+        .map((doc) => [doc.id, doc.data() as Record<string, unknown>]),
+    );
+
+    const tracks = seedTracks.map((track) =>
+      stored.has(track.slug) ? normalizeTrack(track.slug, stored.get(track.slug)) : track,
+    );
+
+    // A stored document whose slug is not in the seed is a track added purely
+    // through the CMS. Keep it, after the seeded ones.
+    for (const [slug, data] of stored) {
+      if (seedTracks.some((track) => track.slug === slug)) continue;
+      tracks.push(normalizeTrack(slug, data));
+    }
+
+    return tracks;
   } catch (e) {
     console.error("Partnership tracks read failed. Falling back to seed.", e);
     return seedTracks;

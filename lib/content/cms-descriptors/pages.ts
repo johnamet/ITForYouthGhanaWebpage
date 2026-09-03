@@ -1,6 +1,8 @@
 import { buildSeedFields } from "@/lib/cms/descriptors/page-overrides";
 import type { ContentTypeDescriptor } from "@/lib/cms/descriptors/types";
 import { contactPageContent } from "@/lib/content/contact-config";
+import { newsHubContent } from "@/lib/content/news-config";
+import { partnershipOverviewContent } from "@/lib/content/partnership-config";
 import {
   impactOverviewContent,
   impactReportsContent,
@@ -102,6 +104,28 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     description: "Goal descriptions and alignment copy on the SDGs page.",
     revalidatePaths: ["/our-impact/sdgs", "/our-impact"],
     seed: impactSdgsContent as unknown as Record<string, unknown>,
+  },
+  {
+    key: "partner-with-us",
+    docId: "_overview",
+    hub: "partner-with-us",
+    label: "Partner With Us overview",
+    route: "/partner-with-us",
+    collection: FIREBASE_COLLECTIONS.partnerships,
+    description: "Headings, value cards and next-steps copy on the partnership hub.",
+    revalidatePaths: ["/partner-with-us"],
+    seed: partnershipOverviewContent as unknown as Record<string, unknown>,
+  },
+  {
+    key: "news-hub",
+    docId: "hub",
+    hub: "news-and-updates",
+    label: "News hub page",
+    route: "/news-and-updates",
+    collection: FIREBASE_COLLECTIONS.newsPages,
+    description: "Wording on the news hub. Articles themselves are edited under Articles.",
+    revalidatePaths: ["/news-and-updates"],
+    seed: newsHubContent as unknown as Record<string, unknown>,
   },
 ];
 
