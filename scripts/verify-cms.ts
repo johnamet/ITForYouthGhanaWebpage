@@ -148,7 +148,11 @@ async function main() {
     seed: Record<string, unknown>,
   ) => {
     const fields = resolveFields(descriptor, { id });
-    const values = initialValues(fields, undefined, seed);
+    // Exactly what app/(admin)/admin/cms/[type]/[id]/page.tsx hands the form
+    // for a record with no stored document yet: the id, and the merged content
+    // as the fallback. Simulating a CREATE instead would be a different screen
+    // with different rules — a new record honours the descriptor's defaults.
+    const values = initialValues(fields, { id: id ?? "" }, seed);
     const stored = projectRecord(descriptor, values as Record<string, unknown>, fields);
     const merged = applyOverrides(seed, stored);
     roundTripped += 1;
@@ -178,7 +182,28 @@ async function main() {
 
   console.log(`No-op saves: ${roundTripped} generated editor(s) round-trip their seed unchanged.`);
 
-  // ── 4. Descriptor reachability ───────────────────────────────────────────
+  // ── 4. No descriptor key is defined twice ────────────────────────────────
+  //
+  // CMS_DESCRIPTORS merges four maps, so a key defined in two of them silently
+  // loses one editor with nothing to see. The Laptop Bank already owns
+  // `page-how-it-works`, and a second page of that name added elsewhere would
+  // simply replace it — the editor would still be listed, and would edit the
+  // wrong content.
+  const { CMS_DESCRIPTOR_SOURCES } = await import("../lib/cms/descriptors/registry");
+  const seenIn = new Map<string, string[]>();
+  for (const [source, map] of Object.entries(CMS_DESCRIPTOR_SOURCES)) {
+    for (const key of Object.keys(map)) {
+      seenIn.set(key, [...(seenIn.get(key) ?? []), source]);
+    }
+  }
+  for (const [key, sources] of seenIn) {
+    if (sources.length > 1) {
+      fail(`descriptor key "${key}" is defined in ${sources.join(" and ")}; one silently replaces the other.`);
+    }
+  }
+  console.log(`Descriptor keys: ${seenIn.size} unique across ${Object.keys(CMS_DESCRIPTOR_SOURCES).length} source maps.`);
+
+  // ── 5. Descriptor reachability ───────────────────────────────────────────
   const { CMS_DESCRIPTORS } = await import("../lib/cms/descriptors/registry");
   const { adminNodes, adminHubs } = await import("../lib/content/admin-registry");
 

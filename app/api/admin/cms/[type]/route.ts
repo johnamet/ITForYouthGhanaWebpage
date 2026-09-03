@@ -32,7 +32,14 @@ import { isSeedCollection } from "@/lib/cms/descriptors/seed-collections";
  * deploy — the worst kind of bug, because nothing appears to be wrong.
  */
 function revalidateFor(paths: string[] | undefined) {
-  for (const path of paths ?? []) revalidatePath(path);
+  for (const path of paths ?? []) {
+    // A path with a segment in brackets — "/departments/[slug]" — rebuilds
+    // every page of that route rather than one. Needed because a department,
+    // an initiative and a partnership track each render their own page, and
+    // the descriptor cannot know which slugs exist at the time it is written.
+    if (path.includes("[")) revalidatePath(path, "page");
+    else revalidatePath(path);
+  }
 }
 
 export async function POST(request: Request, { params }: { params: { type: string } }) {

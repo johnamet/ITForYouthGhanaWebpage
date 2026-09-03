@@ -3,6 +3,7 @@ import type { ContentTypeDescriptor } from "@/lib/cms/descriptors/types";
 import { contactPageContent } from "@/lib/content/contact-config";
 import {
   applyForTrainingHub,
+  whatWeDoOverviewContent,
   careersHub,
   howItWorksHub,
   partnersHub,
@@ -229,6 +230,17 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     description: "Wording around the course catalogue, cohorts and application process.",
     revalidatePaths: ["/apply-for-training/courses"],
     seed: trainingCoursesHub as unknown as Record<string, unknown>,
+  },
+  {
+    key: "what-we-do",
+    docId: "what-we-do",
+    hub: "what-we-do",
+    label: "What We Do overview",
+    route: "/what-we-do",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "Headings, pillars and next-step copy on the What We Do hub. The initiatives themselves are edited under Initiatives.",
+    revalidatePaths: ["/what-we-do"],
+    seed: whatWeDoOverviewContent as unknown as Record<string, unknown>,
   },
   {
     key: "news-hub",

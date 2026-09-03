@@ -3,7 +3,6 @@
 
 import { CMS_DESCRIPTORS } from "@/lib/cms/descriptors/registry";
 import { organisationServices } from "@/lib/content/organisation-config";
-import { partnershipTracks } from "@/lib/content/partnership-config";
 
 export type AdminNodeType = "singleton" | "collection";
 
@@ -65,7 +64,11 @@ export const adminNodes: AdminNode[] = [
   { key: "homepage.ticker",          hub: "homepage", label: "Marquee Ticker",     type: "singleton", adminPath: "/admin/content/homepage" },
 
   // What We Do
-  { key: "what.initiatives", hub: "what-we-do", label: "Initiatives", type: "collection", adminPath: "/admin/programmes", previewHref: "/what-we-do" },
+  //
+  // Initiatives and the hub copy are generated from the descriptor registry.
+  // Custom pages stay hand-listed: they are authored from nothing rather than
+  // edited over shipped content, which is a different job — see the note at
+  // the end of docs/superpowers/plans/2026-09-03-seed-backed-collections.md.
   { key: "what.custom-pages", hub: "what-we-do", label: "Custom Pages", type: "collection", adminPath: "/admin/what-we-do-pages", previewHref: "/what-we-do" },
 
   // Who We Are, Apply for Training
@@ -89,15 +92,11 @@ export const adminNodes: AdminNode[] = [
   })),
 
   // Partner With Us
-  { key: "pwu.overview", hub: "partner-with-us", label: "Overview", type: "singleton", adminPath: "/admin/partner-with-us/overview", previewHref: "/partner-with-us" },
-  ...partnershipTracks.map((track): AdminNode => ({
-    key: `pwu.${track.slug}`,
-    hub: "partner-with-us",
-    label: track.title,
-    type: "singleton",
-    adminPath: `/admin/partner-with-us/${track.slug}`,
-    previewHref: `/partner-with-us/${track.slug}`,
-  })),
+  //
+  // Nothing hand-listed: the overview is a generated page editor and the five
+  // tracks are a generated seed-backed collection. These entries used to name
+  // each track individually, which meant a track added to the seed was
+  // invisible in the sidebar until someone remembered to add it here too.
 
   // Our Impact
   { key: "impact.overview", hub: "our-impact", label: "Overview",   type: "singleton",  adminPath: "/admin/cms/page-impact-overview", previewHref: "/our-impact" },

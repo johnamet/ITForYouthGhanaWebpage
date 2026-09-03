@@ -85,23 +85,58 @@ export function initialValues(
       continue;
     }
 
+    /**
+     * A checkbox, a select and a number cannot express "not overridden".
+     *
+     * An empty text field falls back to the shipped wording, which is what
+     * makes a copy override safe. There is no equivalent for a checkbox —
+     * false IS an answer — so for content with shipped values behind it these
+     * three kinds show the CURRENT effective value instead. Without this,
+     * opening a shipped department and saving would have set its status to
+     * blank and quietly unfeatured it: verify:cms caught exactly that on
+     * eleven records.
+     *
+     * A NEW record still honours the descriptor's default, so a department
+     * added here starts as a draft rather than inheriting the template's
+     * published status.
+     */
+    const merged = fallback?.[field.key];
+    const inheritable = record !== undefined && stored === undefined && merged !== undefined;
+
     if (field.kind === "boolean") {
-      // A new record honours the descriptor's default; an existing one shows
-      // exactly what is stored, so an editor who turned something off does not
-      // find it back on next time they open the form.
       values[field.key] =
-        stored === undefined && record === undefined ? field.defaultValue === true : stored === true;
+        stored !== undefined
+          ? stored === true
+          : inheritable
+            ? merged === true
+            : record === undefined
+              ? field.defaultValue === true
+              : false;
       continue;
     }
 
     if (field.kind === "number") {
       // null and undefined both render as an empty control, which is what
       // keeps "not counted yet" distinct from a real zero.
-      values[field.key] = stored === null || stored === undefined ? "" : String(stored);
+      const value = stored === null || stored === undefined ? (inheritable ? merged : null) : stored;
+      values[field.key] = value === null || value === undefined ? "" : String(value);
       continue;
     }
 
     const defaulted = typeof field.defaultValue === "string" ? field.defaultValue : "";
+
+    if (field.kind === "select") {
+      values[field.key] =
+        typeof stored === "string" && stored
+          ? stored
+          : inheritable && typeof merged === "string"
+            ? merged
+            : record === undefined
+              ? defaulted
+              : "";
+      continue;
+    }
+
     values[field.key] =
       typeof stored === "string" ? stored : record === undefined ? defaulted : "";
   }

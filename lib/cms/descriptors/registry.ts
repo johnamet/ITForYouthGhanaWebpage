@@ -1,6 +1,7 @@
 import type { ContentTypeDescriptor } from "@/lib/cms/descriptors/types";
 import { PAGE_DESCRIPTORS } from "@/lib/content/cms-descriptors/pages";
 import { RECORD_DESCRIPTORS } from "@/lib/content/cms-descriptors/records";
+import { SEED_COLLECTION_DESCRIPTORS } from "@/lib/content/cms-descriptors/seed-collections";
 import { LAPTOP_BANK_CONTENT_TYPES } from "@/lib/content/laptop-bank-admin-schema";
 
 /**
@@ -19,7 +20,22 @@ import { LAPTOP_BANK_CONTENT_TYPES } from "@/lib/content/laptop-bank-admin-schem
 export const CMS_DESCRIPTORS: Record<string, ContentTypeDescriptor> = {
   ...LAPTOP_BANK_CONTENT_TYPES,
   ...RECORD_DESCRIPTORS,
+  ...SEED_COLLECTION_DESCRIPTORS,
   ...PAGE_DESCRIPTORS,
+};
+
+/**
+ * The source maps, for the duplicate-key check in scripts/verify-cms.ts.
+ *
+ * Merging four maps means a key defined twice silently loses one editor with
+ * nothing to see: the Laptop Bank already has a `page-how-it-works`, and a
+ * second one added elsewhere would simply replace it.
+ */
+export const CMS_DESCRIPTOR_SOURCES = {
+  "laptop-bank": LAPTOP_BANK_CONTENT_TYPES,
+  records: RECORD_DESCRIPTORS,
+  "seed-collections": SEED_COLLECTION_DESCRIPTORS,
+  pages: PAGE_DESCRIPTORS,
 };
 
 export const CMS_DESCRIPTOR_KEYS = Object.keys(CMS_DESCRIPTORS);

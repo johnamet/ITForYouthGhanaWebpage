@@ -88,6 +88,20 @@ function coerceValue(field: FieldDescriptor, raw: unknown): unknown {
             delete row[itemField.key];
             continue;
           }
+
+          /**
+           * A key the row never had, still empty, is not added.
+           *
+           * Item controls are generated from the shape MERGED across every row,
+           * so a card that carries bullets gives every card a bullets control.
+           * Writing the empty ones back would add `bullets: []` to rows that
+           * had no bullets at all — which verify:cms caught as "opening the
+           * editor and saving would change sections" on all eight initiatives.
+           */
+          const isEmpty =
+            value === "" || (Array.isArray(value) && value.length === 0);
+          if (isEmpty && !(itemField.key in source)) continue;
+
           row[itemField.key] = value;
           if (typeof value === "string" ? value !== "" : Array.isArray(value) ? value.length > 0 : true) {
             filled = true;
