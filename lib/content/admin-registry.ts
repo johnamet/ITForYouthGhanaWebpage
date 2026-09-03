@@ -65,8 +65,6 @@ export const adminNodes: AdminNode[] = [
   { key: "homepage.ticker",          hub: "homepage", label: "Marquee Ticker",     type: "singleton", adminPath: "/admin/content/homepage" },
 
   // Who We Are
-  { key: "who.team",        hub: "who-we-are", label: "Team",      type: "collection", adminPath: "/admin/team", previewHref: "/who-we-are/team" },
-  { key: "who.partners",    hub: "who-we-are", label: "Partners",  type: "collection", adminPath: "/admin/partners", previewHref: "/who-we-are/partners" },
   { key: "who.careers",     hub: "who-we-are", label: "Careers",   type: "singleton",  adminPath: "/admin/who-we-are-pages" },
 
   // What We Do
@@ -104,7 +102,6 @@ export const adminNodes: AdminNode[] = [
   // Our Impact
   { key: "impact.overview", hub: "our-impact", label: "Overview",   type: "singleton",  adminPath: "/admin/our-impact", previewHref: "/our-impact" },
   { key: "impact.reports",  hub: "our-impact", label: "Reports",    type: "collection", adminPath: "/admin/our-impact", previewHref: "/our-impact/reports" },
-  { key: "impact.testimonials", hub: "our-impact", label: "Testimonials", type: "collection", adminPath: "/admin/testimonials", previewHref: "/our-impact/testimonials" },
   { key: "impact.sdgs",     hub: "our-impact", label: "UN SDGs",    type: "singleton",  adminPath: "/admin/our-impact", previewHref: "/our-impact/sdgs" },
 
   // News & Updates

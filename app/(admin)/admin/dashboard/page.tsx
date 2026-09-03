@@ -38,7 +38,7 @@ export default async function AdminDashboardPage() {
       status: activeTeam.length ? "published" : "draft",
       action: {
         label: "Manage Team",
-        href: "/admin/team",
+        href: "/admin/cms/team",
       },
     },
     {
@@ -48,7 +48,7 @@ export default async function AdminDashboardPage() {
       status: activePartners.length ? "published" : "draft",
       action: {
         label: "Manage Partners",
-        href: "/admin/partners",
+        href: "/admin/cms/partner",
       },
     },
     {
@@ -58,7 +58,7 @@ export default async function AdminDashboardPage() {
       status: activeTestimonials.length ? "published" : "draft",
       action: {
         label: "Manage Testimonials",
-        href: "/admin/testimonials",
+        href: "/admin/cms/testimonial",
       },
     },
     {
@@ -68,7 +68,7 @@ export default async function AdminDashboardPage() {
       status: publishedJobs.length ? "published" : "draft",
       action: {
         label: "Manage Jobs",
-        href: "/admin/jobs",
+        href: "/admin/cms/job",
       },
     },
   ];

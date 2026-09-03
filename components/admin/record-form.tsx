@@ -24,14 +24,22 @@ function initialValues(
   for (const field of descriptor.fields) {
     const stored = record?.[field.key];
     if (field.kind === "boolean") {
-      values[field.key] = stored === true;
+      // A new record honours the descriptor's default; an existing one shows
+      // exactly what is stored, so an editor who turned something off does not
+      // find it back on next time they open the form.
+      values[field.key] =
+        stored === undefined && record === undefined
+          ? field.defaultValue === true
+          : stored === true;
     } else if (field.kind === "number") {
       // null and undefined both render as an empty control, which is what
       // keeps "not counted yet" distinct from a real zero.
       values[field.key] =
         stored === null || stored === undefined ? "" : String(stored);
     } else {
-      values[field.key] = typeof stored === "string" ? stored : "";
+      const fallback = typeof field.defaultValue === "string" ? field.defaultValue : "";
+      values[field.key] =
+        typeof stored === "string" ? stored : record === undefined ? fallback : "";
     }
   }
   return values;

@@ -178,6 +178,18 @@ const nextConfig = {
         destination: "/laptop-bank",
         permanent: true,
       },
+      // Team, jobs, partners and testimonials moved onto the descriptor-driven
+      // editor. Their bespoke forms are gone, so these keep a bookmarked admin
+      // URL working. Temporary, like the Laptop Bank ones below: internal
+      // admin URLs, not the public URL map.
+      { source: "/admin/team", destination: "/admin/cms/team", permanent: false },
+      { source: "/admin/team/:path*", destination: "/admin/cms/team", permanent: false },
+      { source: "/admin/jobs", destination: "/admin/cms/job", permanent: false },
+      { source: "/admin/jobs/:path*", destination: "/admin/cms/job", permanent: false },
+      { source: "/admin/partners", destination: "/admin/cms/partner", permanent: false },
+      { source: "/admin/partners/:path*", destination: "/admin/cms/partner", permanent: false },
+      { source: "/admin/testimonials", destination: "/admin/cms/testimonial", permanent: false },
+      { source: "/admin/testimonials/:path*", destination: "/admin/cms/testimonial", permanent: false },
       // The Laptop Bank's record editors were generalised to /admin/cms/[type]
       // when the descriptor pattern was rolled out. These keep a bookmarked
       // admin URL working. Temporary rather than permanent on purpose: these

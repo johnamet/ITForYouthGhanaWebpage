@@ -43,6 +43,17 @@ export type FieldDescriptor = {
   consent?: boolean;
   /** Full-width control, for long text. */
   wide?: boolean;
+  /**
+   * Value a NEW record starts with.
+   *
+   * Needed because the old hand-written forms carried defaults in their zod
+   * schemas — `partnerSchema` defaults `active` to true — and a generic form
+   * that initialised every boolean to false would have saved new partners
+   * hidden. A `consent` field should normally NOT set this: the point of the
+   * consent treatment is that a publishing decision is made deliberately, not
+   * inherited.
+   */
+  defaultValue?: string | boolean;
 };
 
 export type ContentTypeDescriptor = {

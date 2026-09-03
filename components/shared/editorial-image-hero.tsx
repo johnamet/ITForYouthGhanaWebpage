@@ -68,7 +68,7 @@ export function EditorialImageHero({
           "relative",
           visibleImage
             ? "min-h-[34rem] sm:min-h-[40rem] lg:min-h-[46rem]"
-            : "min-h-[18rem] bg-brand-navy sm:min-h-[22rem]",
+            : "bg-brand-navy",
         )}
       >
         {visibleImage ? (
@@ -88,7 +88,12 @@ export function EditorialImageHero({
         />
 
         {visibleBreadcrumbs.length > 0 ? (
-          <div className="absolute inset-x-0 top-0 z-10">
+          <div
+            className={cn(
+              "z-10",
+              visibleImage ? "absolute inset-x-0 top-0" : "relative",
+            )}
+          >
             <nav
               aria-label="Breadcrumb"
               className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-2 gap-y-1 px-4 pt-7 text-sm font-medium text-white sm:px-6 lg:px-8 lg:pt-9"
@@ -115,9 +120,23 @@ export function EditorialImageHero({
         ) : null}
 
         {hasHeroContent ? (
-          <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 sm:bottom-6 lg:bottom-8">
+          <div
+            className={cn(
+              "z-20",
+              visibleImage
+                ? "pointer-events-none absolute inset-x-0 bottom-4 sm:bottom-6 lg:bottom-8"
+                : "relative pb-10 pt-8 sm:pb-12 sm:pt-10 lg:pb-16 lg:pt-12",
+            )}
+          >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="pointer-events-auto w-full sm:max-w-xl">
+              <div
+                className={cn(
+                  "w-full",
+                  visibleImage
+                    ? "pointer-events-auto sm:max-w-xl"
+                    : "sm:max-w-2xl lg:max-w-3xl",
+                )}
+              >
                 {hasPanel ? (
                   <div className="border-l-4 border-brand-gold bg-brand-navy/90 px-6 py-7 text-white shadow-editorial backdrop-blur-xl backdrop-saturate-150 sm:px-8 sm:py-9">
                     {hasText(eyebrow) ? (
@@ -146,16 +165,22 @@ export function EditorialImageHero({
 
                 {visibleCtas.length > 0 ? (
                   <div className={cn("flex flex-wrap gap-3", hasPanel && "mt-4")}>
-                      {visibleCtas.map((cta) => (
-                        <Button
-                          key={`${cta.href}-${cta.label}`}
-                          href={cta.href}
-                          variant={cta.variant === "secondary" ? "white-outline" : cta.variant === "primaryBlue" ? "solid-blue" : "solid-pink"}
-                          size="lg"
-                        >
-                          {cta.label}
-                        </Button>
-                      ))}
+                    {visibleCtas.map((cta) => (
+                      <Button
+                        key={`${cta.href}-${cta.label}`}
+                        href={cta.href}
+                        variant={
+                          cta.variant === "secondary"
+                            ? "white-outline"
+                            : cta.variant === "primaryBlue"
+                              ? "solid-blue"
+                              : "solid-pink"
+                        }
+                        size="lg"
+                      >
+                        {cta.label}
+                      </Button>
+                    ))}
                   </div>
                 ) : null}
               </div>
