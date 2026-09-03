@@ -1,6 +1,16 @@
 import { buildSeedFields } from "@/lib/cms/descriptors/page-overrides";
 import type { ContentTypeDescriptor } from "@/lib/cms/descriptors/types";
 import { contactPageContent } from "@/lib/content/contact-config";
+import {
+  applyForTrainingHub,
+  careersHub,
+  howItWorksHub,
+  partnersHub,
+  teamHub,
+  trainingCoursesHub,
+  whoCanApplyHub,
+  whoWeAreHub,
+} from "@/lib/content/site-config";
 import { newsHubContent } from "@/lib/content/news-config";
 import { partnershipOverviewContent } from "@/lib/content/partnership-config";
 import {
@@ -115,6 +125,110 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     description: "Headings, value cards and next-steps copy on the partnership hub.",
     revalidatePaths: ["/partner-with-us"],
     seed: partnershipOverviewContent as unknown as Record<string, unknown>,
+  },
+  /**
+   * The eight seed-backed site pages, previously edited by
+   * components/admin/site-page-form.tsx.
+   *
+   * Each has a fixed document id in `siteContent` and a seed in
+   * lib/content/site-config.ts, which is exactly the singleton pattern already
+   * carrying the contact and impact pages — so these needed no new machinery,
+   * only the repeatable-list controls that let an editor add a section or a
+   * stat the way the old form could.
+   *
+   * `testimonialsHub` is deliberately absent. It is in `pageFallbacks` but no
+   * public page reads it — /our-impact/testimonials renders the impact page
+   * content instead — and an editor for content that renders nowhere is worse
+   * than no editor: someone would spend an afternoon rewording a page that
+   * does not exist.
+   */
+  {
+    key: "who-we-are",
+    docId: "who-we-are",
+    hub: "who-we-are",
+    label: "Who We Are page",
+    route: "/who-we-are",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "Hero, principles, operating model and next-step copy on the Who We Are hub.",
+    revalidatePaths: ["/who-we-are"],
+    seed: whoWeAreHub as unknown as Record<string, unknown>,
+  },
+  {
+    key: "team",
+    docId: "team",
+    hub: "who-we-are",
+    label: "Team page",
+    route: "/who-we-are/team",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "Wording around the team listing. The people themselves are edited under Team.",
+    revalidatePaths: ["/who-we-are/team"],
+    seed: teamHub as unknown as Record<string, unknown>,
+  },
+  {
+    key: "partners",
+    docId: "partners",
+    hub: "who-we-are",
+    label: "Partners page",
+    route: "/who-we-are/partners",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "Wording around the partner logos. The partners themselves are edited under Partners.",
+    revalidatePaths: ["/who-we-are/partners"],
+    seed: partnersHub as unknown as Record<string, unknown>,
+  },
+  {
+    key: "careers",
+    docId: "careers",
+    hub: "who-we-are",
+    label: "Careers page",
+    route: "/who-we-are/careers",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "Wording around the vacancies. The roles themselves are edited under Jobs.",
+    revalidatePaths: ["/who-we-are/careers"],
+    seed: careersHub as unknown as Record<string, unknown>,
+  },
+  {
+    key: "apply-for-training",
+    docId: "apply-for-training",
+    hub: "apply-for-training",
+    label: "Apply for Training page",
+    route: "/apply-for-training",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "The learner pathway landing page: hero, sections, cohorts, process steps and stats.",
+    revalidatePaths: ["/apply-for-training"],
+    seed: applyForTrainingHub as unknown as Record<string, unknown>,
+  },
+  {
+    key: "apply-who-can-apply",
+    docId: "apply-for-training-who-can-apply",
+    hub: "apply-for-training",
+    label: "Who Can Apply page",
+    route: "/apply-for-training/who-can-apply",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "Eligibility wording, readiness sections and next-step cards.",
+    revalidatePaths: ["/apply-for-training/who-can-apply"],
+    seed: whoCanApplyHub as unknown as Record<string, unknown>,
+  },
+  {
+    key: "apply-how-it-works",
+    docId: "apply-for-training-how-it-works",
+    hub: "apply-for-training",
+    label: "How It Works page",
+    route: "/apply-for-training/how-it-works",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "The training process page: stages, principles and explore copy.",
+    revalidatePaths: ["/apply-for-training/how-it-works"],
+    seed: howItWorksHub as unknown as Record<string, unknown>,
+  },
+  {
+    key: "apply-courses",
+    docId: "apply-for-training-courses",
+    hub: "apply-for-training",
+    label: "Courses page",
+    route: "/apply-for-training/courses",
+    collection: FIREBASE_COLLECTIONS.siteContent,
+    description: "Wording around the course catalogue, cohorts and application process.",
+    revalidatePaths: ["/apply-for-training/courses"],
+    seed: trainingCoursesHub as unknown as Record<string, unknown>,
   },
   {
     key: "news-hub",

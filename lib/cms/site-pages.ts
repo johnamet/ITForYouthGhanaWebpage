@@ -1,3 +1,4 @@
+import { applyOverrides } from "@/lib/cms/descriptors/page-overrides";
 import {
   applyForTrainingHub,
   careersHub,
@@ -13,6 +14,7 @@ import {
 import { getAdminFirestore } from "@/lib/firebase/admin";
 import type { DynamicSitePagePayload, SitePagePayload } from "@/lib/utils/validators";
 import type { DynamicSitePage, DynamicSitePageStatus, SitePage } from "@/types/content";
+import { toPlainData } from "@/lib/utils/plain";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 type CmsWriteResult = {
@@ -52,6 +54,10 @@ const WHAT_WE_DO_DYNAMIC_PARENT = "what-we-do";
 const WHAT_WE_DO_DYNAMIC_TYPE = "whatWeDoDynamicPage";
 const RESERVED_WHAT_WE_DO_SLUGS = new Set(initiatives.map((initiative) => initiative.slug));
 
+function asString(value: unknown) {
+  return typeof value === "string" ? value : undefined;
+}
+
 const optionalStringFields = [
   "heroImage",
   "overviewTitle",
@@ -78,10 +84,17 @@ const optionalStringFields = [
   "nextStepDescription",
 ] as const satisfies readonly (keyof SitePage)[];
 
-function asString(value: unknown) {
-  return typeof value === "string" ? value : undefined;
-}
-
+/**
+ * Merges a stored document over a page shape, field by field.
+ *
+ * KEPT ONLY FOR THE DYNAMIC PAGES, and the distinction is the point. The eight
+ * seed-backed site pages have real shipped copy behind them, so an empty
+ * stored value there means "not overridden" and `applyOverrides` is right. A
+ * dynamic page has no shipped copy at all — its fallback is an empty template
+ * — so an empty value is a real answer from whoever authored the page, and an
+ * empty stats array means the page has no stats rather than "use the blank row
+ * from the template".
+ */
 function mergeSitePage(fallback: SitePage, data: Record<string, unknown>): SitePage {
   const stats = Array.isArray(data.stats) ? data.stats : fallback.stats;
   const sections = Array.isArray(data.sections) ? data.sections : fallback.sections;
@@ -201,6 +214,29 @@ function sortDynamicPages(pages: DynamicSitePage[]) {
   });
 }
 
+/**
+ * One of the eight seed-backed site pages: its seed with stored overrides
+ * applied.
+ *
+ * This used to be `mergeSitePage`, which rebuilt the page field by field with
+ * `asString(data.x) ?? fallback.x` and took any stored array wholesale. Two
+ * things went wrong with that, and both were live:
+ *
+ *   - An EMPTY stored value won. `siteContent/apply-for-training` holds
+ *     `intro: ""`, written by a form that submitted every field whether or not
+ *     it had been touched, and the live page therefore had no introduction.
+ *     `applyOverrides` treats empty as "not overridden", which is the rule
+ *     every other page in this CMS already follows.
+ *   - An array of the wrong shape was taken as-is. The merge now refuses a
+ *     value whose shape does not match the seed's, which is the type safety
+ *     the field-by-field version was providing and the reason it looked
+ *     unsafe to replace.
+ *
+ * A key the seed does not declare is dropped, which is what keeps `updatedAt`
+ * out of the React tree. So a field the CMS should be able to set has to exist
+ * in the seed object — `courses` does not, and a stored `courses: []` is
+ * consequently ignored rather than published as an empty catalogue.
+ */
 export async function getCmsSitePage(slug: string): Promise<SitePage | null> {
   const fallback = pageFallbacks[slug];
 
@@ -214,13 +250,17 @@ export async function getCmsSitePage(slug: string): Promise<SitePage | null> {
     return fallback;
   }
 
+  const merge = (data: Record<string, unknown>) =>
+    applyOverrides(fallback as unknown as Record<string, unknown>, toPlainData(data)) as unknown as SitePage;
+
   try {
     const directDoc = await db.collection(FIREBASE_COLLECTIONS.siteContent).doc(slug).get();
 
     if (directDoc.exists) {
-      return mergeSitePage(fallback, directDoc.data() ?? {});
+      return merge((directDoc.data() ?? {}) as Record<string, unknown>);
     }
 
+    // A document whose id is not its slug: written before ids were fixed.
     const slugMatch = await db
       .collection(FIREBASE_COLLECTIONS.siteContent)
       .where("slug", "==", slug)
@@ -231,7 +271,7 @@ export async function getCmsSitePage(slug: string): Promise<SitePage | null> {
       return fallback;
     }
 
-    return mergeSitePage(fallback, slugMatch.docs[0].data());
+    return merge((slugMatch.docs[0].data() ?? {}) as Record<string, unknown>);
   } catch (error) {
     console.error("Firestore site-content read failed. Falling back to seed content.", error);
     return fallback;

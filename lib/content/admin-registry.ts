@@ -64,18 +64,18 @@ export const adminNodes: AdminNode[] = [
   { key: "homepage.floating",        hub: "homepage", label: "Floating Elements",  type: "singleton", adminPath: "/admin/content/floating-elements" },
   { key: "homepage.ticker",          hub: "homepage", label: "Marquee Ticker",     type: "singleton", adminPath: "/admin/content/homepage" },
 
-  // Who We Are
-  { key: "who.careers",     hub: "who-we-are", label: "Careers",   type: "singleton",  adminPath: "/admin/who-we-are-pages" },
-
   // What We Do
   { key: "what.initiatives", hub: "what-we-do", label: "Initiatives", type: "collection", adminPath: "/admin/programmes", previewHref: "/what-we-do" },
   { key: "what.custom-pages", hub: "what-we-do", label: "Custom Pages", type: "collection", adminPath: "/admin/what-we-do-pages", previewHref: "/what-we-do" },
 
-  // Apply for Training
-  { key: "apply.landing",   hub: "apply-for-training", label: "Landing",       type: "singleton",  adminPath: "/admin/content/apply-for-training", previewHref: "/apply-for-training" },
-  { key: "apply.who",       hub: "apply-for-training", label: "Who Can Apply", type: "singleton",  adminPath: "/admin/content/apply-for-training-who-can-apply", previewHref: "/apply-for-training/who-can-apply" },
-  { key: "apply.courses",   hub: "apply-for-training", label: "Courses",       type: "collection", adminPath: "/admin/content/apply-for-training-courses", previewHref: "/apply-for-training/courses" },
-  { key: "apply.process",   hub: "apply-for-training", label: "How It Works",   type: "singleton",  adminPath: "/admin/content/apply-for-training-how-it-works", previewHref: "/apply-for-training/how-it-works" },
+  // Who We Are, Apply for Training
+  //
+  // Nothing hand-listed here any more. The eight seed-backed site pages —
+  // Who We Are, Team, Partners, Careers and the four Apply for Training pages
+  // — are generated from lib/content/cms-descriptors/pages.ts, which is what
+  // keeps the sidebar honest: a page added to that registry appears here
+  // automatically, and one removed cannot leave a node pointing at a route
+  // that no longer exists (which is exactly what these five entries did).
 
   // For Organisations
   { key: "org.overview", hub: "for-organisations", label: "Overview", type: "singleton", adminPath: "/admin/programmes/for-organisations/overview", previewHref: "/for-organisations" },
