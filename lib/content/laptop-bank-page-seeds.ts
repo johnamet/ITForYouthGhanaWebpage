@@ -120,26 +120,6 @@ export function getPageSeed(key: string): LaptopBankPageSeed | undefined {
   return LAPTOP_BANK_PAGE_SEEDS.find((page) => page.key === key);
 }
 
-/**
- * The separator used in stored field keys for a nested path.
- *
- * `hero.heading` is stored as `hero__heading`. A dot is avoided on purpose:
- * Firestore treats a dot as a field-path separator in `update()` and in
- * queries, so a literal dotted key is a trap waiting for whoever writes the
- * next query against this collection.
- */
-export const PATH_SEPARATOR = "__";
-
-/** Keys that must never become editable fields. See the note in `walkSeed`. */
-export const NON_EDITABLE_KEYS = new Set([
-  // Spec §2.2: "URLs are final. They will be printed on legal paperwork." A
-  // CTA's wording is content; its destination is part of the URL map.
-  "href",
-  // Spec §10 checks that every anchor on 5.2 and 5.4 resolves, and an anchor
-  // that has been shared is a URL someone may have bookmarked.
-  "anchor",
-  // Internal plumbing, not content.
-  "id",
-  "mediaKey",
-  "variant",
-]);
+// PATH_SEPARATOR and NON_EDITABLE_KEYS moved to
+// lib/cms/descriptors/page-overrides.ts when the pattern was generalised.
+export { PATH_SEPARATOR, NON_EDITABLE_KEYS } from "@/lib/cms/descriptors/page-overrides";

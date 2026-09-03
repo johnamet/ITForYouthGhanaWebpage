@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { Database } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { LaptopBankRecordForm } from "@/components/admin/laptop-bank-record-form";
+import { RecordForm } from "@/components/admin/record-form";
 import { getContentTypeDescriptor } from "@/lib/content/laptop-bank-admin-schema";
 
 export default function AdminLaptopBankNewRecordPage({
@@ -27,7 +27,7 @@ export default function AdminLaptopBankNewRecordPage({
         icon={<Database className="h-6 w-6" />}
       />
 
-      <LaptopBankRecordForm descriptor={descriptor} />
+      <RecordForm descriptor={descriptor} />
     </div>
   );
 }

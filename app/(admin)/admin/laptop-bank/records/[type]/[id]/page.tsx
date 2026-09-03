@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Database } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { LaptopBankRecordForm } from "@/components/admin/laptop-bank-record-form";
+import { RecordForm } from "@/components/admin/record-form";
 import { getRecord } from "@/lib/cms/laptop-bank-admin";
 import { getContentTypeDescriptor } from "@/lib/content/laptop-bank-admin-schema";
 
@@ -51,7 +51,7 @@ export default async function AdminLaptopBankEditRecordPage({
         icon={<Database className="h-6 w-6" />}
       />
 
-      <LaptopBankRecordForm
+      <RecordForm
         descriptor={descriptor}
         record={record ?? (isSingleton ? { id: descriptor.singletonId as string } : undefined)}
       />

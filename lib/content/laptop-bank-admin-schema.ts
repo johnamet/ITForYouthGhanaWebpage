@@ -1,8 +1,9 @@
-import {
-  LAPTOP_BANK_PAGE_SEEDS,
-  NON_EDITABLE_KEYS,
-  PATH_SEPARATOR,
-} from "@/lib/content/laptop-bank-page-seeds";
+import type {
+  ContentTypeDescriptor,
+  FieldDescriptor,
+} from "@/lib/cms/descriptors/types";
+import { buildSeedFields } from "@/lib/cms/descriptors/page-overrides";
+import { LAPTOP_BANK_PAGE_SEEDS } from "@/lib/content/laptop-bank-page-seeds";
 import { LAPTOP_BANK_TOKENS, type TokenName } from "@/lib/content/laptop-bank-tokens";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
@@ -23,32 +24,11 @@ import { FIREBASE_COLLECTIONS } from "@/types/firebase";
  * both the Firestore field names and what an editor sees.
  */
 
-export type FieldKind = "text" | "textarea" | "number" | "boolean" | "select" | "url";
-
-export type FieldDescriptor = {
-  key: string;
-  label: string;
-  kind: FieldKind;
-  required?: boolean;
-  /**
-   * Bounds for a `number` field. Counts are non-negative by nature — a real
-   * record was saved with units_offered = -70, which no amount of care at the
-   * keyboard prevents and which would have published as a figure. A
-   * percentage is additionally capped at 100.
-   */
-  min?: number;
-  max?: number;
-  help?: string;
-  options?: { value: string; label: string }[];
-  /**
-   * Marks a field that decides whether something appears publicly. The
-   * renderer gives these an amber panel spelling out what publishing does, and
-   * never pre-selects the publishing value.
-   */
-  consent?: boolean;
-  /** Full-width control, for long text. */
-  wide?: boolean;
-};
+export type {
+  FieldKind,
+  FieldDescriptor,
+  ContentTypeDescriptor,
+} from "@/lib/cms/descriptors/types";
 
 export type LaptopBankContentTypeKey =
   | "process-stage"
@@ -68,29 +48,6 @@ export type LaptopBankContentTypeKey =
    */
   | `page-${string}`;
 
-export type ContentTypeDescriptor = {
-  key: LaptopBankContentTypeKey;
-  collection: string;
-  label: string;
-  plural: string;
-  description: string;
-  /** "collection" lists many records; "singleton" edits one fixed document. */
-  shape: "collection" | "singleton";
-  /** Firestore document id for a singleton. */
-  singletonId?: string;
-  /** Which field titles a row in a list. */
-  titleField: string;
-  /** Numeric or string field a collection is sorted by. */
-  sortField?: string;
-  /**
-   * Field whose value becomes the document id on create. When absent, the id
-   * is generated. Used where the spec implies a stable, meaningful key.
-   */
-  idField?: string;
-  fields: FieldDescriptor[];
-  /** The spec rule governing this type, in plain words, shown above the form. */
-  guidance?: string;
-};
 
 const AUDIENCE_OPTIONS = [
   { value: "corporate", label: "Corporate — donor organisations" },
@@ -136,6 +93,7 @@ const TOKEN_FIELDS: FieldDescriptor[] = (
 const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
   "process-stage": {
     key: "process-stage",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankStages,
     label: "Process stage",
     plural: "Process stages",
@@ -160,6 +118,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
 
   "intake-item": {
     key: "intake-item",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankIntake,
     label: "Intake item",
     plural: "Intake specification",
@@ -181,6 +140,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
 
   document: {
     key: "document",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankDocuments,
     label: "Document",
     plural: "Documents",
@@ -202,6 +162,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
 
   donor: {
     key: "donor",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankDonors,
     label: "Donor organisation",
     plural: "Donor organisations",
@@ -231,6 +192,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
 
   story: {
     key: "story",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankStories,
     label: "Recipient story",
     plural: "Recipient stories",
@@ -277,6 +239,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
    */
   "application-status": {
     key: "application-status",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankSettings,
     label: "Application status",
     plural: "Application status",
@@ -322,6 +285,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
    */
   faq: {
     key: "faq",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankFaqs,
     label: "FAQ",
     plural: "Eligibility FAQs",
@@ -352,6 +316,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
    */
   token: {
     key: "token",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankSettings,
     label: "Awaited content",
     plural: "Awaited content (tokens)",
@@ -367,6 +332,7 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
 
   "dashboard-metrics": {
     key: "dashboard-metrics",
+    hub: "laptop-bank",
     collection: FIREBASE_COLLECTIONS.laptopBankMetrics,
     label: "Dashboard metrics",
     plural: "Dashboard metrics",
@@ -403,83 +369,12 @@ const BASE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = {
 
 // ─── Page copy descriptors, generated from each page's seed ───────────────────
 
-/** "handleForYou" -> "Handle for you"; "cards" -> "Cards"; "0" -> "1". */
-function humaniseSegment(segment: string): string {
-  if (/^\d+$/.test(segment)) return String(Number(segment) + 1);
-  const spaced = segment.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ");
-  return spaced.charAt(0).toUpperCase() + spaced.slice(1).toLowerCase();
-}
-
-/** A long string, or one that reads like prose, gets a textarea. */
-function looksLongform(key: string, value: string): boolean {
-  return value.length > 90 || ["body", "answer", "description", "intro", "subheading", "summary"].some((hint) =>
-    key.toLowerCase().includes(hint),
-  );
-}
-
-/**
- * Walks a page's seed content and produces one editable field per leaf string.
- *
- * Generated rather than hand-listed because the ten pages hold roughly two
- * hundred strings between them: enumerating those by hand would be a second
- * copy to keep in step with the seed, and the first field anyone forgot would
- * be silently uneditable. Adding a string to a content object now makes it
- * appear in the editor automatically.
- *
- * Only strings become fields. Numbers and booleans do not appear in page copy,
- * and NON_EDITABLE_KEYS holds back the values that are structure rather than
- * content — link destinations (spec §2.2: the URL map is final and printed on
- * legal paperwork) and anchors (spec §10 checks they resolve, and a shared
- * anchor is a URL someone may have bookmarked).
- */
-function walkSeed(
-  value: unknown,
-  trail: string[],
-  fields: FieldDescriptor[],
-  depth = 0,
-): void {
-  if (depth > 8) return;
-
-  if (typeof value === "string") {
-    const key = trail.join(PATH_SEPARATOR);
-    const leaf = trail[trail.length - 1] ?? key;
-    fields.push({
-      key,
-      label: trail.map(humaniseSegment).join(" › "),
-      kind: looksLongform(leaf, value) ? "textarea" : "text",
-      wide: looksLongform(leaf, value),
-      help: `Currently: “${value.length > 120 ? `${value.slice(0, 120)}…` : value}”`,
-    });
-    return;
-  }
-
-  if (Array.isArray(value)) {
-    value.forEach((item, index) => walkSeed(item, [...trail, String(index)], fields, depth + 1));
-    return;
-  }
-
-  if (value && typeof value === "object") {
-    for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
-      if (NON_EDITABLE_KEYS.has(key)) continue;
-      walkSeed(item, [...trail, key], fields, depth + 1);
-    }
-  }
-}
-
-export function buildPageFields(seed: Record<string, unknown>): FieldDescriptor[] {
-  const fields: FieldDescriptor[] = [];
-  // `meta` is deliberately included: spec 5.1 BUILD fixes the title and meta
-  // description for the landing page, but the other nine are ours to tune, and
-  // SEO copy is exactly the kind of thing that should not need a developer.
-  walkSeed(seed, [], fields);
-  return fields;
-}
-
 const PAGE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = Object.fromEntries(
   LAPTOP_BANK_PAGE_SEEDS.map((page) => [
     `page-${page.key}`,
     {
-      key: `page-${page.key}` as LaptopBankContentTypeKey,
+      key: `page-${page.key}`,
+      hub: "laptop-bank",
       collection: FIREBASE_COLLECTIONS.laptopBankPages,
       label: page.label,
       plural: page.label,
@@ -489,7 +384,7 @@ const PAGE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = Object.fromEnt
       titleField: "meta__title",
       guidance:
         `Every field here is live copy on ${page.route}. Leave a field empty to keep the wording the site ships with — an empty field falls back to the built-in text rather than blanking the page. Link destinations and section anchors are not editable here on purpose: the URL map is final and gets printed on legal paperwork.`,
-      fields: buildPageFields(page.seed),
+      fields: buildSeedFields(page.seed),
     } satisfies ContentTypeDescriptor,
   ]),
 );

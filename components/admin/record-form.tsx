@@ -7,7 +7,7 @@ import { AlertCircle, CheckCircle2, Loader2, Save, ShieldAlert, Trash2 } from "l
 import type {
   ContentTypeDescriptor,
   FieldDescriptor,
-} from "@/lib/content/laptop-bank-admin-schema";
+} from "@/lib/cms/descriptors/types";
 
 const inputClassName =
   "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
@@ -191,14 +191,14 @@ function Field({
 }
 
 /**
- * The one editor for all six Laptop Bank content types.
+ * The one editor for every descriptor-driven content type in the admin.
  *
  * Renders from `descriptor.fields`, so adding a field to a content type is a
  * descriptor edit and nothing else. See the note at the top of
- * lib/content/laptop-bank-admin-schema.ts for why this is one component rather
- * than six.
+ * lib/cms/descriptors/types.ts for why this is one component rather than one
+ * per type.
  */
-export function LaptopBankRecordForm({
+export function RecordForm({
   descriptor,
   record,
 }: {
