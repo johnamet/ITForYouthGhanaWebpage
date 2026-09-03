@@ -148,20 +148,61 @@ function applyOverride(target: Record<string, unknown>, path: string[], value: s
   container[leaf] = value;
 }
 /**
- * Applies stored flat-path overrides onto a clone of a seed object.
+ * Assigns a legacy whole-value override.
  *
- * Stored documents hold flat path keys — `hero__heading`,
- * `handleForYou__cards__0__title` — which is exactly what the generated editor
- * produces, and a flat map is trivially mergeable with no nested-diff logic.
+ * Documents written before the flat-path editor existed store a whole value
+ * under its top-level key — `siteContent/apply-for-training` holds 28 such
+ * keys, `partnerships/educational` 32. Those are real edits somebody made, and
+ * a migration that only understood flat paths would silently ignore every one
+ * of them and revert the page to its seed. So both shapes are honoured.
+ *
+ * Only keys the seed already has are accepted, which drops `updatedAt` and any
+ * other stored plumbing without needing a denylist.
+ */
+function applyLegacyOverride(
+  target: Record<string, unknown>,
+  key: string,
+  value: unknown,
+): void {
+  if (!(key in target)) return;
+  if (value === undefined || value === null) return;
+  // Same rule as a flat-path override: an empty string means "not overridden",
+  // never "blank this out".
+  if (typeof value === "string" && !value.trim()) return;
+  target[key] = value;
+}
+
+/**
+ * Applies stored overrides onto a clone of a seed object.
+ *
+ * Two shapes are accepted, and both are load-bearing:
+ *
+ *   - `hero__heading` — a flat path, written by the generated editor. Applied
+ *     only when it resolves to an existing string in the seed, so a stale key
+ *     left behind after copy was restructured in code cannot grow a phantom
+ *     field.
+ *   - `heroHeading` — a legacy whole-value key, written by the hand-built
+ *     forms that came before. See applyLegacyOverride for why these must keep
+ *     working.
+ *
+ * In both cases an empty value means "not overridden", never "blank this out".
+ * A heading cleared by accident would otherwise leave a live page with no
+ * title, and a reader cannot tell that from a deliberate deletion.
  */
 export function applyOverrides<T extends Record<string, unknown>>(
   seed: T,
   stored: Record<string, unknown>,
 ): T {
   const result = clone(seed);
+
   for (const [storedKey, value] of Object.entries(stored)) {
-    if (typeof value !== "string" || !value.trim()) continue;
-    applyOverride(result as Record<string, unknown>, storedKey.split(PATH_SEPARATOR), value);
+    if (storedKey.includes(PATH_SEPARATOR)) {
+      if (typeof value !== "string" || !value.trim()) continue;
+      applyOverride(result as Record<string, unknown>, storedKey.split(PATH_SEPARATOR), value);
+    } else {
+      applyLegacyOverride(result as Record<string, unknown>, storedKey, value);
+    }
   }
+
   return result;
 }
