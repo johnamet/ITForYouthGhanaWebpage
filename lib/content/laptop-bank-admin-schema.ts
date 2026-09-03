@@ -396,6 +396,10 @@ const PAGE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = Object.fromEnt
       previewHref: page.route,
       // A page editor only affects its own route.
       revalidatePaths: [page.route],
+      // Carried so the editor can fill its repeatable lists: a text field
+      // shows its current wording in help text and stays empty to mean "not
+      // overridden", but a list has to show the rows that are actually there.
+      seed: page.seed,
       fields: buildSeedFields(page.seed),
     } satisfies ContentTypeDescriptor,
   ]),

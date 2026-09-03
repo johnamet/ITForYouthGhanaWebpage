@@ -1,4 +1,12 @@
+import { PATH_SEPARATOR } from "@/lib/cms/descriptors/page-overrides";
 import { getDescriptor } from "@/lib/cms/descriptors/registry";
+import {
+  BASE_ID_KEY,
+  findSeedRecord,
+  isSeedCollection,
+  resolveFields,
+  templateRecord,
+} from "@/lib/cms/descriptors/seed-collections";
 import type {
   ContentTypeDescriptor,
   FieldDescriptor,
@@ -38,6 +46,60 @@ export type WriteResult = {
  */
 function coerceValue(field: FieldDescriptor, raw: unknown): unknown {
   switch (field.kind) {
+    /**
+     * A `string[]`, submitted as one line per item.
+     *
+     * Blank lines are dropped rather than stored, because a stray newline in a
+     * textarea would otherwise publish an empty bullet.
+     */
+    case "stringList": {
+      const lines = Array.isArray(raw)
+        ? raw.map((item) => String(item))
+        : typeof raw === "string"
+          ? raw.split("\n")
+          : [];
+      return lines.map((line) => line.trim()).filter(Boolean);
+    }
+
+    /**
+     * A repeatable group, stored whole.
+     *
+     * Two rules carry the weight here. Unknown keys on a row are PRESERVED —
+     * a section's `href` and `anchor` are deliberately not editable, and a save
+     * that rebuilt each row from the declared fields alone would strip every
+     * link destination on the page. And a row whose editable fields are all
+     * blank is DROPPED, so pressing "add" and then changing your mind does not
+     * publish an empty card.
+     */
+    case "list": {
+      if (!Array.isArray(raw)) return [];
+      const itemFields = field.itemFields ?? [];
+      const rows: Record<string, unknown>[] = [];
+
+      for (const entry of raw) {
+        if (!entry || typeof entry !== "object" || Array.isArray(entry)) continue;
+        const source = entry as Record<string, unknown>;
+        const row: Record<string, unknown> = { ...source };
+        let filled = false;
+
+        for (const itemField of itemFields) {
+          const value = coerceValue(itemField, source[itemField.key]);
+          if (value === null || value === undefined) {
+            delete row[itemField.key];
+            continue;
+          }
+          row[itemField.key] = value;
+          if (typeof value === "string" ? value !== "" : Array.isArray(value) ? value.length > 0 : true) {
+            filled = true;
+          }
+        }
+
+        if (filled) rows.push(row);
+      }
+
+      return rows;
+    }
+
     case "boolean":
       return raw === true || raw === "true" || raw === "on";
 
@@ -69,9 +131,10 @@ function coerceValue(field: FieldDescriptor, raw: unknown): unknown {
 export function projectRecord(
   descriptor: ContentTypeDescriptor,
   payload: Record<string, unknown>,
+  fields: FieldDescriptor[] = descriptor.fields,
 ): Record<string, unknown> {
   const out: Record<string, unknown> = {};
-  for (const field of descriptor.fields) {
+  for (const field of fields) {
     out[field.key] = coerceValue(field, payload[field.key]);
   }
   return out;
@@ -89,8 +152,9 @@ export function projectRecord(
 export function outOfRangeFields(
   descriptor: ContentTypeDescriptor,
   record: Record<string, unknown>,
+  fields: FieldDescriptor[] = descriptor.fields,
 ): string[] {
-  return descriptor.fields
+  return fields
     .filter((field) => {
       if (field.kind !== "number") return false;
       const value = record[field.key];
@@ -112,13 +176,17 @@ export function outOfRangeFields(
 export function missingRequiredFields(
   descriptor: ContentTypeDescriptor,
   record: Record<string, unknown>,
+  fields: FieldDescriptor[] = descriptor.fields,
 ): string[] {
-  return descriptor.fields
+  return fields
     .filter((field) => {
       if (!field.required) return false;
       const value = record[field.key];
       if (field.kind === "number") return value === null || value === undefined;
       if (field.kind === "boolean") return false; // false is a valid answer
+      if (field.kind === "list" || field.kind === "stringList") {
+        return !Array.isArray(value) || value.length === 0;
+      }
       return typeof value !== "string" || value.trim() === "";
     })
     .map((field) => field.label);
@@ -183,6 +251,28 @@ export async function getSingletonRecord(
   return getRecord(key, descriptor.singletonId);
 }
 
+/**
+ * The fields a write should be validated and projected against.
+ *
+ * Only a seed-backed collection needs the extra read: its copy fields come
+ * from the record's own seed, and for a record added through the admin the
+ * seed is named by the stored document rather than by the id. One read on an
+ * admin write path is a fair price for not having to smuggle the base through
+ * the form body, where a tampered value would decide which fields are
+ * accepted.
+ */
+export async function resolveFieldsForWrite(
+  descriptor: ContentTypeDescriptor,
+  id: string | undefined,
+): Promise<FieldDescriptor[]> {
+  if (!isSeedCollection(descriptor)) return descriptor.fields;
+  if (!id) return resolveFields(descriptor, { isCreate: true });
+  if (findSeedRecord(descriptor, id)) return resolveFields(descriptor, { id });
+
+  const stored = await getRecord(descriptor.key, id);
+  return resolveFields(descriptor, { id, stored });
+}
+
 export async function countRecords(key: string): Promise<number> {
   return (await listRecords(key)).length;
 }
@@ -202,6 +292,7 @@ export async function saveRecord(
   key: string,
   id: string | undefined,
   data: Record<string, unknown>,
+  fields?: FieldDescriptor[],
 ): Promise<WriteResult> {
   const descriptor = getDescriptor(key);
   if (!descriptor) return { configured: false, written: false };
@@ -209,7 +300,8 @@ export async function saveRecord(
   const db = await getAdminFirestore();
   if (!db) return { configured: false, written: false };
 
-  const record = projectRecord(descriptor, data);
+  const resolved = fields ?? (await resolveFieldsForWrite(descriptor, id));
+  const record = projectRecord(descriptor, data, resolved);
   const { FieldValue } = await import("firebase-admin/firestore");
 
   let documentId = id;
@@ -224,6 +316,38 @@ export async function saveRecord(
 
   const collection = db.collection(descriptor.collection);
   const reference = documentId ? collection.doc(documentId) : collection.doc();
+
+  /**
+   * A record added to a seed-backed collection records the seed record it
+   * inherited its structure from, so its editor can be generated later and its
+   * unedited fields fall back to that base rather than rendering blank.
+   */
+  if (isSeedCollection(descriptor) && !findSeedRecord(descriptor, reference.id)) {
+    const template = templateRecord(descriptor);
+    if (template && record[BASE_ID_KEY] === undefined) record[BASE_ID_KEY] = template.id;
+  }
+
+  /**
+   * Clears stale flat-path keys under a list field.
+   *
+   * An array used to be walked into `sections__0__title` … and is now stored
+   * whole under `sections`. A document holding both shapes would have the
+   * flat paths applied on top of the array the editor just saved — the editor
+   * would remove a section, save, and watch it come back. Removing the old
+   * keys is what makes the two shapes one value.
+   */
+  const listKeys = resolved
+    .filter((field) => field.kind === "list" || field.kind === "stringList")
+    .map((field) => `${field.key}${PATH_SEPARATOR}`);
+
+  if (listKeys.length) {
+    const existing = await reference.get();
+    for (const storedKey of Object.keys(existing.data() ?? {})) {
+      if (listKeys.some((prefix) => storedKey.startsWith(prefix))) {
+        record[storedKey] = FieldValue.delete();
+      }
+    }
+  }
 
   await reference.set(
     { ...record, updatedAt: FieldValue.serverTimestamp() },

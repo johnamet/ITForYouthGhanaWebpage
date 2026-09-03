@@ -2,8 +2,28 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { AlertCircle, CheckCircle2, Loader2, Save, ShieldAlert, Trash2 } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowDown,
+  ArrowUp,
+  CheckCircle2,
+  Loader2,
+  Plus,
+  RotateCcw,
+  Save,
+  ShieldAlert,
+  Trash2,
+} from "lucide-react";
 
+import {
+  asRows,
+  emptyRow,
+  initialValues,
+  rowValue,
+  type FieldValue,
+  type FormValues,
+  type ListRow,
+} from "@/lib/cms/descriptors/form-values";
 import type {
   ContentTypeDescriptor,
   FieldDescriptor,
@@ -13,37 +33,6 @@ const inputClassName =
   "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
 const textareaClassName =
   "mt-2 min-h-32 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm leading-7 text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
-
-type FormValues = Record<string, string | boolean>;
-
-function initialValues(
-  descriptor: ContentTypeDescriptor,
-  record?: Record<string, unknown>,
-): FormValues {
-  const values: FormValues = {};
-  for (const field of descriptor.fields) {
-    const stored = record?.[field.key];
-    if (field.kind === "boolean") {
-      // A new record honours the descriptor's default; an existing one shows
-      // exactly what is stored, so an editor who turned something off does not
-      // find it back on next time they open the form.
-      values[field.key] =
-        stored === undefined && record === undefined
-          ? field.defaultValue === true
-          : stored === true;
-    } else if (field.kind === "number") {
-      // null and undefined both render as an empty control, which is what
-      // keeps "not counted yet" distinct from a real zero.
-      values[field.key] =
-        stored === null || stored === undefined ? "" : String(stored);
-    } else {
-      const fallback = typeof field.defaultValue === "string" ? field.defaultValue : "";
-      values[field.key] =
-        typeof stored === "string" ? stored : record === undefined ? fallback : "";
-    }
-  }
-  return values;
-}
 
 /**
  * A field that decides whether something is published.
@@ -70,6 +59,128 @@ function ConsentWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * A repeatable group of rows.
+ *
+ * This control is the reason the four hand-written forms could be retired. They
+ * could add a stat, remove a section, add a process step; the generated editor
+ * could only reword what a seed already had, and replacing a form with
+ * something that does less is not a refactor. Rows can also be reordered here,
+ * which none of the forms it replaced could do — the order is the order they
+ * appear on the page.
+ *
+ * Unknown keys on a row are carried through untouched, so a section's link
+ * destination and anchor survive an edit even though neither is shown.
+ */
+function ListControl({
+  field,
+  rows,
+  onChange,
+  idPrefix,
+}: {
+  field: FieldDescriptor;
+  rows: ListRow[];
+  onChange: (rows: ListRow[]) => void;
+  idPrefix: string;
+}) {
+  const itemFields = field.itemFields ?? [];
+
+  const setRow = (index: number, key: string, value: unknown) =>
+    onChange(rows.map((row, position) => (position === index ? { ...row, [key]: value } : row)));
+
+  const move = (index: number, delta: number) => {
+    const target = index + delta;
+    if (target < 0 || target >= rows.length) return;
+    const next = [...rows];
+    const [moved] = next.splice(index, 1);
+    next.splice(target, 0, moved);
+    onChange(next);
+  };
+
+  const label = (row: ListRow, index: number) => {
+    const titleField = itemFields.find((item) => item.kind === "text" || item.kind === "textarea");
+    const title = titleField ? String(row[titleField.key] ?? "").trim() : "";
+    return title || `Item ${index + 1}`;
+  };
+
+  return (
+    <div className="mt-3 space-y-4">
+      {rows.map((row, index) => (
+        <div
+          key={index}
+          className="rounded-[20px] border border-slate-200 bg-slate-50/70 p-4"
+        >
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+              {index + 1}. {label(row, index)}
+            </p>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => move(index, -1)}
+                disabled={index === 0}
+                aria-label="Move up"
+                className="rounded-xl border border-slate-300 bg-white p-2 text-slate-600 transition hover:text-slate-900 disabled:opacity-40"
+              >
+                <ArrowUp className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => move(index, 1)}
+                disabled={index === rows.length - 1}
+                aria-label="Move down"
+                className="rounded-xl border border-slate-300 bg-white p-2 text-slate-600 transition hover:text-slate-900 disabled:opacity-40"
+              >
+                <ArrowDown className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onChange(rows.filter((_, position) => position !== index))}
+                aria-label="Remove"
+                className="rounded-xl border border-rose-200 bg-white p-2 text-rose-600 transition hover:bg-rose-50"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {itemFields.map((itemField) => (
+              <div
+                key={itemField.key}
+                className={itemField.wide || itemField.kind === "textarea" ? "sm:col-span-2" : undefined}
+              >
+                <Field
+                  field={itemField}
+                  value={rowValue(itemField, row)}
+                  onChange={(value) => setRow(index, itemField.key, value)}
+                  idPrefix={`${idPrefix}-${field.key}-${index}`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={() => onChange([...rows, emptyRow(itemFields)])}
+        className="inline-flex items-center gap-2 rounded-control border border-brand-border bg-white px-4 py-2 text-sm font-bold text-brand-ink transition hover:border-brand-navy"
+      >
+        <Plus className="h-4 w-4" />
+        Add
+      </button>
+
+      {rows.length === 0 ? (
+        <p className="text-sm leading-6 text-slate-500">
+          Nothing entered. Leaving this empty keeps the content the site ships with rather than
+          removing the section.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 function Field({
   field,
   value,
@@ -77,8 +188,8 @@ function Field({
   idPrefix,
 }: {
   field: FieldDescriptor;
-  value: string | boolean;
-  onChange: (value: string | boolean) => void;
+  value: FieldValue;
+  onChange: (value: FieldValue) => void;
   idPrefix: string;
 }) {
   const id = `${idPrefix}-${field.key}`;
@@ -101,6 +212,32 @@ function Field({
   let control: React.ReactNode;
 
   switch (field.kind) {
+    case "list":
+      return (
+        <div>
+          {label}
+          {help}
+          <ListControl
+            field={field}
+            rows={asRows(value)}
+            onChange={(rows) => onChange(rows)}
+            idPrefix={idPrefix}
+          />
+        </div>
+      );
+
+    case "stringList":
+      control = (
+        <textarea
+          id={id}
+          value={typeof value === "string" ? value : ""}
+          onChange={(event) => onChange(event.target.value)}
+          className={textareaClassName}
+          placeholder="One per line"
+        />
+      );
+      break;
+
     case "boolean":
       control = (
         <label htmlFor={id} className="mt-2 flex cursor-pointer items-start gap-3 text-sm leading-6 text-slate-700">
@@ -209,15 +346,38 @@ function Field({
 export function RecordForm({
   descriptor,
   record,
+  fields = descriptor.fields,
+  fallbackRecord,
+  revertible = false,
 }: {
   descriptor: ContentTypeDescriptor;
   record?: Record<string, unknown> & { id?: string };
+  /**
+   * The fields this screen renders.
+   *
+   * Passed in rather than read off the descriptor because a seed-backed
+   * collection generates its copy fields from the RECORD'S own seed: two
+   * initiatives are not the same shape, and a shared field list would show one
+   * record's sections under another record's name.
+   */
+  fields?: FieldDescriptor[];
+  /** Seed plus stored overrides, used to fill repeatable lists. */
+  fallbackRecord?: Record<string, unknown>;
+  /**
+   * True for a record the site ships in code, where removing the stored
+   * document restores the shipped content rather than deleting anything. The
+   * control says so in those words: "delete permanently" would be a lie, and
+   * an editor who believed it would not press it.
+   */
+  revertible?: boolean;
 }) {
   const router = useRouter();
   const recordId = typeof record?.id === "string" ? record.id : undefined;
   const isCreate = !recordId;
 
-  const [values, setValues] = useState<FormValues>(() => initialValues(descriptor, record));
+  const [values, setValues] = useState<FormValues>(() =>
+    initialValues(fields, record, fallbackRecord),
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [notice, setNotice] = useState<{ type: "idle" | "success" | "error"; message: string }>({
@@ -265,7 +425,10 @@ export function RecordForm({
 
   async function handleDelete() {
     if (!recordId) return;
-    if (!window.confirm(`Delete this ${descriptor.label.toLowerCase()} permanently?`)) return;
+    const question = revertible
+      ? `Discard every change made to this ${descriptor.label.toLowerCase()} and go back to the wording the site ships with?`
+      : `Delete this ${descriptor.label.toLowerCase()} permanently?`;
+    if (!window.confirm(question)) return;
 
     setIsDeleting(true);
     setNotice({ type: "idle", message: "" });
@@ -276,7 +439,9 @@ export function RecordForm({
       );
       const payload = await response.json().catch(() => null);
       if (!response.ok || !payload?.success) throw new Error(payload?.message || "Delete failed");
-      router.push(listHref);
+      // A revert leaves the record in place, so staying on it shows the
+      // restored content. A delete has nothing left to show.
+      if (!revertible) router.push(listHref);
       router.refresh();
     } catch (error) {
       setNotice({
@@ -288,11 +453,11 @@ export function RecordForm({
     }
   }
 
-  const setValue = (key: string, value: string | boolean) =>
+  const setValue = (key: string, value: FieldValue) =>
     setValues((current) => ({ ...current, [key]: value }));
 
-  const consentFields = descriptor.fields.filter((field) => field.consent);
-  const plainFields = descriptor.fields.filter((field) => !field.consent);
+  const consentFields = fields.filter((field) => field.consent);
+  const plainFields = fields.filter((field) => !field.consent);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -366,10 +531,20 @@ export function RecordForm({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            className="inline-flex items-center gap-2 rounded-control border border-rose-300 bg-white px-5 py-2.5 text-sm font-bold text-rose-700 transition hover:bg-rose-50 disabled:pointer-events-none disabled:opacity-60"
+            className={`inline-flex items-center gap-2 rounded-control border bg-white px-5 py-2.5 text-sm font-bold transition disabled:pointer-events-none disabled:opacity-60 ${
+              revertible
+                ? "border-slate-300 text-slate-700 hover:bg-slate-50"
+                : "border-rose-300 text-rose-700 hover:bg-rose-50"
+            }`}
           >
-            {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-            Delete
+            {isDeleting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : revertible ? (
+              <RotateCcw className="h-4 w-4" />
+            ) : (
+              <Trash2 className="h-4 w-4" />
+            )}
+            {revertible ? "Revert to shipped content" : "Delete"}
           </button>
         ) : null}
 

@@ -149,6 +149,9 @@ export const PAGE_DESCRIPTORS: Record<string, ContentTypeDescriptor> = Object.fr
       titleField: "title",
       previewHref: entry.route,
       revalidatePaths: entry.revalidatePaths,
+      // Carried so the editor can fill its repeatable lists — see the note on
+      // ContentTypeDescriptor.seed.
+      seed: entry.seed,
       guidance:
         `Every field here is live copy on ${entry.route}. Leave a field empty to keep the wording the site ships with — an empty field falls back to the built-in text rather than blanking the page. Link destinations and section anchors are not editable here on purpose.`,
       fields: buildSeedFields(entry.seed),

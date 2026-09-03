@@ -3,25 +3,35 @@ import { Database } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { RecordForm } from "@/components/admin/record-form";
-import { getRecord } from "@/lib/cms/laptop-bank-admin";
-import { getContentTypeDescriptor } from "@/lib/content/laptop-bank-admin-schema";
+import { getRecord } from "@/lib/cms/descriptors/crud";
+import { getDescriptor } from "@/lib/cms/descriptors/registry";
+import {
+  findSeedRecord,
+  isSeedCollection,
+  mergedRecordFor,
+  resolveFields,
+} from "@/lib/cms/descriptors/seed-collections";
 
-export default async function AdminLaptopBankEditRecordPage({
+export default async function AdminCmsEditRecordPage({
   params,
 }: {
   params: { type: string; id: string };
 }) {
-  const descriptor = getContentTypeDescriptor(params.type);
+  const descriptor = getDescriptor(params.type);
   if (!descriptor) notFound();
 
-  const record = await getRecord(descriptor.key, params.id);
+  const stored = await getRecord(descriptor.key, params.id);
+  const seedBacked = isSeedCollection(descriptor);
+  const seedRecord = seedBacked ? findSeedRecord(descriptor, params.id) : undefined;
 
-  // A singleton that has never been written has no document yet. That is the
-  // normal starting state, not an error, so the form opens empty and the first
-  // save creates it — rather than 404ing an editor out of the only screen
-  // where they could enter the figures.
+  // A singleton that has never been written has no document yet, and neither
+  // does a seed-backed record nobody has edited. Both are the normal starting
+  // state rather than an error: the form opens with the shipped content and
+  // the first save creates the document.
   const isSingleton = descriptor.shape === "singleton";
-  if (!record && !isSingleton) {
+  const expected = isSingleton || Boolean(seedRecord);
+
+  if (!stored && !expected) {
     return (
       <div className="space-y-8">
         <AdminPageHeader
@@ -38,22 +48,32 @@ export default async function AdminLaptopBankEditRecordPage({
     );
   }
 
+  const fields = resolveFields(descriptor, { id: params.id, stored });
+  const fallbackRecord = mergedRecordFor(descriptor, params.id, stored);
+  const record = stored ?? { id: params.id };
+
+  const title = seedRecord
+    ? seedRecord.title
+    : String(
+        (fallbackRecord?.[descriptor.titleField] ?? record[descriptor.titleField]) ||
+          `Edit ${descriptor.label.toLowerCase()}`,
+      );
+
   return (
     <div className="space-y-8">
       <AdminPageHeader
         eyebrow={descriptor.plural}
-        title={
-          record
-            ? String(record[descriptor.titleField] || `Edit ${descriptor.label.toLowerCase()}`)
-            : descriptor.label
-        }
+        title={title}
         description={descriptor.description}
         icon={<Database className="h-6 w-6" />}
       />
 
       <RecordForm
         descriptor={descriptor}
-        record={record ?? (isSingleton ? { id: descriptor.singletonId as string } : undefined)}
+        record={record}
+        fields={fields}
+        fallbackRecord={fallbackRecord}
+        revertible={Boolean(seedRecord)}
       />
     </div>
   );

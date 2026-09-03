@@ -7,12 +7,14 @@ import {
   missingRequiredFields,
   outOfRangeFields,
   projectRecord,
+  resolveFieldsForWrite,
   saveRecord,
-} from "@/lib/cms/laptop-bank-admin";
-import { getContentTypeDescriptor } from "@/lib/content/laptop-bank-admin-schema";
+} from "@/lib/cms/descriptors/crud";
+import { getDescriptor } from "@/lib/cms/descriptors/registry";
+import { isSeedCollection } from "@/lib/cms/descriptors/seed-collections";
 
 /**
- * Creates one Laptop Bank content record (build spec §4).
+ * Creates one content record.
  *
  * Validation is descriptor-driven rather than a hand-written zod object per
  * type: the descriptor already declares every field, its kind and whether it
@@ -37,7 +39,7 @@ export async function POST(request: Request, { params }: { params: { type: strin
   const unauthorized = await requireAdminApiSession();
   if (unauthorized) return unauthorized;
 
-  const descriptor = getContentTypeDescriptor(params.type);
+  const descriptor = getDescriptor(params.type);
   if (!descriptor) {
     return NextResponse.json({ success: false, message: "Unknown content type." }, { status: 404 });
   }
@@ -52,13 +54,31 @@ export async function POST(request: Request, { params }: { params: { type: strin
     );
   }
 
+  /**
+   * A seed-backed collection only accepts new records when it says so.
+   *
+   * Initiatives do not: an initiative is a programme with its own routing and
+   * imagery, so one added through a form would be a page nothing links to.
+   * Adding it to the seed makes it editable here with no migration.
+   */
+  if (!(descriptor.allowCreate ?? !isSeedCollection(descriptor))) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: `${descriptor.plural} are part of the site's structure and are added in code, not here. Edit an existing one instead.`,
+      },
+      { status: 400 },
+    );
+  }
+
   const payload = await request.json().catch(() => null);
   if (!payload || typeof payload !== "object") {
     return NextResponse.json({ success: false, message: "Invalid request body." }, { status: 400 });
   }
 
-  const record = projectRecord(descriptor, payload as Record<string, unknown>);
-  const missing = missingRequiredFields(descriptor, record);
+  const fields = await resolveFieldsForWrite(descriptor, undefined);
+  const record = projectRecord(descriptor, payload as Record<string, unknown>, fields);
+  const missing = missingRequiredFields(descriptor, record, fields);
   if (missing.length) {
     return NextResponse.json(
       { success: false, message: `Please fill in: ${missing.join(", ")}.` },
@@ -66,7 +86,7 @@ export async function POST(request: Request, { params }: { params: { type: strin
     );
   }
 
-  const outOfRange = outOfRangeFields(descriptor, record);
+  const outOfRange = outOfRangeFields(descriptor, record, fields);
   if (outOfRange.length) {
     return NextResponse.json(
       { success: false, message: `Please check: ${outOfRange.join(", ")}.` },
@@ -74,7 +94,7 @@ export async function POST(request: Request, { params }: { params: { type: strin
     );
   }
 
-  const result = await saveRecord(descriptor.key, undefined, record);
+  const result = await saveRecord(descriptor.key, undefined, record, fields);
   if (!result.configured) {
     return NextResponse.json(
       { success: false, message: "Firebase Admin is not configured yet." },
@@ -85,7 +105,7 @@ export async function POST(request: Request, { params }: { params: { type: strin
   const current = await getCurrentAdminUser();
   await writeAuditLog({
     action: "create",
-    resourceType: `laptop-bank-${descriptor.key}`,
+    resourceType: `cms-${descriptor.key}`,
     resourceId: result.id ?? "unknown",
     actor: current ? { uid: current.uid, email: current.email, role: current.role } : null,
     summary: `Created ${descriptor.label.toLowerCase()}`,
