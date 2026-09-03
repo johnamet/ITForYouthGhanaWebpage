@@ -58,6 +58,19 @@ export const departmentDescriptor: ContentTypeDescriptor = {
   revalidatePaths: ["/departments", "/departments/[slug]"],
   guidance:
     "These eight departments ship with the site, so an unedited one shows the wording built into the code and needs no document here at all. Anything you change is stored as an override, and “Revert to shipped content” puts a department back to that original wording rather than deleting it. Setting the status to draft hides a department from /departments without losing what you wrote. A department you add here starts from the structure of an existing one, so work through every field before publishing it.",
+  /**
+   * Every department card renders an icon image, and no department seed sets
+   * one — so it was editable in the old form and uneditable in the generated
+   * one until this was declared.
+   */
+  optionalFields: [
+    {
+      key: "iconImage",
+      label: "Icon image URL",
+      kind: "url",
+      help: "Small image shown on the department card instead of the emoji icon.",
+    },
+  ],
   fields: [
     {
       key: "slug",
@@ -128,6 +141,20 @@ export const partnershipTrackDescriptor: ContentTypeDescriptor = {
   excludeDocIds: ["_overview"],
   previewHref: "/partner-with-us",
   revalidatePaths: ["/partner-with-us", "/partner-with-us/[slug]"],
+  optionalFields: [
+    {
+      key: "overviewVideoUrl",
+      label: "Overview video URL",
+      kind: "url",
+      help: "Plays in the overview section. The section shows its image when this is empty.",
+    },
+    {
+      key: "overviewVideoTitle",
+      label: "Overview video title",
+      kind: "text",
+      help: "Accessible title for that video. Falls back to the track title.",
+    },
+  ],
   guidance:
     "The five tracks ship with the site, so an unedited one shows the wording built into the code and “Revert to shipped content” puts it back to that. A track has no draft state: one you add here appears on /partner-with-us as soon as it is saved, so fill in the wording before you save rather than after. The headings and cards on the hub page itself are edited under Partner With Us overview.",
   fields: [

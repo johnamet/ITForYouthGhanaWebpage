@@ -182,6 +182,34 @@ async function main() {
 
   console.log(`No-op saves: ${roundTripped} generated editor(s) round-trip their seed unchanged.`);
 
+  // ── 3b. A declared optional key actually survives the merge ──────────────
+  //
+  // These are the keys a renderer reads but a seed does not set — a hero image
+  // on /who-we-are, an icon image on every department card. The merge drops an
+  // unknown key by default, so honouring one takes an allowlist threaded from
+  // the descriptor through every read path. Declaring the field and forgetting
+  // the allowlist gives an editor a control that saves and does nothing, which
+  // is worse than no control at all.
+  const { mergedRecordFor } = await import("../lib/cms/descriptors/seed-collections");
+  let optionalChecked = 0;
+
+  for (const [key, descriptor] of Object.entries(descriptors)) {
+    for (const field of descriptor.optionalFields ?? []) {
+      const probe = `ZZ-probe-${field.key}`;
+      const id =
+        descriptor.shape === "seed-collection"
+          ? seedRecordsOf(descriptor)[0]?.id
+          : descriptor.singletonId;
+      const merged = mergedRecordFor(descriptor, id, { [field.key]: probe });
+      optionalChecked += 1;
+      if (merged?.[field.key] !== probe) {
+        fail(`descriptor "${key}" declares optional field "${field.key}", but a stored value for it does not survive the merge.`);
+      }
+    }
+  }
+
+  console.log(`Optional keys: ${optionalChecked} field(s) a seed omits are settable through the merge.`);
+
   // ── 4. No descriptor key is defined twice ────────────────────────────────
   //
   // CMS_DESCRIPTORS merges four maps, so a key defined in two of them silently
@@ -303,6 +331,17 @@ async function main() {
             ]
           : [],
       );
+
+    // An optional field for a key the seed DOES declare would render a second
+    // control for the same value, and the two would disagree the moment one of
+    // them was edited.
+    const seedForKeys =
+      descriptor.seed ?? descriptor.seedRecords?.[0]?.seed ?? undefined;
+    for (const field of descriptor.optionalFields ?? []) {
+      if (seedForKeys && field.key in seedForKeys) {
+        fail(`descriptor "${key}" declares optional field "${field.key}", which its seed already has — that is two controls for one value.`);
+      }
+    }
 
     for (const emptyList of listFields(descriptor.fields)) {
       fail(`descriptor "${key}" declares list field "${emptyList}" with no itemFields, so its rows would have no controls.`);

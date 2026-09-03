@@ -150,6 +150,25 @@ export type ContentTypeDescriptor = {
    */
   fields: FieldDescriptor[];
   /**
+   * Fields for keys the seed does NOT declare.
+   *
+   * A page's renderer often reads more than its seed sets — /who-we-are reads
+   * a hero image, a highlights eyebrow and an overview video the seed has no
+   * key for, and every department card reads an `iconImage` no department
+   * ships. Those were editable through the hand-written forms and became
+   * uneditable when the editors were generated from the seed, because a walk
+   * can only find what is there.
+   *
+   * The merge drops a stored key the seed does not have, which is what keeps
+   * `updatedAt` out of the React tree — so making one of these settable is a
+   * deliberate, named exception rather than a relaxation of that rule. Only
+   * non-empty strings are accepted, and only for the keys listed here.
+   *
+   * A key that IS in the seed does not belong here: it would render a second
+   * control for the same value. verify:cms checks for that.
+   */
+  optionalFields?: FieldDescriptor[];
+  /**
    * For a `seed-collection`: the records the site ships, in display order.
    */
   seedRecords?: SeedCollectionRecord[];

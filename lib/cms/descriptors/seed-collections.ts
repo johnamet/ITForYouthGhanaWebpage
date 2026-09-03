@@ -119,7 +119,7 @@ export function resolveFields(
   if (!seed) return declared;
 
   const skip = new Set(descriptor.fields.map((field) => field.key));
-  return [...declared, ...buildSeedFields(seed, skip)];
+  return [...declared, ...buildSeedFields(seed, skip), ...(descriptor.optionalFields ?? [])];
 }
 
 /**
@@ -133,10 +133,16 @@ function mergeOne(
   id: string,
   seed: Record<string, unknown>,
   stored: Record<string, unknown> | undefined,
+  allowKeys: Iterable<string> = [],
 ): Record<string, unknown> {
-  const merged = applyOverrides(seed, toPlainData(stored ?? {}));
+  const merged = applyOverrides(seed, toPlainData(stored ?? {}), { allowKeys });
   if ("id" in merged) merged.id = id;
   return merged;
+}
+
+/** The keys a descriptor allows an editor to set even though its seed omits them. */
+export function optionalKeysOf(descriptor: ContentTypeDescriptor): string[] {
+  return (descriptor.optionalFields ?? []).map((field) => field.key);
 }
 
 /** Stored documents for a seed-backed collection, by document id. */
@@ -178,7 +184,7 @@ export async function readSeedCollection<T>(
   const records: Record<string, unknown>[] = [];
 
   for (const record of seedRecordsOf(descriptor)) {
-    records.push(mergeOne(record.id, record.seed, stored.get(record.id)));
+    records.push(mergeOne(record.id, record.seed, stored.get(record.id), optionalKeysOf(descriptor)));
   }
 
   const seededIds = new Set(seedRecordsOf(descriptor).map((record) => record.id));
@@ -186,7 +192,7 @@ export async function readSeedCollection<T>(
     if (seededIds.has(id)) continue;
     const seed = baseSeedFor(descriptor, id, document);
     if (!seed) continue;
-    records.push(mergeOne(id, seed, document));
+    records.push(mergeOne(id, seed, document, optionalKeysOf(descriptor)));
   }
 
   return records as T[];
@@ -200,7 +206,7 @@ export async function readSeedRecord<T>(
   const seedRecord = findSeedRecord(descriptor, id);
   const db = await getAdminFirestore();
 
-  if (!db) return seedRecord ? (mergeOne(id, seedRecord.seed, undefined) as T) : undefined;
+  if (!db) return seedRecord ? (mergeOne(id, seedRecord.seed, undefined, optionalKeysOf(descriptor)) as T) : undefined;
 
   try {
     const doc = await db.collection(descriptor.collection).doc(id).get();
@@ -209,10 +215,10 @@ export async function readSeedRecord<T>(
     if (!seed) return undefined;
     // A record with neither a seed entry nor a stored document does not exist.
     if (!seedRecord && !stored) return undefined;
-    return mergeOne(id, seed, stored) as T;
+    return mergeOne(id, seed, stored, optionalKeysOf(descriptor)) as T;
   } catch (error) {
     console.error(`Seed record read failed for ${descriptor.key}/${id}. Using seed.`, error);
-    return seedRecord ? (mergeOne(id, seedRecord.seed, undefined) as T) : undefined;
+    return seedRecord ? (mergeOne(id, seedRecord.seed, undefined, optionalKeysOf(descriptor)) as T) : undefined;
   }
 }
 
@@ -231,9 +237,13 @@ export function mergedRecordFor(
 ): Record<string, unknown> | undefined {
   if (isSeedCollection(descriptor)) {
     const seed = baseSeedFor(descriptor, id, stored);
-    return seed ? mergeOne(id ?? "", seed, stored) : undefined;
+    return seed ? mergeOne(id ?? "", seed, stored, optionalKeysOf(descriptor)) : undefined;
   }
-  if (descriptor.seed) return applyOverrides(descriptor.seed, toPlainData(stored ?? {}));
+  if (descriptor.seed) {
+    return applyOverrides(descriptor.seed, toPlainData(stored ?? {}), {
+      allowKeys: optionalKeysOf(descriptor),
+    });
+  }
   return undefined;
 }
 
@@ -274,7 +284,7 @@ export async function seedCollectionRows(
       seeded: true,
       edited: document !== undefined,
       overrides: countOverrides(document),
-      record: mergeOne(record.id, record.seed, document),
+      record: mergeOne(record.id, record.seed, document, optionalKeysOf(descriptor)),
     });
   }
 
@@ -283,7 +293,7 @@ export async function seedCollectionRows(
     if (seededIds.has(id)) continue;
     const seed = baseSeedFor(descriptor, id, document);
     if (!seed) continue;
-    const merged = mergeOne(id, seed, document);
+    const merged = mergeOne(id, seed, document, optionalKeysOf(descriptor));
     rows.push({
       id,
       title: String(merged[descriptor.titleField] ?? id),

@@ -1,5 +1,5 @@
 import { buildSeedFields } from "@/lib/cms/descriptors/page-overrides";
-import type { ContentTypeDescriptor } from "@/lib/cms/descriptors/types";
+import type { ContentTypeDescriptor, FieldDescriptor } from "@/lib/cms/descriptors/types";
 import { contactPageContent } from "@/lib/content/contact-config";
 import {
   applyForTrainingHub,
@@ -57,7 +57,72 @@ export type PageSeedEntry = {
   /** Paths to rebuild after a write. */
   revalidatePaths: string[];
   seed: Record<string, unknown>;
+  /**
+   * Fields for keys this page's renderer reads but its seed does not set.
+   *
+   * The generated editor can only find what the seed contains, so a page that
+   * renders `page.heroImage` from a seed with no `heroImage` key had a control
+   * in the old hand-written form and none afterwards. Declaring it here brings
+   * the control back and allows the merge to store it — see
+   * `ContentTypeDescriptor.optionalFields`.
+   *
+   * Measured rather than guessed: each key below was found by reading the keys
+   * the page's own components access and subtracting the keys its seed
+   * declares.
+   */
+  optionalFields?: FieldDescriptor[];
 };
+
+const HERO_IMAGE_FIELD: FieldDescriptor = {
+  key: "heroImage",
+  label: "Hero image URL",
+  kind: "url",
+  help: "This page ships without a hero image and falls back to a stock one. A URL here replaces it.",
+};
+
+const HIGHLIGHTS_EYEBROW_FIELD: FieldDescriptor = {
+  key: "highlightsEyebrow",
+  label: "Statistics eyebrow",
+  kind: "text",
+  help: "Small label above the statistics row. Shows “In focus” when empty.",
+};
+
+const EXPLORE_FIELDS: FieldDescriptor[] = [
+  {
+    key: "exploreEyebrow",
+    label: "Explore eyebrow",
+    kind: "text",
+    help: "Small label above the related-pages row at the foot of the page.",
+  },
+  {
+    key: "exploreTitle",
+    label: "Explore heading",
+    kind: "text",
+    help: "Heading above the related-pages row. Shows “Continue exploring” when empty.",
+  },
+  {
+    key: "exploreDescription",
+    label: "Explore description",
+    kind: "textarea",
+    wide: true,
+    help: "Sentence under that heading.",
+  },
+];
+
+const OVERVIEW_VIDEO_FIELDS: FieldDescriptor[] = [
+  {
+    key: "overviewVideoUrl",
+    label: "Overview video URL",
+    kind: "url",
+    help: "Plays in the overview section. The section shows its image when this is empty.",
+  },
+  {
+    key: "overviewVideoTitle",
+    label: "Overview video title",
+    kind: "text",
+    help: "Accessible title for that video. Falls back to the page title.",
+  },
+];
 
 export const PAGE_SEEDS: PageSeedEntry[] = [
   {
@@ -126,6 +191,7 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     description: "Headings, value cards and next-steps copy on the partnership hub.",
     revalidatePaths: ["/partner-with-us"],
     seed: partnershipOverviewContent as unknown as Record<string, unknown>,
+    optionalFields: OVERVIEW_VIDEO_FIELDS,
   },
   /**
    * The eight seed-backed site pages, previously edited by
@@ -153,6 +219,7 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     description: "Hero, principles, operating model and next-step copy on the Who We Are hub.",
     revalidatePaths: ["/who-we-are"],
     seed: whoWeAreHub as unknown as Record<string, unknown>,
+    optionalFields: [HERO_IMAGE_FIELD, HIGHLIGHTS_EYEBROW_FIELD, ...OVERVIEW_VIDEO_FIELDS],
   },
   {
     key: "team",
@@ -163,6 +230,7 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     collection: FIREBASE_COLLECTIONS.siteContent,
     description: "Wording around the team listing. The people themselves are edited under Team.",
     revalidatePaths: ["/who-we-are/team"],
+    optionalFields: [HIGHLIGHTS_EYEBROW_FIELD, ...EXPLORE_FIELDS],
     seed: teamHub as unknown as Record<string, unknown>,
   },
   {
@@ -174,6 +242,7 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     collection: FIREBASE_COLLECTIONS.siteContent,
     description: "Wording around the partner logos. The partners themselves are edited under Partners.",
     revalidatePaths: ["/who-we-are/partners"],
+    optionalFields: [HIGHLIGHTS_EYEBROW_FIELD, ...EXPLORE_FIELDS],
     seed: partnersHub as unknown as Record<string, unknown>,
   },
   {
@@ -185,6 +254,7 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     collection: FIREBASE_COLLECTIONS.siteContent,
     description: "Wording around the vacancies. The roles themselves are edited under Jobs.",
     revalidatePaths: ["/who-we-are/careers"],
+    optionalFields: [HIGHLIGHTS_EYEBROW_FIELD, ...EXPLORE_FIELDS],
     seed: careersHub as unknown as Record<string, unknown>,
   },
   {
@@ -218,6 +288,14 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     collection: FIREBASE_COLLECTIONS.siteContent,
     description: "The training process page: stages, principles and explore copy.",
     revalidatePaths: ["/apply-for-training/how-it-works"],
+    optionalFields: [
+      {
+        key: "principlesHeroTitle",
+        label: "Principles hero heading",
+        kind: "text",
+        help: "Heading on the principles panel. Falls back to the principles title when empty.",
+      },
+    ],
     seed: howItWorksHub as unknown as Record<string, unknown>,
   },
   {
@@ -259,6 +337,18 @@ export function getPageSeedEntry(key: string): PageSeedEntry | undefined {
   return PAGE_SEEDS.find((entry) => entry.key === key);
 }
 
+/**
+ * The keys an editor may set on a page even though its seed omits them.
+ *
+ * Looked up by collection AND document id because document ids are only unique
+ * within a collection — `overview` is an impact page here and could be
+ * something else elsewhere.
+ */
+export function pageOptionalKeys(collection: string, docId: string): string[] {
+  const entry = PAGE_SEEDS.find((item) => item.collection === collection && item.docId === docId);
+  return (entry?.optionalFields ?? []).map((field) => field.key);
+}
+
 /** One singleton descriptor per page, keyed `page-<key>`. */
 export const PAGE_DESCRIPTORS: Record<string, ContentTypeDescriptor> = Object.fromEntries(
   PAGE_SEEDS.map((entry) => [
@@ -280,7 +370,8 @@ export const PAGE_DESCRIPTORS: Record<string, ContentTypeDescriptor> = Object.fr
       seed: entry.seed,
       guidance:
         `Every field here is live copy on ${entry.route}. Leave a field empty to keep the wording the site ships with — an empty field falls back to the built-in text rather than blanking the page. Link destinations and section anchors are not editable here on purpose.`,
-      fields: buildSeedFields(entry.seed),
+      optionalFields: entry.optionalFields,
+      fields: [...buildSeedFields(entry.seed), ...(entry.optionalFields ?? [])],
     } satisfies ContentTypeDescriptor,
   ]),
 );

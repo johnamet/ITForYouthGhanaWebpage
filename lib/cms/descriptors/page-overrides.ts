@@ -293,18 +293,20 @@ function shapeMatches(seedValue: unknown, value: unknown): boolean {
  *
  *   - A key the seed has must be replaced by a value of the SAME SHAPE. See
  *     shapeMatches.
- *   - A key the seed does NOT have is dropped. That is what keeps `updatedAt`
- *     and `createdAt` out without a denylist to maintain. Accepting an absent
+ *   - A key the seed does NOT have is dropped, UNLESS it is named in
+ *     `allowKeys` and its value is a string. That is what keeps `updatedAt`
+ *     and `createdAt` out without a denylist to maintain: accepting any absent
  *     key as a string was tried and immediately let `updatedAt` through, since
- *     `toPlainData` turns its Timestamp into an ISO string — so an optional
- *     field a page needs is declared in the seed object instead, where it is
- *     typed and visible.
+ *     `toPlainData` turns its Timestamp into an ISO string. The allowlist is
+ *     `ContentTypeDescriptor.optionalFields` — the handful of keys a renderer
+ *     reads but a seed does not set, such as /who-we-are's hero image.
  *   - An empty value means "not overridden", never "blank this out".
  */
 function applyLegacyOverride(
   target: Record<string, unknown>,
   key: string,
   value: unknown,
+  allowKeys: Set<string>,
 ): void {
   if (value === undefined || value === null) return;
   if (typeof value === "string" && !value.trim()) return;
@@ -313,7 +315,10 @@ function applyLegacyOverride(
   // a section list that renders nothing.
   if (Array.isArray(value) && value.length === 0) return;
 
-  if (!(key in target)) return;
+  if (!(key in target)) {
+    if (allowKeys.has(key) && typeof value === "string") target[key] = value;
+    return;
+  }
 
   if (!shapeMatches(target[key], value)) return;
   target[key] = value;
@@ -346,13 +351,15 @@ function applyLegacyOverride(
 export function applyOverrides<T extends Record<string, unknown>>(
   seed: T,
   stored: Record<string, unknown>,
+  options: { allowKeys?: Iterable<string> } = {},
 ): T {
   const result = clone(seed);
   const entries = Object.entries(stored);
+  const allowKeys = new Set(options.allowKeys ?? []);
 
   for (const [storedKey, value] of entries) {
     if (storedKey.includes(PATH_SEPARATOR)) continue;
-    applyLegacyOverride(result as Record<string, unknown>, storedKey, value);
+    applyLegacyOverride(result as Record<string, unknown>, storedKey, value, allowKeys);
   }
 
   for (const [storedKey, value] of entries) {

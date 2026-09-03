@@ -1,4 +1,5 @@
 import { applyOverrides } from "@/lib/cms/descriptors/page-overrides";
+import { pageOptionalKeys } from "@/lib/content/cms-descriptors/pages";
 import {
   applyForTrainingHub,
   careersHub,
@@ -250,8 +251,15 @@ export async function getCmsSitePage(slug: string): Promise<SitePage | null> {
     return fallback;
   }
 
+  // Keys the page renders but its seed does not set — /who-we-are's hero
+  // image, the explore headings on the team, partners and careers pages. The
+  // merge drops an unknown key by default; these are the named exceptions.
+  const allowKeys = pageOptionalKeys(FIREBASE_COLLECTIONS.siteContent, slug);
+
   const merge = (data: Record<string, unknown>) =>
-    applyOverrides(fallback as unknown as Record<string, unknown>, toPlainData(data)) as unknown as SitePage;
+    applyOverrides(fallback as unknown as Record<string, unknown>, toPlainData(data), {
+      allowKeys,
+    }) as unknown as SitePage;
 
   try {
     const directDoc = await db.collection(FIREBASE_COLLECTIONS.siteContent).doc(slug).get();
