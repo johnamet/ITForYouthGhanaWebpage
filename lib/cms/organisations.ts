@@ -1,12 +1,30 @@
 import { organisationOverviewContent as seedOverview, organisationServices as seedServices } from "@/lib/content/organisation-config";
+import { applyOverrides } from "@/lib/cms/descriptors/page-overrides";
 import { getAdminFirestore } from "@/lib/firebase/admin";
 import type { OrganisationOverviewContent, OrganisationServicePage } from "@/types/content";
+import { toPlainData } from "@/lib/utils/plain";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 const OVERVIEW_ID = "_overview";
 
+/**
+ * Merges stored overrides over the seed.
+ *
+ * Routed through the shared merger rather than a spread. `{ ...fallback,
+ * ...data }` carries a stored `updatedAt` Timestamp straight through, and a
+ * Timestamp reaching a Client Component logs an error on every prerender while
+ * the build still exits 0 — easy to ship, easy to miss. The same bug was found
+ * and fixed in lib/cms/partnerships.ts and lib/cms/impact-pages.ts.
+ *
+ * The merger only accepts keys the seed already has, so stored plumbing is
+ * dropped without a denylist, and it understands both the flat-path keys the
+ * generated editor writes and the whole-value keys the old forms wrote.
+ */
 function merge<T extends object>(fallback: T, data?: Record<string, unknown>): T {
-  return { ...fallback, ...(data ?? {}) } as T;
+  return applyOverrides(
+    fallback as unknown as Record<string, unknown>,
+    toPlainData((data ?? {}) as Record<string, unknown>),
+  ) as unknown as T;
 }
 
 export async function getCmsOrganisationOverview(): Promise<OrganisationOverviewContent> {

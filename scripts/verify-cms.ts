@@ -83,7 +83,36 @@ async function main() {
       `(${exempt} exempt, ${routes.length} admin routes total).`,
   );
 
-  // ── 2. Descriptor reachability ───────────────────────────────────────────
+  // ── 2. No reader spreads raw Firestore data over a seed ──────────────────
+  //
+  // `{ ...seed, ...doc.data() }` carries a stored Timestamp into the React
+  // tree, which logs an error on every prerender while the build still exits
+  // 0. It shipped twice — lib/cms/partnerships.ts and lib/cms/impact-pages.ts
+  // — and the second one survived a scan of every zero-argument reader because
+  // it takes a slug. Checking the PATTERN statically catches the class rather
+  // than the instances.
+  const cmsDir = path.join(process.cwd(), "lib", "cms");
+  const rawSpread = /\.\.\.\((?:doc\.data\(\)|data|snapshot)\b/;
+  let readersChecked = 0;
+
+  for (const entry of fs.readdirSync(cmsDir)) {
+    if (!entry.endsWith(".ts")) continue;
+    const source = fs.readFileSync(path.join(cmsDir, entry), "utf8");
+    readersChecked += 1;
+    for (const [index, line] of source.split("\n").entries()) {
+      if (!rawSpread.test(line)) continue;
+      if (line.includes("toPlainData") || line.includes("applyOverrides")) continue;
+      fail(
+        `lib/cms/${entry}:${index + 1} spreads raw Firestore data over a seed. ` +
+          "Route it through toPlainData or applyOverrides — a stored Timestamp " +
+          "reaching a Client Component logs an error on every prerender.",
+      );
+    }
+  }
+
+  console.log(`Reader hygiene: ${readersChecked} CMS modules checked for raw Firestore spreads.`);
+
+  // ── 3. Descriptor reachability ───────────────────────────────────────────
   const { CMS_DESCRIPTORS } = await import("../lib/cms/descriptors/registry");
   const { adminNodes, adminHubs } = await import("../lib/content/admin-registry");
 
