@@ -1,3 +1,4 @@
+import { applyOverrides } from "@/lib/cms/descriptors/page-overrides";
 import {
   impactOverviewContent,
   impactReportsContent,
@@ -11,6 +12,7 @@ import type {
   ImpactSdgsContent,
   ImpactTestimonialsContent,
 } from "@/types/content";
+import { toPlainData } from "@/lib/utils/plain";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 export const IMPACT_PAGE_SLUGS = ["overview", "reports", "testimonials", "sdgs"] as const;
@@ -51,8 +53,26 @@ export function isImpactPageSlug(value: string): value is ImpactPageSlug {
   return IMPACT_PAGE_SLUGS.includes(value as ImpactPageSlug);
 }
 
+/**
+ * Merges stored overrides over the seed.
+ *
+ * Routed through the shared merger rather than a spread, which fixes a leak
+ * this file had: `{ ...fallback, ...data }` carried the stored `updatedAt`
+ * Timestamp straight through, and a Timestamp reaching a Client Component logs
+ * an error on every prerender while still exiting 0. It went unnoticed because
+ * the scan that found the same bug in lib/cms/partnerships.ts only covered
+ * readers taking no arguments, and this one takes a slug.
+ *
+ * The merger only accepts keys the seed already has, so `updatedAt` is dropped
+ * without needing a denylist, and it understands both the flat-path keys the
+ * generated editor writes and the whole-value keys the old form wrote — there
+ * are 21 of the latter stored against `overview` today.
+ */
 function normalizeObject<T extends object>(fallback: T, data: Record<string, unknown> | undefined): T {
-  return { ...fallback, ...(data ?? {}) } as T;
+  return applyOverrides(
+    fallback as unknown as Record<string, unknown>,
+    toPlainData((data ?? {}) as Record<string, unknown>),
+  ) as unknown as T;
 }
 
 export async function getCmsImpactPage<Slug extends ImpactPageSlug>(

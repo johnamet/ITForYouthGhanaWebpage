@@ -214,7 +214,7 @@ const documentationSections: DocSection[] = [
     id: "impact-news",
     title: "Impact, Testimonials, News, And Articles",
     summary: "Impact pages, SDG pages, reports, testimonials, news hub, listing pages, and article records.",
-    adminRoute: "/admin/our-impact",
+    adminRoute: "/admin/cms/page-impact-overview",
     publicRoutes: ["/our-impact", "/our-impact/reports", "/our-impact/testimonials", "/our-impact/sdgs", "/news-and-updates", "/news-and-updates/news", "/news-and-updates/blogs"],
     purpose:
       "Use these editors to publish evidence, stories, updates, blog thinking, reports, and public proof of work.",

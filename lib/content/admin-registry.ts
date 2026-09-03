@@ -100,9 +100,9 @@ export const adminNodes: AdminNode[] = [
   })),
 
   // Our Impact
-  { key: "impact.overview", hub: "our-impact", label: "Overview",   type: "singleton",  adminPath: "/admin/our-impact", previewHref: "/our-impact" },
-  { key: "impact.reports",  hub: "our-impact", label: "Reports",    type: "collection", adminPath: "/admin/our-impact", previewHref: "/our-impact/reports" },
-  { key: "impact.sdgs",     hub: "our-impact", label: "UN SDGs",    type: "singleton",  adminPath: "/admin/our-impact", previewHref: "/our-impact/sdgs" },
+  { key: "impact.overview", hub: "our-impact", label: "Overview",   type: "singleton",  adminPath: "/admin/cms/page-impact-overview", previewHref: "/our-impact" },
+  { key: "impact.reports",  hub: "our-impact", label: "Reports",    type: "collection", adminPath: "/admin/cms/page-impact-overview", previewHref: "/our-impact/reports" },
+  { key: "impact.sdgs",     hub: "our-impact", label: "UN SDGs",    type: "singleton",  adminPath: "/admin/cms/page-impact-overview", previewHref: "/our-impact/sdgs" },
 
   // News & Updates
   { key: "news.hub",    hub: "news-and-updates", label: "Overview", type: "singleton", adminPath: "/admin/news-and-updates/hub", previewHref: "/news-and-updates" },

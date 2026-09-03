@@ -2104,7 +2104,7 @@ export const adminNavigation: AdminNavItem[] = [
   },
   {
     label: "Our Impact",
-    href: "/admin/our-impact",
+    href: "/admin/cms/page-impact-overview",
     description: "Impact overview, reports, testimonials, and SDG pages.",
   },
   {

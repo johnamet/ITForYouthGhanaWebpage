@@ -179,6 +179,8 @@ const nextConfig = {
         permanent: true,
       },
       { source: "/admin/content/contact", destination: "/admin/cms/page-contact", permanent: false },
+      { source: "/admin/our-impact", destination: "/admin/cms/page-impact-overview", permanent: false },
+      { source: "/admin/our-impact/:slug", destination: "/admin/cms/page-impact-:slug", permanent: false },
       // Team, jobs, partners and testimonials moved onto the descriptor-driven
       // editor. Their bespoke forms are gone, so these keep a bookmarked admin
       // URL working. Temporary, like the Laptop Bank ones below: internal

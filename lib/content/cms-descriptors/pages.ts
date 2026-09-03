@@ -1,6 +1,12 @@
 import { buildSeedFields } from "@/lib/cms/descriptors/page-overrides";
 import type { ContentTypeDescriptor } from "@/lib/cms/descriptors/types";
 import { contactPageContent } from "@/lib/content/contact-config";
+import {
+  impactOverviewContent,
+  impactReportsContent,
+  impactSdgsContent,
+  impactTestimonialsContent,
+} from "@/lib/content/impact-config";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
 
 /**
@@ -18,8 +24,17 @@ import { FIREBASE_COLLECTIONS } from "@/types/firebase";
  */
 
 export type PageSeedEntry = {
-  /** Firestore document id, and the admin route key after the `page-` prefix. */
+  /**
+   * The admin route key, after the `page-` prefix.
+   *
+   * Distinct from `docId` because the two namespaces are different: the impact
+   * testimonials PAGE and the testimonial RECORDS are separate editors, and
+   * `page-testimonials` next to `testimonial` would be a trap for whoever
+   * reads the sidebar next.
+   */
   key: string;
+  /** Firestore document id. */
+  docId: string;
   hub: string;
   label: string;
   /** The public route this copy renders on. */
@@ -34,6 +49,7 @@ export type PageSeedEntry = {
 export const PAGE_SEEDS: PageSeedEntry[] = [
   {
     key: "contact",
+    docId: "contact",
     hub: "contact",
     label: "Contact page",
     route: "/contact",
@@ -42,6 +58,50 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
       "Every heading, channel, enquiry option and response step on the contact page.",
     revalidatePaths: ["/contact"],
     seed: contactPageContent as unknown as Record<string, unknown>,
+  },
+  {
+    key: "impact-overview",
+    docId: "overview",
+    hub: "our-impact",
+    label: "Impact overview",
+    route: "/our-impact",
+    collection: FIREBASE_COLLECTIONS.impactPages,
+    description: "Headings, evidence cards, snapshot and measurement copy on the impact hub.",
+    revalidatePaths: ["/our-impact", "/our-impact/reports", "/"],
+    seed: impactOverviewContent as unknown as Record<string, unknown>,
+  },
+  {
+    key: "impact-reports",
+    docId: "reports",
+    hub: "our-impact",
+    label: "Impact reports",
+    route: "/our-impact/reports",
+    collection: FIREBASE_COLLECTIONS.impactPages,
+    description: "Report listings copy, download headings and the methodology note.",
+    revalidatePaths: ["/our-impact/reports", "/our-impact"],
+    seed: impactReportsContent as unknown as Record<string, unknown>,
+  },
+  {
+    key: "impact-testimonials",
+    docId: "testimonials",
+    hub: "our-impact",
+    label: "Impact testimonials page",
+    route: "/our-impact/testimonials",
+    collection: FIREBASE_COLLECTIONS.impactPages,
+    description: "Page wording around the testimonials. The quotes themselves are edited under Testimonials.",
+    revalidatePaths: ["/our-impact/testimonials", "/our-impact"],
+    seed: impactTestimonialsContent as unknown as Record<string, unknown>,
+  },
+  {
+    key: "impact-sdgs",
+    docId: "sdgs",
+    hub: "our-impact",
+    label: "UN SDGs page",
+    route: "/our-impact/sdgs",
+    collection: FIREBASE_COLLECTIONS.impactPages,
+    description: "Goal descriptions and alignment copy on the SDGs page.",
+    revalidatePaths: ["/our-impact/sdgs", "/our-impact"],
+    seed: impactSdgsContent as unknown as Record<string, unknown>,
   },
 ];
 
@@ -61,7 +121,7 @@ export const PAGE_DESCRIPTORS: Record<string, ContentTypeDescriptor> = Object.fr
       plural: entry.label,
       description: `${entry.description} Renders on ${entry.route}.`,
       shape: "singleton" as const,
-      singletonId: entry.key,
+      singletonId: entry.docId,
       titleField: "title",
       previewHref: entry.route,
       revalidatePaths: entry.revalidatePaths,
