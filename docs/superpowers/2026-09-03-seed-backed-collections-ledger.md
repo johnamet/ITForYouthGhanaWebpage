@@ -125,13 +125,37 @@ from whoever authored the page rather than a fallback.
 **`testimonialsHub`** is in `pageFallbacks` but no public page reads it, so it
 gets no editor. An editor for content that renders nowhere is worse than none.
 
-## Still open
+## Closed afterwards — fields a renderer reads but a seed omits (`7ec5aba`)
 
-- A field a seed object does not declare cannot be edited — `courses` on the
-  training pages, `heroImage` on Who We Are and the testimonials page. The fix
-  is a one-line seed addition where the page actually needs it, not a change
-  to the merge: accepting an absent key was tried and immediately let
-  `updatedAt` through, since `toPlainData` turns its Timestamp into a string.
+The gap was measured, not estimated: the keys each page's own components access
+minus the keys its seed declares. Eighteen key-page pairs across eight distinct
+keys — a hero image, a statistics eyebrow and an overview video on
+/who-we-are, the explore headings on team, partners and careers, a principles
+heading on how-it-works, the overview video on /partner-with-us and on every
+partnership track, and an `iconImage` rendered on every department card that no
+department seed sets.
+
+Declared as `optionalFields` on the descriptor rather than added to the seeds
+as empty strings. The difference is not cosmetic: /who-we-are renders
+`page.overviewVideoTitle ?? page.title`, so an empty string in the seed would
+win over the fallback and publish a blank video title. Nothing about the
+shipped content changes; a control appears, and the merge accepts a value for
+that key when somebody sets one. Every other absent key is still dropped, which
+is what keeps `updatedAt` out of the React tree.
+
+Two more verify:cms assertions, because the failure mode here is a control that
+saves and does nothing: a stored value for every declared optional key must
+survive the merge (22 fields), and an optional field for a key the seed already
+has is rejected as two controls for one value. Also checked end to end against
+live Firestore — written, read back through `getCmsSitePage`, deleted, shipped
+content confirmed restored.
+
+`courses`, listed alongside these in the first draft of this ledger, turned out
+not to be a lost capability at all: the old form never edited it. It was a zod
+default that wrote `courses: []`, which is the empty array the merge now
+ignores.
+
+## Still open
 - Adding a department or a partnership track through the admin starts from a
   template record's structure, so an unedited field shows the template's
   wording. The create screen says so in an amber panel and a new department
