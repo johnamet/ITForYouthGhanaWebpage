@@ -15,7 +15,7 @@ export default function AdminLaptopBankNewRecordPage({
 
   // There is nothing to create for a singleton.
   if (descriptor.shape === "singleton") {
-    redirect(`/admin/laptop-bank/records/${descriptor.key}/${descriptor.singletonId}`);
+    redirect(`/admin/cms/${descriptor.key}/${descriptor.singletonId}`);
   }
 
   return (

@@ -75,6 +75,8 @@ export type ContentTypeDescriptor = {
   fields: FieldDescriptor[];
   /** The spec rule governing this type, in plain words, shown above the form. */
   guidance?: string;
+  /** The public route this content renders on, for a preview link. */
+  previewHref?: string;
 };
 
 

@@ -1,12 +1,7 @@
 // lib/content/admin-registry.ts
 // Central registry for Admin Content Explorer (hubs -> pages/collections)
 
-import {
-  LAPTOP_BANK_CONTENT_TYPES,
-  LAPTOP_BANK_PAGE_TYPE_KEYS,
-  LAPTOP_BANK_RECORD_TYPE_KEYS,
-} from "@/lib/content/laptop-bank-admin-schema";
-import { LAPTOP_BANK_PAGE_SEEDS } from "@/lib/content/laptop-bank-page-seeds";
+import { CMS_DESCRIPTORS } from "@/lib/cms/descriptors/registry";
 import { organisationServices } from "@/lib/content/organisation-config";
 import { partnershipTracks } from "@/lib/content/partnership-config";
 
@@ -142,36 +137,23 @@ export function getNodesForHub(hubKey: string) {
 }
 
 
-// ─── IT for Youth Laptop Bank ─────────────────────────────────────────────────
+// ─── Descriptor-driven editors ────────────────────────────────────────────────
 //
-// Generated from the descriptors rather than listed by hand, so a content type
-// or page added there shows up in the Content Explorer and in the sidebar's
-// editor count without a second edit here. Getting that wrong is exactly how
-// the Laptop Bank ended up initially registered in `adminNavigation`, which
-// nothing renders.
+// Generated from lib/cms/descriptors/registry.ts rather than listed by hand, so
+// registering a descriptor is all it takes to make an editor findable. Getting
+// this wrong is exactly how the Laptop Bank ended up registered only in
+// `adminNavigation`, which nothing renders, and stayed invisible in the admin.
+//
+// scripts/verify-cms.ts asserts every descriptor has a node here.
 
-const laptopBankRecordNodes: AdminNode[] = LAPTOP_BANK_RECORD_TYPE_KEYS.map((key) => {
-  const descriptor = LAPTOP_BANK_CONTENT_TYPES[key];
-  return {
-    key: `laptop-bank.${key}`,
-    hub: "laptop-bank",
-    label: descriptor.plural,
-    type: descriptor.shape === "singleton" ? "singleton" : "collection",
-    adminPath: `/admin/laptop-bank/records/${key}`,
-  };
-});
-
-const laptopBankPageNodes: AdminNode[] = LAPTOP_BANK_PAGE_TYPE_KEYS.map((key, index) => {
-  const descriptor = LAPTOP_BANK_CONTENT_TYPES[key];
-  return {
-    key: `laptop-bank.${key}`,
-    hub: "laptop-bank",
-    label: `${descriptor.label} — wording`,
-    type: "singleton",
-    adminPath: `/admin/laptop-bank/records/${key}`,
-    previewHref: LAPTOP_BANK_PAGE_SEEDS[index]?.route,
-  };
-});
+const descriptorNodes: AdminNode[] = Object.entries(CMS_DESCRIPTORS).map(([key, descriptor]) => ({
+  key: `cms.${key}`,
+  hub: descriptor.hub,
+  label: descriptor.plural,
+  type: descriptor.shape === "singleton" ? "singleton" : "collection",
+  adminPath: `/admin/cms/${key}`,
+  previewHref: descriptor.previewHref,
+}));
 
 const laptopBankInboxNodes: AdminNode[] = [
   {
@@ -192,4 +174,4 @@ const laptopBankInboxNodes: AdminNode[] = [
   },
 ];
 
-adminNodes.push(...laptopBankInboxNodes, ...laptopBankRecordNodes, ...laptopBankPageNodes);
+adminNodes.push(...laptopBankInboxNodes, ...descriptorNodes);

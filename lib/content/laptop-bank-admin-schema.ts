@@ -384,6 +384,7 @@ const PAGE_CONTENT_TYPES: Record<string, ContentTypeDescriptor> = Object.fromEnt
       titleField: "meta__title",
       guidance:
         `Every field here is live copy on ${page.route}. Leave a field empty to keep the wording the site ships with — an empty field falls back to the built-in text rather than blanking the page. Link destinations and section anchors are not editable here on purpose: the URL map is final and gets printed on legal paperwork.`,
+      previewHref: page.route,
       fields: buildSeedFields(page.seed),
     } satisfies ContentTypeDescriptor,
   ]),

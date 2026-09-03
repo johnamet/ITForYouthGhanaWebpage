@@ -2,8 +2,8 @@ import { Database, FileText, GraduationCap, Laptop } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { countRecords, getSingletonRecord } from "@/lib/cms/laptop-bank-admin";
+import { CMS_DESCRIPTORS } from "@/lib/cms/descriptors/registry";
 import {
-  LAPTOP_BANK_CONTENT_TYPES,
   LAPTOP_BANK_PAGE_TYPE_KEYS,
   LAPTOP_BANK_RECORD_TYPE_KEYS,
 } from "@/lib/content/laptop-bank-admin-schema";
@@ -21,7 +21,7 @@ export default async function AdminLaptopBankPage() {
   const [counts, metrics, offers, applications] = await Promise.all([
     Promise.all(
       LAPTOP_BANK_RECORD_TYPE_KEYS.filter(
-        (key) => LAPTOP_BANK_CONTENT_TYPES[key].shape === "collection",
+        (key) => CMS_DESCRIPTORS[key].shape === "collection",
       ).map(async (key) => [key, await countRecords(key)] as const),
     ),
     getSingletonRecord("dashboard-metrics"),
@@ -92,14 +92,14 @@ export default async function AdminLaptopBankPage() {
         <h2 className="font-heading text-xl font-bold text-slate-950">Content</h2>
         <div className="grid gap-4 lg:grid-cols-2">
           {LAPTOP_BANK_RECORD_TYPE_KEYS.map((key) => {
-            const descriptor = LAPTOP_BANK_CONTENT_TYPES[key];
+            const descriptor = CMS_DESCRIPTORS[key];
             const isSingleton = descriptor.shape === "singleton";
             const count = countByKey.get(key);
 
             return (
               <a
                 key={key}
-                href={`/admin/laptop-bank/records/${key}`}
+                href={`/admin/cms/${key}`}
                 className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition hover:border-brand-navy"
               >
                 <div className="flex items-center gap-3 text-brand-navy">
@@ -137,11 +137,11 @@ export default async function AdminLaptopBankPage() {
         </p>
         <div className="grid gap-4 lg:grid-cols-2">
           {LAPTOP_BANK_PAGE_TYPE_KEYS.map((key) => {
-            const descriptor = LAPTOP_BANK_CONTENT_TYPES[key];
+            const descriptor = CMS_DESCRIPTORS[key];
             return (
               <a
                 key={key}
-                href={`/admin/laptop-bank/records/${key}`}
+                href={`/admin/cms/${key}`}
                 className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition hover:border-brand-navy"
               >
                 <div className="flex items-center gap-3 text-brand-navy">

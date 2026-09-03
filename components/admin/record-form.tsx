@@ -217,7 +217,7 @@ export function RecordForm({
     message: "",
   });
 
-  const listHref = `/admin/laptop-bank/records/${descriptor.key}`;
+  const listHref = `/admin/cms/${descriptor.key}`;
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -226,8 +226,8 @@ export function RecordForm({
 
     try {
       const url = isCreate
-        ? `/api/admin/laptop-bank/records/${descriptor.key}`
-        : `/api/admin/laptop-bank/records/${descriptor.key}/${encodeURIComponent(recordId)}`;
+        ? `/api/admin/cms/${descriptor.key}`
+        : `/api/admin/cms/${descriptor.key}/${encodeURIComponent(recordId)}`;
 
       const response = await fetch(url, {
         method: isCreate ? "POST" : "PUT",
@@ -263,7 +263,7 @@ export function RecordForm({
     setNotice({ type: "idle", message: "" });
     try {
       const response = await fetch(
-        `/api/admin/laptop-bank/records/${descriptor.key}/${encodeURIComponent(recordId)}`,
+        `/api/admin/cms/${descriptor.key}/${encodeURIComponent(recordId)}`,
         { method: "DELETE" },
       );
       const payload = await response.json().catch(() => null);

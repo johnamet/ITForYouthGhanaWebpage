@@ -178,6 +178,21 @@ const nextConfig = {
         destination: "/laptop-bank",
         permanent: true,
       },
+      // The Laptop Bank's record editors were generalised to /admin/cms/[type]
+      // when the descriptor pattern was rolled out. These keep a bookmarked
+      // admin URL working. Temporary rather than permanent on purpose: these
+      // are internal admin URLs, not the public URL map, so a 308 cached in
+      // someone's browser would be harder to undo than it is worth.
+      {
+        source: "/admin/laptop-bank/records/:type",
+        destination: "/admin/cms/:type",
+        permanent: false,
+      },
+      {
+        source: "/admin/laptop-bank/records/:type/:id",
+        destination: "/admin/cms/:type/:id",
+        permanent: false,
+      },
       // NOTE: /laptop-bank/uk is RESERVED and must not be published (spec
       // §2.2). It deliberately has no route file and no redirect, so it 404s.
       // Do not repurpose the path — it is held for a UK entity whose

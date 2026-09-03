@@ -25,7 +25,7 @@ export default async function AdminLaptopBankRecordsPage({
   // A singleton has no list. Send the editor straight to the one record rather
   // than showing a one-row table that only ever links to itself.
   if (descriptor.shape === "singleton") {
-    redirect(`/admin/laptop-bank/records/${descriptor.key}/${descriptor.singletonId}`);
+    redirect(`/admin/cms/${descriptor.key}/${descriptor.singletonId}`);
   }
 
   const records = await listRecords(descriptor.key);
@@ -58,7 +58,7 @@ export default async function AdminLaptopBankRecordsPage({
       className: "text-right",
       render: (row) => (
         <a
-          href={`/admin/laptop-bank/records/${descriptor.key}/${encodeURIComponent(row.id)}`}
+          href={`/admin/cms/${descriptor.key}/${encodeURIComponent(row.id)}`}
           className="text-sm font-semibold text-brand-navy hover:text-brand-ink"
         >
           Edit
@@ -78,7 +78,7 @@ export default async function AdminLaptopBankRecordsPage({
 
       <div>
         <a
-          href={`/admin/laptop-bank/records/${descriptor.key}/new`}
+          href={`/admin/cms/${descriptor.key}/new`}
           className="inline-flex items-center gap-2 rounded-control border border-brand-navy bg-brand-navy px-5 py-2.5 text-sm font-bold text-white transition hover:bg-white hover:text-brand-navy"
         >
           Add a {descriptor.label.toLowerCase()}
