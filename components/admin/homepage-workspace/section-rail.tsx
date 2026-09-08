@@ -16,7 +16,7 @@ export function SectionRail() {
   return (
     <aside
       aria-label="Homepage sections"
-      className="min-h-0 overflow-y-auto border-r border-brand-border bg-white p-3"
+      className="h-full min-h-0 overflow-y-auto border-r border-brand-border bg-white p-3"
     >
       <div className="mb-3 flex items-center justify-between px-2">
         <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-slate-400">

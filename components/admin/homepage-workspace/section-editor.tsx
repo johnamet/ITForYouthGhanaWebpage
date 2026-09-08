@@ -80,7 +80,7 @@ export function SectionEditor() {
   return (
     <section
       aria-labelledby="workspace-editor-title"
-      className="min-h-0 overflow-y-auto border-r border-slate-200 bg-brand-alt"
+      className="h-full min-h-0 overflow-y-auto border-r border-slate-200 bg-brand-alt"
     >
       <div className="border-b border-slate-200 bg-white px-5 py-4">
         <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-primary">
