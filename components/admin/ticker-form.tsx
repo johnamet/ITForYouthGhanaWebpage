@@ -1,29 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AlertCircle, ArrowDown, ArrowUp, CheckCircle2, Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 
 import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import type { MarqueeTickerContent, MarqueeTickerItem, MarqueeTickerMode } from "@/components/home/marquee-ticker";
-
-type ApiResponse = { success?: boolean; message?: string };
-type SubmitState = { type: "idle" | "success" | "error"; message: string };
-
-type Props = { initial: MarqueeTickerContent };
 
 const input =
   "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
 const smallInput =
   "mt-2 w-56 rounded-2xl border border-brand-border bg-white px-3 py-2 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
 
-export function TickerForm({ initial }: Props) {
-  const router = useRouter();
-  const [values, setValues] = useState<MarqueeTickerContent>(() => initial);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitState, setSubmitState] = useState<SubmitState>({ type: "idle", message: "" });
+export function TickerForm({
+  value,
+  onChange,
+}: {
+  value: MarqueeTickerContent;
+  onChange: (next: MarqueeTickerContent) => void;
+}) {
+  const setValues = (updater: (current: MarqueeTickerContent) => MarqueeTickerContent) =>
+    onChange(updater(value));
 
-  const update = <Key extends keyof MarqueeTickerContent>(key: Key, value: MarqueeTickerContent[Key]) => setValues((v) => ({ ...v, [key]: value }));
+  const update = <Key extends keyof MarqueeTickerContent>(key: Key, val: MarqueeTickerContent[Key]) => setValues((v) => ({ ...v, [key]: val }));
 
   const addItem = () => setValues((v) => ({ ...v, items: [...v.items, { label: "", href: "" }] }));
   const removeItem = (i: number) => setValues((v) => ({ ...v, items: v.items.filter((_, idx) => idx !== i) }));
@@ -32,42 +29,13 @@ export function TickerForm({ initial }: Props) {
   const up = (i: number) => setValues((v) => (i <= 0 ? v : { ...v, items: ((n) => ([n[i - 1], n[i]] = [n[i]!, n[i - 1]!], n))([...v.items]) }));
   const down = (i: number) => setValues((v) => (i >= v.items.length - 1 ? v : { ...v, items: ((n) => ([n[i], n[i + 1]] = [n[i + 1]!, n[i]!], n))([...v.items]) }));
 
-  const onSave = async () => {
-    setIsSubmitting(true);
-    setSubmitState({ type: "idle", message: "" });
-    try {
-      const resp = await fetch("/api/admin/homepage", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ticker: values }),
-      });
-      const payload = (await resp.json().catch(() => null)) as ApiResponse | null;
-      if (!resp.ok || !payload?.success) {
-        throw new Error(payload?.message || "We couldn't save the ticker.");
-      }
-      setSubmitState({ type: "success", message: payload.message || "Ticker updated." });
-      router.refresh();
-    } catch (err) {
-      setSubmitState({ type: "error", message: err instanceof Error ? err.message : "We couldn't save the ticker." });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="space-y-6">
-      {submitState.type !== "idle" ? (
-        <div className={`flex items-start gap-3 rounded-[24px] border p-5 text-sm font-medium ${submitState.type === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-rose-200 bg-rose-50 text-rose-700"}`}>
-          {submitState.type === "success" ? <CheckCircle2 className="mt-0.5 h-5 w-5" /> : <AlertCircle className="mt-0.5 h-5 w-5" />}
-          <span>{submitState.message}</span>
-        </div>
-      ) : null}
-
       <div className="flex items-center justify-between">
         <div className="flex flex-wrap items-center gap-4">
           <div>
             <label className="text-sm font-bold text-brand-ink">Mode</label>
-            <select className={smallInput} value={values.mode} onChange={(e) => update("mode", e.target.value as MarqueeTickerMode)}>
+            <select className={smallInput} value={value.mode} onChange={(e) => update("mode", e.target.value as MarqueeTickerMode)}>
               {(["stats","partners","news","announcement"] as MarqueeTickerMode[]).map((m) => (
                 <option key={m} value={m}>{m}</option>
               ))}
@@ -75,21 +43,17 @@ export function TickerForm({ initial }: Props) {
           </div>
           <div>
             <label className="text-sm font-bold text-brand-ink">Speed</label>
-            <select className={smallInput} value={values.speed ?? "medium"} onChange={(e) => update("speed", e.target.value as MarqueeTickerContent["speed"])}>
+            <select className={smallInput} value={value.speed ?? "medium"} onChange={(e) => update("speed", e.target.value as MarqueeTickerContent["speed"])}>
               {(["slow","medium","fast"] as (NonNullable<MarqueeTickerContent["speed"]>)[]).map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
           </div>
           <label className="mt-6 inline-flex items-center gap-3 rounded-2xl border border-brand-border bg-brand-mist px-4 py-3 text-sm font-medium text-brand-ink">
-            <input type="checkbox" checked={values.pauseOnHover ?? false} onChange={(e) => update("pauseOnHover", e.target.checked)} className="h-4 w-4 rounded border-slate-300" />
+            <input type="checkbox" checked={value.pauseOnHover ?? false} onChange={(e) => update("pauseOnHover", e.target.checked)} className="h-4 w-4 rounded border-slate-300" />
             Pause on hover
           </label>
         </div>
-
-        <button onClick={onSave} disabled={isSubmitting} className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70">
-          {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Save
-        </button>
       </div>
 
       <div className="rounded-[30px] border border-brand-border bg-white p-6 shadow-sm">
@@ -99,7 +63,7 @@ export function TickerForm({ initial }: Props) {
         </div>
 
         <div className="space-y-4">
-          {values.items.map((it, i) => (
+          {value.items.map((it, i) => (
             <div key={`${it.label}-${i}`} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_1fr_1fr_auto_auto]">
               <div>
                 <label className="text-sm font-bold text-brand-ink">Label</label>
@@ -138,7 +102,7 @@ export function TickerForm({ initial }: Props) {
           <h4 className="text-sm font-semibold text-white">Preview</h4>
           <p className="mt-1 text-xs text-white/50">This simulates the marquee with the current values. Save to publish.</p>
         </div>
-        <MarqueeTicker ticker={values} />
+        <MarqueeTicker ticker={value} />
       </section>
     </div>
   );
