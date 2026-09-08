@@ -150,9 +150,16 @@ the rail, bar, and canvas only read.
   `newsletter-form.tsx`) become controlled: they take `value` / `onChange`
   in place of `initial`, and lose their own save, busy, and notice state.
   Seven copies of save plumbing collapse into one in the provider.
-- `components/admin/admin-shell.tsx` gains an opt-in `bleed` prop that drops
-  the `main` padding. Growing the existing shell with a variant is preferred
-  over a negative-margin hack or a parallel shell component.
+- `components/admin/admin-shell.tsx` gains an opt-in full-bleed variant that
+  drops the `main` padding. Growing the existing shell with a variant is
+  preferred over a negative-margin hack or a parallel shell component.
+
+  The variant is selected from `usePathname()` inside the shell, against an
+  exported route list — not from a prop. A prop cannot work here: the page is
+  a *child* of `AdminShell`, so it cannot set its parent's props, and a
+  nested layout cannot change a parent layout's padding either. `AdminShell`
+  is already a client component that switches on `usePathname()` for nav
+  active states, so this follows the pattern already there.
 - `app/(admin)/admin/content/homepage/page.tsx` becomes a thin server page:
   fetch the seven published values, render the workspace.
 - `app/(admin)/admin/content/homepage/sections/[section]/page.tsx` — the
