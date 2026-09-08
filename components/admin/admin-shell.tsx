@@ -41,6 +41,13 @@ type SidebarItem = {
   match?: (pathname: string) => boolean;
 };
 
+/**
+ * Admin routes that manage their own full-height layout and must not receive
+ * the shell's default page padding. Selected from the pathname because a page
+ * cannot set a prop on the shell that renders it.
+ */
+export const BLEED_ADMIN_ROUTES = ["/admin/content/homepage"];
+
 const workspaceItems: SidebarItem[] = [
   {
     label: "Dashboard",
@@ -103,6 +110,8 @@ export function AdminShell({ children, adminUser }: AdminShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const isBleed = BLEED_ADMIN_ROUTES.includes(pathname);
 
   const isActivePath = (href: string) => {
     if (pathname === href || pathname.startsWith(`${href}/`)) {
@@ -230,7 +239,14 @@ export function AdminShell({ children, adminUser }: AdminShellProps) {
           </div>
         </aside>
 
-        <main className="bg-slate-100 px-4 py-8 text-slate-900 sm:px-6 lg:px-10">{children}</main>
+        <main
+          className={cn(
+            "bg-slate-100 text-slate-900",
+            isBleed ? "min-h-screen" : "px-4 py-8 sm:px-6 lg:px-10",
+          )}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

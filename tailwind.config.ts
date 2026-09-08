@@ -35,6 +35,7 @@ const config: Config = {
           mist: "#E8F1FA",
           border: "#D8E5F2",
           warm: "#FBE7EF",
+          alt: "#F7F9FC",
         },
       },
 
