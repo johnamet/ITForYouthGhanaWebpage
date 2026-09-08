@@ -94,7 +94,10 @@ Nothing else can be built until the seven sections have stable ids and keys, bec
 
 **Interfaces:**
 - Consumes: nothing from earlier tasks.
-- Produces: `HomepageDraftValues`, `HomepageSectionKey`, `WorkspaceSection`, `workspaceSections`, `workspaceSectionsById`, `DEFAULT_WORKSPACE_SECTION_ID`, `findWorkspaceSection(id)`, `HOMEPAGE_SECTION_KEYS`.
+- Produces: `HomepageDraftValues`, `HomepageSectionKey`, `WorkspaceSection`, `workspaceSections`, `workspaceSectionsById`, `DEFAULT_WORKSPACE_SECTION_ID`, `findWorkspaceSection(id)`.
+
+Export nothing beyond that list. In particular do not add a keys array or any
+other convenience export that no other task consumes.
 
 - [ ] **Step 1: Create the registry**
 
@@ -208,18 +211,15 @@ export const workspaceSections: WorkspaceSection[] = Object.values(
   SECTIONS,
 ).sort((left, right) => left.order - right.order);
 
-export const HOMEPAGE_SECTION_KEYS = workspaceSections.map(
-  (section) => section.key,
-);
-
-export const DEFAULT_WORKSPACE_SECTION_ID = SECTIONS.overview.id;
+export const DEFAULT_WORKSPACE_SECTION_ID = "overview" as const;
 
 /** Resolves a `?section=` value, falling back to the overview section. */
 export function findWorkspaceSection(
   id: string | null | undefined,
 ): WorkspaceSection {
   return (
-    workspaceSections.find((section) => section.id === id) ?? SECTIONS.overview
+    workspaceSections.find((section) => section.id === id) ??
+    SECTIONS[DEFAULT_WORKSPACE_SECTION_ID]
   );
 }
 ```
