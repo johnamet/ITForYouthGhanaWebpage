@@ -14,6 +14,7 @@ import { contactPageContent } from "@/lib/content/contact-config";
 import { impactOverviewContent } from "@/lib/content/impact-config";
 import { organisationServices } from "@/lib/content/organisation-config";
 import { FIREBASE_COLLECTIONS } from "@/types/firebase";
+import { workspaceSectionsById } from "@/lib/cms/homepage-sections";
 import type {
   AdminActivityItem,
   AdminApplicationRecord,
@@ -448,6 +449,14 @@ export const homepageSectionConfigs: AdminHomepageSectionConfig[] = [
     status: "live",
     collection: FIREBASE_COLLECTIONS.homepage,
     description: "Rotating stats, calls to action, news headlines, and partner logos.",
+  },
+  {
+    id: workspaceSectionsById.overview.id,
+    label: workspaceSectionsById.overview.label,
+    route: "/admin/content/homepage",
+    status: "live",
+    collection: FIREBASE_COLLECTIONS.homepage,
+    description: workspaceSectionsById.overview.description,
   },
   {
     id: "impact-counter",
