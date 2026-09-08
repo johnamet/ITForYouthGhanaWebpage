@@ -1079,7 +1079,11 @@ export function SectionRail() {
   return (
     <aside
       aria-label="Homepage sections"
-      className="min-h-0 overflow-y-auto border-r border-brand-border bg-white p-3"
+      // h-full is load-bearing: the grid wrapper has a definite height, but a
+      // block child's height stays content-driven, so without this the
+      // overflow-y-auto below has no bounded box to clip against and the page
+      // scrolls instead of the pane.
+      className="h-full min-h-0 overflow-y-auto border-r border-brand-border bg-white p-3"
     >
       <div className="mb-3 flex items-center justify-between px-2">
         <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-slate-400">
@@ -1315,7 +1319,7 @@ export function SectionEditor() {
   return (
     <section
       aria-labelledby="workspace-editor-title"
-      className="min-h-0 overflow-y-auto border-r border-slate-200 bg-brand-alt"
+      className="h-full min-h-0 overflow-y-auto border-r border-slate-200 bg-brand-alt"
     >
       <div className="border-b border-slate-200 bg-white px-5 py-4">
         <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-primary">
@@ -1438,7 +1442,7 @@ export function WorkspaceLayout({ preview }: { preview?: React.ReactNode }) {
         <div
           role="tablist"
           aria-label="Editor view"
-          className="grid grid-cols-2 rounded-lg bg-slate-100 p-1"
+          className="grid grid-cols-2 rounded-media bg-slate-100 p-1"
         >
           {(["edit", "preview"] as const).map((option) => (
             <button
@@ -1460,6 +1464,9 @@ export function WorkspaceLayout({ preview }: { preview?: React.ReactNode }) {
         </div>
       </div>
 
+      {/* The grid gets a definite height from flex-1 + min-h-0 inside h-screen,
+          and its items stretch to the row. Each pane root carries h-full so
+          that height reaches the scrolling element itself. */}
       <div className="grid min-h-0 flex-1 xl:grid-cols-[176px_392px_minmax(520px,1fr)] 2xl:grid-cols-[196px_430px_minmax(580px,1fr)]">
         {/* Below xl the rail stacks above the editor in the Edit tab. It must
             stay reachable: it is the only way to change section, so hiding it
@@ -2231,7 +2238,7 @@ export function PreviewPane() {
   return (
     <section
       aria-label="Live homepage preview"
-      className="flex min-h-0 flex-col bg-slate-200 p-4 2xl:p-5"
+      className="flex h-full min-h-0 flex-col bg-slate-200 p-4 2xl:p-5"
     >
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-media border border-slate-300 bg-white shadow-sm">
         <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-3 py-2.5">
