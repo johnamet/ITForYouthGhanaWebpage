@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, CheckCircle2, Loader2, Save } from "lucide-react";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import {
   ChallengeSectionForm,
@@ -12,6 +12,7 @@ import { NewsletterForm } from "@/components/admin/newsletter-form";
 import { ProgrammeShowcaseForm } from "@/components/admin/programme-showcase-form";
 import { TickerForm } from "@/components/admin/ticker-form";
 
+import { SaveSectionButton } from "./save-section-button";
 import { useWorkspace } from "./workspace-provider";
 
 function ActiveForm() {
@@ -73,9 +74,8 @@ function ActiveForm() {
 }
 
 export function SectionEditor() {
-  const { activeSection, isDirty, saveState, save } = useWorkspace();
+  const { activeSection, isDirty, saveState } = useWorkspace();
   const dirty = isDirty(activeSection.key);
-  const saving = saveState.status === "saving";
 
   return (
     <section
@@ -101,20 +101,20 @@ export function SectionEditor() {
         <ActiveForm />
 
         {saveState.status === "error" ? (
-          <div className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">
+          <div className="flex items-start gap-3 rounded-media border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">
             <AlertCircle aria-hidden className="mt-0.5 h-5 w-5" />
             <span>{saveState.message}</span>
           </div>
         ) : null}
 
         {saveState.status === "saved" ? (
-          <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800">
+          <div className="flex items-start gap-3 rounded-media border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800">
             <CheckCircle2 aria-hidden className="mt-0.5 h-5 w-5" />
             <span>{saveState.message}</span>
           </div>
         ) : null}
 
-        <div className="sticky bottom-3 flex items-center justify-between rounded-xl border border-brand-border bg-white/95 p-3 shadow-sm backdrop-blur">
+        <div className="sticky bottom-3 flex items-center justify-between rounded-media border border-brand-border bg-white/95 p-3 shadow-sm backdrop-blur">
           <span className="flex items-center gap-1.5 text-[0.68rem] font-semibold text-slate-500">
             {dirty ? (
               <>
@@ -128,19 +128,7 @@ export function SectionEditor() {
               "No unsaved changes"
             )}
           </span>
-          <button
-            type="button"
-            disabled={!dirty || saving}
-            onClick={() => save(activeSection.key)}
-            className="inline-flex items-center gap-2 rounded-md bg-brand-accent px-4 py-2.5 text-xs font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {saving ? (
-              <Loader2 aria-hidden className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <Save aria-hidden className="h-3.5 w-3.5" />
-            )}
-            Save {activeSection.label.toLowerCase()}
-          </button>
+          <SaveSectionButton />
         </div>
       </div>
     </section>

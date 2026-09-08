@@ -1,15 +1,13 @@
 "use client";
 
-import { ChevronRight, ExternalLink, Loader2, Save } from "lucide-react";
+import { ChevronRight, ExternalLink } from "lucide-react";
 
-import { cn } from "@/lib/utils/cn";
-
+import { SaveSectionButton } from "./save-section-button";
 import { useWorkspace } from "./workspace-provider";
 
 export function WorkspaceBar() {
-  const { activeSection, isDirty, saveState, save } = useWorkspace();
+  const { activeSection, isDirty } = useWorkspace();
   const dirty = isDirty(activeSection.key);
-  const saving = saveState.status === "saving";
 
   return (
     <header className="shrink-0 border-b border-slate-200 bg-white/95 px-4 py-4 shadow-sm backdrop-blur sm:px-6">
@@ -46,27 +44,12 @@ export function WorkspaceBar() {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-brand-border px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+            className="inline-flex items-center gap-2 rounded-control border border-brand-border px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
           >
             <ExternalLink aria-hidden className="h-3.5 w-3.5" />
             Open public page
           </a>
-          <button
-            type="button"
-            disabled={!dirty || saving}
-            onClick={() => save(activeSection.key)}
-            className={cn(
-              "inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-xs font-bold text-white transition",
-              "bg-brand-accent hover:bg-brand-accent-dark disabled:cursor-not-allowed disabled:opacity-50",
-            )}
-          >
-            {saving ? (
-              <Loader2 aria-hidden className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <Save aria-hidden className="h-3.5 w-3.5" />
-            )}
-            Save {activeSection.label.toLowerCase()}
-          </button>
+          <SaveSectionButton />
         </div>
       </div>
     </header>

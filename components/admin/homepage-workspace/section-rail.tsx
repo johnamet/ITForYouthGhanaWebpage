@@ -3,32 +3,12 @@
 import { Check, Eye, EyeOff } from "lucide-react";
 
 import {
+  isSectionHiddenFromPage,
   workspaceSections,
-  type HomepageDraftValues,
-  type HomepageSectionKey,
 } from "@/lib/cms/homepage-sections";
 import { cn } from "@/lib/utils/cn";
 
 import { useWorkspace } from "./workspace-provider";
-
-/**
- * Whether a section will render nothing on the public page. This mirrors how
- * the public renderers already decide: object sections check `active`, and
- * list sections render nothing when empty or when every item is inactive.
- */
-export function isSectionHidden(
-  key: HomepageSectionKey,
-  values: HomepageDraftValues,
-): boolean {
-  const value = values[key];
-  if (Array.isArray(value)) {
-    return (
-      value.length === 0 ||
-      value.every((item) => (item as { active?: boolean }).active === false)
-    );
-  }
-  return (value as { active?: boolean }).active === false;
-}
 
 export function SectionRail() {
   const { activeSection, selectSection, isDirty, values } = useWorkspace();
@@ -51,7 +31,7 @@ export function SectionRail() {
         {workspaceSections.map((section) => {
           const isActive = section.id === activeSection.id;
           const dirty = isDirty(section.key);
-          const hidden = isSectionHidden(section.key, values);
+          const hidden = isSectionHiddenFromPage(section.key, values);
 
           return (
             <button
@@ -60,7 +40,7 @@ export function SectionRail() {
               onClick={() => selectSection(section.id)}
               aria-current={isActive ? "true" : undefined}
               className={cn(
-                "flex items-start gap-2 rounded-md px-2.5 py-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent",
+                "flex items-start gap-2 rounded-control px-2.5 py-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent",
                 isActive
                   ? "bg-brand-mist text-brand-navy"
                   : "text-slate-600 hover:bg-slate-50",

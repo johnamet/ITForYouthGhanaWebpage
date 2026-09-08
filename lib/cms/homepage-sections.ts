@@ -116,3 +116,91 @@ export function findWorkspaceSection(
     SECTIONS[DEFAULT_WORKSPACE_SECTION_ID]
   );
 }
+
+/**
+ * Whether a section will render nothing on the public homepage.
+ *
+ * Each branch mirrors the guard in the component that actually renders that
+ * section, cited by file and line. A single generic `active === false` test is
+ * NOT sufficient and was wrong in both directions: the narrative sections also
+ * hide when their copy is blank, and an empty programme showcase is not hidden
+ * at all because the page substitutes seed content. If you change a renderer's
+ * guard, change its branch here too, or the rail will show a wrong badge.
+ */
+export function isSectionHiddenFromPage(
+  key: HomepageSectionKey,
+  values: HomepageDraftValues,
+): boolean {
+  switch (key) {
+    // marquee-ticker.tsx always renders. Its `return null` belongs to a
+    // separator helper, not to the section component.
+    case "ticker":
+      return false;
+
+    // legacy-homepage-sections.tsx:62-66
+    case "overviewSection": {
+      const content = values.overviewSection;
+      if (content.active === false) return true;
+      const hasIntro = Boolean(
+        content.title || content.headline || content.description,
+      );
+      const hasStory = Boolean(
+        content.storyTitle ||
+          content.storyHeadline ||
+          content.storyDescription ||
+          content.callout ||
+          (content.ctaLabel && content.ctaHref),
+      );
+      return !hasIntro && !hasStory && !content.image;
+    }
+
+    // legacy-homepage-sections.tsx:71-72
+    case "challengeSection": {
+      const content = values.challengeSection;
+      if (content.active === false) return true;
+      return (
+        !content.title &&
+        !content.headline &&
+        !content.description &&
+        !content.stats.length &&
+        !content.problemItems.length &&
+        !content.solutionItems.length
+      );
+    }
+
+    // legacy-homepage-sections.tsx:130-131
+    case "missionSection": {
+      const content = values.missionSection;
+      if (content.active === false) return true;
+      return (
+        !content.title &&
+        !content.headline &&
+        !content.description &&
+        !content.image &&
+        !content.missionTitle &&
+        !content.missionHeadline &&
+        !content.missionDescription
+      );
+    }
+
+    // An empty list is NOT hidden: homepage-sections.tsx:71 substitutes the
+    // seed showcase, so InitiativesTree still renders. Only a non-empty list
+    // with every item inactive renders nothing (initiatives-tree.tsx:70-72).
+    case "programmeShowcase":
+      return (
+        values.programmeShowcase.length > 0 &&
+        values.programmeShowcase.every((item) => item.active === false)
+      );
+
+    // join-cta-block.tsx:22-23 — empty or every card inactive.
+    case "joinCtaCards":
+      return (
+        values.joinCtaCards.length === 0 ||
+        values.joinCtaCards.every((card) => card.active === false)
+      );
+
+    // newsletter-signup-section.tsx:17-18
+    case "newsletterSignup":
+      return values.newsletterSignup.active === false;
+  }
+}
