@@ -1448,7 +1448,7 @@ export function WorkspaceLayout({ preview }: { preview?: React.ReactNode }) {
               aria-selected={view === option}
               onClick={() => setView(option)}
               className={cn(
-                "rounded-md px-4 py-2 text-sm font-bold capitalize transition",
+                "rounded-control px-4 py-2 text-sm font-bold capitalize transition",
                 view === option
                   ? "bg-white shadow-sm text-brand-ink"
                   : "text-slate-500",
@@ -2233,7 +2233,7 @@ export function PreviewPane() {
       aria-label="Live homepage preview"
       className="flex min-h-0 flex-col bg-slate-200 p-4 2xl:p-5"
     >
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-slate-300 bg-white shadow-sm">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-media border border-slate-300 bg-white shadow-sm">
         <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-3 py-2.5">
           <div className="flex rounded-lg border border-slate-200 bg-slate-50 p-0.5">
             {VIEWPORTS.map((option) => {
@@ -2246,7 +2246,7 @@ export function PreviewPane() {
                   aria-pressed={viewport === option.id}
                   onClick={() => setViewport(option.id)}
                   className={cn(
-                    "flex h-7 w-7 items-center justify-center rounded-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent",
+                    "flex h-7 w-7 items-center justify-center rounded-control transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent",
                     viewport === option.id
                       ? "border border-brand-border bg-white text-brand-navy"
                       : "border border-transparent text-slate-500",
@@ -2264,7 +2264,7 @@ export function PreviewPane() {
               aria-label="Fit preview"
               aria-pressed={fit}
               onClick={() => setFit((current) => !current)}
-              className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:bg-slate-50"
+              className="flex h-8 w-8 items-center justify-center rounded-control border border-slate-200 text-slate-500 transition hover:bg-slate-50"
             >
               <Maximize2 aria-hidden className="h-3.5 w-3.5" />
             </button>
@@ -2272,7 +2272,7 @@ export function PreviewPane() {
               type="button"
               aria-label="Refresh preview"
               onClick={refresh}
-              className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:bg-slate-50"
+              className="flex h-8 w-8 items-center justify-center rounded-control border border-slate-200 text-slate-500 transition hover:bg-slate-50"
             >
               <RefreshCw aria-hidden className="h-3.5 w-3.5" />
             </button>
@@ -2301,7 +2301,7 @@ export function PreviewPane() {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-flex rounded-md border border-brand-border bg-white px-4 py-2 text-xs font-bold text-slate-700"
+                className="mt-4 inline-flex rounded-control border border-brand-border bg-white px-4 py-2 text-xs font-bold text-slate-700"
               >
                 Open public page
               </a>
@@ -2325,7 +2325,7 @@ export function PreviewPane() {
                 src={PREVIEW_ROUTE}
                 title="Homepage preview"
                 onError={() => setFailed(true)}
-                className="h-full min-h-[650px] w-full rounded-md border-0 bg-white shadow-sm"
+                className="h-full min-h-[650px] w-full rounded-control border-0 bg-white shadow-sm"
               />
             </div>
           )}
