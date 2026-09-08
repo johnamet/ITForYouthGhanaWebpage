@@ -408,6 +408,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -475,6 +476,18 @@ export function HomepageWorkspaceProvider({
   const [payloadVersion, setPayloadVersion] = useState(0);
   const [saveState, setSaveState] = useState<SaveState>({ status: "idle" });
 
+  // `save` needs to know what the drafts hold *when its request returns*, not
+  // what they held when it was called. Reading state through a ref is the only
+  // way to see edits made while the request was in flight.
+  const draftsRef = useRef(drafts);
+  useEffect(() => {
+    draftsRef.current = drafts;
+  }, [drafts]);
+
+  // Keys with a save request currently in flight, so one section cannot have
+  // two overlapping writes.
+  const inFlight = useRef<Set<HomepageSectionKey>>(new Set());
+
   // A save calls router.refresh(), which hands this component new published
   // props. Replace the baseline ONLY — never touch drafts, or saving one
   // section would silently discard unsaved edits in another.
@@ -518,10 +531,11 @@ export function HomepageWorkspaceProvider({
   const save = useCallback(
     async (key: HomepageSectionKey) => {
       const value = drafts[key];
-      if (value === undefined) {
+      if (value === undefined || inFlight.current.has(key)) {
         return;
       }
 
+      inFlight.current.add(key);
       setSaveState({ status: "saving" });
       try {
         const response = await fetch("/api/admin/homepage", {
@@ -539,18 +553,34 @@ export function HomepageWorkspaceProvider({
           );
         }
 
-        // Fold the saved value into the baseline and clear the draft, so the
-        // preview never flickers back to the pre-save copy.
+        // The server now holds `value`, so fold it into the baseline
+        // regardless — that is simply true.
         setPublished((current) => ({ ...current, [key]: value }));
-        setDrafts((current) => {
-          const next = { ...current };
-          delete next[key];
-          return next;
-        });
-        setSaveState({
-          status: "saved",
-          message: payload.message || "Homepage section updated.",
-        });
+
+        // But the editor may have changed this section again while the request
+        // was in flight. Clearing the draft unconditionally would discard that
+        // newer edit and report the section as saved, which is silent data
+        // loss. Only clear when the draft still holds exactly what was sent;
+        // `setValue` always creates a new object, so identity is a sound test.
+        const superseded = draftsRef.current[key] !== value;
+
+        if (superseded) {
+          setSaveState({
+            status: "saved",
+            message:
+              "Saved. You have changed this section since — save again to publish those edits.",
+          });
+        } else {
+          setDrafts((current) => {
+            const next = { ...current };
+            delete next[key];
+            return next;
+          });
+          setSaveState({
+            status: "saved",
+            message: payload.message || "Homepage section updated.",
+          });
+        }
         router.refresh();
       } catch (error) {
         // Keep the draft. The editor footer surfaces this message.
@@ -558,6 +588,8 @@ export function HomepageWorkspaceProvider({
           status: "error",
           message: error instanceof Error ? error.message : "Save failed.",
         });
+      } finally {
+        inFlight.current.delete(key);
       }
     },
     [drafts, router],
@@ -592,9 +624,31 @@ export function HomepageWorkspaceProvider({
       if (!(anchor instanceof HTMLAnchorElement) || anchor.target === "_blank") {
         return;
       }
+      // A modified or non-primary click opens the link in a new tab or window
+      // and leaves this tab's drafts untouched, so there is nothing to warn
+      // about — and cancelling would block the browser's own behaviour.
+      if (
+        event.button !== 0 ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
       const href = anchor.getAttribute("href") ?? "";
-      // Only guard in-app navigation that leaves the workspace.
-      if (!href.startsWith("/") || href.startsWith("/admin/content/homepage")) {
+      if (!href.startsWith("/")) {
+        return;
+      }
+      // Navigation within the workspace is not leaving it. Matched precisely
+      // so a future sibling route such as /admin/content/homepage-archive is
+      // not silently exempted from the guard.
+      const workspacePath = "/admin/content/homepage";
+      if (
+        href === workspacePath ||
+        href.startsWith(`${workspacePath}?`) ||
+        href.startsWith(`${workspacePath}#`)
+      ) {
         return;
       }
       const confirmed = window.confirm(
