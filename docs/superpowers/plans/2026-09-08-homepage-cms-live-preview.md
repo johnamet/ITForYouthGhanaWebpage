@@ -854,6 +854,12 @@ export function NewsletterForm({
 
 `update` stays as written. Delete the router, `useState`, submit state, save function, notice block, and save button; replace JSX reads of `values` with `value`; remove now-unused types and imports.
 
+This form is the only one of the four still wrapped in a `<form>`: line 49 is
+`<form onSubmit={onSubmit} className="space-y-8">`, closing at line 101.
+Replace both tags with `<div className="space-y-8">` and `</div>`, keeping the
+`space-y-8` spacing. The ticker, showcase, and join-CTA forms are already
+plain `<div className="space-y-6">` wrappers and need no such change.
+
 - [ ] **Step 6: Confirm the expected failure**
 
 Run: `npm run type-check`
