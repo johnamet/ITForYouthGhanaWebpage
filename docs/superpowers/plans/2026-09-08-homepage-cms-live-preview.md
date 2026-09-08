@@ -1077,12 +1077,12 @@ export function SectionRail() {
   const { activeSection, selectSection, isDirty, values } = useWorkspace();
 
   return (
+    // h-full is load-bearing: the grid wrapper has a definite height, but a
+    // block child's height stays content-driven, so without it the
+    // overflow-y-auto here would have no bounded box to clip against and the
+    // page would scroll instead of the pane.
     <aside
       aria-label="Homepage sections"
-      // h-full is load-bearing: the grid wrapper has a definite height, but a
-      // block child's height stays content-driven, so without this the
-      // overflow-y-auto below has no bounded box to clip against and the page
-      // scrolls instead of the pane.
       className="h-full min-h-0 overflow-y-auto border-r border-brand-border bg-white p-3"
     >
       <div className="mb-3 flex items-center justify-between px-2">
