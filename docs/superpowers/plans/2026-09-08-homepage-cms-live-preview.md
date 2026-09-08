@@ -22,7 +22,17 @@
 - **No restyling of public homepage components.** They are rendered as-is.
 - **Icons are `lucide-react`.** The mockup's `<iconify-icon>` tags are mockup-only; never introduce that dependency.
 - **Brand palette only**, via existing Tailwind `brand-*` tokens: navy `#142850`, primary blue `#1E72BA`, dark blue `#0152BE`, mist `#E8F1FA`, accent pink `#D70B52`, dark pink `#B00944`, warm pink `#FBE7EF`, ink `#1A1A1A`, muted `#5C6672`, border `#D8E5F2`, alt background `#F7F9FC`, white. No green, orange, yellow, purple, neon, metallic, or gradients outside tonal blends of these.
-- **Control radius 6px; media and small surfaces 12px.** Headings use `font-heading` (Georgia/Cambria); body copy uses Inter.
+  Two deliberate exemptions inside the admin surface, which the approved brief
+  blesses when it says to keep "the current white/slate CMS surfaces":
+  `slate-*` neutrals, and **semantic status colour** — `emerald-*` for saved and
+  `rose-*` for errors, as every existing admin form already uses. Rendering an
+  error in brand pink, the same colour as the primary action, would make a
+  failure look like an invitation. This exemption covers admin chrome only and
+  never public pages.
+- **Control radius 6px; media and small surfaces 12px** — expressed through the
+  semantic Tailwind tokens `rounded-control` (0.375rem) and `rounded-media`
+  (0.75rem) that `tailwind.config.ts` already defines, not raw `rounded-md` /
+  `rounded-xl`. Headings use `font-heading` (Georgia/Cambria); body copy uses Inter.
 - **Accessible keyboard focus is required** on the rail, the section outlines, and the viewport controls.
 
 **The seven section keys, fixed for the whole plan.** Every task uses exactly these strings:
@@ -892,17 +902,163 @@ The homepage route does not compile until Task 6 rewires it."
 The three panes that read from the provider. No preview yet.
 
 **Files:**
+- Modify: `lib/cms/homepage-sections.ts` (append the hide predicate)
 - Create: `components/admin/homepage-workspace/section-rail.tsx`
 - Create: `components/admin/homepage-workspace/workspace-bar.tsx`
 - Create: `components/admin/homepage-workspace/section-editor.tsx`
+- Create: `components/admin/homepage-workspace/save-section-button.tsx`
 
 **Interfaces:**
 - Consumes: `useWorkspace()` from Task 3; the seven controlled forms from Task 4; `workspaceSections` from Task 1.
-- Produces: `SectionRail`, `WorkspaceBar`, `SectionEditor` — all zero-prop components reading context. `isSectionHidden(key, values)` is exported from `section-rail.tsx` for the rail's own use; the canvas does not need it, because the public renderers already return null for inactive sections.
+- Produces: `SectionRail`, `WorkspaceBar`, `SectionEditor`, `SaveSectionButton` — all reading context; only `SaveSectionButton` takes a prop (`className`). Also `isSectionHiddenFromPage(key, values)`, appended to `lib/cms/homepage-sections.ts`.
 
 - [ ] **Step 1: Create the rail**
 
 Create `components/admin/homepage-workspace/section-rail.tsx`:
+
+First create the one save action, shared by the bar and the editor footer.
+The approved design shows the button in both places; that is one action
+rendered twice, not two actions, so it is one component.
+
+Create `components/admin/homepage-workspace/save-section-button.tsx`:
+
+```tsx
+"use client";
+
+import { Loader2, Save } from "lucide-react";
+
+import { cn } from "@/lib/utils/cn";
+
+import { useWorkspace } from "./workspace-provider";
+
+/**
+ * The single per-section save action. Rendered in both the workspace bar and
+ * the editor footer, per the approved design. There is no save-all.
+ */
+export function SaveSectionButton({ className }: { className?: string }) {
+  const { activeSection, isDirty, saveState, save } = useWorkspace();
+  const dirty = isDirty(activeSection.key);
+  const saving = saveState.status === "saving";
+
+  return (
+    <button
+      type="button"
+      disabled={!dirty || saving}
+      onClick={() => save(activeSection.key)}
+      className={cn(
+        "inline-flex items-center gap-2 rounded-control bg-brand-accent px-4 py-2.5 text-xs font-bold text-white transition hover:bg-brand-accent-dark disabled:cursor-not-allowed disabled:opacity-50",
+        className,
+      )}
+    >
+      {saving ? (
+        <Loader2 aria-hidden className="h-3.5 w-3.5 animate-spin" />
+      ) : (
+        <Save aria-hidden className="h-3.5 w-3.5" />
+      )}
+      Save {activeSection.label.toLowerCase()}
+    </button>
+  );
+}
+```
+
+Next add the hide predicate to the registry, which is where per-section facts
+belong. Append to `lib/cms/homepage-sections.ts`:
+
+```ts
+/**
+ * Whether a section will render nothing on the public homepage.
+ *
+ * Each branch mirrors the guard in the component that actually renders that
+ * section, cited by file and line. A single generic `active === false` test is
+ * NOT sufficient and was wrong in both directions: the narrative sections also
+ * hide when their copy is blank, and an empty programme showcase is not hidden
+ * at all because the page substitutes seed content. If you change a renderer's
+ * guard, change its branch here too, or the rail will show a wrong badge.
+ */
+export function isSectionHiddenFromPage(
+  key: HomepageSectionKey,
+  values: HomepageDraftValues,
+): boolean {
+  switch (key) {
+    // marquee-ticker.tsx always renders. Its `return null` belongs to a
+    // separator helper, not to the section component.
+    case "ticker":
+      return false;
+
+    // legacy-homepage-sections.tsx:62-66
+    case "overviewSection": {
+      const content = values.overviewSection;
+      if (content.active === false) return true;
+      const hasIntro = Boolean(
+        content.title || content.headline || content.description,
+      );
+      const hasStory = Boolean(
+        content.storyTitle ||
+          content.storyHeadline ||
+          content.storyDescription ||
+          content.callout ||
+          (content.ctaLabel && content.ctaHref),
+      );
+      return !hasIntro && !hasStory && !content.image;
+    }
+
+    // legacy-homepage-sections.tsx:71-72
+    case "challengeSection": {
+      const content = values.challengeSection;
+      if (content.active === false) return true;
+      return (
+        !content.title &&
+        !content.headline &&
+        !content.description &&
+        !content.stats.length &&
+        !content.problemItems.length &&
+        !content.solutionItems.length
+      );
+    }
+
+    // legacy-homepage-sections.tsx:130-131
+    case "missionSection": {
+      const content = values.missionSection;
+      if (content.active === false) return true;
+      return (
+        !content.title &&
+        !content.headline &&
+        !content.description &&
+        !content.image &&
+        !content.missionTitle &&
+        !content.missionHeadline &&
+        !content.missionDescription
+      );
+    }
+
+    // An empty list is NOT hidden: homepage-sections.tsx:71 substitutes the
+    // seed showcase, so InitiativesTree still renders. Only a non-empty list
+    // with every item inactive renders nothing (initiatives-tree.tsx:70-72).
+    case "programmeShowcase":
+      return (
+        values.programmeShowcase.length > 0 &&
+        values.programmeShowcase.every((item) => item.active === false)
+      );
+
+    // join-cta-block.tsx:22-23 — empty or every card inactive.
+    case "joinCtaCards":
+      return (
+        values.joinCtaCards.length === 0 ||
+        values.joinCtaCards.every((card) => card.active === false)
+      );
+
+    // newsletter-signup-section.tsx:17-18
+    case "newsletterSignup":
+      return values.newsletterSignup.active === false;
+  }
+}
+```
+
+The switch is exhaustive over `HomepageSectionKey` with no `default`, so adding
+a section to the registry without a hide rule fails the build. It needs no `as`
+casts, because each branch knows its own value's type.
+
+Then create `components/admin/homepage-workspace/section-rail.tsx`:
 
 ```tsx
 "use client";
@@ -910,32 +1066,12 @@ Create `components/admin/homepage-workspace/section-rail.tsx`:
 import { Check, Eye, EyeOff } from "lucide-react";
 
 import {
+  isSectionHiddenFromPage,
   workspaceSections,
-  type HomepageDraftValues,
-  type HomepageSectionKey,
 } from "@/lib/cms/homepage-sections";
 import { cn } from "@/lib/utils/cn";
 
 import { useWorkspace } from "./workspace-provider";
-
-/**
- * Whether a section will render nothing on the public page. This mirrors how
- * the public renderers already decide: object sections check `active`, and
- * list sections render nothing when empty or when every item is inactive.
- */
-export function isSectionHidden(
-  key: HomepageSectionKey,
-  values: HomepageDraftValues,
-): boolean {
-  const value = values[key];
-  if (Array.isArray(value)) {
-    return (
-      value.length === 0 ||
-      value.every((item) => (item as { active?: boolean }).active === false)
-    );
-  }
-  return (value as { active?: boolean }).active === false;
-}
 
 export function SectionRail() {
   const { activeSection, selectSection, isDirty, values } = useWorkspace();
@@ -958,7 +1094,7 @@ export function SectionRail() {
         {workspaceSections.map((section) => {
           const isActive = section.id === activeSection.id;
           const dirty = isDirty(section.key);
-          const hidden = isSectionHidden(section.key, values);
+          const hidden = isSectionHiddenFromPage(section.key, values);
 
           return (
             <button
@@ -967,7 +1103,7 @@ export function SectionRail() {
               onClick={() => selectSection(section.id)}
               aria-current={isActive ? "true" : undefined}
               className={cn(
-                "flex items-start gap-2 rounded-md px-2.5 py-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent",
+                "flex items-start gap-2 rounded-control px-2.5 py-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent",
                 isActive
                   ? "bg-brand-mist text-brand-navy"
                   : "text-slate-600 hover:bg-slate-50",
@@ -1035,16 +1171,14 @@ Create `components/admin/homepage-workspace/workspace-bar.tsx`:
 ```tsx
 "use client";
 
-import { ChevronRight, ExternalLink, Loader2, Save } from "lucide-react";
+import { ChevronRight, ExternalLink } from "lucide-react";
 
-import { cn } from "@/lib/utils/cn";
-
+import { SaveSectionButton } from "./save-section-button";
 import { useWorkspace } from "./workspace-provider";
 
 export function WorkspaceBar() {
-  const { activeSection, isDirty, saveState, save } = useWorkspace();
+  const { activeSection, isDirty } = useWorkspace();
   const dirty = isDirty(activeSection.key);
-  const saving = saveState.status === "saving";
 
   return (
     <header className="shrink-0 border-b border-slate-200 bg-white/95 px-4 py-4 shadow-sm backdrop-blur sm:px-6">
@@ -1081,27 +1215,12 @@ export function WorkspaceBar() {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-brand-border px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+            className="inline-flex items-center gap-2 rounded-control border border-brand-border px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
           >
             <ExternalLink aria-hidden className="h-3.5 w-3.5" />
             Open public page
           </a>
-          <button
-            type="button"
-            disabled={!dirty || saving}
-            onClick={() => save(activeSection.key)}
-            className={cn(
-              "inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-xs font-bold text-white transition",
-              "bg-brand-accent hover:bg-brand-accent-dark disabled:cursor-not-allowed disabled:opacity-50",
-            )}
-          >
-            {saving ? (
-              <Loader2 aria-hidden className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <Save aria-hidden className="h-3.5 w-3.5" />
-            )}
-            Save {activeSection.label.toLowerCase()}
-          </button>
+          <SaveSectionButton />
         </div>
       </div>
     </header>
@@ -1116,7 +1235,7 @@ Create `components/admin/homepage-workspace/section-editor.tsx`:
 ```tsx
 "use client";
 
-import { AlertCircle, CheckCircle2, Loader2, Save } from "lucide-react";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import {
   ChallengeSectionForm,
@@ -1128,6 +1247,7 @@ import { NewsletterForm } from "@/components/admin/newsletter-form";
 import { ProgrammeShowcaseForm } from "@/components/admin/programme-showcase-form";
 import { TickerForm } from "@/components/admin/ticker-form";
 
+import { SaveSectionButton } from "./save-section-button";
 import { useWorkspace } from "./workspace-provider";
 
 function ActiveForm() {
@@ -1189,9 +1309,8 @@ function ActiveForm() {
 }
 
 export function SectionEditor() {
-  const { activeSection, isDirty, saveState, save } = useWorkspace();
+  const { activeSection, isDirty, saveState } = useWorkspace();
   const dirty = isDirty(activeSection.key);
-  const saving = saveState.status === "saving";
 
   return (
     <section
@@ -1217,20 +1336,20 @@ export function SectionEditor() {
         <ActiveForm />
 
         {saveState.status === "error" ? (
-          <div className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">
+          <div className="flex items-start gap-3 rounded-media border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">
             <AlertCircle aria-hidden className="mt-0.5 h-5 w-5" />
             <span>{saveState.message}</span>
           </div>
         ) : null}
 
         {saveState.status === "saved" ? (
-          <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800">
+          <div className="flex items-start gap-3 rounded-media border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800">
             <CheckCircle2 aria-hidden className="mt-0.5 h-5 w-5" />
             <span>{saveState.message}</span>
           </div>
         ) : null}
 
-        <div className="sticky bottom-3 flex items-center justify-between rounded-xl border border-brand-border bg-white/95 p-3 shadow-sm backdrop-blur">
+        <div className="sticky bottom-3 flex items-center justify-between rounded-media border border-brand-border bg-white/95 p-3 shadow-sm backdrop-blur">
           <span className="flex items-center gap-1.5 text-[0.68rem] font-semibold text-slate-500">
             {dirty ? (
               <>
@@ -1244,19 +1363,7 @@ export function SectionEditor() {
               "No unsaved changes"
             )}
           </span>
-          <button
-            type="button"
-            disabled={!dirty || saving}
-            onClick={() => save(activeSection.key)}
-            className="inline-flex items-center gap-2 rounded-md bg-brand-accent px-4 py-2.5 text-xs font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {saving ? (
-              <Loader2 aria-hidden className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <Save aria-hidden className="h-3.5 w-3.5" />
-            )}
-            Save {activeSection.label.toLowerCase()}
-          </button>
+          <SaveSectionButton />
         </div>
       </div>
     </section>
@@ -1264,7 +1371,9 @@ export function SectionEditor() {
 }
 ```
 
-This save button and the bar's are the **same** per-section action rendered twice, as the mockup shows. Neither is a "save all".
+Both save buttons are now the one `SaveSectionButton`, rendered in two places
+as the mockup shows. Neither is a "save all", and there is only one
+implementation to keep correct.
 
 - [ ] **Step 4: Verify**
 
