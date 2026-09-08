@@ -95,12 +95,31 @@ The seven editable sections, in public page order, with their
 The eight context sections are hero slideshow, impact counter, donation
 campaign, featured story, latest news, testimonials, team, and partners.
 
+### Client-safety constraint
+
+`lib/cms/admin-config.ts` imports `getAdminSdkStatus` from
+`@/lib/firebase/admin`, which calls `loadServiceAccount()` and reads the
+service-account private key from the environment. Any client component that
+imports `admin-config.ts` therefore pulls service-account-reading code into
+the browser bundle.
+
+The section rail is a client component. So `lib/cms/homepage-sections.ts`
+must **not** import `homepageSectionConfigs`; it declares the seven
+sections' id, schema key, label, description, and page order itself.
+`admin-config.ts` then imports those labels and descriptions when building
+its own seven homepage-owned entries, so there is still one source of truth
+for them and the dependency only ever points server-ward.
+
+**Rule for implementation: no client component may import
+`lib/cms/admin-config.ts`, directly or transitively.**
+
 ### Registry gap to fix
 
 `homepageSectionConfigs` in `lib/cms/admin-config.ts` holds fifteen entries
 but has no `overview` entry, even though the page renders
 `OverviewSectionForm`. Implementation must add one there — in
-`admin-config.ts` itself, not in the new registry module — with
+`admin-config.ts` itself, sourcing its label and description from
+`homepage-sections.ts` per the constraint above — with
 `route: "/admin/content/homepage"` and `collection: FIREBASE_COLLECTIONS.homepage`,
 bringing that list to sixteen. A `team` entry is also missing; that is noted
 but not required by this work.
@@ -115,9 +134,11 @@ the rail, bar, and canvas only read.
 - `lib/cms/homepage-sections.ts` — the workspace section registry. Maps each
   of the seven editors to its schema key, label, description, and public page
   order. Feeds the rail, the editor header, and the preview outline labels so
-  the three cannot drift. It *derives* the workspace's seven from
-  `homepageSectionConfigs` by schema key rather than restating them, so
-  `homepageSectionConfigs` remains the single list of all homepage sections.
+  the three cannot drift.
+
+  This module is **standalone and client-safe**, and the dependency runs
+  *from* `admin-config.ts` *to* it, not the other way around. See the
+  client-safety constraint below for why the obvious direction is unsafe.
 - `components/admin/homepage-workspace/workspace-provider.tsx` — published
   baseline, draft map, active section, per-section save, leave guard.
 - `components/admin/homepage-workspace/section-rail.tsx` — 176px rail with
