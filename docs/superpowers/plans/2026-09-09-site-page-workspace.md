@@ -1752,7 +1752,15 @@ export function SitePagePreviewCanvas({
   // Pair ContentPage's element children against the targets we expect it to
   // have rendered. See Step 1: a mismatch means its structure changed, and
   // mispaired outlines would be worse than none.
+  //
+  // This runs on every reflow, not only on a new payload. The viewport controls
+  // in the surrounding PreviewFrame change this iframe's width, which moves
+  // every block while `record` and `payloadVersion` stay identical — overlays
+  // measured once would then sit over the wrong blocks and a click would select
+  // the wrong region, silently. An image loading or a font swapping does the
+  // same. The ResizeObserver below covers all of it.
   useEffect(() => {
+    const measure = () => {
     const root = rootRef.current?.firstElementChild;
     if (!root) {
       return;
@@ -1785,6 +1793,17 @@ export function SitePagePreviewCanvas({
         };
       }),
     );
+    };
+
+    measure();
+
+    const host = rootRef.current;
+    if (!host) {
+      return;
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(host);
+    return () => observer.disconnect();
   }, [record, payloadVersion]);
 
   return (
@@ -1820,6 +1839,11 @@ export function SitePagePreviewCanvas({
   );
 }
 ```
+
+Note the measurement body is wrapped in a local `measure` function so both the
+immediate call and the observer share it. Keep them sharing it: two copies of
+the pairing logic would be free to disagree, which is exactly the failure the
+visible-mismatch guard exists to catch.
 
 One boundary wraps the whole page rather than one per block, because the blocks are inside `ContentPage` and cannot be wrapped individually. That is a real reduction in isolation compared with the homepage: a throw takes the whole preview to the placeholder, not one section. It still recovers on the next payload, which is what matters for half-typed values.
 
