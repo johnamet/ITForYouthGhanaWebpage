@@ -2292,8 +2292,16 @@ export function PreviewPane() {
     if (!ready) {
       return;
     }
-    if (skipScrollFor.current === activeSection.id) {
-      skipScrollFor.current = null;
+    // Read and clear unconditionally. Clearing only on a match would strand a
+    // stale id: the canvas can select a section that is already active, in
+    // which case activeSection.id never changes, this effect never re-runs,
+    // and the ref stays pinned — silently suppressing the scroll the next time
+    // the editor picks that same section from the rail. Consuming the value on
+    // every run means a stale id can only ever be discarded harmlessly.
+    const skip = skipScrollFor.current;
+    skipScrollFor.current = null;
+
+    if (skip === activeSection.id) {
       return;
     }
     post({ type: "itfyg:preview-scroll", sectionId: activeSection.id });
