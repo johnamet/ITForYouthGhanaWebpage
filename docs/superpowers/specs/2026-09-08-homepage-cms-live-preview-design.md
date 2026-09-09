@@ -251,9 +251,30 @@ discard unsaved work in another.
   `[196px][430px][preview]` at `2xl`, per the mockup.
 - Below `xl`, the rail collapses and the editor switches to Edit / Preview
   tabs rather than shrinking both panes past usability.
-- Viewport controls set width on the iframe itself: `100%`, `760px`, `390px`.
-  This is what makes the breakpoints real.
-- There is **no "fit" control**, though the mockup showed one. The iframe is
+- Viewport controls set a **fixed pixel width** on the iframe: `1280px`,
+  `820px`, `390px`, paired with a scale-to-fit transform on a wrapper.
+
+  The width must be a real number, not `100%`. The preview column is a
+  fraction of the admin shell — with `max-w-[1500px]`, a `320px` sidebar and
+  the `176px`/`392px` editor tracks, a `100%` iframe measures about `548px`.
+  That is below `sm:` (640), so a `100%` "desktop" preset would render
+  *narrower* than a `760px` "tablet" one and no preset would ever reach `md:`
+  or `lg:` — defeating the only reason the preview is an iframe. Widening the
+  pane cannot rescue it: even with the shell cap removed, a 1920px monitor
+  yields roughly `968px`, still under `lg:`.
+
+  `820px` rather than `768px` for tablet because a classic scrollbar inside the
+  iframe shaves ~15px off the media-query width, so a preset sitting exactly on
+  the breakpoint lands below it.
+
+  The scale is applied **after** the width, and is therefore not the "fit"
+  control described below: setting the width first makes the layout viewport
+  genuinely 1280px, so the breakpoints resolve honestly, and the transform only
+  shrinks that truthful render to something visible. The wrapper carrying the
+  scaled footprint must be sized to the post-transform dimensions, because a
+  transform alone does not affect layout and would leave the scroll extents
+  wrong.
+- There is **no standalone "fit" control**, though the mockup showed one. The iframe is
   `h-full`, so its layout viewport equals the pane height and the homepage
   scrolls inside the iframe's own document. Scaling the wrapper would therefore
   display the same slice of page, smaller — revealing nothing and shortening no
@@ -265,6 +286,16 @@ discard unsaved work in another.
 - Existing admin visual language is retained: navy sidebar, white/slate
   surfaces, Georgia/Cambria headings, Inter body, brand palette, 6–12px
   control radii, restrained shadows, visible keyboard focus.
+
+### Form layout inside the editor track
+
+The editor track is a fixed `392px` (`430px` at 2xl). The seven forms must
+therefore not use viewport breakpoints (`md:grid-cols-*`) for their field
+grids: those resolve against the window, not the pane, so on any desktop
+window they activate inside 392px — the ticker's five-track item row collapses
+to three ~48px text inputs. Fields stack in a single column. This is the same
+class of error as sizing the preview iframe with a percentage, and the original
+spec omitted it.
 
 ## Failure modes
 
