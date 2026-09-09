@@ -19,7 +19,7 @@ export function PreviewPane() {
       scrollTargetId={activeSection.id}
       onSelectSection={selectSection}
       footerLabel={`Homepage · ${activeSection.label}`}
-      title="Homepage preview"
+      subject="Homepage"
     />
   );
 }

@@ -56,12 +56,17 @@ export type PreviewFrameProps<TData> = {
    */
   footerLabel: string;
   /**
-   * Accessible name for the iframe. It must describe THIS workspace's page —
-   * a site page announcing itself as "Homepage preview" would be false — so
-   * it is a caller's prop, and the screenshot script keys off the frame's
-   * `data-preview-frame` attribute instead of this text.
+   * What is being previewed, as a noun phrase — "Homepage", or "Who We Are:
+   * Our story". NOT a full label: the frame composes it differently for the
+   * iframe's title and the wrapper's accessible name, so passing a phrase like
+   * "Homepage preview" yields "Live preview of Homepage preview".
+   *
+   * It has to be a prop at all because a site page announcing itself as
+   * "Homepage preview" would be false. The screenshot script keys off the
+   * frame's constant `data-preview-frame` attribute rather than this text,
+   * precisely so this can vary.
    */
-  title: string;
+  subject: string;
 };
 
 export function PreviewFrame<TData>({
@@ -72,7 +77,7 @@ export function PreviewFrame<TData>({
   scrollTargetId,
   onSelectSection,
   footerLabel,
-  title,
+  subject,
 }: PreviewFrameProps<TData>) {
   const frameRef = useRef<HTMLIFrameElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -207,7 +212,7 @@ export function PreviewFrame<TData>({
 
   return (
     <section
-      aria-label={`Live preview: ${title}`}
+      aria-label={`Live preview of ${subject}`}
       className="flex h-full min-h-0 flex-col bg-slate-200 p-4 2xl:p-5"
     >
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-media border border-slate-300 bg-white shadow-sm">
@@ -306,7 +311,7 @@ export function PreviewFrame<TData>({
                   key={reloadKey}
                   ref={frameRef}
                   src={previewRoute}
-                  title={title}
+                  title={`${subject} preview`}
                   data-preview-frame=""
                   onError={() => setFailed(true)}
                   className="h-full w-full rounded-control border-0 bg-white shadow-sm"
