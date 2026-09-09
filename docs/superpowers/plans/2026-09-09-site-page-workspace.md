@@ -1181,6 +1181,32 @@ function sameValue(left: unknown, right: unknown): boolean {
   return JSON.stringify(left ?? null) === JSON.stringify(right ?? null);
 }
 
+/**
+ * Splits zod's `fieldErrors` into per-region buckets. A field no region owns
+ * cannot be attributed, so its messages go to the page level rather than being
+ * silently dropped. Shared by the client validation pass and the server's
+ * rejection path, which need identical behaviour.
+ */
+function groupFieldErrorsByRegion(
+  fieldErrors: Record<string, string[] | undefined>,
+): { regions: RegionErrors; form: string[] } {
+  const regions: RegionErrors = {};
+  const form: string[] = [];
+
+  for (const [field, messages] of Object.entries(fieldErrors)) {
+    if (!messages?.length) {
+      continue;
+    }
+    const region = regionForField(field);
+    if (!region) {
+      form.push(...messages);
+      continue;
+    }
+    regions[region.id] = [...(regions[region.id] ?? []), ...messages];
+  }
+  return { regions, form };
+}
+
 export function SitePageWorkspaceProvider({
   family,
   publishedRecord,
@@ -1216,11 +1242,23 @@ export function SitePageWorkspaceProvider({
     setPublished(publishedRecord);
   }, [publishedRecord]);
 
+  // Tracks the draft as it is RIGHT NOW, so a save that has already sent its
+  // payload can tell whether the editor has typed since.
+  const draftRef = useRef(draft);
+  useEffect(() => {
+    draftRef.current = draft;
+  }, [draft]);
+
   const applyDraft = useCallback((next: EditableSitePage) => {
     setDraft(next);
     setPayloadVersion((version) => version + 1);
-    setSaveState({ status: "idle" });
-    setServerErrors({ regions: {}, form: [] });
+    // Leave saveState and serverErrors alone while a request is outstanding.
+    // Resetting them here would snap the UI back to "idle" mid-save, and the
+    // in-flight response would then land on top of state it does not describe.
+    if (!saving.current) {
+      setSaveState({ status: "idle" });
+      setServerErrors({ regions: {}, form: [] });
+    }
   }, []);
 
   // Client-side validation with the SAME schema the endpoint uses, which is
@@ -1233,23 +1271,11 @@ export function SitePageWorkspaceProvider({
       return { regions: {} as RegionErrors, form: [] as string[] };
     }
     const flat = parsed.error.flatten();
-    const regions: RegionErrors = {};
-    const form: string[] = [...flat.formErrors];
-
-    for (const [field, messages] of Object.entries(flat.fieldErrors)) {
-      if (!messages?.length) {
-        continue;
-      }
-      const region = regionForField(field);
-      if (!region) {
-        // A field no region owns cannot be attributed, so it surfaces at page
-        // level rather than being silently dropped.
-        form.push(...messages);
-        continue;
-      }
-      regions[region.id] = [...(regions[region.id] ?? []), ...messages];
-    }
-    return { regions, form };
+    const grouped = groupFieldErrorsByRegion(flat.fieldErrors);
+    return {
+      regions: grouped.regions,
+      form: [...flat.formErrors, ...grouped.form],
+    };
   }, [draft]);
 
   const regionErrors = useMemo<RegionErrors>(() => {
@@ -1295,9 +1321,21 @@ export function SitePageWorkspaceProvider({
   }, []);
 
   const save = useCallback(async () => {
-    if (saving.current || !canSave) {
+    if (!canSave) {
       return;
     }
+    if (saving.current) {
+      // Say so rather than no-op'ing: canSave is true, so the editor has every
+      // reason to expect the click to do something.
+      setSaveState({
+        status: "error",
+        message: "Still saving your previous change — try again in a moment.",
+      });
+      return;
+    }
+    // The exact payload this request sends. Compared against draftRef on
+    // completion to tell whether the editor has typed since.
+    const sent = draft;
     saving.current = true;
     setSaveState({ status: "saving" });
 
@@ -1310,7 +1348,7 @@ export function SitePageWorkspaceProvider({
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(draft),
+          body: JSON.stringify(sent),
         },
       );
       const payload = (await response.json().catch(() => null)) as
@@ -1322,28 +1360,33 @@ export function SitePageWorkspaceProvider({
         | null;
 
       if (!response.ok || !payload?.success) {
-        const regions: RegionErrors = {};
-        const form: string[] = [...(payload?.errors?.formErrors ?? [])];
-
-        for (const [field, messages] of Object.entries(
-          payload?.errors?.fieldErrors ?? {},
-        )) {
-          const region = regionForField(field);
-          if (!region) {
-            form.push(...messages);
-            continue;
-          }
-          regions[region.id] = [...(regions[region.id] ?? []), ...messages];
+        // Only attribute these if the draft has not moved on. Errors describing
+        // a payload the editor has already edited past are phantoms, and worse
+        // than none — they point at fields that may now be valid.
+        if (draftRef.current === sent) {
+          const grouped = groupFieldErrorsByRegion(
+            payload?.errors?.fieldErrors ?? {},
+          );
+          setServerErrors({
+            regions: grouped.regions,
+            form: [...(payload?.errors?.formErrors ?? []), ...grouped.form],
+          });
         }
-        setServerErrors({ regions, form });
         throw new Error(payload?.message || "We couldn't save this page.");
       }
 
-      setPublished(draft);
-      setSaveState({
-        status: "saved",
-        message: payload.message || "Page updated.",
-      });
+      // The server now holds `sent`, so that is the baseline regardless of what
+      // the editor has typed since.
+      setPublished(sent);
+      setSaveState(
+        draftRef.current === sent
+          ? { status: "saved", message: payload.message || "Page updated." }
+          : {
+              status: "saved",
+              message:
+                "Saved. You have changed the page since — save again to publish those edits.",
+            },
+      );
       router.refresh();
     } catch (error) {
       setSaveState({
@@ -1353,7 +1396,7 @@ export function SitePageWorkspaceProvider({
     } finally {
       saving.current = false;
     }
-  }, [canSave, draft, family.endpointBase, published, router]);
+  }, [canSave, draft, family.endpointBase, published.slug, router]);
 
   useEffect(() => {
     if (!isDirty) {
