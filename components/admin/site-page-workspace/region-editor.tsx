@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactElement } from "react";
+
 import { AlertCircle } from "lucide-react";
 
 import { BodySectionsRegion } from "@/components/admin/site-page/body-sections-region";
@@ -12,14 +14,17 @@ import { StatsRegion } from "@/components/admin/site-page/stats-region";
 
 import { useSitePageWorkspace } from "./record-provider";
 
-function ActiveRegion() {
+function ActiveRegion(): ReactElement {
   const { activeRegion, draft, setDraft, family } = useSitePageWorkspace();
   const props = { value: draft, onChange: setDraft };
 
-  // Exhaustive over SitePageRegionId — TypeScript fails the build if a
-  // region is added to the registry without an editor here. No default
-  // branch: that is what makes the omission a build failure rather than a
-  // silent gap.
+  // Exhaustive over SitePageRegionId — the `: ReactElement` return-type
+  // annotation is what makes this build-enforced, not the absent `default`.
+  // This project does not set noImplicitReturns, so an unannotated function
+  // whose switch drops a case compiles clean (its inferred return type just
+  // widens to include `undefined`, which is a valid ReactNode). With the
+  // annotation, the same omission is TS2366: Function lacks ending return
+  // statement.
   switch (activeRegion.id) {
     case "hero":
       return <HeroRegion {...props} />;

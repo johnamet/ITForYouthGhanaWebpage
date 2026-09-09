@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactElement } from "react";
+
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import {
@@ -15,11 +17,16 @@ import { TickerForm } from "@/components/admin/ticker-form";
 import { SaveSectionButton } from "./save-section-button";
 import { useWorkspace } from "./workspace-provider";
 
-function ActiveForm() {
+function ActiveForm(): ReactElement {
   const { activeSection, values, setValue } = useWorkspace();
 
-  // Exhaustive over HomepageSectionKey — TypeScript fails the build if a
-  // section key is added to the registry without a form here.
+  // Exhaustive over HomepageSectionKey — the `: ReactElement` return-type
+  // annotation is what makes this build-enforced, not the absent `default`.
+  // This project does not set noImplicitReturns, so an unannotated function
+  // whose switch drops a case compiles clean (its inferred return type just
+  // widens to include `undefined`, which is a valid ReactNode). With the
+  // annotation, the same omission is TS2366: Function lacks ending return
+  // statement.
   switch (activeSection.key) {
     case "overviewSection":
       return (
