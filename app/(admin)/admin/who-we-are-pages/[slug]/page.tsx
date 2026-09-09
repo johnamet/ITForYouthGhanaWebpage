@@ -1,42 +1,45 @@
 import { notFound } from "next/navigation";
-import { FileText } from "lucide-react";
 
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { SitePageForm } from "@/components/admin/site-page-form";
+import { SitePageWorkspaceBar } from "@/components/admin/site-page-workspace/workspace-bar";
+import { RegionEditor } from "@/components/admin/site-page-workspace/region-editor";
+import { RegionRail } from "@/components/admin/site-page-workspace/region-rail";
+import { SitePageWorkspaceProvider } from "@/components/admin/site-page-workspace/record-provider";
+import { SitePagePreviewPane } from "@/components/admin/site-page-workspace/preview-pane-adapter";
+import { WorkspaceShell } from "@/components/admin/workspace-kit/workspace-shell";
+import { SITE_PAGE_FAMILIES } from "@/lib/cms/site-page-families";
 import { getCmsWhoWeAreDynamicPageBySlug } from "@/lib/cms/site-pages";
+import type { EditableSitePage } from "@/types/content";
 
-type AdminEditWhoWeAreDynamicPageProps = {
+type PageProps = {
   params: { slug: string };
+  searchParams: { region?: string };
 };
 
 export default async function AdminEditWhoWeAreDynamicPage({
   params,
-}: AdminEditWhoWeAreDynamicPageProps) {
-  const page = await getCmsWhoWeAreDynamicPageBySlug(params.slug, true);
+  searchParams,
+}: PageProps) {
+  const record = await getCmsWhoWeAreDynamicPageBySlug(params.slug, true);
 
-  if (!page) {
+  if (!record) {
     notFound();
   }
 
-  return (
-    <div className="space-y-8">
-      <AdminPageHeader
-        eyebrow="Who We Are"
-        title={`Edit page: ${page.title || page.slug}`}
-        description="Update the custom page content, route slug, publish status, CTAs, and related links."
-        icon={<FileText className="h-5 w-5" />}
-        primaryAction={{ label: "Preview page", href: `/who-we-are/${page.slug}` }}
-      />
+  const source: EditableSitePage = record;
+  const publishedRecord = JSON.parse(JSON.stringify(source)) as EditableSitePage;
 
-      <SitePageForm
-        initial={page}
-        endpoint={`/api/admin/who-we-are-pages/${page.slug}`}
-        previewHref={`/who-we-are/${page.slug}`}
-        submitLabel="Save page"
-        method="PUT"
-        showSlugField
-        showPublishingFields
+  return (
+    <SitePageWorkspaceProvider
+      family={SITE_PAGE_FAMILIES["who-we-are"]}
+      publishedRecord={publishedRecord}
+      initialRegionId={searchParams.region ?? null}
+    >
+      <WorkspaceShell
+        bar={<SitePageWorkspaceBar />}
+        rail={<RegionRail />}
+        editor={<RegionEditor />}
+        preview={<SitePagePreviewPane />}
       />
-    </div>
+    </SitePageWorkspaceProvider>
   );
 }

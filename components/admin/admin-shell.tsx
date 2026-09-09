@@ -43,10 +43,18 @@ type SidebarItem = {
 
 /**
  * Admin routes that manage their own full-height layout and must not receive
- * the shell's default page padding. Selected from the pathname because a page
- * cannot set a prop on the shell that renders it.
+ * the shell's page padding. A predicate rather than a list, because the
+ * site-page workspaces carry a dynamic slug segment.
  */
-export const BLEED_ADMIN_ROUTES = ["/admin/content/homepage"];
+export function isBleedAdminRoute(pathname: string): boolean {
+  if (pathname === "/admin/content/homepage") {
+    return true;
+  }
+  // `(?!new$)` is load-bearing: without it this matches the create routes,
+  // which are ordinary scrolling forms and would render flush against the
+  // sidebar with no full-height layout to justify it.
+  return /^\/admin\/(who-we-are|what-we-do)-pages\/(?!new$)[^/]+$/.test(pathname);
+}
 
 const workspaceItems: SidebarItem[] = [
   {
@@ -111,7 +119,7 @@ export function AdminShell({ children, adminUser }: AdminShellProps) {
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  const isBleed = BLEED_ADMIN_ROUTES.includes(pathname);
+  const isBleed = isBleedAdminRoute(pathname);
 
   const isActivePath = (href: string) => {
     if (pathname === href || pathname.startsWith(`${href}/`)) {
