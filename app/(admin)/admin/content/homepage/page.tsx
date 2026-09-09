@@ -1,5 +1,6 @@
 import { HomepageWorkspaceProvider } from "@/components/admin/homepage-workspace/workspace-provider";
 import { WorkspaceLayout } from "@/components/admin/homepage-workspace/workspace-layout";
+import { PreviewPane } from "@/components/admin/homepage-workspace/preview-pane";
 import type { HomepageDraftValues } from "@/lib/cms/homepage-sections";
 import {
   getCmsChallengeSection,
@@ -63,7 +64,7 @@ export default async function AdminHomepageWorkspacePage({
       publishedValues={publishedValues}
       initialSectionId={searchParams.section ?? null}
     >
-      <WorkspaceLayout />
+      <WorkspaceLayout preview={<PreviewPane />} />
     </HomepageWorkspaceProvider>
   );
 }
