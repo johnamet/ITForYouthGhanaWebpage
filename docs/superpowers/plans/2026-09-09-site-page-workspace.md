@@ -252,12 +252,17 @@ export type PreviewFrameProps<TData> = {
    */
   footerLabel: string;
   /**
-   * Accessible name for the iframe. It must describe THIS workspace's page —
-   * a site page announcing itself as "Homepage preview" would be false — so
-   * it is a caller's prop, and the screenshot script keys off the frame's
-   * `data-preview-frame` attribute instead of this text.
+   * What is being previewed, as a noun phrase — "Homepage", or "Who We Are:
+   * Our story". NOT a full label: the frame composes it differently for the
+   * iframe's title and the wrapper's accessible name, so passing a phrase like
+   * "Homepage preview" yields "Live preview of Homepage preview".
+   *
+   * It has to be a prop at all because a site page announcing itself as
+   * "Homepage preview" would be false. The screenshot script keys off the
+   * frame's constant `data-preview-frame` attribute rather than this text,
+   * precisely so this can vary.
    */
-  title: string;
+  subject: string;
 };
 
 export function PreviewFrame<TData>(props: PreviewFrameProps<TData>): JSX.Element;
@@ -276,11 +281,16 @@ Move the whole body of `components/admin/homepage-workspace/preview-pane.tsx` in
 - the readiness timeout, the `onError` handler, the failure fallback copy, and `refresh()` clearing both `ready` and `failed`;
 - the origin check and the `event.source === frameRef.current?.contentWindow` check.
 
-The iframe's `title` becomes `title={title}` from the new prop, and it gains a
-constant `data-preview-frame=""` attribute. The title has to vary — a site page
-must not announce itself as "Homepage preview" — while the screenshot script's
-selector must not, so the two concerns are split: the prop names the frame for
-assistive technology, the attribute identifies it for automation.
+The iframe gains a constant `data-preview-frame=""` attribute, and both its
+`title` and the wrapper's `aria-label` are composed from the single `subject`
+prop. The names have to vary — a site page must not announce itself as
+"Homepage preview" — while the screenshot script's selector must not, so the
+two concerns are split: `subject` names the frame for assistive technology, the
+attribute identifies it for automation.
+
+`subject` is a noun phrase, not a label, so each slot can read naturally:
+`"Homepage"` yields the iframe title "Homepage preview" and the wrapper name
+"Live preview of Homepage".
 
 **Do not change the geometry.** Fixed width, then transform. The outer wrapper must stay sized to the scaled footprint or the scroll extents go wrong.
 
@@ -292,7 +302,8 @@ Three substitutions where the old code read the workspace:
 | `activeSection.id` | `activeSectionId` prop |
 | `selectSection(message.sectionId)` | `onSelectSection(message.sectionId)` |
 | `activeSection.label` in the footer | `footerLabel` prop |
-| `aria-label="Live homepage preview"` on the wrapper section | `aria-label={\`Live preview: ${title}\`}` |
+| `aria-label="Live homepage preview"` on the wrapper section | `aria-label={\`Live preview of ${subject}\`}` |
+| `title="Homepage preview"` on the iframe | `title={\`${subject} preview\`}` |
 | the footer's hard-coded `· Homepage ·` segment | removed; `footerLabel` now carries it |
 
 Those last two are the same defect as the hard-coded `title`: in a shared
@@ -345,7 +356,7 @@ export function PreviewPane() {
       scrollTargetId={activeSection.id}
       onSelectSection={selectSection}
       footerLabel={`Homepage · ${activeSection.label}`}
-      title="Homepage preview"
+      subject="Homepage"
     />
   );
 }
@@ -1887,7 +1898,7 @@ export function SitePagePreviewPane() {
       scrollTargetId={activeRegion.previewTarget}
       onSelectSection={selectRegion}
       footerLabel={`${family.label} · ${published.title || published.slug} · ${activeRegion.label}`}
-      title={`${family.label} page preview`}
+      subject={`${family.label}: ${published.title || published.slug}`}
     />
   );
 }
