@@ -59,24 +59,31 @@ const sectionColumns: AdminTableColumn<AdminHomepageSectionConfig>[] = [
   {
     key: "actions",
     label: "Actions",
-    render: (section) => (
-      <div className="flex flex-wrap gap-2">
-        <Link
-          href={section.route}
-          className="inline-flex items-center gap-1 rounded-full bg-slate-950 px-3 py-2 text-xs font-bold text-white"
-        >
-          <Pencil className="h-3.5 w-3.5" />
-          Edit
-        </Link>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700"
-        >
-          <Eye className="h-3.5 w-3.5" />
-          Preview
-        </Link>
-      </div>
-    ),
+    render: (section) => {
+      const editHref =
+        section.route === "/admin/content/homepage"
+          ? `${section.route}?section=${section.id}`
+          : section.route;
+
+      return (
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={editHref}
+            className="inline-flex items-center gap-1 rounded-full bg-slate-950 px-3 py-2 text-xs font-bold text-white"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+            Edit
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700"
+          >
+            <Eye className="h-3.5 w-3.5" />
+            Preview
+          </Link>
+        </div>
+      );
+    },
   },
 ];
 
