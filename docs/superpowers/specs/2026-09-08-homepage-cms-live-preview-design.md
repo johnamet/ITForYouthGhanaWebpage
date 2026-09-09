@@ -253,9 +253,13 @@ discard unsaved work in another.
   tabs rather than shrinking both panes past usability.
 - Viewport controls set width on the iframe itself: `100%`, `760px`, `390px`.
   This is what makes the breakpoints real.
-- "Fit" is a separate CSS `transform: scale()` on the iframe wrapper.
-  Transforms do not alter the layout viewport, so fitting cannot corrupt the
-  breakpoints it is displaying.
+- There is **no "fit" control**, though the mockup showed one. The iframe is
+  `h-full`, so its layout viewport equals the pane height and the homepage
+  scrolls inside the iframe's own document. Scaling the wrapper would therefore
+  display the same slice of page, smaller — revealing nothing and shortening no
+  scroll. A genuine fit-whole-page control would need the canvas to report its
+  content height so the iframe could be made tall and then scaled, which is out
+  of scope. Only the desktop/tablet/mobile controls are required.
 - The mockup's `<iconify-icon>` tags become `lucide-react`, matching the rest
   of the admin surface.
 - Existing admin visual language is retained: navy sidebar, white/slate

@@ -66,7 +66,7 @@ programmeShowcase  joinCtaCards  newsletterSignup
 | `components/admin/homepage-workspace/section-rail.tsx` | Section list with active / unsaved / saved / hidden states. |
 | `components/admin/homepage-workspace/section-editor.tsx` | Maps active section to its controlled form; renders the save footer. |
 | `components/admin/homepage-workspace/workspace-bar.tsx` | Sticky header: breadcrumb, dirty badge, save, open public page. |
-| `components/admin/homepage-workspace/preview-pane.tsx` | Iframe host: viewport controls, fit, refresh, message plumbing. |
+| `components/admin/homepage-workspace/preview-pane.tsx` | Iframe host: viewport controls, refresh, message plumbing. |
 | `components/admin/homepage-workspace/preview-messages.ts` | The message contract shared by pane and canvas. Types and origin guard in one place. |
 | `components/admin/homepage-workspace/preview-canvas.tsx` | Renders the fifteen sections, merges drafts over baseline, outlines and labels each. |
 | `components/admin/homepage-workspace/preview-section-boundary.tsx` | Per-section error boundary, keyed on payload version. |
@@ -2195,7 +2195,7 @@ Create `components/admin/homepage-workspace/preview-pane.tsx`:
 ```tsx
 "use client";
 
-import { Maximize2, Monitor, RefreshCw, Smartphone, Tablet, Zap } from "lucide-react";
+import { Monitor, RefreshCw, Smartphone, Tablet, Zap } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useWorkspace } from "./workspace-provider";
@@ -2216,14 +2216,26 @@ const VIEWPORTS = [
  *  that the preview still feels live. */
 const DRAFT_DEBOUNCE_MS = 120;
 
+/**
+ * How long to wait for the canvas's readiness handshake before treating the
+ * preview as failed. iframe `onError` does not fire for HTTP errors, auth
+ * redirects, or hangs — and an expired session is redirected by middleware to
+ * /admin-login, which would otherwise render the login form silently inside
+ * the preview. None of those cases post the handshake, so one timeout covers
+ * all of them.
+ */
+const READY_TIMEOUT_MS = 8000;
+
 export function PreviewPane() {
   const { values, activeSection, payloadVersion, selectSection } = useWorkspace();
   const frameRef = useRef<HTMLIFrameElement | null>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const [viewport, setViewport] = useState<(typeof VIEWPORTS)[number]["id"]>("desktop");
-  const [fit, setFit] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
+  // Set when the canvas itself asked for a section, so the scroll effect below
+  // does not animate the view away from what the editor just clicked.
+  const skipScrollFor = useRef<string | null>(null);
 
   const post = useCallback((message: unknown) => {
     frameRef.current?.contentWindow?.postMessage(message, window.location.origin);
@@ -2247,6 +2259,7 @@ export function PreviewPane() {
         return;
       }
       if (message.type === "itfyg:preview-select") {
+        skipScrollFor.current = message.sectionId;
         selectSection(message.sectionId);
       }
     };
@@ -2271,17 +2284,37 @@ export function PreviewPane() {
     return () => window.clearTimeout(timer);
   }, [ready, post, payloadVersion, values, activeSection.id]);
 
-  // Selecting in the rail scrolls the preview to the matching section.
+  // Selecting in the rail scrolls the preview to the matching section. A
+  // selection that came FROM the canvas is skipped: the editor is already
+  // looking at that section, so echoing a scroll back would animate away from
+  // where they clicked.
   useEffect(() => {
     if (!ready) {
+      return;
+    }
+    if (skipScrollFor.current === activeSection.id) {
+      skipScrollFor.current = null;
       return;
     }
     post({ type: "itfyg:preview-scroll", sectionId: activeSection.id });
   }, [ready, post, activeSection.id]);
 
-  // A reload discards readiness until the fresh document announces itself.
+  // Failure detection. See READY_TIMEOUT_MS: the handshake is the only signal
+  // that distinguishes a working preview from a login page, an error page, or
+  // a hang, because none of those fire onError.
+  useEffect(() => {
+    if (ready) {
+      return;
+    }
+    const timer = window.setTimeout(() => setFailed(true), READY_TIMEOUT_MS);
+    return () => window.clearTimeout(timer);
+  }, [ready, reloadKey]);
+
+  // A reload discards readiness until the fresh document announces itself, and
+  // gives a failed preview another chance.
   const refresh = () => {
     setReady(false);
+    setFailed(false);
     setReloadKey((key) => key + 1);
   };
 
@@ -2294,7 +2327,7 @@ export function PreviewPane() {
     >
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-media border border-slate-300 bg-white shadow-sm">
         <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-3 py-2.5">
-          <div className="flex rounded-lg border border-slate-200 bg-slate-50 p-0.5">
+          <div className="flex rounded-control border border-slate-200 bg-slate-50 p-0.5">
             {VIEWPORTS.map((option) => {
               const Icon = option.icon;
               return (
@@ -2318,15 +2351,6 @@ export function PreviewPane() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              aria-label="Fit preview"
-              aria-pressed={fit}
-              onClick={() => setFit((current) => !current)}
-              className="flex h-8 w-8 items-center justify-center rounded-control border border-slate-200 text-slate-500 transition hover:bg-slate-50"
-            >
-              <Maximize2 aria-hidden className="h-3.5 w-3.5" />
-            </button>
             <button
               type="button"
               aria-label="Refresh preview"
@@ -2353,8 +2377,10 @@ export function PreviewPane() {
                 The preview could not load.
               </p>
               <p className="mt-2 leading-6">
-                Editing and saving still work. Open the public page in a new tab
-                to check your changes.
+                Your session may have expired — try refreshing the preview, or
+                reload this page to sign in again. Editing and saving still
+                work, and you can open the public page in a new tab to check
+                your changes.
               </p>
               <a
                 href="/"
@@ -2369,13 +2395,10 @@ export function PreviewPane() {
             <div
               // Width drives the iframe's real layout viewport, which is what
               // makes the homepage's Tailwind breakpoints resolve correctly.
-              // Fit is a transform, which does NOT alter the layout viewport,
-              // so zooming cannot corrupt the breakpoints being displayed.
-              style={{
-                width: active.width,
-                transform: fit ? "scale(0.75)" : undefined,
-                transformOrigin: "top center",
-              }}
+              // Nothing here may be a transform: a transform would shrink the
+              // rendered box while leaving that layout viewport untouched, so
+              // it would display the same slice of page, smaller.
+              style={{ width: active.width }}
               className="h-full shrink-0"
             >
               <iframe
