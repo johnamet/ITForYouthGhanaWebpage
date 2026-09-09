@@ -170,8 +170,23 @@ review to catch.
 - `components/admin/site-page-workspace/workspace-bar.tsx` — breadcrumb,
   record title, dirty badge, "Save page", "Open public page".
 - `components/admin/site-page-workspace/preview-canvas.tsx` — renders
-  `ContentPage` against the draft, wrapping each region's target in an outline,
-  a label, a click target and a boundary.
+  `ContentPage` against the draft and positions an outline, a label and a
+  click target over each region's block.
+
+  **It cannot wrap those blocks.** `ContentPage` renders them internally and is
+  not to be modified, so the canvas pairs its element children positionally
+  against the targets it expects to have rendered — `hero` always, then
+  `stats`, `body` and `related` for each non-empty region, using the very
+  filters `ContentPage` itself applies. If the child count and the expected
+  count disagree, `ContentPage`'s structure has changed and any pairing would
+  put outlines on the wrong blocks, so outlining is disabled with a visible
+  notice instead. The preview still renders; outlining is the enhancement, not
+  the substance.
+
+  This also forces one error boundary around the whole page rather than one per
+  block, which is a real loss of isolation against the homepage: a throw sends
+  the entire preview to the placeholder rather than one section. It still
+  recovers on the next payload, which is what matters for half-typed values.
 - `app/(admin-preview)/admin/site-pages/[family]/[slug]/preview/page.tsx` —
   the iframe document. `family` is `who-we-are` or `what-we-do`.
 
