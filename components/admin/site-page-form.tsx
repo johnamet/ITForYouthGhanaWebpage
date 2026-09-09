@@ -14,15 +14,22 @@ import {
 } from "lucide-react";
 
 import type {
-  ActionLink,
-  ContentBlock,
   DynamicSitePage,
   EditableSitePage,
-  HighlightStat,
-  RouteCard,
   TrainingCohort,
   TrainingProcessStep,
 } from "@/types/content";
+
+import { BodySectionsRegion } from "./site-page/body-sections-region";
+import { CtasRegion } from "./site-page/ctas-region";
+import { RelatedRegion } from "./site-page/related-region";
+import {
+  emptyCohort,
+  emptyProcessStep,
+  inputClass,
+  panelClass,
+} from "./site-page/shared";
+import { StatsRegion } from "./site-page/stats-region";
 
 type ApiResponse = {
   success?: boolean;
@@ -45,50 +52,6 @@ type SitePageFormProps = {
   slugBasePath?: string;
   successRedirectHref?: string;
 };
-
-const inputClass =
-  "mt-2 w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-ink outline-none transition placeholder:text-slate-400 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20";
-
-const panelClass = "rounded-[30px] border border-brand-border bg-white p-6 shadow-sm lg:p-8";
-
-const emptyStat: HighlightStat = {
-  value: "",
-  label: "",
-  description: "",
-  icon: "",
-};
-
-const emptySection: ContentBlock = {
-  title: "",
-  body: "",
-  bullets: [],
-};
-
-const emptyCta: ActionLink = {
-  label: "",
-  href: "/",
-};
-
-const emptyRelatedCard: RouteCard = {
-  href: "/",
-  eyebrow: "",
-  title: "",
-  description: "",
-};
-
-const emptyCohort: TrainingCohort = { id: "", name: "", startDate: "", summary: "", format: "", duration: "", location: "", status: "upcoming" };
-const emptyProcessStep: TrainingProcessStep = { number: "", title: "", description: "", icon: "" };
-
-function toLines(value?: string[]) {
-  return (value ?? []).join("\n");
-}
-
-function fromLines(value: string) {
-  return value
-    .split("\n")
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
 
 export function SitePageForm({
   initial,
@@ -116,72 +79,6 @@ export function SitePageForm({
     setValues((current) => ({ ...current, [key]: value }));
   };
 
-  const updateStat = <Key extends keyof HighlightStat>(
-    index: number,
-    key: Key,
-    value: HighlightStat[Key],
-  ) => {
-    setValues((current) => ({
-      ...current,
-      stats: current.stats.map((stat, statIndex) =>
-        statIndex === index ? { ...stat, [key]: value } : stat,
-      ),
-    }));
-  };
-
-  const updateSection = <Key extends keyof ContentBlock>(
-    index: number,
-    key: Key,
-    value: ContentBlock[Key],
-  ) => {
-    setValues((current) => ({
-      ...current,
-      sections: current.sections.map((section, sectionIndex) =>
-        sectionIndex === index ? { ...section, [key]: value } : section,
-      ),
-    }));
-  };
-
-  const updateCta = <Key extends keyof ActionLink>(
-    index: number,
-    key: Key,
-    value: ActionLink[Key],
-  ) => {
-    setValues((current) => ({
-      ...current,
-      ctas: current.ctas.map((cta, ctaIndex) =>
-        ctaIndex === index ? { ...cta, [key]: value } : cta,
-      ),
-    }));
-  };
-
-  const updateRelatedCard = <Key extends keyof RouteCard>(
-    index: number,
-    key: Key,
-    value: RouteCard[Key],
-  ) => {
-    setValues((current) => ({
-      ...current,
-      related: current.related.map((card, cardIndex) =>
-        cardIndex === index ? { ...card, [key]: value } : card,
-      ),
-    }));
-  };
-
-  const removeItem = <Key extends "stats" | "sections" | "ctas" | "related">(
-    key: Key,
-    index: number,
-  ) => {
-    setValues((current) => ({
-      ...current,
-      [key]: current[key].filter((_, itemIndex) => itemIndex !== index),
-    }));
-  };
-
-  const addStat = () => update("stats", [...values.stats, emptyStat]);
-  const addSection = () => update("sections", [...values.sections, emptySection]);
-  const addCta = () => update("ctas", [...values.ctas, emptyCta]);
-  const addRelatedCard = () => update("related", [...values.related, emptyRelatedCard]);
   const updateCohort = (index: number, patch: Partial<TrainingCohort>) =>
     update("cohorts", (values.cohorts ?? []).map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item));
   const updateProcessStep = (index: number, patch: Partial<TrainingProcessStep>) =>
@@ -544,50 +441,22 @@ export function SitePageForm({
             <label htmlFor="principlesImageAlt" className="text-sm font-bold text-brand-ink">Feature image alt text</label>
             <input id="principlesImageAlt" value={values.principlesImageAlt ?? ""} onChange={(event) => update("principlesImageAlt", event.target.value)} className={inputClass} />
           </div>
-          <div>
-            <label htmlFor="highlightsEyebrow" className="text-sm font-bold text-brand-ink">
-              Highlights label
-            </label>
-            <input
-              id="highlightsEyebrow"
-              value={values.highlightsEyebrow ?? ""}
-              onChange={(event) => update("highlightsEyebrow", event.target.value)}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="exploreEyebrow" className="text-sm font-bold text-brand-ink">
-              Explore eyebrow
-            </label>
-            <input
-              id="exploreEyebrow"
-              value={values.exploreEyebrow ?? ""}
-              onChange={(event) => update("exploreEyebrow", event.target.value)}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="exploreTitle" className="text-sm font-bold text-brand-ink">
-              Explore title
-            </label>
-            <input
-              id="exploreTitle"
-              value={values.exploreTitle ?? ""}
-              onChange={(event) => update("exploreTitle", event.target.value)}
-              className={inputClass}
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="exploreDescription" className="text-sm font-bold text-brand-ink">
-              Explore description
-            </label>
-            <textarea
-              id="exploreDescription"
-              value={values.exploreDescription ?? ""}
-              onChange={(event) => update("exploreDescription", event.target.value)}
-              className={`${inputClass} h-24`}
-            />
-          </div>
+          {values.process !== undefined ? (
+            <>
+              <div>
+                <label htmlFor="processEyebrow" className="text-sm font-bold text-brand-ink">Process eyebrow</label>
+                <input id="processEyebrow" value={values.processEyebrow ?? ""} onChange={(event) => update("processEyebrow", event.target.value)} className={inputClass} />
+              </div>
+              <div>
+                <label htmlFor="processTitle" className="text-sm font-bold text-brand-ink">Process title</label>
+                <input id="processTitle" value={values.processTitle ?? ""} onChange={(event) => update("processTitle", event.target.value)} className={inputClass} />
+              </div>
+              <div className="md:col-span-2">
+                <label htmlFor="processDescription" className="text-sm font-bold text-brand-ink">Process description</label>
+                <textarea id="processDescription" value={values.processDescription ?? ""} onChange={(event) => update("processDescription", event.target.value)} className={`${inputClass} h-24`} />
+              </div>
+            </>
+          ) : null}
           <div>
             <label htmlFor="nextStepEyebrow" className="text-sm font-bold text-brand-ink">Final CTA eyebrow</label>
             <input id="nextStepEyebrow" value={values.nextStepEyebrow ?? ""} onChange={(event) => update("nextStepEyebrow", event.target.value)} className={inputClass} />
@@ -603,271 +472,10 @@ export function SitePageForm({
         </div>
       </section>
 
-      <section className={panelClass}>
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-              Proof
-            </p>
-            <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
-              Stats
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={addStat}
-            className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"
-          >
-            <Plus className="h-4 w-4" />
-            Add stat
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {values.stats.map((stat, index) => (
-            <div
-              key={`${stat.label}-${index}`}
-              className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[0.6fr_1fr_1.4fr_0.6fr_1fr_auto]"
-            >
-              <div>
-                <label className="text-sm font-bold text-brand-ink">Value</label>
-                <input
-                  value={stat.value}
-                  onChange={(event) => updateStat(index, "value", event.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-bold text-brand-ink">Label</label>
-                <input
-                  value={stat.label}
-                  onChange={(event) => updateStat(index, "label", event.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-bold text-brand-ink">Description</label>
-                <input
-                  value={stat.description ?? ""}
-                  onChange={(event) => updateStat(index, "description", event.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-bold text-brand-ink">Icon</label>
-                <input
-                  value={stat.icon ?? ""}
-                  onChange={(event) => updateStat(index, "icon", event.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-bold text-brand-ink">Icon image URL</label>
-                <input
-                  value={stat.iconImage ?? ""}
-                  onChange={(event) => updateStat(index, "iconImage", event.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => removeItem("stats", index)}
-                className="h-10 rounded-xl border border-rose-200 px-3 text-sm font-semibold text-rose-700"
-              >
-                <Trash2 className="mr-1 inline-block h-4 w-4" />
-                Remove
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className={panelClass}>
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-              Story
-            </p>
-            <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
-              Content sections
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={addSection}
-            className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"
-          >
-            <Plus className="h-4 w-4" />
-            Add section
-          </button>
-        </div>
-
-        <div className="space-y-5">
-          {values.sections.map((section, index) => (
-            <div key={`${section.title}-${index}`} className="rounded-2xl border border-brand-border p-4">
-              <div className="grid gap-4 md:grid-cols-[1fr_auto]">
-                <div>
-                  <label className="text-sm font-bold text-brand-ink">Title</label>
-                  <input
-                    value={section.title}
-                    onChange={(event) => updateSection(index, "title", event.target.value)}
-                    className={inputClass}
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => removeItem("sections", index)}
-                  className="mt-8 h-10 rounded-xl border border-rose-200 px-3 text-sm font-semibold text-rose-700"
-                >
-                  <Trash2 className="mr-1 inline-block h-4 w-4" />
-                  Remove
-                </button>
-              </div>
-              <label className="mt-4 block text-sm font-bold text-brand-ink">Body</label>
-              <textarea
-                value={section.body}
-                onChange={(event) => updateSection(index, "body", event.target.value)}
-                className={`${inputClass} h-32`}
-              />
-              <label className="mt-4 block text-sm font-bold text-brand-ink">
-                Bullets, one per line
-              </label>
-              <textarea
-                value={toLines(section.bullets)}
-                onChange={(event) => updateSection(index, "bullets", fromLines(event.target.value))}
-                className={`${inputClass} h-24`}
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className={panelClass}>
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-              Conversion
-            </p>
-            <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
-              Hero CTAs
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={addCta}
-            className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"
-          >
-            <Plus className="h-4 w-4" />
-            Add CTA
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {values.ctas.map((cta, index) => (
-            <div key={`${cta.label}-${index}`} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_1fr_auto]">
-              <div>
-                <label className="text-sm font-bold text-brand-ink">Label</label>
-                <input
-                  value={cta.label}
-                  onChange={(event) => updateCta(index, "label", event.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-bold text-brand-ink">Href</label>
-                <input
-                  value={cta.href}
-                  onChange={(event) => updateCta(index, "href", event.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => removeItem("ctas", index)}
-                className="h-10 rounded-xl border border-rose-200 px-3 text-sm font-semibold text-rose-700"
-              >
-                <Trash2 className="mr-1 inline-block h-4 w-4" />
-                Remove
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className={panelClass}>
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-gold">
-              Navigation
-            </p>
-            <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">
-              Related route cards
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={addRelatedCard}
-            className="inline-flex items-center gap-2 rounded-full border border-brand-border px-4 py-2 text-sm font-semibold text-brand-ink"
-          >
-            <Plus className="h-4 w-4" />
-            Add card
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {values.related.map((card, index) => (
-            <div key={`${card.href}-${index}`} className="rounded-2xl border border-brand-border p-4">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <label className="text-sm font-bold text-brand-ink">Eyebrow</label>
-                  <input
-                    value={card.eyebrow ?? ""}
-                    onChange={(event) => updateRelatedCard(index, "eyebrow", event.target.value)}
-                    className={inputClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-bold text-brand-ink">Href</label>
-                  <input
-                    value={card.href}
-                    onChange={(event) => updateRelatedCard(index, "href", event.target.value)}
-                    className={inputClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-bold text-brand-ink">Title</label>
-                  <input
-                    value={card.title}
-                    onChange={(event) => updateRelatedCard(index, "title", event.target.value)}
-                    className={inputClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-bold text-brand-ink">Description</label>
-                  <input
-                    value={card.description}
-                    onChange={(event) => updateRelatedCard(index, "description", event.target.value)}
-                    className={inputClass}
-            />
-          </div>
-          {values.process !== undefined ? <>
-            <div><label htmlFor="processEyebrow" className="text-sm font-bold text-brand-ink">Process eyebrow</label><input id="processEyebrow" value={values.processEyebrow ?? ""} onChange={(event) => update("processEyebrow", event.target.value)} className={inputClass} /></div>
-            <div><label htmlFor="processTitle" className="text-sm font-bold text-brand-ink">Process title</label><input id="processTitle" value={values.processTitle ?? ""} onChange={(event) => update("processTitle", event.target.value)} className={inputClass} /></div>
-            <div className="md:col-span-2"><label htmlFor="processDescription" className="text-sm font-bold text-brand-ink">Process description</label><textarea id="processDescription" value={values.processDescription ?? ""} onChange={(event) => update("processDescription", event.target.value)} className={`${inputClass} h-24`} /></div>
-          </> : null}
-        </div>
-              <button
-                type="button"
-                onClick={() => removeItem("related", index)}
-                className="mt-4 h-10 rounded-xl border border-rose-200 px-3 text-sm font-semibold text-rose-700"
-              >
-                <Trash2 className="mr-1 inline-block h-4 w-4" />
-                Remove card
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
+      <StatsRegion value={values} onChange={setValues} />
+      <BodySectionsRegion value={values} onChange={setValues} />
+      <CtasRegion value={values} onChange={setValues} />
+      <RelatedRegion value={values} onChange={setValues} />
 
       <div className="flex flex-wrap items-center gap-3 rounded-[26px] border border-brand-border bg-white px-5 py-4 shadow-sm">
         <button
