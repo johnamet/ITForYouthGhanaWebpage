@@ -23,6 +23,7 @@ import { workspaceSectionsById } from "@/lib/cms/homepage-sections";
 import { programmeShowcase as defaultProgrammeShowcase } from "@/lib/content/site-config";
 import { cn } from "@/lib/utils/cn";
 
+import { PreviewSectionBoundary } from "./preview-section-boundary";
 import {
   isTrustedPreviewEvent,
   previewSectionDomId,
@@ -36,6 +37,7 @@ function PreviewSection({
   editable,
   isActive,
   onSelect,
+  resetKey,
   children,
 }: {
   sectionId: string;
@@ -43,6 +45,7 @@ function PreviewSection({
   editable: boolean;
   isActive: boolean;
   onSelect: (sectionId: string) => void;
+  resetKey: number;
   children: React.ReactNode;
 }) {
   if (!editable) {
@@ -52,14 +55,18 @@ function PreviewSection({
         id={previewSectionDomId(sectionId)}
         className="pointer-events-none opacity-40"
       >
-        {children}
+        <PreviewSectionBoundary label={label} resetKey={resetKey}>
+          {children}
+        </PreviewSectionBoundary>
       </div>
     );
   }
 
   return (
     <div id={previewSectionDomId(sectionId)} className="group relative">
-      {children}
+      <PreviewSectionBoundary label={label} resetKey={resetKey}>
+        {children}
+      </PreviewSectionBoundary>
       <button
         type="button"
         onClick={() => onSelect(sectionId)}
@@ -93,6 +100,7 @@ export function HomepagePreviewCanvas({
 }) {
   const [values, setValues] = useState(baseline.editable);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
+  const [payloadVersion, setPayloadVersion] = useState(0);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -107,6 +115,7 @@ export function HomepagePreviewCanvas({
       if (message.type === "itfyg:preview-draft") {
         setValues(message.values);
         setActiveSectionId(message.activeSectionId);
+        setPayloadVersion(message.payloadVersion);
         return;
       }
 
@@ -147,6 +156,7 @@ export function HomepagePreviewCanvas({
       editable
       isActive={activeSectionId === sectionId}
       onSelect={onSelect}
+      resetKey={payloadVersion}
     >
       {node}
     </PreviewSection>
@@ -159,6 +169,7 @@ export function HomepagePreviewCanvas({
       editable={false}
       isActive={false}
       onSelect={onSelect}
+      resetKey={payloadVersion}
     >
       {node}
     </PreviewSection>
