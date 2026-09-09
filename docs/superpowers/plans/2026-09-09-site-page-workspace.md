@@ -495,7 +495,7 @@ Also a pure refactor, and verifiable **without Firestore**: the two `new` routes
 
 **Interfaces:**
 - Consumes: `SitePage`, `DynamicSitePage` from `types/content.ts`.
-- Produces: `EditableSitePage`, `SitePageRegionId`, `SitePageRegion`, `sitePageRegions`, `sitePageRegionsById`, `DEFAULT_SITE_PAGE_REGION_ID`, `findSitePageRegion`, `regionForField`, `isRegionEmpty`, `SitePageFamily`, `SITE_PAGE_FAMILIES`, `findSitePageFamily`.
+- Produces: `EditableSitePage`, `SitePageRegionId`, `SitePageRegion`, `sitePageRegions`, `sitePageRegionsById`, `DEFAULT_SITE_PAGE_REGION_ID`, `findSitePageRegion`, `regionForField`, `doesTargetRender`, `isRegionEmpty`, `SitePageFamily`, `SITE_PAGE_FAMILIES`, `findSitePageFamily`.
 
 - [ ] **Step 1: Promote `EditableSitePage` into the shared types**
 
@@ -658,24 +658,96 @@ export function regionForField(field: string): SitePageRegion | undefined {
 function isBlank(value: unknown): boolean {
   if (value === undefined || value === null) return true;
   if (typeof value === "string") return value.trim().length === 0;
+  if (typeof value === "number") return false;
   if (Array.isArray(value)) return value.length === 0;
   return false;
 }
 
+// ContentPage's own per-item filters, mirrored so this module agrees with what
+// actually renders. An array-length test is NOT equivalent: ContentPage drops
+// blank items first, so a single empty row — which every "Add" button creates —
+// renders nothing while the array is length 1. Cited by line; if a filter in
+// content-page.tsx changes, change its twin here.
+const meaningfulStats = (page: EditableSitePage) =>
+  // content-page.tsx:17
+  page.stats.filter(
+    (stat) => stat.value.trim() || stat.label.trim() || stat.description?.trim(),
+  );
+
+const meaningfulSections = (page: EditableSitePage) =>
+  // content-page.tsx:18-20
+  page.sections.filter(
+    (section) =>
+      section.title.trim() ||
+      section.body.trim() ||
+      section.bullets?.some((bullet) => bullet.trim()),
+  );
+
+const meaningfulCtas = (page: EditableSitePage) =>
+  // content-page.tsx:21
+  page.ctas.filter((cta) => cta.label.trim() && cta.href.trim());
+
+const meaningfulRelated = (page: EditableSitePage) =>
+  // content-page.tsx:22
+  page.related.filter((card) => card.title.trim() && card.href.trim());
+
 /**
- * Whether a region contributes nothing to the rendered page. Only meaningful
- * for regions with a preview target — ContentPage filters `stats`, `sections`,
- * `ctas` and `related` before rendering, so an all-blank region really does
- * render nothing.
+ * Whether ContentPage renders the block a preview target names.
+ *
+ * This answers a different question from `isRegionEmpty` below, and conflating
+ * the two is a bug: the hero block always renders even when every hero field is
+ * blank, and CTAs have no block of their own at all. The preview canvas uses
+ * THIS function to predict which children ContentPage produced, so it must
+ * track the renderer exactly.
+ */
+export function doesTargetRender(
+  target: string,
+  page: EditableSitePage,
+): boolean {
+  switch (target) {
+    // content-page.tsx:36-46 — EditorialImageHero is rendered unconditionally.
+    case "hero":
+      return true;
+    // content-page.tsx:48
+    case "stats":
+      return meaningfulStats(page).length > 0;
+    // content-page.tsx:50
+    case "body":
+      return meaningfulSections(page).length > 0;
+    // content-page.tsx:80
+    case "related":
+      return meaningfulRelated(page).length > 0;
+    default:
+      return false;
+  }
+}
+
+/**
+ * Whether the editor has put anything meaningful in this region. Drives the
+ * rail's "nothing added yet" state and nothing else — it deliberately does NOT
+ * predict whether a block renders, which is `doesTargetRender`'s job.
  */
 export function isRegionEmpty(
   region: SitePageRegion,
   page: EditableSitePage,
 ): boolean {
-  if (region.previewTarget === null) {
-    return false;
+  switch (region.id) {
+    case "ctas":
+      return meaningfulCtas(page).length === 0;
+    case "stats":
+      return meaningfulStats(page).length === 0;
+    case "body":
+      return meaningfulSections(page).length === 0;
+    case "related":
+      return (
+        meaningfulRelated(page).length === 0 &&
+        isBlank(page.exploreEyebrow) &&
+        isBlank(page.exploreTitle) &&
+        isBlank(page.exploreDescription)
+      );
+    default:
+      return region.fields.every((field) => isBlank(page[field]));
   }
-  return region.fields.every((field) => isBlank(page[field]));
 }
 ```
 
@@ -1541,7 +1613,7 @@ import {
   type ParentToCanvasMessage,
 } from "@/components/admin/workspace-kit/preview-protocol";
 import {
-  isRegionEmpty,
+  doesTargetRender,
   sitePageRegions,
   sitePageRegionsById,
 } from "@/lib/cms/site-page-regions";
@@ -1623,15 +1695,11 @@ export function SitePagePreviewCanvas({
     if (!root) {
       return;
     }
-    const expected = TARGET_ORDER.filter((target) => {
-      if (target === "hero") {
-        return true;
-      }
-      const region = sitePageRegions.find(
-        (candidate) => candidate.previewTarget === target,
-      );
-      return region ? !isRegionEmpty(region, record) : false;
-    });
+    // doesTargetRender, not isRegionEmpty: the two answer different questions,
+    // and only this one tracks what ContentPage actually produced.
+    const expected = TARGET_ORDER.filter((target) =>
+      doesTargetRender(target, record),
+    );
     const children = Array.from(root.children) as HTMLElement[];
 
     if (children.length !== expected.length) {
