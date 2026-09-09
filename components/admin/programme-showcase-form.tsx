@@ -64,7 +64,7 @@ export function ProgrammeShowcaseForm({
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-5">
             <div><label className="text-sm font-bold text-brand-ink">ID</label><input className={input} value={item.id} onChange={(e) => update(i, "id", e.target.value)} /></div>
             <div><label className="text-sm font-bold text-brand-ink">Eyebrow</label><input className={input} value={item.eyebrow ?? ""} onChange={(e) => update(i, "eyebrow", e.target.value)} /></div>
             <div className="md:col-span-2"><label className="text-sm font-bold text-brand-ink">Title</label><input className={input} value={item.title} onChange={(e) => update(i, "title", e.target.value)} /></div>

@@ -12,9 +12,9 @@ import {
 import { cn } from "@/lib/utils/cn";
 
 const VIEWPORTS = [
-  { id: "desktop", label: "Desktop preview", width: "100%", icon: Monitor },
-  { id: "tablet", label: "Tablet preview", width: "760px", icon: Tablet },
-  { id: "mobile", label: "Mobile preview", width: "390px", icon: Smartphone },
+  { id: "desktop", label: "Desktop preview", width: 1280, icon: Monitor },
+  { id: "tablet", label: "Tablet preview", width: 820, icon: Tablet },
+  { id: "mobile", label: "Mobile preview", width: 390, icon: Smartphone },
 ] as const;
 
 /** Debounce for draft payloads. Long enough to coalesce typing, short enough
@@ -34,6 +34,8 @@ const READY_TIMEOUT_MS = 8000;
 export function PreviewPane() {
   const { values, activeSection, payloadVersion, selectSection } = useWorkspace();
   const frameRef = useRef<HTMLIFrameElement | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const [stage, setStage] = useState({ width: 0, height: 0 });
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const [viewport, setViewport] = useState<(typeof VIEWPORTS)[number]["id"]>("desktop");
@@ -61,6 +63,17 @@ export function PreviewPane() {
       }
       if (message.type === "itfyg:preview-ready") {
         setReady(true);
+        // A self-reload (e.g. dev HMR) re-fires this handshake without
+        // `ready` transitioning, since it was already true — so the debounced
+        // draft effect below never reposts. Posting here too keeps the
+        // canvas from falling back to its published baseline until the next
+        // keystroke.
+        post({
+          type: "itfyg:preview-draft",
+          payloadVersion,
+          values,
+          activeSectionId: activeSection.id,
+        });
         return;
       }
       if (message.type === "itfyg:preview-select") {
@@ -70,7 +83,7 @@ export function PreviewPane() {
     };
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [selectSection]);
+  }, [selectSection, post, payloadVersion, values, activeSection.id]);
 
   // Downward channel: debounced draft payloads. Always all seven sections, so
   // the parent stays authoritative even immediately after a save.
@@ -133,6 +146,30 @@ export function PreviewPane() {
 
   const active = VIEWPORTS.find((option) => option.id === viewport) ?? VIEWPORTS[0];
 
+  // The preview column is far narrower than a desktop viewport, so a truthful
+  // 1280px render has to be scaled down to be visible. Measuring the stage is
+  // what lets the scale be exact rather than guessed.
+  useEffect(() => {
+    const element = stageRef.current;
+    if (!element) {
+      return;
+    }
+    const observer = new ResizeObserver((entries) => {
+      const box = entries[0]?.contentRect;
+      if (!box) {
+        return;
+      }
+      // Rounded to whole pixels so subpixel resize noise cannot thrash state.
+      setStage({ width: Math.round(box.width), height: Math.round(box.height) });
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [failed]);
+
+  // Never scale above 1: a preset narrower than the stage renders at 1:1.
+  const scale =
+    stage.width > 0 ? Math.min(1, stage.width / active.width) : 1;
+
   return (
     <section
       aria-label="Live homepage preview"
@@ -183,7 +220,10 @@ export function PreviewPane() {
           </span>
         </p>
 
-        <div className="flex min-h-0 flex-1 justify-center overflow-auto bg-slate-300/70 p-4">
+        <div
+          ref={stageRef}
+          className="flex min-h-0 flex-1 justify-center overflow-auto bg-slate-300/70 p-4"
+        >
           {failed ? (
             <div className="m-auto max-w-sm text-center text-sm text-slate-600">
               <p className="font-bold text-brand-ink">
@@ -206,22 +246,36 @@ export function PreviewPane() {
             </div>
           ) : (
             <div
-              // Width drives the iframe's real layout viewport, which is what
-              // makes the homepage's Tailwind breakpoints resolve correctly.
-              // Nothing here may be a transform: a transform would shrink the
-              // rendered box while leaving that layout viewport untouched, so
-              // it would display the same slice of page, smaller.
-              style={{ width: active.width }}
-              className="h-full shrink-0"
+              // The scaled footprint. Sizing this to the post-transform
+              // dimensions keeps the scroll extents honest — a transform alone
+              // does not affect layout, which is what made the old Fit control
+              // useless.
+              style={{
+                width: Math.round(active.width * scale),
+                height: stage.height || undefined,
+              }}
+              className="shrink-0"
             >
-              <iframe
-                key={reloadKey}
-                ref={frameRef}
-                src={PREVIEW_ROUTE}
-                title="Homepage preview"
-                onError={() => setFailed(true)}
-                className="h-full min-h-[650px] w-full rounded-control border-0 bg-white shadow-sm"
-              />
+              <div
+                // The true viewport box. Its width is what the iframe's media
+                // queries resolve against, so it must be the real preset width
+                // and must never itself be a percentage.
+                style={{
+                  width: active.width,
+                  height: stage.height ? Math.round(stage.height / scale) : "100%",
+                  transform: `scale(${scale})`,
+                  transformOrigin: "top left",
+                }}
+              >
+                <iframe
+                  key={reloadKey}
+                  ref={frameRef}
+                  src={PREVIEW_ROUTE}
+                  title="Homepage preview"
+                  onError={() => setFailed(true)}
+                  className="h-full w-full rounded-control border-0 bg-white shadow-sm"
+                />
+              </div>
             </div>
           )}
         </div>

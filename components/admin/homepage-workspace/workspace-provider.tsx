@@ -118,6 +118,9 @@ export function HomepageWorkspaceProvider({
   const selectSection = useCallback((id: string) => {
     const section = findWorkspaceSection(id);
     setActiveId(section.id);
+    // A save result belongs to the section it came from; carrying it across
+    // would attribute one section's outcome to another.
+    setSaveState({ status: "idle" });
     // Shallow by design. window.history is natively supported by the App
     // Router since Next 14.1 and does NOT re-render the server component, so
     // switching sections never re-runs the seven Firestore getters.

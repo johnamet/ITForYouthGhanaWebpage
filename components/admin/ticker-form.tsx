@@ -64,7 +64,7 @@ export function TickerForm({
 
         <div className="space-y-4">
           {value.items.map((it, i) => (
-            <div key={`${it.label}-${i}`} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_1fr_1fr_auto_auto]">
+            <div key={`${it.label}-${i}`} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4">
               <div>
                 <label className="text-sm font-bold text-brand-ink">Label</label>
                 <input className={input} value={it.label} onChange={(e) => updateItem(i, "label", e.target.value)} />

@@ -107,6 +107,9 @@ export function HomepagePreviewCanvas({
       if (!isTrustedPreviewEvent(event)) {
         return;
       }
+      if (event.source !== window.parent) {
+        return;
+      }
       const message = event.data as ParentToCanvasMessage | null;
       if (!message || typeof message !== "object") {
         return;
@@ -162,10 +165,10 @@ export function HomepagePreviewCanvas({
     </PreviewSection>
   );
 
-  const context = (sectionId: string, node: React.ReactNode) => (
+  const context = (sectionId: string, label: string, node: React.ReactNode) => (
     <PreviewSection
       sectionId={sectionId}
-      label={sectionId}
+      label={label}
       editable={false}
       isActive={false}
       onSelect={onSelect}
@@ -179,6 +182,7 @@ export function HomepagePreviewCanvas({
     <div className="bg-white">
       {context(
         "hero-slideshow",
+        "Hero slideshow",
         <HeroSlideshow slides={baseline.context.slides} interval={6000} />,
       )}
       {editable(
@@ -203,6 +207,7 @@ export function HomepagePreviewCanvas({
       )}
       {context(
         "impact-counter",
+        "Impact counter",
         <ImpactCounter stats={baseline.context.impactStats} />,
       )}
       {editable(
@@ -212,26 +217,32 @@ export function HomepagePreviewCanvas({
       )}
       {context(
         "donation",
+        "Donation campaign",
         <DonationCampaign campaign={baseline.context.campaign} />,
       )}
       {context(
         "featured-story",
+        "Featured story",
         <FeaturedStoryVideo story={baseline.context.story} />,
       )}
       {context(
         "articles",
+        "Latest news & blog",
         <LatestNewsGrid articles={baseline.context.articles} />,
       )}
       {context(
         "testimonials",
+        "Testimonials carousel",
         <TestimonialsSection testimonials={baseline.context.testimonials} />,
       )}
       {context(
         "team",
+        "Team section",
         <HomepageTeamSection members={baseline.context.teamMembers} />,
       )}
       {context(
         "partners",
+        "Partner strip",
         <PartnersStrip partners={baseline.context.partners} />,
       )}
       {editable(

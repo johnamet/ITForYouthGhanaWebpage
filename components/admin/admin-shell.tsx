@@ -145,7 +145,12 @@ export function AdminShell({ children, adminUser }: AdminShellProps) {
 
   return (
     <div className="min-h-screen bg-brand-navy text-white">
-      <div className="mx-auto grid min-h-screen max-w-[1500px] gap-0 lg:grid-cols-[320px_1fr]">
+      <div
+        className={cn(
+          "mx-auto grid min-h-screen gap-0 lg:grid-cols-[320px_1fr]",
+          isBleed ? "max-w-none" : "max-w-[1500px]",
+        )}
+      >
         <aside className="border-r border-white/10 bg-brand-navy lg:sticky lg:top-0 lg:h-screen">
           <div className="flex h-full flex-col">
             <div className="px-6 py-7">

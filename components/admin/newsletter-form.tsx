@@ -26,7 +26,7 @@ export function NewsletterForm({
           <h2 className="mt-2 font-heading text-2xl font-bold text-brand-ink">Newsletter signup</h2>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5">
           <div>
             <label className="text-sm font-bold text-brand-ink">Eyebrow</label>
             <input className={input} value={value.eyebrow} onChange={(e) => update("eyebrow", e.target.value)} />

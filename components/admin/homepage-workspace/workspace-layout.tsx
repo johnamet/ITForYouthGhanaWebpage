@@ -45,7 +45,7 @@ export function WorkspaceLayout({ preview }: { preview?: React.ReactNode }) {
       {/* The grid gets a definite height from flex-1 + min-h-0 inside h-screen,
           and its items stretch to the row. Each pane root carries h-full so
           that height reaches the scrolling element itself. */}
-      <div className="grid min-h-0 flex-1 xl:grid-cols-[176px_392px_minmax(520px,1fr)] 2xl:grid-cols-[196px_430px_minmax(580px,1fr)]">
+      <div className="grid min-h-0 flex-1 xl:grid-cols-[176px_392px_minmax(0,1fr)] 2xl:grid-cols-[196px_430px_minmax(0,1fr)]">
         {/* Below xl the rail stacks above the editor in the Edit tab. It must
             stay reachable: it is the only way to change section, so hiding it
             outright would strand narrow-viewport editors on one section. */}

@@ -62,7 +62,7 @@ export function JoinCtaCardsForm({
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-5">
             <div><label className="text-sm font-bold text-brand-ink">ID</label><input className={input} value={card.id} onChange={(e) => update(i, "id", e.target.value)} /></div>
             <div><label className="text-sm font-bold text-brand-ink">Icon</label>
               <select className={input} value={card.icon} onChange={(e) => update(i, "icon", e.target.value as JoinCtaCard["icon"])}>
