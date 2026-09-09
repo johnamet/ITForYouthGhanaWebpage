@@ -103,6 +103,13 @@ export interface DynamicSitePage extends SitePage {
   order: number;
 }
 
+/**
+ * A site page as the admin edits it: the public shape plus the dynamic-page
+ * fields that only exist for records stored in Firestore.
+ */
+export type EditableSitePage = SitePage &
+  Partial<Pick<DynamicSitePage, "id" | "parentSlug" | "status" | "order">>;
+
 export type TeamMemberStatus = "active" | "inactive";
 
 export type JobType = "full-time" | "part-time" | "contract" | "volunteer";

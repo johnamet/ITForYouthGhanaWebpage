@@ -17,9 +17,9 @@ import type {
   ActionLink,
   ContentBlock,
   DynamicSitePage,
+  EditableSitePage,
   HighlightStat,
   RouteCard,
-  SitePage,
   TrainingCohort,
   TrainingProcessStep,
 } from "@/types/content";
@@ -33,8 +33,6 @@ type SubmitState = {
   type: "idle" | "success" | "error";
   message: string;
 };
-
-type EditableSitePage = SitePage & Partial<Pick<DynamicSitePage, "id" | "parentSlug" | "status" | "order">>;
 
 type SitePageFormProps = {
   initial: EditableSitePage;
