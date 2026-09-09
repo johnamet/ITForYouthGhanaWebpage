@@ -13,7 +13,7 @@ import { StatsRegion } from "@/components/admin/site-page/stats-region";
 import { useSitePageWorkspace } from "./record-provider";
 
 function ActiveRegion() {
-  const { activeRegion, draft, setDraft } = useSitePageWorkspace();
+  const { activeRegion, draft, setDraft, family } = useSitePageWorkspace();
   const props = { value: draft, onChange: setDraft };
 
   // Exhaustive over SitePageRegionId — TypeScript fails the build if a
@@ -32,7 +32,11 @@ function ActiveRegion() {
     case "related":
       return <RelatedRegion {...props} />;
     case "settings":
-      return <SettingsRegion {...props} />;
+      // slugBasePath is not optional in practice: without it the slug helper
+      // text says "/who-we-are" on a What We Do page, telling the editor the
+      // wrong address at the moment they are choosing it. The family
+      // descriptor carries publicBase for exactly this.
+      return <SettingsRegion {...props} slugBasePath={family.publicBase} />;
     case "other":
       return <OtherFieldsRegion {...props} />;
   }
