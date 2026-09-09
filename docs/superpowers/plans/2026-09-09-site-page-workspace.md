@@ -1563,7 +1563,7 @@ An exhaustive switch over `activeRegion.id`, so adding a region to the registry 
 
 ```tsx
 function ActiveRegion() {
-  const { activeRegion, draft, setDraft } = useSitePageWorkspace();
+  const { activeRegion, draft, setDraft, family } = useSitePageWorkspace();
   const props = { value: draft, onChange: setDraft };
 
   switch (activeRegion.id) {
@@ -1578,7 +1578,11 @@ function ActiveRegion() {
     case "related":
       return <RelatedRegion {...props} />;
     case "settings":
-      return <SettingsRegion {...props} />;
+      // slugBasePath is not optional in practice: without it the slug helper
+      // text says "/who-we-are" on a What We Do page, telling the editor the
+      // wrong address at the moment they are choosing it. The family descriptor
+      // carries publicBase for exactly this.
+      return <SettingsRegion {...props} slugBasePath={family.publicBase} />;
     case "other":
       return <OtherFieldsRegion {...props} />;
   }
