@@ -245,7 +245,11 @@ export type PreviewFrameProps<TData> = {
   scrollTargetId: string | null;
   /** Called when someone clicks an outlined section inside the canvas. */
   onSelectSection: (sectionId: string) => void;
-  /** Right-hand text in the frame's footer strip. */
+  /**
+   * The whole trailing text in the frame's footer strip, composed by the
+   * caller. It is not appended to a literal, because the frame is shared and
+   * cannot know which page it is previewing.
+   */
   footerLabel: string;
   /**
    * Accessible name for the iframe. It must describe THIS workspace's page —
@@ -288,6 +292,13 @@ Three substitutions where the old code read the workspace:
 | `activeSection.id` | `activeSectionId` prop |
 | `selectSection(message.sectionId)` | `onSelectSection(message.sectionId)` |
 | `activeSection.label` in the footer | `footerLabel` prop |
+| `aria-label="Live homepage preview"` on the wrapper section | `aria-label={\`Live preview: ${title}\`}` |
+| the footer's hard-coded `· Homepage ·` segment | removed; `footerLabel` now carries it |
+
+Those last two are the same defect as the hard-coded `title`: in a shared
+component they are false for any workspace but the homepage, and the
+`aria-label` one would announce a Who We Are preview as the homepage's to a
+screen reader.
 
 And the scroll effect now guards on the new prop:
 
@@ -333,7 +344,7 @@ export function PreviewPane() {
       // there is always somewhere to scroll.
       scrollTargetId={activeSection.id}
       onSelectSection={selectSection}
-      footerLabel={activeSection.label}
+      footerLabel={`Homepage · ${activeSection.label}`}
       title="Homepage preview"
     />
   );
@@ -350,8 +361,15 @@ Then confirm the geometry survived the move:
 Run: `grep -nE "width: 1280|width: 820|width: 390|transformOrigin|Math.min\(1,|data-preview-frame" components/admin/workspace-kit/preview-frame.tsx`
 Expected: all six present.
 
-Run: `grep -cE "100%" components/admin/workspace-kit/preview-frame.tsx`
-Expected: `0`. A percentage width anywhere in this file is the bug this design exists to avoid.
+Run: `grep -nE "width:[^;,]*100%" components/admin/workspace-kit/preview-frame.tsx`
+Expected: no output. A percentage **width** is the bug this design exists to
+avoid; the `height` fallback of `"100%"` is correct and pre-existing, so do not
+grep for the bare string.
+
+Run: `grep -ciE "homepage" components/admin/workspace-kit/preview-frame.tsx`
+Expected: `1` — only the comment on the `title` prop explaining why the title
+must not be hard-coded. Any other occurrence means a homepage-specific string
+survived into the shared component.
 
 - [ ] **Step 4: Commit**
 
@@ -1868,7 +1886,7 @@ export function SitePagePreviewPane() {
       // nowhere to scroll. This is what PreviewFrame's nullable prop is for.
       scrollTargetId={activeRegion.previewTarget}
       onSelectSection={selectRegion}
-      footerLabel={activeRegion.label}
+      footerLabel={`${family.label} · ${published.title || published.slug} · ${activeRegion.label}`}
       title={`${family.label} page preview`}
     />
   );
