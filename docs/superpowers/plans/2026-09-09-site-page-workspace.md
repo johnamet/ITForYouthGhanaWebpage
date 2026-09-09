@@ -1559,10 +1559,18 @@ Follow `components/admin/homepage-workspace/workspace-bar.tsx`, with these diffe
 
 - [ ] **Step 3: Create the region editor**
 
-An exhaustive switch over `activeRegion.id`, so adding a region to the registry without an editor fails the build:
+A switch over `activeRegion.id` with no `default`, **and an explicit return
+type**. The annotation is what makes the exhaustiveness real: verified against
+this repo's own `tsc`, an unannotated function whose switch misses a case
+compiles clean, because its inferred return type widens to include `undefined`
+and that is a valid `ReactNode`. With `: ReactElement` the same omission is
+`TS2366: Function lacks ending return statement`. This project does not set
+`noImplicitReturns`, so the annotation is the only thing enforcing it.
 
 ```tsx
-function ActiveRegion() {
+import type { ReactElement } from "react";
+
+function ActiveRegion(): ReactElement {
   const { activeRegion, draft, setDraft, family } = useSitePageWorkspace();
   const props = { value: draft, onChange: setDraft };
 
@@ -1589,7 +1597,14 @@ function ActiveRegion() {
 }
 ```
 
-No `default` branch. Above it render the region's label and description, and below it the region's own `regionErrors` entries in a rose card. Root gets `h-full min-h-0 overflow-y-auto` and `bg-brand-alt`.
+No `default` branch, and do not drop the `: ReactElement` annotation — without
+it the missing-case protection silently disappears. Above the switch render the
+region's label and description, and below it the region's own `regionErrors`
+entries in a rose card. Root gets `h-full min-h-0 overflow-y-auto` and
+`bg-brand-alt`.
+
+Any comment in this file claiming the switch is build-enforced must name the
+annotation as the mechanism, not the absent `default`.
 
 - [ ] **Step 4: Verify**
 
