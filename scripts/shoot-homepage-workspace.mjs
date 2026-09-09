@@ -1,4 +1,18 @@
-import { chromium } from "playwright";
+// playwright is deliberately NOT a dependency of this project: it is needed
+// only by this script, and declaring it would pull a browser download into
+// every install. Import it dynamically so a missing install produces an
+// actionable message instead of an opaque module-not-found.
+let chromium;
+try {
+  ({ chromium } = await import("playwright"));
+} catch {
+  console.error(
+    "playwright is not installed, and this script is the only thing that needs it.\n" +
+      "Install it on demand:\n" +
+      "  npm i -D playwright && npx playwright install chromium",
+  );
+  process.exit(1);
+}
 
 const outDir = process.argv[2] ?? ".superdesign/tmp";
 const baseUrl = process.env.PREVIEW_BASE_URL ?? "http://localhost:3000";
@@ -22,6 +36,11 @@ const VIEWPORTS = [
 ];
 
 const browser = await chromium.launch();
+let failures = 0;
+
+// Everything below runs inside try/finally so a timeout on goto or on the
+// iframe wait cannot leave a Chromium process behind.
+try {
 const context = await browser.newContext({
   viewport: { width: 1800, height: 1100 },
 });
@@ -49,8 +68,6 @@ await page.locator('iframe[title="Homepage preview"]').waitFor({
   state: "visible",
   timeout: 30000,
 });
-
-let failures = 0;
 
 for (const viewport of VIEWPORTS) {
   await page.locator(`button[aria-label="${viewport.label}"]`).click();
@@ -87,8 +104,9 @@ for (const viewport of VIEWPORTS) {
     animations: "disabled",
   });
 }
-
-await browser.close();
+} finally {
+  await browser.close();
+}
 
 if (failures > 0) {
   console.error(`\n${failures} viewport check(s) failed.`);
