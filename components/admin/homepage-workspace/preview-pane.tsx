@@ -5,6 +5,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useWorkspace } from "./workspace-provider";
 import {
+  PREVIEW_DRAFT,
+  PREVIEW_READY,
+  PREVIEW_SCROLL,
+  PREVIEW_SELECT,
   isTrustedPreviewEvent,
   PREVIEW_ROUTE,
   type CanvasToParentMessage,
@@ -61,7 +65,7 @@ export function PreviewPane() {
       if (!message || typeof message !== "object") {
         return;
       }
-      if (message.type === "itfyg:preview-ready") {
+      if (message.type === PREVIEW_READY) {
         setReady(true);
         // A self-reload (e.g. dev HMR) re-fires this handshake without
         // `ready` transitioning, since it was already true — so the debounced
@@ -69,14 +73,14 @@ export function PreviewPane() {
         // canvas from falling back to its published baseline until the next
         // keystroke.
         post({
-          type: "itfyg:preview-draft",
+          type: PREVIEW_DRAFT,
           payloadVersion,
-          values,
+          data: values,
           activeSectionId: activeSection.id,
         });
         return;
       }
-      if (message.type === "itfyg:preview-select") {
+      if (message.type === PREVIEW_SELECT) {
         skipScrollFor.current = message.sectionId;
         selectSection(message.sectionId);
       }
@@ -93,9 +97,9 @@ export function PreviewPane() {
     }
     const timer = window.setTimeout(() => {
       post({
-        type: "itfyg:preview-draft",
+        type: PREVIEW_DRAFT,
         payloadVersion,
-        values,
+        data: values,
         activeSectionId: activeSection.id,
       });
     }, DRAFT_DEBOUNCE_MS);
@@ -122,7 +126,7 @@ export function PreviewPane() {
     if (skip === activeSection.id) {
       return;
     }
-    post({ type: "itfyg:preview-scroll", sectionId: activeSection.id });
+    post({ type: PREVIEW_SCROLL, sectionId: activeSection.id });
   }, [ready, post, activeSection.id]);
 
   // Failure detection. See READY_TIMEOUT_MS: the handshake is the only signal

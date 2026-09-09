@@ -33,41 +33,18 @@ export type PreviewBaseline = {
   context: PreviewContext;
 };
 
-/** Canvas has mounted and can accept a payload. */
-export type PreviewReadyMessage = { type: "itfyg:preview-ready" };
-
-/** A viewer clicked an editable section in the preview. */
-export type PreviewSelectMessage = {
-  type: "itfyg:preview-select";
-  sectionId: string;
-};
-
-/** A debounced draft payload. Always carries all seven sections. */
-export type PreviewDraftMessage = {
-  type: "itfyg:preview-draft";
-  payloadVersion: number;
-  values: HomepageDraftValues;
-  activeSectionId: string;
-};
-
-/** The active section changed in the rail; scroll the preview to match. */
-export type PreviewScrollMessage = {
-  type: "itfyg:preview-scroll";
-  sectionId: string;
-};
-
-export type CanvasToParentMessage = PreviewReadyMessage | PreviewSelectMessage;
-export type ParentToCanvasMessage = PreviewDraftMessage | PreviewScrollMessage;
-
-/**
- * The preview is same-origin by construction, so both directions reject any
- * message whose origin is not an exact match.
- */
-export function isTrustedPreviewEvent(event: MessageEvent): boolean {
-  return event.origin === window.location.origin;
-}
-
-/** DOM id of a preview section wrapper, used for scrolling and outlining. */
-export function previewSectionDomId(sectionId: string): string {
-  return `preview-section-${sectionId}`;
-}
+// Re-export the shared protocol
+export {
+  PREVIEW_READY,
+  PREVIEW_SELECT,
+  PREVIEW_DRAFT,
+  PREVIEW_SCROLL,
+  isTrustedPreviewEvent,
+  previewSectionDomId,
+  type CanvasToParentMessage,
+  type ParentToCanvasMessage,
+  type PreviewDraftMessage,
+  type PreviewReadyMessage,
+  type PreviewScrollMessage,
+  type PreviewSelectMessage,
+} from "@/components/admin/workspace-kit/preview-protocol";

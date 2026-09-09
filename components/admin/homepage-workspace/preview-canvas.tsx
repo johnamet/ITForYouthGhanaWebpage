@@ -19,12 +19,16 @@ import { MarqueeTicker } from "@/components/home/marquee-ticker";
 import { NewsletterSignupSection } from "@/components/home/newsletter-signup-section";
 import { PartnersStrip } from "@/components/home/patrners-strip";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
-import { workspaceSectionsById } from "@/lib/cms/homepage-sections";
+import { type HomepageDraftValues, workspaceSectionsById } from "@/lib/cms/homepage-sections";
 import { programmeShowcase as defaultProgrammeShowcase } from "@/lib/content/site-config";
 import { cn } from "@/lib/utils/cn";
 
-import { PreviewSectionBoundary } from "./preview-section-boundary";
+import { PreviewSectionBoundary } from "@/components/admin/workspace-kit/section-boundary";
 import {
+  PREVIEW_DRAFT,
+  PREVIEW_READY,
+  PREVIEW_SCROLL,
+  PREVIEW_SELECT,
   isTrustedPreviewEvent,
   previewSectionDomId,
   type ParentToCanvasMessage,
@@ -110,19 +114,19 @@ export function HomepagePreviewCanvas({
       if (event.source !== window.parent) {
         return;
       }
-      const message = event.data as ParentToCanvasMessage | null;
+      const message = event.data as ParentToCanvasMessage<HomepageDraftValues> | null;
       if (!message || typeof message !== "object") {
         return;
       }
 
-      if (message.type === "itfyg:preview-draft") {
-        setValues(message.values);
+      if (message.type === PREVIEW_DRAFT) {
+        setValues(message.data);
         setActiveSectionId(message.activeSectionId);
         setPayloadVersion(message.payloadVersion);
         return;
       }
 
-      if (message.type === "itfyg:preview-scroll") {
+      if (message.type === PREVIEW_SCROLL) {
         setActiveSectionId(message.sectionId);
         document
           .getElementById(previewSectionDomId(message.sectionId))
@@ -134,7 +138,7 @@ export function HomepagePreviewCanvas({
     // Announce readiness. Without this the parent's first payload can race the
     // iframe load and be dropped.
     window.parent.postMessage(
-      { type: "itfyg:preview-ready" },
+      { type: PREVIEW_READY },
       window.location.origin,
     );
     return () => window.removeEventListener("message", handleMessage);
@@ -142,7 +146,7 @@ export function HomepagePreviewCanvas({
 
   const onSelect = useCallback((sectionId: string) => {
     window.parent.postMessage(
-      { type: "itfyg:preview-select", sectionId },
+      { type: PREVIEW_SELECT, sectionId },
       window.location.origin,
     );
   }, []);
