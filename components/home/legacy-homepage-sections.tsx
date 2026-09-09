@@ -150,3 +150,12 @@ export function LegacyHomepageSections({
     </>
   );
 }
+
+// Exported so the admin homepage preview can outline and label each narrative
+// section separately. LegacyHomepageSections still renders all three together
+// for the public page; nothing about its behaviour changes.
+export {
+  QuickOverview as HomepageOverviewSection,
+  Challenge as HomepageChallengeSection,
+  Vision as HomepageMissionSection,
+};
