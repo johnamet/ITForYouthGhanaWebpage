@@ -247,6 +247,13 @@ export type PreviewFrameProps<TData> = {
   onSelectSection: (sectionId: string) => void;
   /** Right-hand text in the frame's footer strip. */
   footerLabel: string;
+  /**
+   * Accessible name for the iframe. It must describe THIS workspace's page —
+   * a site page announcing itself as "Homepage preview" would be false — so
+   * it is a caller's prop, and the screenshot script keys off the frame's
+   * `data-preview-frame` attribute instead of this text.
+   */
+  title: string;
 };
 
 export function PreviewFrame<TData>(props: PreviewFrameProps<TData>): JSX.Element;
@@ -263,8 +270,13 @@ Move the whole body of `components/admin/homepage-workspace/preview-pane.tsx` in
 - the two-layer sizing box — outer wrapper at `active.width * scale`, inner at `active.width` with `transform: scale(...)` and `transformOrigin: "top left"`;
 - the `skipScrollFor` ref and its read-and-clear-unconditionally treatment;
 - the readiness timeout, the `onError` handler, the failure fallback copy, and `refresh()` clearing both `ready` and `failed`;
-- the origin check and the `event.source === frameRef.current?.contentWindow` check;
-- `title="Homepage preview"` on the iframe.
+- the origin check and the `event.source === frameRef.current?.contentWindow` check.
+
+The iframe's `title` becomes `title={title}` from the new prop, and it gains a
+constant `data-preview-frame=""` attribute. The title has to vary — a site page
+must not announce itself as "Homepage preview" — while the screenshot script's
+selector must not, so the two concerns are split: the prop names the frame for
+assistive technology, the attribute identifies it for automation.
 
 **Do not change the geometry.** Fixed width, then transform. The outer wrapper must stay sized to the scaled footprint or the scroll extents go wrong.
 
@@ -322,6 +334,7 @@ export function PreviewPane() {
       scrollTargetId={activeSection.id}
       onSelectSection={selectSection}
       footerLabel={activeSection.label}
+      title="Homepage preview"
     />
   );
 }
@@ -334,8 +347,8 @@ Expected: all PASS.
 
 Then confirm the geometry survived the move:
 
-Run: `grep -nE "width: 1280|width: 820|width: 390|transformOrigin|Math.min\(1," components/admin/workspace-kit/preview-frame.tsx`
-Expected: all five present.
+Run: `grep -nE "width: 1280|width: 820|width: 390|transformOrigin|Math.min\(1,|data-preview-frame" components/admin/workspace-kit/preview-frame.tsx`
+Expected: all six present.
 
 Run: `grep -cE "100%" components/admin/workspace-kit/preview-frame.tsx`
 Expected: `0`. A percentage width anywhere in this file is the bug this design exists to avoid.
@@ -1745,13 +1758,40 @@ export function isBleedAdminRoute(pathname: string): boolean {
   if (pathname === "/admin/content/homepage") {
     return true;
   }
-  return (
-    /^\/admin\/(who-we-are|what-we-do)-pages\/[^/]+$/.test(pathname)
-  );
+  // `(?!new$)` is load-bearing: without it this matches the create routes,
+  // which are ordinary scrolling forms and would render flush against the
+  // sidebar with no full-height layout to justify it.
+  return /^\/admin\/(who-we-are|what-we-do)-pages\/(?!new$)[^/]+$/.test(pathname);
 }
 ```
 
-The `[^/]+$` anchor matters: it must match `/admin/who-we-are-pages/our-story` but **not** `/admin/who-we-are-pages` (the index, which wants normal padding) and not any deeper path. Then `const isBleed = isBleedAdminRoute(pathname);`.
+Then `const isBleed = isBleedAdminRoute(pathname);`.
+
+Verify the predicate before moving on — this was wrong in an earlier draft of
+the plan:
+
+```bash
+node -e '
+const re = /^\/admin\/(who-we-are|what-we-do)-pages\/(?!new$)[^/]+$/;
+const cases = [
+  ["/admin/who-we-are-pages", false],
+  ["/admin/who-we-are-pages/our-story", true],
+  ["/admin/who-we-are-pages/new", false],
+  ["/admin/what-we-do-pages/new", false],
+  ["/admin/what-we-do-pages/girls-in-tech", true],
+  ["/admin/who-we-are-pages/a/b", false],
+];
+let bad = 0;
+for (const [path, want] of cases) {
+  const got = re.test(path);
+  if (got !== want) { bad++; console.log("WRONG", path, "got", got, "want", want); }
+}
+console.log(bad ? bad + " wrong" : "all six cases correct");
+process.exit(bad ? 1 : 0);
+'
+```
+
+Expected: `all six cases correct`.
 
 - [ ] **Step 2: Create the preview pane adapter**
 
@@ -1829,6 +1869,7 @@ export function SitePagePreviewPane() {
       scrollTargetId={activeRegion.previewTarget}
       onSelectSection={selectRegion}
       footerLabel={activeRegion.label}
+      title={`${family.label} page preview`}
     />
   );
 }
@@ -1888,7 +1929,17 @@ const outDir = process.argv[4] ?? ".superdesign/tmp";
 
 Use `route` in the `page.goto` call and `name` in the screenshot filenames. Keep everything else exactly as it is — the guarded playwright import, the `ITFY_ADMIN_SESSION` handling, the three viewport assertions, the `try/finally` that closes the browser, and the frame lookup.
 
-The frame lookup currently matches `/homepage/preview`. Both preview routes end in `/preview`, so change it to match `"/preview"` — and keep the existing check that a missing frame counts as a failure rather than a skip.
+Two selector changes, because the frame is now shared:
+
+- The frame lookup currently matches `/homepage/preview`. Both preview routes
+  end in `/preview`, so match `"/preview"` instead.
+- The iframe wait currently uses `iframe[title="Homepage preview"]`. That title
+  is now a per-workspace prop, so it no longer identifies the frame. Select
+  `iframe[data-preview-frame]` instead — an attribute that is constant across
+  workspaces precisely so automation has something stable to key off.
+
+Keep the existing check that a missing frame counts as a failure rather than a
+skip.
 
 - [ ] **Step 2: Update the script entry**
 
