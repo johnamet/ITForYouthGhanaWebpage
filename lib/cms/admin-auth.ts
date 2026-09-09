@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 import {
@@ -13,6 +14,21 @@ export async function getCurrentAdminUser() {
     console.error("Admin session verification failed", error);
     return null;
   });
+}
+
+/**
+ * Page-level auth guard. Returns the signed-in admin, or redirects to the
+ * login page. Shared by every admin layout so the redirect target cannot
+ * drift between them.
+ */
+export async function requireAdminPage() {
+  const adminUser = await getCurrentAdminUser();
+
+  if (!adminUser) {
+    redirect("/admin-login");
+  }
+
+  return adminUser;
 }
 
 export async function requireAdminApiSession() {

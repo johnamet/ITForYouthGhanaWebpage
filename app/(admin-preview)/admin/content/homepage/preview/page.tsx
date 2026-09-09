@@ -53,33 +53,38 @@ export default async function HomepagePreviewPage() {
     getCmsPartners(),
   ]);
 
+  // Annotated rather than cast, so the compiler checks this object against
+  // PreviewBaseline. JSON.stringify accepts `any`, so building the literal
+  // inline and casting the result would let a swapped variable or a dropped
+  // field compile cleanly and hand a component `undefined` at runtime — which
+  // is exactly the drift PreviewBaseline's derived types exist to prevent.
+  const source: PreviewBaseline = {
+    editable: {
+      ticker,
+      overviewSection,
+      challengeSection,
+      missionSection,
+      programmeShowcase,
+      joinCtaCards,
+      newsletterSignup,
+    },
+    context: {
+      slides,
+      impactStats,
+      campaign,
+      story,
+      articles,
+      testimonials,
+      teamMembers,
+      partners,
+    },
+  };
+
   // Firestore can return records whose prototypes are not plain objects, which
   // cannot cross the Server-to-Client boundary. Rebuild as plain JSON. Dates on
   // these records are already strings (see normalizeArticle), so this is
   // lossless.
-  const baseline = JSON.parse(
-    JSON.stringify({
-      editable: {
-        ticker,
-        overviewSection,
-        challengeSection,
-        missionSection,
-        programmeShowcase,
-        joinCtaCards,
-        newsletterSignup,
-      },
-      context: {
-        slides,
-        impactStats,
-        campaign,
-        story,
-        articles,
-        testimonials,
-        teamMembers,
-        partners,
-      },
-    }),
-  ) as PreviewBaseline;
+  const baseline = JSON.parse(JSON.stringify(source)) as PreviewBaseline;
 
   return <HomepagePreviewCanvas baseline={baseline} />;
 }

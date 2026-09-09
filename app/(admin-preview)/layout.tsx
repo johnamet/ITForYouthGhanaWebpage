@@ -1,23 +1,18 @@
-import { redirect } from "next/navigation";
-
-import { getCurrentAdminUser } from "@/lib/cms/admin-auth";
+import { requireAdminPage } from "@/lib/cms/admin-auth";
 
 /**
  * Bare admin layout. Renders no shell chrome, because its only route is the
  * homepage preview document that the CMS workspace loads in an iframe. It
- * repeats the auth redirect from app/(admin)/layout.tsx rather than reusing
- * it, since that layout's whole purpose is to wrap children in AdminShell.
+ * exists separately from app/(admin)/layout.tsx because that layout's whole
+ * purpose is to wrap children in AdminShell, which must not appear inside the
+ * iframe — but it shares the same auth guard.
  */
 export default async function AdminPreviewLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const adminUser = await getCurrentAdminUser();
-
-  if (!adminUser) {
-    redirect("/admin-login");
-  }
+  await requireAdminPage();
 
   return <>{children}</>;
 }
