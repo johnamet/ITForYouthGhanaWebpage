@@ -90,7 +90,15 @@ export function SitePagePreviewCanvas({
   // Pair ContentPage's element children against the targets we expect it to
   // have rendered. See Step 1: a mismatch means its structure changed, and
   // mispaired outlines would be worse than none.
+  //
+  // This runs on every reflow, not only on a new payload. The viewport controls
+  // in the surrounding PreviewFrame change this iframe's width, which moves
+  // every block while `record` and `payloadVersion` stay identical — overlays
+  // measured once would then sit over the wrong blocks and a click would select
+  // the wrong region, silently. An image loading or a font swapping does the
+  // same. The ResizeObserver below covers all of it.
   useEffect(() => {
+    const measure = () => {
     const root = rootRef.current?.firstElementChild;
     if (!root) {
       return;
@@ -123,6 +131,17 @@ export function SitePagePreviewCanvas({
         };
       }),
     );
+    };
+
+    measure();
+
+    const host = rootRef.current;
+    if (!host) {
+      return;
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(host);
+    return () => observer.disconnect();
   }, [record, payloadVersion]);
 
   return (

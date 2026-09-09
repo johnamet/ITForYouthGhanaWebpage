@@ -25,7 +25,7 @@ export class PreviewSectionBoundary extends Component<
     // Half-typed draft values produce these legitimately, so this is a console
     // note rather than an error report.
     console.warn(
-      `Homepage preview section "${this.props.label}" could not render.`,
+      `Preview section "${this.props.label}" could not render.`,
       error,
       info,
     );
