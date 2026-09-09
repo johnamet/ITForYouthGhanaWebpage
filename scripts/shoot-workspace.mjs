@@ -14,7 +14,9 @@ try {
   process.exit(1);
 }
 
-const outDir = process.argv[2] ?? ".superdesign/tmp";
+const route = process.argv[2] ?? "/admin/content/homepage";
+const name = process.argv[3] ?? "homepage";
+const outDir = process.argv[4] ?? ".superdesign/tmp";
 const baseUrl = process.env.PREVIEW_BASE_URL ?? "http://localhost:3000";
 const session = process.env.ITFY_ADMIN_SESSION;
 
@@ -59,12 +61,12 @@ page.on("console", (message) => {
   }
 });
 
-await page.goto(`${baseUrl}/admin/content/homepage`, {
+await page.goto(`${baseUrl}${route}`, {
   waitUntil: "domcontentloaded",
   timeout: 60000,
 });
 
-await page.locator('iframe[title="Homepage preview"]').waitFor({
+await page.locator("iframe[data-preview-frame]").waitFor({
   state: "visible",
   timeout: 30000,
 });
@@ -76,7 +78,7 @@ for (const viewport of VIEWPORTS) {
 
   const frame = page
     .frames()
-    .find((candidate) => candidate.url().includes("/homepage/preview"));
+    .find((candidate) => candidate.url().includes("/preview"));
 
   if (!frame) {
     console.log(`FAIL ${viewport.name}: preview frame not found`);
@@ -100,7 +102,7 @@ for (const viewport of VIEWPORTS) {
   );
 
   await page.screenshot({
-    path: `${outDir}/homepage-workspace-${viewport.name}.png`,
+    path: `${outDir}/${name}-workspace-${viewport.name}.png`,
     animations: "disabled",
   });
 }
