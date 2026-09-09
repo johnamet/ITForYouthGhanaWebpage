@@ -18,7 +18,7 @@ export function PreviewPane() {
       // there is always somewhere to scroll.
       scrollTargetId={activeSection.id}
       onSelectSection={selectSection}
-      footerLabel={activeSection.label}
+      footerLabel={`Homepage · ${activeSection.label}`}
       title="Homepage preview"
     />
   );

@@ -49,7 +49,11 @@ export type PreviewFrameProps<TData> = {
   scrollTargetId: string | null;
   /** Called when someone clicks an outlined section inside the canvas. */
   onSelectSection: (sectionId: string) => void;
-  /** Right-hand text in the frame's footer strip. */
+  /**
+   * The whole trailing text of the footer strip, composed by the caller —
+   * the frame cannot know which page it is previewing, so it cannot build
+   * this string itself.
+   */
   footerLabel: string;
   /**
    * Accessible name for the iframe. It must describe THIS workspace's page —
@@ -203,7 +207,7 @@ export function PreviewFrame<TData>({
 
   return (
     <section
-      aria-label="Live homepage preview"
+      aria-label={`Live preview: ${title}`}
       className="flex h-full min-h-0 flex-col bg-slate-200 p-4 2xl:p-5"
     >
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-media border border-slate-300 bg-white shadow-sm">
@@ -313,8 +317,7 @@ export function PreviewFrame<TData>({
         </div>
 
         <p className="shrink-0 border-t border-slate-200 px-3 py-2 text-[0.64rem] text-slate-500">
-          Click any outlined section to edit it · Homepage ·{" "}
-          {footerLabel}
+          Click any outlined section to edit it · {footerLabel}
         </p>
       </div>
     </section>
