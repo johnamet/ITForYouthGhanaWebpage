@@ -1549,20 +1549,26 @@ export default async function AdminHomepageWorkspacePage({
     getCmsNewsletterSignup(),
   ]);
 
+  // Annotated rather than cast, so the compiler checks this object against
+  // HomepageDraftValues. JSON.stringify accepts `any`, so building the literal
+  // inline and casting the result would let a swapped variable or a dropped
+  // field compile cleanly and fail at runtime.
+  const published: HomepageDraftValues = {
+    ticker,
+    overviewSection,
+    challengeSection,
+    missionSection,
+    programmeShowcase,
+    joinCtaCards,
+    newsletterSignup,
+  };
+
   // Firestore can return records whose prototypes are not plain objects, which
   // cannot cross the Server-to-Client boundary. Rebuild as plain JSON. Every
   // date on these records is already a string (see normalizeArticle), so this
   // is lossless.
   const publishedValues = JSON.parse(
-    JSON.stringify({
-      ticker,
-      overviewSection,
-      challengeSection,
-      missionSection,
-      programmeShowcase,
-      joinCtaCards,
-      newsletterSignup,
-    }),
+    JSON.stringify(published),
   ) as HomepageDraftValues;
 
   return (
@@ -1626,6 +1632,8 @@ Two constraints discovered while planning, both load-bearing:
 - Create: `app/(admin-preview)/layout.tsx`
 - Create: `app/(admin-preview)/admin/content/homepage/preview/page.tsx`
 - Modify: `components/home/legacy-homepage-sections.tsx` (add three aliased exports)
+- Modify: `lib/cms/admin-auth.ts` (add the shared `requireAdminPage` guard)
+- Modify: `app/(admin)/layout.tsx` (use the shared guard)
 
 **Interfaces:**
 - Consumes: `HomepageDraftValues`, `workspaceSectionsById` from Task 1.
@@ -1971,37 +1979,76 @@ export function HomepagePreviewCanvas({
 }
 ```
 
-- [ ] **Step 4: Create the bare preview layout**
+- [ ] **Step 4: Extract the page-level auth guard**
 
-Create `app/(admin-preview)/layout.tsx`:
+The new layout needs the same auth check `app/(admin)/layout.tsx` performs.
+Duplicating it would put two copies of an authorization decision in the tree,
+free to drift — and an auth check is the worst place to allow drift. Extract it
+once. `lib/cms/admin-auth.ts` already exports `requireAdminApiSession` for API
+routes, so this is its page-level sibling.
 
-```tsx
-import { redirect } from "next/navigation";
+Add to `lib/cms/admin-auth.ts`, importing `redirect` from `next/navigation`:
 
-import { getCurrentAdminUser } from "@/lib/cms/admin-auth";
-
+```ts
 /**
- * Bare admin layout. Renders no shell chrome, because its only route is the
- * homepage preview document that the CMS workspace loads in an iframe. It
- * repeats the auth redirect from app/(admin)/layout.tsx rather than reusing
- * it, since that layout's whole purpose is to wrap children in AdminShell.
+ * Page-level auth guard. Returns the signed-in admin, or redirects to the
+ * login page. Shared by every admin layout so the redirect target cannot
+ * drift between them.
  */
-export default async function AdminPreviewLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export async function requireAdminPage() {
   const adminUser = await getCurrentAdminUser();
 
   if (!adminUser) {
     redirect("/admin-login");
   }
 
+  return adminUser;
+}
+```
+
+`redirect()` returns `never`, so TypeScript narrows `adminUser` to non-null
+after the guard and the return type needs no assertion.
+
+Then rewrite the body of `app/(admin)/layout.tsx` to use it, leaving its
+imports otherwise unchanged:
+
+```tsx
+export default async function AdminLayout({ children }: AdminLayoutProps) {
+  const adminUser = await requireAdminPage();
+
+  return <AdminShell adminUser={adminUser}>{children}</AdminShell>;
+}
+```
+
+Its `getCurrentAdminUser` and `redirect` imports become unused — remove them
+and import `requireAdminPage` from `@/lib/cms/admin-auth` instead.
+
+- [ ] **Step 5: Create the bare preview layout**
+
+Create `app/(admin-preview)/layout.tsx`:
+
+```tsx
+import { requireAdminPage } from "@/lib/cms/admin-auth";
+
+/**
+ * Bare admin layout. Renders no shell chrome, because its only route is the
+ * homepage preview document that the CMS workspace loads in an iframe. It
+ * exists separately from app/(admin)/layout.tsx because that layout's whole
+ * purpose is to wrap children in AdminShell, which must not appear inside the
+ * iframe — but it shares the same auth guard.
+ */
+export default async function AdminPreviewLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  await requireAdminPage();
+
   return <>{children}</>;
 }
 ```
 
-- [ ] **Step 5: Create the preview route**
+- [ ] **Step 6: Create the preview route**
 
 Create `app/(admin-preview)/admin/content/homepage/preview/page.tsx`:
 
@@ -2061,44 +2108,49 @@ export default async function HomepagePreviewPage() {
     getCmsPartners(),
   ]);
 
+  // Annotated rather than cast, so the compiler checks this object against
+  // PreviewBaseline. JSON.stringify accepts `any`, so building the literal
+  // inline and casting the result would let a swapped variable or a dropped
+  // field compile cleanly and hand a component `undefined` at runtime — which
+  // is exactly the drift PreviewBaseline's derived types exist to prevent.
+  const source: PreviewBaseline = {
+    editable: {
+      ticker,
+      overviewSection,
+      challengeSection,
+      missionSection,
+      programmeShowcase,
+      joinCtaCards,
+      newsletterSignup,
+    },
+    context: {
+      slides,
+      impactStats,
+      campaign,
+      story,
+      articles,
+      testimonials,
+      teamMembers,
+      partners,
+    },
+  };
+
   // Firestore can return records whose prototypes are not plain objects, which
   // cannot cross the Server-to-Client boundary. Rebuild as plain JSON. Dates on
   // these records are already strings (see normalizeArticle), so this is
   // lossless.
-  const baseline = JSON.parse(
-    JSON.stringify({
-      editable: {
-        ticker,
-        overviewSection,
-        challengeSection,
-        missionSection,
-        programmeShowcase,
-        joinCtaCards,
-        newsletterSignup,
-      },
-      context: {
-        slides,
-        impactStats,
-        campaign,
-        story,
-        articles,
-        testimonials,
-        teamMembers,
-        partners,
-      },
-    }),
-  ) as PreviewBaseline;
+  const baseline = JSON.parse(JSON.stringify(source)) as PreviewBaseline;
 
   return <HomepagePreviewCanvas baseline={baseline} />;
 }
 ```
 
-- [ ] **Step 6: Verify**
+- [ ] **Step 7: Verify**
 
 Run: `npm run type-check && npm run lint && npm run build`
 Expected: all PASS. A build error about two route groups resolving the same path means the directory nesting under `(admin-preview)` is wrong — it must be exactly `admin/content/homepage/preview`.
 
-- [ ] **Step 7: Verify in the browser**
+- [ ] **Step 8: Verify in the browser**
 
 Run: `npm run dev`, then visit `/admin/content/homepage/preview` directly.
 
@@ -2108,7 +2160,7 @@ Expected:
 - Hovering an editable section shows a blue outline and its label; the label and outline do not appear on dimmed sections.
 - The public homepage at `/` is completely unchanged.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
 git add components/admin/homepage-workspace/preview-messages.ts components/admin/homepage-workspace/preview-canvas.tsx "app/(admin-preview)" components/home/legacy-homepage-sections.tsx
