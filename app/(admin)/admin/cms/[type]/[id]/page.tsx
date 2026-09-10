@@ -3,8 +3,11 @@ import { Database } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { RecordForm } from "@/components/admin/record-form";
+import { EditorWithPreview } from "@/components/admin/cms-preview/editor-with-preview";
+import { isPreviewableDescriptor } from "@/components/admin/cms-preview/preview-context";
 import { getRecord } from "@/lib/cms/descriptors/crud";
 import { getDescriptor } from "@/lib/cms/descriptors/registry";
+import { initialValues } from "@/lib/cms/descriptors/form-values";
 import {
   findSeedRecord,
   isSeedCollection,
@@ -51,6 +54,20 @@ export default async function AdminCmsEditRecordPage({
   const fields = resolveFields(descriptor, { id: params.id, stored });
   const fallbackRecord = mergedRecordFor(descriptor, params.id, stored);
   const record = stored ?? { id: params.id };
+
+  if (isPreviewableDescriptor(descriptor)) {
+    return (
+      <EditorWithPreview
+        descriptor={descriptor}
+        record={record}
+        fields={fields}
+        fallbackRecord={fallbackRecord}
+        revertible={Boolean(seedRecord)}
+        recordId={params.id}
+        initialValues={initialValues(fields, record, fallbackRecord)}
+      />
+    );
+  }
 
   const title = seedRecord
     ? seedRecord.title

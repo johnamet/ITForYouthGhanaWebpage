@@ -27,6 +27,9 @@ import {
 import { adminHubs, adminNodes, getNodesForHub } from "@/lib/content/admin-registry";
 import { cn } from "@/lib/utils/cn";
 import type { AdminSessionUser } from "@/lib/firebase/auth";
+import { PREVIEWABLE_KEYS } from "@/components/admin/cms-preview/preview-context";
+
+const BLEED_CMS_KEYS = new Set<string>(PREVIEWABLE_KEYS);
 
 type AdminShellProps = {
   children: React.ReactNode;
@@ -53,7 +56,20 @@ export function isBleedAdminRoute(pathname: string): boolean {
   // `(?!new$)` is load-bearing: without it this matches the create routes,
   // which are ordinary scrolling forms and would render flush against the
   // sidebar with no full-height layout to justify it.
-  return /^\/admin\/(who-we-are|what-we-do)-pages\/(?!new$)[^/]+$/.test(pathname);
+  if (/^\/admin\/(who-we-are|what-we-do)-pages\/(?!new$)[^/]+$/.test(pathname)) {
+    return true;
+  }
+
+  // Only the routed singletons get the two-pane layout, but the predicate
+  // cannot see the descriptor from a pathname — so it matches the shape and
+  // checks the key against the registry, rather than a collection's record
+  // editor losing its page padding for every `/admin/cms/<type>/<id>` route.
+  const cmsMatch = /^\/admin\/cms\/([^/]+)\/[^/]+$/.exec(pathname);
+  if (cmsMatch && BLEED_CMS_KEYS.has(cmsMatch[1])) {
+    return true;
+  }
+
+  return false;
 }
 
 const workspaceItems: SidebarItem[] = [
