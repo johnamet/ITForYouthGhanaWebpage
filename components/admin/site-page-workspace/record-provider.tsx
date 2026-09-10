@@ -70,6 +70,31 @@ function sameValue(left: unknown, right: unknown): boolean {
 }
 
 /**
+ * The record as the endpoint would store it. The schema strips blank optional
+ * fields, so a draft carrying `description: ""` and the stored record carrying
+ * nothing are the same record — comparing them raw reports a permanent, false
+ * dirty state after every save.
+ *
+ * Falls back to the input when the draft does not parse, which is fine: an
+ * invalid draft cannot be saved anyway, so its dirtiness only has to be
+ * good enough to show "unsaved".
+ */
+function canonicalRecord(page: EditableSitePage): EditableSitePage {
+  const parsed = dynamicSitePageSchema.safeParse(page);
+  return parsed.success ? (parsed.data as EditableSitePage) : page;
+}
+
+/**
+ * The payload actually sent, and the object client validation runs against.
+ * `order: 0` is what lib/cms/site-pages.ts writes when a stored document has
+ * no order, but the schema demands a positive integer — so a record that has
+ * never been ordered would be unsavable until this maps it back to absent.
+ */
+function toPayload(page: EditableSitePage): EditableSitePage {
+  return { ...page, order: page.order || undefined };
+}
+
+/**
  * Splits zod's `fieldErrors` into per-region buckets. A field no region owns
  * cannot be attributed, so its messages go to the page level rather than being
  * silently dropped. Shared by the client validation pass and the server's
@@ -154,7 +179,7 @@ export function SitePageWorkspaceProvider({
   // attribution and immediacy; the server still validates and is still
   // authoritative.
   const clientErrors = useMemo(() => {
-    const parsed = dynamicSitePageSchema.safeParse(draft);
+    const parsed = dynamicSitePageSchema.safeParse(toPayload(draft));
     if (parsed.success) {
       return { regions: {} as RegionErrors, form: [] as string[] };
     }
@@ -180,22 +205,30 @@ export function SitePageWorkspaceProvider({
     [clientErrors.form, serverErrors.form],
   );
 
+  const canonicalDraft = useMemo(() => canonicalRecord(draft), [draft]);
+  const canonicalPublished = useMemo(
+    () => canonicalRecord(published),
+    [published],
+  );
+
   const dirtyRegions = useMemo(() => {
     const dirty = new Set<SitePageRegionId>();
     for (const region of sitePageRegions) {
       const changed = region.fields.some(
-        (field) => !sameValue(draft[field], published[field]),
+        (field) => !sameValue(canonicalDraft[field], canonicalPublished[field]),
       );
       if (changed) {
         dirty.add(region.id);
       }
     }
     return dirty;
-  }, [draft, published]);
+  }, [canonicalDraft, canonicalPublished]);
 
   const isDirty = dirtyRegions.size > 0;
   const canSave =
     isDirty && Object.keys(clientErrors.regions).length === 0 && clientErrors.form.length === 0;
+
+  const activeRegion = findSitePageRegion(activeId);
 
   const selectRegion = useCallback((id: string) => {
     const region = findSitePageRegion(id);
@@ -236,7 +269,7 @@ export function SitePageWorkspaceProvider({
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(sent),
+          body: JSON.stringify(toPayload(sent)),
         },
       );
       const payload = (await response.json().catch(() => null)) as
@@ -266,6 +299,7 @@ export function SitePageWorkspaceProvider({
       // The server now holds `sent`, so that is the baseline regardless of what
       // the editor has typed since.
       setPublished(sent);
+      setServerErrors({ regions: {}, form: [] });
       setSaveState(
         draftRef.current === sent
           ? { status: "saved", message: payload.message || "Page updated." }
@@ -275,7 +309,14 @@ export function SitePageWorkspaceProvider({
                 "Saved. You have changed the page since — save again to publish those edits.",
             },
       );
-      router.refresh();
+      if (sent.slug !== published.slug) {
+        // The endpoint moved the record, so the current URL no longer exists.
+        router.replace(
+          `${family.adminIndex}/${encodeURIComponent(sent.slug)}?region=${activeRegion.id}`,
+        );
+      } else {
+        router.refresh();
+      }
     } catch (error) {
       setSaveState({
         status: "error",
@@ -284,7 +325,15 @@ export function SitePageWorkspaceProvider({
     } finally {
       saving.current = false;
     }
-  }, [canSave, draft, family.endpointBase, published.slug, router]);
+  }, [
+    activeRegion,
+    canSave,
+    draft,
+    family.adminIndex,
+    family.endpointBase,
+    published.slug,
+    router,
+  ]);
 
   useEffect(() => {
     if (!isDirty) {
@@ -347,7 +396,7 @@ export function SitePageWorkspaceProvider({
       family,
       published,
       draft,
-      activeRegion: findSitePageRegion(activeId),
+      activeRegion,
       payloadVersion,
       isDirty,
       dirtyRegions,
@@ -363,7 +412,7 @@ export function SitePageWorkspaceProvider({
       family,
       published,
       draft,
-      activeId,
+      activeRegion,
       payloadVersion,
       isDirty,
       dirtyRegions,

@@ -54,7 +54,7 @@ export function CtasRegion({ value, onChange }: SitePageRegionProps) {
 
       <div className="space-y-4">
         {value.ctas.map((cta, index) => (
-          <div key={`${cta.label}-${index}`} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_1fr_auto]">
+          <div key={index} className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[1fr_1fr_auto]">
             <div>
               <label className="text-sm font-bold text-brand-ink">Label</label>
               <input

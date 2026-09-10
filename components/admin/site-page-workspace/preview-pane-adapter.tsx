@@ -20,6 +20,7 @@ export function SitePagePreviewPane() {
       onSelectSection={selectRegion}
       footerLabel={`${family.label} · ${published.title || published.slug} · ${activeRegion.label}`}
       subject={`${family.label}: ${published.title || published.slug}`}
+      publicHref={`${family.publicBase}/${published.slug}`}
     />
   );
 }

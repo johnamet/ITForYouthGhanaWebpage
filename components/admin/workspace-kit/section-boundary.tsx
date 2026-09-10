@@ -43,7 +43,10 @@ export class PreviewSectionBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="border-y border-dashed border-brand-border bg-brand-alt px-6 py-10 text-center">
+        <div
+          data-preview-fallback=""
+          className="border-y border-dashed border-brand-border bg-brand-alt px-6 py-10 text-center"
+        >
           <p className="font-heading text-lg font-bold text-brand-ink">
             {this.props.label}
           </p>

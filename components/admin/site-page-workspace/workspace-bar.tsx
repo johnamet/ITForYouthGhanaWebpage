@@ -26,6 +26,7 @@ export function SitePageWorkspaceBar() {
   const errorRegionCount = Object.values(regionErrors).filter(
     (messages) => (messages?.length ?? 0) > 0,
   ).length;
+  const blockingCount = errorRegionCount + formErrors.length;
 
   return (
     <header className="shrink-0 border-b border-slate-200 bg-white/95 px-4 py-4 shadow-sm backdrop-blur sm:px-6">
@@ -71,7 +72,7 @@ export function SitePageWorkspaceBar() {
         <div className="flex items-center gap-3">
           {isDirty && !canSave ? (
             <span className="text-xs font-bold text-rose-600">
-              {errorRegionCount} region(s) need attention
+              {blockingCount} item(s) need attention
             </span>
           ) : null}
           <a

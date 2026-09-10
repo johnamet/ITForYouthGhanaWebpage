@@ -103,6 +103,11 @@ export function SitePagePreviewCanvas({
     if (!root) {
       return;
     }
+    if (root.hasAttribute("data-preview-fallback")) {
+      setPairingFailed(true);
+      setOverlays([]);
+      return;
+    }
     // doesTargetRender, not isRegionEmpty: the two answer different questions,
     // and only this one tracks what ContentPage actually produced.
     const expected = TARGET_ORDER.filter((target) =>

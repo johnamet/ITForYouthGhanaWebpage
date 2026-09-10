@@ -80,6 +80,7 @@ export function SettingsRegion({
               <input
                 id="order"
                 type="number"
+                min={1}
                 value={"order" in value ? value.order : 0}
                 onChange={(event) => update("order", Number(event.target.value))}
                 className={inputClass}

@@ -20,6 +20,7 @@ export function PreviewPane() {
       onSelectSection={selectSection}
       footerLabel={`Homepage · ${activeSection.label}`}
       subject="Homepage"
+      publicHref="/"
     />
   );
 }

@@ -69,7 +69,7 @@ export function StatsRegion({ value, onChange }: SitePageRegionProps) {
       <div className="space-y-4">
         {value.stats.map((stat, index) => (
           <div
-            key={`${stat.label}-${index}`}
+            key={index}
             className="grid items-end gap-4 rounded-2xl border border-brand-border p-4 md:grid-cols-[0.6fr_1fr_1.4fr_0.6fr_1fr_auto]"
           >
             <div>

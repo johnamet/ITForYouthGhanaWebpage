@@ -67,6 +67,9 @@ export type PreviewFrameProps<TData> = {
    * precisely so this can vary.
    */
   subject: string;
+  /** The public page this frame previews, used by the failure fallback's
+   *  "Open public page" link. */
+  publicHref: string;
 };
 
 export function PreviewFrame<TData>({
@@ -78,6 +81,7 @@ export function PreviewFrame<TData>({
   onSelectSection,
   footerLabel,
   subject,
+  publicHref,
 }: PreviewFrameProps<TData>) {
   const frameRef = useRef<HTMLIFrameElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -255,8 +259,8 @@ export function PreviewFrame<TData>({
         <p className="flex shrink-0 items-center gap-2 border-b border-brand-border bg-brand-mist/60 px-3 py-2 text-[0.66rem] leading-5 text-brand-navy">
           <Zap aria-hidden className="h-3 w-3 text-brand-primary" />
           <span>
-            <b>Live draft:</b> typing updates this preview immediately. Save the
-            section to publish.
+            <b>Live draft:</b> typing updates this preview immediately. Save to
+            publish.
           </span>
         </p>
 
@@ -276,7 +280,7 @@ export function PreviewFrame<TData>({
                 your changes.
               </p>
               <a
-                href="/"
+                href={publicHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 inline-flex rounded-control border border-brand-border bg-white px-4 py-2 text-xs font-bold text-slate-700"

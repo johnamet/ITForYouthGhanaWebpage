@@ -52,9 +52,26 @@ export function BodySectionsRegion({ value, onChange }: SitePageRegionProps) {
         </button>
       </div>
 
+      {(() => {
+        const titles = value.sections.map((section) => section.title.trim());
+        const duplicated = titles.some(
+          (title, index) => titles.indexOf(title) !== index,
+        );
+        if (!duplicated) {
+          return null;
+        }
+        return (
+          <p className="rounded-media border border-rose-200 bg-rose-50 p-4 text-sm leading-6 text-rose-700">
+            Two sections share a title. The public page identifies sections by
+            title, so one of them will not appear. Give each a distinct title —
+            including newly added sections, which start out blank.
+          </p>
+        );
+      })()}
+
       <div className="space-y-5">
         {value.sections.map((section, index) => (
-          <div key={`${section.title}-${index}`} className="rounded-2xl border border-brand-border p-4">
+          <div key={index} className="rounded-2xl border border-brand-border p-4">
             <div className="grid gap-4 md:grid-cols-[1fr_auto]">
               <div>
                 <label className="text-sm font-bold text-brand-ink">Title</label>

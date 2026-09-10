@@ -90,7 +90,7 @@ export function RelatedRegion({ value, onChange }: SitePageRegionProps) {
 
       <div className="space-y-4">
         {value.related.map((card, index) => (
-          <div key={`${card.href}-${index}`} className="rounded-2xl border border-brand-border p-4">
+          <div key={index} className="rounded-2xl border border-brand-border p-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label className="text-sm font-bold text-brand-ink">Eyebrow</label>
