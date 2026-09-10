@@ -26,7 +26,15 @@ deliberately not reusing the parts that are not.
    of the page while typing.
 2. **`SitePageForm` is split into one component per region.** The workspace
    mounts one at a time; the two `new` routes compose all of them in a single
-   scroll exactly as today. The field markup is written once.
+   scroll. The field markup is written once, and every field, label,
+   placeholder, input type and id is unchanged.
+
+   The **order** of the panels does change, to registry order: hero, CTAs,
+   stats, body, related, settings, then the not-shown fields. Slug and publish
+   status therefore move from the first panel to the sixth on the create
+   routes. That is a deliberate consequence of one component set serving both
+   surfaces; if the create flow needs its old ordering, the composition — not
+   the regions — is where to restore it.
 3. **Whole-record save, with per-region error attribution.** Per-region save
    is impossible here: `sitePageSchema` requires `eyebrow` and `title`
    (`min(2)` each) and the endpoint validates the entire object, so a save
@@ -309,11 +317,18 @@ against 45 routes, and the admin registry points at these paths.
   region is wrapped in the shared boundary, keyed on the payload version so a
   section recovers by itself once the value becomes valid.
 - **Duplicate section titles.** `ContentPage` uses `section.title` as its React
-  key, so two blank or identical titles collide and React drops one. This is
-  pre-existing and visible in the preview the moment a section is added. The
-  canvas uses an index-based key of its own so the preview stays stable; the
-  underlying renderer is left alone, and the body-sections region warns when
-  two titles match.
+  key, so two blank or identical titles collide and React drops one. This bites
+  on first use: clicking "Add section" twice creates two sections with a blank
+  title.
+
+  The body-sections region warns when any title is non-unique, counting blanks.
+  That is the whole mitigation. An earlier draft of this spec also promised the
+  canvas would apply an index-based key of its own to keep the preview stable —
+  **that is impossible** and the claim was wrong: the canvas renders
+  `<ContentPage page={record}/>` and cannot key that component's internal
+  `sections.map()`, and changing `ContentPage` is forbidden. The collision is
+  therefore visible in the preview by design, which is arguably better feedback
+  than hiding it would be.
 - **No record exists.** Without Firestore the family getters return `[]`, so
   `[slug]` 404s and the workspace cannot be opened at all. Nothing in the
   design can fix that; it is recorded under verification.
@@ -338,6 +353,24 @@ an `itfy-admin-session` cookie and real Firestore data. Two consequences:
   a real record. The existing `scripts/shoot-homepage-workspace.mjs` is
   generalised to take a route so it can screenshot this workspace at the three
   viewport widths too.
+
+## Known limitations
+
+Three things this design does not fix, recorded so they are not misattributed
+to it later:
+
+- `ContentPage` hard-codes a "Who We Are" breadcrumb trail
+  (`content-page.tsx:23-32`), so a What We Do page's preview shows a Who We Are
+  breadcrumb. Fixing it means changing a public renderer, which is out of scope
+  here.
+- `mergeSitePage` returns neither `heroVideoUrl` nor `heroVideoThumbnail`, so
+  for dynamic pages those two fields are written to Firestore and never read
+  back. Region 7's copy says such fields are "saved but will not appear on this
+  page"; for these two it is nearer to saved and then lost.
+- No region owns `courses`, which `sitePageSchema` still validates. A stored
+  record with a malformed `courses` array produces a validation error with no
+  editor anywhere in the UI for the offending field, and cannot be saved from
+  this workspace. The old form could not fix it either.
 
 ## Out of scope
 
