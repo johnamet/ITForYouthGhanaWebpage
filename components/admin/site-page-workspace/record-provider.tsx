@@ -70,21 +70,6 @@ function sameValue(left: unknown, right: unknown): boolean {
 }
 
 /**
- * The record as the endpoint would store it. The schema strips blank optional
- * fields, so a draft carrying `description: ""` and the stored record carrying
- * nothing are the same record — comparing them raw reports a permanent, false
- * dirty state after every save.
- *
- * Falls back to the input when the draft does not parse, which is fine: an
- * invalid draft cannot be saved anyway, so its dirtiness only has to be
- * good enough to show "unsaved".
- */
-function canonicalRecord(page: EditableSitePage): EditableSitePage {
-  const parsed = dynamicSitePageSchema.safeParse(page);
-  return parsed.success ? (parsed.data as EditableSitePage) : page;
-}
-
-/**
  * The payload actually sent, and the object client validation runs against.
  * `order: 0` is what lib/cms/site-pages.ts writes when a stored document has
  * no order, but the schema demands a positive integer — so a record that has
@@ -92,6 +77,27 @@ function canonicalRecord(page: EditableSitePage): EditableSitePage {
  */
 function toPayload(page: EditableSitePage): EditableSitePage {
   return { ...page, order: page.order || undefined };
+}
+
+/**
+ * The record as the endpoint would store it. The schema strips blank optional
+ * fields, so a draft carrying `description: ""` and the stored record carrying
+ * nothing are the same record — comparing them raw reports a permanent, false
+ * dirty state after every save.
+ *
+ * Parses `toPayload(page)`, not `page` itself: canonicalising has to see the
+ * same shape the endpoint validates — or a record the payload step would have
+ * made valid, such as one with `order: 0`, fails here too, falls back to the
+ * raw record on both sides of the comparison, and reintroduces exactly the
+ * permanent-dirty bug this function exists to fix.
+ *
+ * Falls back to the input when the draft does not parse, which is fine: an
+ * invalid draft cannot be saved anyway, so its dirtiness only has to be
+ * good enough to show "unsaved".
+ */
+function canonicalRecord(page: EditableSitePage): EditableSitePage {
+  const parsed = dynamicSitePageSchema.safeParse(toPayload(page));
+  return parsed.success ? (parsed.data as EditableSitePage) : page;
 }
 
 /**
