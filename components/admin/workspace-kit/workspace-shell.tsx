@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils/cn";
 
 export type WorkspaceShellProps = {
   bar: React.ReactNode;
-  rail: React.ReactNode;
+  rail?: React.ReactNode;
   editor: React.ReactNode;
   preview?: React.ReactNode;
 };
@@ -18,6 +18,13 @@ export function WorkspaceShell({
   preview,
 }: WorkspaceShellProps) {
   const [view, setView] = useState<"edit" | "preview">("edit");
+
+  // A consumer with no rail — the descriptor page editors, whose fields have
+  // no grouping metadata to enumerate — gets two panes rather than a dead
+  // 176px column.
+  const gridClass = rail
+    ? "xl:grid-cols-[176px_392px_minmax(0,1fr)] 2xl:grid-cols-[196px_430px_minmax(0,1fr)]"
+    : "xl:grid-cols-[minmax(0,460px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(0,520px)_minmax(0,1fr)]";
 
   return (
     <div className="flex h-screen flex-col">
@@ -53,19 +60,21 @@ export function WorkspaceShell({
       {/* The grid gets a definite height from flex-1 + min-h-0 inside h-screen,
           and its items stretch to the row. Each pane root carries h-full so
           that height reaches the scrolling element itself. */}
-      <div className="grid min-h-0 flex-1 xl:grid-cols-[176px_392px_minmax(0,1fr)] 2xl:grid-cols-[196px_430px_minmax(0,1fr)]">
+      <div className={cn("grid min-h-0 flex-1", gridClass)}>
         {/* Below xl the rail stacks above the editor in the Edit tab. It must
             stay reachable: it is the only way to change section, so hiding it
             outright would strand narrow-viewport editors on one section. */}
-        <div
-          className={cn(
-            "min-h-0",
-            view === "edit" ? "block" : "hidden",
-            "xl:block",
-          )}
-        >
-          {rail}
-        </div>
+        {rail ? (
+          <div
+            className={cn(
+              "min-h-0",
+              view === "edit" ? "block" : "hidden",
+              "xl:block",
+            )}
+          >
+            {rail}
+          </div>
+        ) : null}
 
         <div
           className={cn(

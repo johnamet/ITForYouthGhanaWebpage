@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   AlertCircle,
   ArrowDown,
@@ -349,6 +349,7 @@ export function RecordForm({
   fields = descriptor.fields,
   fallbackRecord,
   revertible = false,
+  onValuesChange,
 }: {
   descriptor: ContentTypeDescriptor;
   record?: Record<string, unknown> & { id?: string };
@@ -370,6 +371,12 @@ export function RecordForm({
    * an editor who believed it would not press it.
    */
   revertible?: boolean;
+  /**
+   * Called whenever the form's values change. Purely an observer: this form
+   * keeps owning its state and its save, because it is shared by every
+   * descriptor including collections, and a live preview only needs to watch.
+   */
+  onValuesChange?: (values: FormValues) => void;
 }) {
   const router = useRouter();
   const recordId = typeof record?.id === "string" ? record.id : undefined;
@@ -378,6 +385,11 @@ export function RecordForm({
   const [values, setValues] = useState<FormValues>(() =>
     initialValues(fields, record, fallbackRecord),
   );
+
+  useEffect(() => {
+    onValuesChange?.(values);
+  }, [values, onValuesChange]);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [notice, setNotice] = useState<{ type: "idle" | "success" | "error"; message: string }>({
