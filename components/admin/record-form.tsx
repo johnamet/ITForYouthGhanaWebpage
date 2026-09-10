@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   AlertCircle,
   ArrowDown,
@@ -375,6 +375,11 @@ export function RecordForm({
    * Called whenever the form's values change. Purely an observer: this form
    * keeps owning its state and its save, because it is shared by every
    * descriptor including collections, and a live preview only needs to watch.
+   *
+   * Notified on value changes only, never on a change of identity of this
+   * callback itself — so it does not need to be memoized by the caller. A
+   * caller whose callback triggers its own re-render (e.g. bumping an
+   * unrelated counter) is therefore safe: it will not retrigger this effect.
    */
   onValuesChange?: (values: FormValues) => void;
 }) {
@@ -386,9 +391,14 @@ export function RecordForm({
     initialValues(fields, record, fallbackRecord),
   );
 
+  const onValuesChangeRef = useRef(onValuesChange);
   useEffect(() => {
-    onValuesChange?.(values);
-  }, [values, onValuesChange]);
+    onValuesChangeRef.current = onValuesChange;
+  });
+
+  useEffect(() => {
+    onValuesChangeRef.current?.(values);
+  }, [values]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
