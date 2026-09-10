@@ -1,3 +1,4 @@
+import { coerceStringList } from "@/lib/cms/descriptors/form-values";
 import { PATH_SEPARATOR } from "@/lib/cms/descriptors/page-overrides";
 import { getDescriptor } from "@/lib/cms/descriptors/registry";
 import {
@@ -49,17 +50,14 @@ function coerceValue(field: FieldDescriptor, raw: unknown): unknown {
     /**
      * A `string[]`, submitted as one line per item.
      *
-     * Blank lines are dropped rather than stored, because a stray newline in a
-     * textarea would otherwise publish an empty bullet.
+     * The body lives in form-values.ts, whose only import is a type, because
+     * the descriptor preview canvas needs the same coercion and is a client
+     * module that must never reach firebase-admin. Moving it rather than
+     * copying it keeps the preview's merge and this save splitting the same
+     * text the same way.
      */
-    case "stringList": {
-      const lines = Array.isArray(raw)
-        ? raw.map((item) => String(item))
-        : typeof raw === "string"
-          ? raw.split("\n")
-          : [];
-      return lines.map((line) => line.trim()).filter(Boolean);
-    }
+    case "stringList":
+      return coerceStringList(raw);
 
     /**
      * A repeatable group, stored whole.

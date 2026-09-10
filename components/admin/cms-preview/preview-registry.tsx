@@ -20,15 +20,38 @@ import { TrainingWhoCanApplyPage } from "@/components/training/training-who-can-
 import { WhatWeDoOverviewPage } from "@/components/what-we-do/what-we-do-overview-page";
 import { WhoWeArePage } from "@/components/who-we-are/who-we-are-page";
 import { mergeCourseCatalog } from "@/lib/api/training";
-import type { FormValues } from "@/lib/cms/descriptors/form-values";
+import type {
+  ContactPageContent,
+  ImpactOverviewContent,
+  ImpactReportsContent,
+  ImpactSdgsContent,
+  ImpactTestimonialsContent,
+  NewsHubContent,
+  PartnershipOverviewContent,
+  SitePage,
+  TrainingCohort,
+  TrainingProcessStep,
+  WhatWeDoOverviewContent,
+} from "@/types/content";
 
 import type { PreviewableKey, PreviewContext } from "./preview-context";
 
-export { PREVIEWABLE_KEYS, isPreviewableDescriptor } from "./preview-context";
 export type { PreviewableKey } from "./preview-context";
 
 /**
- * Renders the public composition for one descriptor against draft values.
+ * Renders the public composition for one descriptor against the merged draft
+ * document.
+ *
+ * `merged` is what `previewDocument` produces — the NESTED shape the public
+ * getters hand their renderers, not the flat `FormValues` the form holds. That
+ * distinction is the whole of this file's contract; see preview-document.ts.
+ *
+ * EVERY ARM CASTS TO ITS OWN RENDERER'S PROP TYPE, on purpose. A single
+ * `as unknown as never` stood here and silenced all sixteen prop contracts at
+ * once, which is exactly why a whole-document shape error survived a
+ * type-check, a lint and a task-scoped review. A named target per arm means a
+ * renderer that changes its prop type breaks this file rather than the
+ * preview.
  *
  * The `: ReactElement` annotation is what makes this switch exhaustive: this
  * project does not set `noImplicitReturns`, so without it a missing case
@@ -37,80 +60,110 @@ export type { PreviewableKey } from "./preview-context";
  */
 export function renderDescriptorPreview(
   key: PreviewableKey,
-  values: FormValues,
+  merged: Record<string, unknown>,
   context: PreviewContext,
 ): ReactElement {
-  // Every renderer here already tolerates partially-filled seed content, which
-  // is exactly the shape a half-typed draft has.
-  const doc = values as unknown as never;
-
   switch (key) {
     case "page-who-we-are":
-      return <WhoWeArePage page={doc} />;
+      return <WhoWeArePage page={merged as unknown as SitePage} />;
     case "page-team":
       return (
         <>
-          <ContentPage page={doc} />
+          <ContentPage page={merged as unknown as SitePage} />
           <TeamDirectory members={context.teamMembers} />
         </>
       );
     case "page-partners":
       return (
         <>
-          <ContentPage page={doc} />
+          <ContentPage page={merged as unknown as SitePage} />
           <PartnerDirectory partners={context.partners} />
         </>
       );
     case "page-careers":
       return (
         <>
-          <ContentPage page={doc} />
+          <ContentPage page={merged as unknown as SitePage} />
           <CareersList jobs={context.jobs} />
         </>
       );
     case "page-what-we-do":
       return (
-        <WhatWeDoOverviewPage content={doc} initiatives={context.initiatives} />
+        <WhatWeDoOverviewPage
+          content={merged as unknown as WhatWeDoOverviewContent}
+          initiatives={context.initiatives}
+        />
       );
     case "page-apply-for-training":
       return (
         <ApplyForTrainingOverviewPage
-          page={doc}
-          cohorts={(values.cohorts as never) ?? []}
-          process={(values.process as never) ?? []}
+          page={merged as unknown as SitePage}
+          cohorts={(merged.cohorts as TrainingCohort[] | undefined) ?? []}
+          process={(merged.process as TrainingProcessStep[] | undefined) ?? []}
         />
       );
     case "page-apply-who-can-apply":
-      return <TrainingWhoCanApplyPage page={doc} />;
+      return <TrainingWhoCanApplyPage page={merged as unknown as SitePage} />;
     case "page-apply-how-it-works":
-      return <TrainingHowItWorksPage page={doc} />;
+      return <TrainingHowItWorksPage page={merged as unknown as SitePage} />;
     case "page-apply-courses":
       return (
         <TrainingCourseListingPage
-          page={doc}
-          // Merged on the client: this list depends on the draft's own
-          // courses, so a server-side read would show nothing change.
+          page={merged as unknown as SitePage}
+          /**
+           * INERT TODAY, AND KEPT ANYWAY.
+           *
+           * `merged.courses` is always undefined: no descriptor field
+           * generates a `courses` key, and the merge drops a stored key the
+           * seed does not declare — `trainingCoursesHub` does not. So this
+           * merge currently returns the base catalogue unchanged.
+           *
+           * It stays because every arm here mirrors exactly what its public
+           * route does, and `/apply-for-training/courses` really does call
+           * `getTrainingCatalogMixed(page.courses)`. Dropping the call would
+           * make the preview diverge from the page the day `courses` becomes
+           * editable, and that divergence would be silent.
+           */
           courses={mergeCourseCatalog(
             context.courseCatalogue,
-            values.courses as unknown[] | undefined,
+            merged.courses as unknown[] | undefined,
           )}
         />
       );
     case "page-impact-overview":
       return (
-        <ImpactOverviewPage content={doc} partners={context.impactPartners} />
+        <ImpactOverviewPage
+          content={merged as unknown as ImpactOverviewContent}
+          partners={context.impactPartners}
+        />
       );
     case "page-impact-reports":
-      return <ImpactReportsPage content={doc} />;
+      return (
+        <ImpactReportsPage content={merged as unknown as ImpactReportsContent} />
+      );
     case "page-impact-testimonials":
-      return <ImpactTestimonialsPage content={doc} />;
+      return (
+        <ImpactTestimonialsPage
+          content={merged as unknown as ImpactTestimonialsContent}
+        />
+      );
     case "page-impact-sdgs":
-      return <ImpactSdgsPage content={doc} />;
+      return <ImpactSdgsPage content={merged as unknown as ImpactSdgsContent} />;
     case "page-partner-with-us":
-      return <PartnerWithUsOverviewPage content={doc} tracks={context.tracks} />;
+      return (
+        <PartnerWithUsOverviewPage
+          content={merged as unknown as PartnershipOverviewContent}
+          tracks={context.tracks}
+        />
+      );
     case "page-news-hub":
-      return <NewsHubPage content={doc} articles={context.articles} />;
+      return (
+        <NewsHubPage
+          content={merged as unknown as NewsHubContent}
+          articles={context.articles}
+        />
+      );
     case "page-contact":
-      return <ContactPage content={doc} />;
+      return <ContactPage content={merged as unknown as ContactPageContent} />;
   }
 }

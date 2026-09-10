@@ -27,6 +27,28 @@ export function emptyRow(itemFields: FieldDescriptor[]): ListRow {
   return row;
 }
 
+/**
+ * A `string[]` from what a textarea holds: one line per item.
+ *
+ * Lives here, in a module whose only import is a type, because two callers
+ * need it and one of them is a client component. `coerceValue` in
+ * lib/cms/descriptors/crud.ts owns the save-time coercion, but that module
+ * imports firebase-admin, so the descriptor preview canvas cannot reach it.
+ * Moving the body here rather than copying it keeps the preview's merge and
+ * the save doing the same thing to the same text.
+ *
+ * Blank lines are dropped rather than kept, because a stray newline in a
+ * textarea would otherwise publish an empty bullet.
+ */
+export function coerceStringList(raw: unknown): string[] {
+  const lines = Array.isArray(raw)
+    ? raw.map((item) => String(item))
+    : typeof raw === "string"
+      ? raw.split("\n")
+      : [];
+  return lines.map((line) => line.trim()).filter(Boolean);
+}
+
 export function asRows(value: unknown): ListRow[] {
   if (!Array.isArray(value)) return [];
   return value.filter(

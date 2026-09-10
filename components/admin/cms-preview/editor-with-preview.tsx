@@ -33,8 +33,15 @@ export function EditorWithPreview({
     <WorkspaceShell
       bar={
         <header className="shrink-0 border-b border-slate-200 bg-white/95 px-4 py-4 shadow-sm backdrop-blur sm:px-6">
-          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-primary">
-            {descriptor.plural}
+          {/*
+            The public route, not `descriptor.plural`. PAGE_DESCRIPTORS sets
+            `plural: entry.label`, so an eyebrow reading from it printed
+            "Contact page" directly above "Contact page" on all sixteen. The
+            route is the one thing this bar can tell an editor that the heading
+            does not: which page the copy in the left pane lands on.
+          */}
+          <p className="text-[0.7rem] font-semibold tracking-[0.08em] text-brand-primary">
+            Renders on {descriptor.previewHref ?? "/"}
           </p>
           <h1 className="mt-1 font-heading text-2xl font-bold text-brand-ink">
             {descriptor.label}
