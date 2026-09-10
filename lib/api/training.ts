@@ -28,10 +28,15 @@ export async function getTrainingCatalog(): Promise<Course[]> {
   return sortCourses(seedTrainingCourses);
 }
 
-export async function getTrainingCatalogMixed(cmsCourses?: unknown[]): Promise<Course[]> {
-  const external = await getCourseCatalog();
-  const base = external.length ? external : seedTrainingCourses;
-
+/**
+ * Merge CMS-authored courses over a base catalogue, CMS winning on a slug
+ * collision. Pure and client-safe on purpose: the admin course preview re-runs
+ * it against unsaved draft values, where an async fetch is not available.
+ */
+export function mergeCourseCatalog(
+  base: Course[],
+  cmsCourses?: unknown[],
+): Course[] {
   const cms: Course[] = Array.isArray(cmsCourses)
     ? cmsCourses
         .map((raw) => {
@@ -44,12 +49,17 @@ export async function getTrainingCatalogMixed(cmsCourses?: unknown[]): Promise<C
         .filter((c): c is Course => Boolean(c))
     : [];
 
-  // Prefer CMS overrides when slug collides
   const bySlug = new Map<string, Course>();
   for (const c of base) bySlug.set(c.slug || c.id, c);
   for (const c of cms) bySlug.set(c.slug || c.id, c);
 
   return sortCourses(Array.from(bySlug.values()));
+}
+
+export async function getTrainingCatalogMixed(cmsCourses?: unknown[]): Promise<Course[]> {
+  const external = await getCourseCatalog();
+  const base = external.length ? external : seedTrainingCourses;
+  return mergeCourseCatalog(base, cmsCourses);
 }
 
 export async function getCourseBySlugMixed(slug: string, cmsCourses?: unknown[]): Promise<Course | null> {
