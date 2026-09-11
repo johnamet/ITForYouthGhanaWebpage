@@ -19,6 +19,7 @@ import {
   resolveFields,
 } from "@/lib/cms/descriptors/seed-collections";
 import { getCmsInitiatives } from "@/lib/cms/initiatives";
+import { getCmsOrganisationServices } from "@/lib/cms/organisations";
 import { getCmsJobs } from "@/lib/cms/jobs";
 import { getCmsPartners } from "@/lib/cms/partners";
 import { getCmsPartnershipTracks } from "@/lib/cms/partnerships";
@@ -79,6 +80,7 @@ export default async function CmsPreviewPage({ params }: PreviewPageProps) {
     tracks,
     articles,
     externalCourses,
+    organisationServices,
   ] = await Promise.all([
     getRecord(descriptor.key, params.id),
     getCmsTeamMembers(false),
@@ -88,6 +90,7 @@ export default async function CmsPreviewPage({ params }: PreviewPageProps) {
     getCmsPartnershipTracks(),
     getCmsPublishedArticles(),
     courseCatalogueWithinBudget(),
+    getCmsOrganisationServices(),
   ]);
 
   // The same base the public route uses: the external catalogue when it has
@@ -106,6 +109,7 @@ export default async function CmsPreviewPage({ params }: PreviewPageProps) {
     tracks,
     articles,
     courseCatalogue,
+    organisationServices,
   };
 
   // Built exactly as the editor builds it, with the same three helpers and the

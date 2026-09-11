@@ -9,6 +9,11 @@ import { ImpactReportsPage } from "@/components/impact/impact-reports-page";
 import { ImpactSdgsPage } from "@/components/impact/impact-sdgs-page";
 import { ImpactTestimonialsPage } from "@/components/impact/impact-testimonials-page";
 import { NewsHubPage } from "@/components/news/news-hub-page";
+import { ForOrganisationsOverviewPage } from "@/components/organisations/for-organisations-overview-page";
+// Aliased because the component and the content type share the name
+// `OrganisationServicePage`, exactly as app/(public)/for-organisations/[slug]
+// aliases it for the same reason.
+import { OrganisationServicePage as OrganisationServiceTemplate } from "@/components/organisations/organisation-service-page";
 import { PartnerDirectory } from "@/components/shared/partner-directory";
 import { PartnerWithUsOverviewPage } from "@/components/partnerships/partner-with-us-overview-page";
 import { CareersList } from "@/components/shared/careers-list";
@@ -27,6 +32,8 @@ import type {
   ImpactSdgsContent,
   ImpactTestimonialsContent,
   NewsHubContent,
+  OrganisationOverviewContent,
+  OrganisationServicePage,
   PartnershipOverviewContent,
   SitePage,
   TrainingCohort,
@@ -165,5 +172,28 @@ export function renderDescriptorPreview(
       );
     case "page-contact":
       return <ContactPage content={merged as unknown as ContactPageContent} />;
+    case "page-for-organisations":
+      return (
+        <ForOrganisationsOverviewPage
+          content={merged as unknown as OrganisationOverviewContent}
+          services={context.organisationServices}
+        />
+      );
+    /**
+     * The four services render one component from their own document and take
+     * nothing from context, so they share an arm rather than repeating it four
+     * times. Listed individually because the switch is the exhaustiveness
+     * check: a fifth service added to the seed shows up here as a compile
+     * error rather than as a preview that silently renders nothing.
+     */
+    case "page-corporate-training":
+    case "page-sponsorships":
+    case "page-hire-graduates":
+    case "page-staff-volunteering":
+      return (
+        <OrganisationServiceTemplate
+          page={merged as unknown as OrganisationServicePage}
+        />
+      );
   }
 }

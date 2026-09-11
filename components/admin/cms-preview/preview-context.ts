@@ -2,6 +2,7 @@ import type { ComponentProps } from "react";
 
 import type { CareersList } from "@/components/shared/careers-list";
 import type { ImpactOverviewPage } from "@/components/impact/impact-overview-page";
+import type { ForOrganisationsOverviewPage } from "@/components/organisations/for-organisations-overview-page";
 import type { NewsHubPage } from "@/components/news/news-hub-page";
 import type { PartnerDirectory } from "@/components/shared/partner-directory";
 import type { PartnerWithUsOverviewPage } from "@/components/partnerships/partner-with-us-overview-page";
@@ -11,7 +12,7 @@ import type { WhatWeDoOverviewPage } from "@/components/what-we-do/what-we-do-ov
 import type { ContentTypeDescriptor } from "@/lib/cms/descriptors/types";
 
 /**
- * Everything the sixteen previews need beyond the descriptor's own document.
+ * Everything the twenty-one previews need beyond the descriptor's own document.
  * Read once when the preview document loads: these are other screens' content,
  * and editing partners should not live-update the Our Impact preview.
  *
@@ -28,10 +29,17 @@ export type PreviewContext = {
   tracks: ComponentProps<typeof PartnerWithUsOverviewPage>["tracks"];
   articles: ComponentProps<typeof NewsHubPage>["articles"];
   courseCatalogue: ComponentProps<typeof TrainingCourseListingPage>["courses"];
+  /**
+   * The four service pages, for the For Organisations overview, which lists
+   * them. Context rather than draft: editing a service does not live-update the
+   * overview preview, the same way editing a partner does not live-update Our
+   * Impact.
+   */
+  organisationServices: ComponentProps<typeof ForOrganisationsOverviewPage>["services"];
 };
 
 /**
- * The sixteen descriptor keys with a previewable public route.
+ * The twenty-one descriptor keys with a previewable public route.
  *
  * These are the real `ContentTypeDescriptor.key` values, i.e. `page-<slug>` —
  * `PAGE_DESCRIPTORS` in `lib/content/cms-descriptors/pages.ts` keys every page
@@ -43,7 +51,7 @@ export type PreviewContext = {
  *
  * Lives here rather than in `preview-registry.tsx` so that
  * `components/admin/admin-shell.tsx` — a `"use client"` module wrapping every
- * admin page — can import the key list without dragging all seventeen public
+ * admin page — can import the key list without dragging all nineteen public
  * page components into the shared admin client chunk. This module has only
  * type-only imports and no renderers, so the key list costs nothing here.
  */
@@ -64,6 +72,12 @@ export const PREVIEWABLE_KEYS = [
   "page-partner-with-us",
   "page-news-hub",
   "page-contact",
+  // For Organisations, moved off its raw-JSON editor onto descriptors.
+  "page-for-organisations",
+  "page-corporate-training",
+  "page-sponsorships",
+  "page-hire-graduates",
+  "page-staff-volunteering",
 ] as const;
 
 export type PreviewableKey = (typeof PREVIEWABLE_KEYS)[number];
