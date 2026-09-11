@@ -8,6 +8,7 @@ import {
   resolveFields,
   templateRecord,
 } from "@/lib/cms/descriptors/seed-collections";
+import { toPlainData } from "@/lib/utils/plain";
 import type {
   ContentTypeDescriptor,
   FieldDescriptor,
@@ -226,7 +227,12 @@ export async function listRecords(key: string): Promise<AdminRecord[]> {
 
   try {
     const snapshot = await db.collection(descriptor.collection).get();
-    const rows = snapshot.docs.map((doc) => ({ ...(doc.data() ?? {}), id: doc.id }) as AdminRecord);
+    // toPlainData, because these rows reach Client Components: the collection
+    // index renders them, and every writer here stamps `updatedAt` with
+    // `FieldValue.serverTimestamp()`, which reads back as a class instance.
+    const rows = snapshot.docs.map(
+      (doc) => ({ ...toPlainData(doc.data() ?? {}), id: doc.id }) as AdminRecord,
+    );
     return sortRecords(descriptor, rows);
   } catch (error) {
     console.error(`Laptop Bank ${key} list failed`, error);
@@ -247,7 +253,10 @@ export async function getRecord(
   try {
     const doc = await db.collection(descriptor.collection).doc(id).get();
     if (!doc.exists) return undefined;
-    return { ...(doc.data() ?? {}), id: doc.id } as AdminRecord;
+    // Normalised at the reader, per lib/utils/plain.ts: this record is handed
+    // straight to RecordForm and EditorWithPreview, both Client Components,
+    // and a raw Firestore Timestamp cannot cross that boundary.
+    return { ...toPlainData(doc.data() ?? {}), id: doc.id } as AdminRecord;
   } catch (error) {
     console.error(`Laptop Bank ${key} read failed`, error);
     return undefined;

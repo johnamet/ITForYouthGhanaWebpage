@@ -4,6 +4,7 @@ import {
   laptopBankStages as seedStages,
 } from "@/lib/content/laptop-bank-config";
 import { getAdminFirestore } from "@/lib/firebase/admin";
+import { toPlainData } from "@/lib/utils/plain";
 import type {
   DashboardMetrics,
   Donor,
@@ -46,7 +47,7 @@ export async function getProcessStages(): Promise<ProcessStage[]> {
     const snapshot = await db.collection(FIREBASE_COLLECTIONS.laptopBankStages).get();
     if (snapshot.empty) return seedStages;
     return snapshot.docs
-      .map((doc) => doc.data() as ProcessStage)
+      .map((doc) => toPlainData(doc.data()) as ProcessStage)
       .sort((left, right) => left.number - right.number);
   } catch (error) {
     console.error("Laptop Bank process stages read failed", error);
@@ -64,7 +65,7 @@ export async function getIntakeItems(): Promise<IntakeItem[]> {
     const snapshot = await db.collection(FIREBASE_COLLECTIONS.laptopBankIntake).get();
     if (snapshot.empty) return seedIntakeItems;
     return snapshot.docs
-      .map((doc) => doc.data() as IntakeItem)
+      .map((doc) => toPlainData(doc.data()) as IntakeItem)
       .sort((left, right) => left.sort_order - right.sort_order);
   } catch (error) {
     console.error("Laptop Bank intake items read failed", error);
@@ -87,7 +88,7 @@ export async function getConsentingDonors(): Promise<Donor[]> {
       .collection(FIREBASE_COLLECTIONS.laptopBankDonors)
       .where("display_consent", "in", ["logo", "named"])
       .get();
-    return snapshot.docs.map((doc) => doc.data() as Donor);
+    return snapshot.docs.map((doc) => toPlainData(doc.data()) as Donor);
   } catch (error) {
     console.error("Laptop Bank donors read failed", error);
     return [];
@@ -136,7 +137,7 @@ export async function getPublishableStories(limit?: number): Promise<Story[]> {
       .get();
 
     const stories = snapshot.docs.map((doc) => {
-      const story = doc.data() as Story;
+      const story = toPlainData(doc.data()) as Story;
       if (story.consent_record_ref?.trim()) return story;
       return { ...story, institution: undefined, photo: undefined };
     });
@@ -171,7 +172,7 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics | null> {
       .doc(DASHBOARD_METRICS_DOC_ID)
       .get();
     if (!doc.exists) return null;
-    return doc.data() as DashboardMetrics;
+    return toPlainData(doc.data()) as DashboardMetrics;
   } catch (error) {
     console.error("Laptop Bank dashboard metrics read failed", error);
     return null;
@@ -187,7 +188,9 @@ export async function getLaptopBankDocuments(): Promise<LaptopBankDocument[]> {
   try {
     const snapshot = await db.collection(FIREBASE_COLLECTIONS.laptopBankDocuments).get();
     if (snapshot.empty) return seedDocuments;
-    const stored = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as LaptopBankDocument);
+    const stored = snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...toPlainData(doc.data()) }) as LaptopBankDocument,
+    );
     // Keep the seed's order, which is the order spec 5.10 lists the files in.
     const seedOrder = new Map(seedDocuments.map((document, index) => [document.id, index]));
     return stored.sort(
