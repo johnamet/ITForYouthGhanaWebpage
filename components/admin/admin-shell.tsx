@@ -87,9 +87,9 @@ const workspaceItems: SidebarItem[] = [
     match: (pathname) => pathname === "/admin/content",
   },
   {
-    label: "Usage & Documentation",
+    label: "Help centre",
     href: "/admin/documentation",
-    description: "How the CMS works",
+    description: "Usage & documentation",
     icon: BookOpen,
   },
 ];

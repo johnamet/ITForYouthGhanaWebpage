@@ -13,6 +13,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { DocumentationHelpCentre } from "@/components/admin/documentation-help-centre";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminStatusPill } from "@/components/admin/admin-status-pill";
 import { adminHubs, getNodesForHub } from "@/lib/content/admin-registry";
@@ -317,7 +318,7 @@ const quickStartSteps = [
 const researchNotes = [
   {
     title: "Task first, reference second",
-    body: "Admins should see the next action before the full explanation. The page now opens with start steps and a page map, then keeps the full manual below.",
+    body: "Admins see task search and common actions first. Detailed publishing and route references remain available without slowing the main workflow.",
     source: "https://documentation.divio.com/",
   },
   {
@@ -352,6 +353,19 @@ const statusGuidance = [
 ];
 
 export default function AdminDocumentationPage() {
+  return (
+    <DocumentationHelpCentre
+      sections={documentationSections}
+      workflowRules={workflowRules}
+      statusGuidance={statusGuidance}
+      researchNotes={researchNotes}
+      contentHubCount={adminHubs.filter((hub) => hub.key !== "system").length}
+    />
+  );
+}
+
+/** Retained as a code-level fallback while the new help-centre UI is validated. */
+export function LegacyAdminDocumentationPage() {
   const visibleHubs = adminHubs.filter((hub) => !["system"].includes(hub.key));
 
   return (
