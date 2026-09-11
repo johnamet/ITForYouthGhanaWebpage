@@ -66,16 +66,13 @@ export async function getCmsOrganisationService(slug: string): Promise<Organisat
   }
 }
 
-async function save(id: string, payload: object) {
-  const db = await getAdminFirestore();
-  if (!db) return { configured: false, written: false } as const;
-  const { FieldValue } = await import("firebase-admin/firestore");
-  await db.collection(FIREBASE_COLLECTIONS.forOrganisations).doc(id).set(
-    { ...payload, updatedAt: FieldValue.serverTimestamp() },
-    { merge: false },
-  );
-  return { configured: true, written: true, id } as const;
-}
-
-export const saveCmsOrganisationOverview = (payload: OrganisationOverviewContent) => save(OVERVIEW_ID, payload);
-export const saveCmsOrganisationService = (slug: string, payload: OrganisationServicePage) => save(slug, { ...payload, slug });
+/*
+ * Writes used to live here, behind /api/admin/organisations/*, for the
+ * raw-JSON editor. Both pages are descriptors now (`page-for-organisations`
+ * and one per service in lib/content/cms-descriptors/pages.ts), so saving goes
+ * through the shared /api/admin/cms/[type] route and lib/cms/descriptors/crud.ts
+ * like every other page editor — which also means a partial edit merges
+ * instead of replacing the whole document, as `{ merge: false }` did here.
+ *
+ * The readers above stay: they are what the public pages render.
+ */

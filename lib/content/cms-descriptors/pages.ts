@@ -13,6 +13,10 @@ import {
   whoWeAreHub,
 } from "@/lib/content/site-config";
 import { newsHubContent } from "@/lib/content/news-config";
+import {
+  organisationOverviewContent,
+  organisationServices,
+} from "@/lib/content/organisation-config";
 import { partnershipOverviewContent } from "@/lib/content/partnership-config";
 import {
   impactOverviewContent,
@@ -122,6 +126,134 @@ const OVERVIEW_VIDEO_FIELDS: FieldDescriptor[] = [
     kind: "text",
     help: "Accessible title for that video. Falls back to the page title.",
   },
+];
+
+/**
+ * The eyebrow / heading / description trio a section's framing copy uses.
+ *
+ * Written as a helper rather than forty literals because the For Organisations
+ * pages repeat this exact shape for every section, and a typo in one of forty
+ * near-identical keys is invisible — the control simply saves nothing.
+ */
+function sectionCopyFields(prefix: string, section: string): FieldDescriptor[] {
+  return [
+    {
+      key: `${prefix}Eyebrow`,
+      label: `${section} eyebrow`,
+      kind: "text",
+      help: `Small label above the ${section.toLowerCase()} section. The page shows its built-in wording when empty.`,
+    },
+    {
+      key: `${prefix}Title`,
+      label: `${section} heading`,
+      kind: "text",
+      help: `Heading for the ${section.toLowerCase()} section. Falls back to the shipped wording.`,
+    },
+    {
+      key: `${prefix}Description`,
+      label: `${section} description`,
+      kind: "textarea",
+      wide: true,
+      help: `Sentence under the ${section.toLowerCase()} heading.`,
+    },
+  ];
+}
+
+/**
+ * Drops any field whose key the seed already sets.
+ *
+ * `PAGE_DESCRIPTORS` concatenates the walked seed fields with `optionalFields`,
+ * so a key present in both would render two controls for one value. Two of the
+ * four services ship `packages` in their seed and two do not, and filtering
+ * here means one shared declaration serves all four — and stops being a
+ * duplicate on its own the day somebody adds the key to a seed.
+ */
+function withoutSeedKeys(
+  fields: FieldDescriptor[],
+  seed: Record<string, unknown>,
+): FieldDescriptor[] {
+  return fields.filter((field) => !(field.key in seed));
+}
+
+/**
+ * Keys the For Organisations overview renders but its seed does not set.
+ *
+ * Measured, per the note on `optionalFields`: every key below was confirmed to
+ * be read by components/organisations/for-organisations-overview-page.tsx and
+ * absent from `organisationOverviewContent`. All fourteen were reachable in the
+ * raw-JSON editor this replaces, so leaving them out would have removed
+ * capability rather than added it.
+ */
+const ORG_OVERVIEW_OPTIONAL_FIELDS: FieldDescriptor[] = [
+  ...OVERVIEW_VIDEO_FIELDS,
+  ...sectionCopyFields("overviewSection", "Overview"),
+  ...sectionCopyFields("servicesSection", "Services"),
+  ...sectionCopyFields("engagementSection", "Engagement"),
+  ...sectionCopyFields("nextStepsSection", "Next steps"),
+];
+
+/**
+ * Keys a For Organisations service page renders but its seed may not set.
+ *
+ * Same measurement. `snapshotEyebrow` is deliberately absent: the type
+ * declares it and partnership-config.ts even sets it, but no component reads
+ * it, so a control for it would save and change nothing.
+ */
+const ORG_SERVICE_OPTIONAL_FIELDS: FieldDescriptor[] = [
+  {
+    key: "pricingHeadline",
+    label: "Pricing heading",
+    kind: "text",
+    help: "Heading above the packages. The section is hidden when there are no packages.",
+  },
+  {
+    key: "pricingDescription",
+    label: "Pricing description",
+    kind: "textarea",
+    wide: true,
+    help: "Sentence under the pricing heading.",
+  },
+  {
+    key: "packages",
+    label: "Packages",
+    kind: "list",
+    help: "Priced packages for this service. Remove every row to hide the section.",
+    itemFields: [
+      { key: "name", label: "Package name", kind: "text" },
+      { key: "price", label: "Price", kind: "text", help: "Free text — “From $2,500”, “On request”." },
+      { key: "description", label: "Description", kind: "textarea", wide: true },
+      {
+        key: "features",
+        label: "What it includes",
+        kind: "stringList",
+        help: "One item per line.",
+      },
+      { key: "note", label: "Footnote", kind: "text" },
+    ],
+  },
+  {
+    key: "overviewCardBadgeLabel",
+    label: "Service-area badge",
+    kind: "text",
+    help: "Badge on each overview card. Shows “Service area” when empty.",
+  },
+  ...sectionCopyFields("overviewSection", "Overview"),
+  ...sectionCopyFields("howItWorksSection", "How it works"),
+  ...sectionCopyFields("caseStudiesSection", "Case studies"),
+  {
+    key: "packagesSectionEyebrow",
+    label: "Packages eyebrow",
+    kind: "text",
+    help: "Small label above the packages section.",
+  },
+  ...sectionCopyFields("faqsSection", "FAQs"),
+  {
+    key: "contactSectionEyebrow",
+    label: "Contact eyebrow",
+    kind: "text",
+    help: "Small label above the enquiry form.",
+  },
+  ...sectionCopyFields("relatedSection", "Related pages"),
 ];
 
 export const PAGE_SEEDS: PageSeedEntry[] = [
@@ -331,6 +463,45 @@ export const PAGE_SEEDS: PageSeedEntry[] = [
     revalidatePaths: ["/news-and-updates"],
     seed: newsHubContent as unknown as Record<string, unknown>,
   },
+  /**
+   * For Organisations: the overview and its four services, previously edited
+   * through components/admin/organisation-content-form.tsx — a single textarea
+   * holding the whole page as raw JSON, saved with `JSON.parse`.
+   *
+   * lib/cms/organisations.ts was already reading through `applyOverrides`, so
+   * it understands the flat-path keys this editor writes; these entries are the
+   * half of that migration that was never finished.
+   */
+  {
+    key: "for-organisations",
+    docId: "_overview",
+    hub: "for-organisations",
+    label: "For Organisations overview",
+    route: "/for-organisations",
+    collection: FIREBASE_COLLECTIONS.forOrganisations,
+    description: "Hero, statistics, value and engagement cards, and next-steps copy on the organisations hub.",
+    revalidatePaths: ["/for-organisations"],
+    seed: organisationOverviewContent as unknown as Record<string, unknown>,
+    optionalFields: withoutSeedKeys(
+      ORG_OVERVIEW_OPTIONAL_FIELDS,
+      organisationOverviewContent as unknown as Record<string, unknown>,
+    ),
+  },
+  ...organisationServices.map((service) => ({
+    key: service.slug,
+    docId: service.slug,
+    hub: "for-organisations",
+    label: `${service.title} service page`,
+    route: `/for-organisations/${service.slug}`,
+    collection: FIREBASE_COLLECTIONS.forOrganisations,
+    description: `Hero, snapshot, overview cards, process, case studies, packages, FAQs and enquiry copy for ${service.title}.`,
+    revalidatePaths: ["/for-organisations", `/for-organisations/${service.slug}`],
+    seed: service as unknown as Record<string, unknown>,
+    optionalFields: withoutSeedKeys(
+      ORG_SERVICE_OPTIONAL_FIELDS,
+      service as unknown as Record<string, unknown>,
+    ),
+  })),
 ];
 
 export function getPageSeedEntry(key: string): PageSeedEntry | undefined {

@@ -1,11 +1,13 @@
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { OrganisationContentForm } from "@/components/admin/organisation-content-form";
-import { getCmsOrganisationOverview } from "@/lib/cms/organisations";
+import { redirect } from "next/navigation";
 
-export default async function AdminOrganisationOverviewPage() {
-  const overview = await getCmsOrganisationOverview();
-  return <div className="space-y-8">
-    <AdminPageHeader eyebrow="Organisation CMS" title="For Organisations overview" description="Edit every section displayed on the public overview page." />
-    <OrganisationContentForm kind="overview" initial={overview} />
-  </div>;
+/**
+ * The For Organisations overview is a descriptor now.
+ *
+ * Kept as a redirect rather than deleted because this path was the editor's
+ * bookmark for the raw-JSON form it replaces, and because
+ * lib/cms/admin-config.ts and the admin registry both pointed here until the
+ * migration. The descriptor route sends a singleton on to its one document.
+ */
+export default function AdminOrganisationOverviewRedirect() {
+  redirect("/admin/cms/page-for-organisations");
 }

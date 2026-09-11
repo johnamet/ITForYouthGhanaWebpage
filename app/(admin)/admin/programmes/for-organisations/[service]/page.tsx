@@ -1,13 +1,21 @@
-import { notFound } from "next/navigation";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { OrganisationContentForm } from "@/components/admin/organisation-content-form";
-import { getCmsOrganisationService } from "@/lib/cms/organisations";
+import { notFound, redirect } from "next/navigation";
 
-export default async function AdminOrganisationServicePage({ params }: { params: { service: string } }) {
-  const service = await getCmsOrganisationService(params.service);
+import { organisationServices } from "@/lib/content/organisation-config";
+
+/**
+ * Each service page is a descriptor now, keyed `page-<slug>`.
+ *
+ * The slug is checked against the shipped services before redirecting so an
+ * unknown one still 404s here, rather than bouncing an editor to a CMS route
+ * that will 404 a step later for a reason that looks unrelated.
+ */
+export default function AdminOrganisationServiceRedirect({
+  params,
+}: {
+  params: { service: string };
+}) {
+  const service = organisationServices.find((entry) => entry.slug === params.service);
   if (!service) notFound();
-  return <div className="space-y-8">
-    <AdminPageHeader eyebrow="Organisation CMS" title={`Edit service: ${service.title}`} description="Edit the hero, section framing, cards, process, case studies, packages, FAQs, CTA, and related routes." primaryAction={{ label: "Preview public page", href: `/for-organisations/${service.slug}` }} />
-    <OrganisationContentForm kind="service" initial={service} />
-  </div>;
+
+  redirect(`/admin/cms/page-${service.slug}`);
 }

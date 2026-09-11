@@ -2,7 +2,6 @@
 // Central registry for Admin Content Explorer (hubs -> pages/collections)
 
 import { CMS_DESCRIPTORS } from "@/lib/cms/descriptors/registry";
-import { organisationServices } from "@/lib/content/organisation-config";
 
 export type AdminNodeType = "singleton" | "collection";
 
@@ -81,15 +80,11 @@ export const adminNodes: AdminNode[] = [
   // that no longer exists (which is exactly what these five entries did).
 
   // For Organisations
-  { key: "org.overview", hub: "for-organisations", label: "Overview", type: "singleton", adminPath: "/admin/programmes/for-organisations/overview", previewHref: "/for-organisations" },
-  ...organisationServices.map((service): AdminNode => ({
-    key: `org.${service.slug}`,
-    hub: "for-organisations",
-    label: service.title,
-    type: "singleton",
-    adminPath: `/admin/programmes/for-organisations/${service.slug}`,
-    previewHref: `/for-organisations/${service.slug}`,
-  })),
+  //
+  // Nothing hand-listed here any more either. The overview and its four
+  // service pages are descriptors now, so `descriptorNodes` generates them —
+  // and these five entries were the ones the note above is about: they pointed
+  // at /admin/programmes/for-organisations/*, which the raw-JSON editor owned.
 
   // Partner With Us
   //
