@@ -316,7 +316,19 @@ function applyLegacyOverride(
   if (Array.isArray(value) && value.length === 0) return;
 
   if (!(key in target)) {
-    if (allowKeys.has(key) && typeof value === "string") target[key] = value;
+    // A key the seed omits is writable only when the descriptor named it in
+    // optionalFields. Strings and arrays both qualify: `optionalFields` is an
+    // explicit, per-descriptor allowlist of keys a renderer reads, and a
+    // `list` field there — the packages on a For Organisations service whose
+    // seed ships none — is as legitimate as a string one. Restricting this to
+    // strings gave those a control that saved and changed nothing, which is
+    // worse than no control at all.
+    //
+    // Numbers and booleans stay out: nothing declares one, and a page has no
+    // way to tell an unset number from a zero, so admitting them would need a
+    // decision this merge cannot make.
+    if (!allowKeys.has(key)) return;
+    if (typeof value === "string" || Array.isArray(value)) target[key] = value;
     return;
   }
 

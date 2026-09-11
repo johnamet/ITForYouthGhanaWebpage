@@ -195,15 +195,34 @@ async function main() {
 
   for (const [key, descriptor] of Object.entries(descriptors)) {
     for (const field of descriptor.optionalFields ?? []) {
-      const probe = `ZZ-probe-${field.key}`;
+      // Probe with a value of the field's OWN kind. A string probe passed for
+      // every kind, because the merge's allowlist branch accepted strings
+      // first — so a `list` optional field was certified settable while a real
+      // array value was silently dropped. That is the precise failure this
+      // check exists to catch, and it went undetected until a `packages` field
+      // was declared on a service whose seed ships none.
+      const probe: unknown =
+        field.kind === "list"
+          ? [{ "zz-probe": `ZZ-probe-${field.key}` }]
+          : field.kind === "stringList"
+            ? [`ZZ-probe-${field.key}`]
+            : field.kind === "number"
+              ? 4242
+              : field.kind === "boolean"
+                ? true
+                : `ZZ-probe-${field.key}`;
       const id =
         descriptor.shape === "seed-collection"
           ? seedRecordsOf(descriptor)[0]?.id
           : descriptor.singletonId;
       const merged = mergedRecordFor(descriptor, id, { [field.key]: probe });
       optionalChecked += 1;
-      if (merged?.[field.key] !== probe) {
-        fail(`descriptor "${key}" declares optional field "${field.key}", but a stored value for it does not survive the merge.`);
+      // Structural comparison: an array or row probe is never reference-equal
+      // to what comes back out of the merge's clone.
+      if (JSON.stringify(merged?.[field.key]) !== JSON.stringify(probe)) {
+        fail(
+          `descriptor "${key}" declares optional field "${field.key}" (kind ${field.kind}), but a stored value of that kind does not survive the merge.`,
+        );
       }
     }
   }
